@@ -1,6 +1,6 @@
 {
     "title": "ZGWZaakToWoo",
-    "$id": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.mapping.json",
+    "$id": "https://commongateway.nl/mapping/pdd.zgwZaakToWoo.mapping.json",
     "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
     "version": "0.0.1",
     "passTrough": false,

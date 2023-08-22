@@ -1,0 +1,8 @@
+{
+    "title": "ZGW",
+    "$id": "https://commongateway.woo.nl/source/zgw.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "description": "ZGW api",
+    "location": "!ChangeMe!"
+}

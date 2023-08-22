@@ -2,7 +2,7 @@
 
 namespace CommonGateway\PDDBundle\ActionHandler;
 
-use CommonGateway\PDDBundle\Service\SyncCasesService;
+use CommonGateway\PDDBundle\Service\SyncZGWZakenService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -10,7 +10,7 @@ use Twig\Error\SyntaxError;
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 
 /**
- * ActionHandler executing SyncCasesService->syncCasesHandler.
+ * ActionHandler executing SyncZGWZakenService->SyncZGWZakenHandler.
  *
  * @author  Conduction BV (info@conduction.nl), Barry Brands (barry@conduction.nl)
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
@@ -18,21 +18,21 @@ use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
  * @package  CommonGateway\PDDBundle
  * @category ActionHandler
  */
-class SyncCasesHandler implements ActionHandlerInterface
+class SyncZGWZakenHandler implements ActionHandlerInterface
 {
 
     /**
-     * @var SyncCasesService
+     * @var SyncZGWZakenService
      */
-    private SyncCasesService $service;
+    private SyncZGWZakenService $service;
 
 
     /**
-     * SyncPubHandler constructor.
+     * SyncZGWZakenHandler constructor.
      *
-     * @param SyncCasesService $service
+     * @param SyncZGWZakenService $service
      */
-    public function __construct(SyncCasesService $service)
+    public function __construct(SyncZGWZakenService $service)
     {
         $this->service = $service;
 
@@ -47,10 +47,10 @@ class SyncCasesHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://commongateway.nl/pdd.SyncCasesAction.action.json',
+            '$id'         => 'https://commongateway.nl/pdd.SyncZGWZaken.action.json',
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
-            'title'       => 'SyncCasesHandler',
-            'description' => 'Handles the sync for xxllnc cases.',
+            'title'       => 'SyncZGWZakenHandler',
+            'description' => 'Handles the sync for zgw zaken.',
             'required'    => [],
             'properties'  => [],
         ];
@@ -59,7 +59,7 @@ class SyncCasesHandler implements ActionHandlerInterface
 
 
     /**
-     * This function runs the SyncCases service plugin.
+     * This function runs the SyncZGWZaken service plugin.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
@@ -70,7 +70,7 @@ class SyncCasesHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->service->syncCasesHandler($data, $configuration);
+        return $this->service->syncZGWZakenHandler($data, $configuration);
 
     }//end run()
 

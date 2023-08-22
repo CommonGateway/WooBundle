@@ -5,10 +5,10 @@
   "version": "0.0.1",
   "passTrough": false,
   "mapping": {
-    "Type_Bijlage": "mimetype",
-    "Status_Bijlage": "{% if accepted == 1 %}{{ 'accepted' }}{% endif %}",
+    "Type_Bijlage": "informatieobject.formaat",
+    "Status_Bijlage": "informatieobject.status",
     "Tijdstip_laatste_wijziging_bijlage": "",
-    "Titel_Bijlage": "filename",
+    "Titel_Bijlage": "informatieobject.titel",
     "URL_Bijlage": "informatieobject.inhoud"
   }
 }

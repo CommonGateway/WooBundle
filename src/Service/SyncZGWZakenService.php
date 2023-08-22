@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Service responsible for synchronizing cases to woo objects.
+ * Service responsible for synchronizing zgw zaken to woo objects.
  *
  * @author  Conduction BV (info@conduction.nl), Barry Brands (barry@conduction.nl).
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @package  CommonGateway\PDDBundle
  * @category Service
  */
-class SyncCasesService
+class SyncZGWZakenService
 {
 
     /**
@@ -67,7 +67,7 @@ class SyncCasesService
 
 
     /**
-     * SyncCasesService constructor.
+     * SyncZGWZakenService constructor.
      *
      * @param GatewayResourceService $resourceService
      * @param CallService            $callService
@@ -110,7 +110,7 @@ class SyncCasesService
 
 
     /**
-     * Handles the synchronization of xxllnc cases.
+     * Handles the synchronization of zgw zaken.
      *
      * @param array $data
      * @param array $configuration
@@ -119,14 +119,14 @@ class SyncCasesService
      *
      * @return array
      */
-    public function syncCasesHandler(array $data, array $configuration): array
+    public function syncZGWZakenHandler(array $data, array $configuration): array
     {
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        isset($this->style) === true && $this->style->success('SyncCasesService triggered');
+        isset($this->style) === true && $this->style->success('SyncZGWZakenService triggered');
 
-        $sourceRef = 'https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json';
+        $sourceRef = 'https://commongateway.woo.nl/source/zgw.source.json';
         $source    = $this->resourceService->getSource($sourceRef, 'common-gateway/pdd-bundle');
         if ($source === null) {
             isset($this->style) === true && $this->style->error("$sourceRef not found.");
@@ -140,7 +140,7 @@ class SyncCasesService
             return [];
         }
 
-        $mappingRef = 'https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json';
+        $mappingRef = 'https://commongateway.nl/mapping/pdd.zgwZaakToWoo.mapping.json';
         $mapping    = $this->resourceService->getMapping($mappingRef, 'common-gateway/pdd-bundle');
         if ($mapping === null) {
             isset($this->style) === true && $this->style->error("$mappingRef not found.");
@@ -151,10 +151,10 @@ class SyncCasesService
 
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
 
-        $response        = $this->callService->call($source, '', 'GET', $sourceConfig);
+        $response        = $this->callService->call($source, '/zrc/v1/zaken', 'GET', $sourceConfig);
         $decodedResponse = $this->callService->decodeResponse($source, $response);
 
-        $responseItems = [];
+        $zaken = [];
         foreach ($decodedResponse['result'] as $result) {
             $result           = $this->mappingService->mapping($mapping, $result);
             $hydrationService = new HydrationService($this->syncService, $this->entityManager);
@@ -165,8 +165,7 @@ class SyncCasesService
                 true,
                 true
             );
-
-            $responseItems[] = $object;
+            $zaken[] = $object;
         }
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
