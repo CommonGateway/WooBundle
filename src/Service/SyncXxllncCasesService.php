@@ -175,7 +175,7 @@ class SyncXxllncCasesService
 
         return $this->data;
 
-    }//end syncCasesHandler()
+    }//end syncXxllncCasesHandler()
 
 
 }//end class

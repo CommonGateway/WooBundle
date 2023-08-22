@@ -165,7 +165,7 @@ class SyncZGWZakenService
                 true,
                 true
             );
-            $zaken[] = $object;
+            $zaken[]          = $object;
         }
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
@@ -174,7 +174,7 @@ class SyncZGWZakenService
 
         return $this->data;
 
-    }//end syncCasesHandler()
+    }//end syncZGWZakenHandler()
 
 
 }//end class
