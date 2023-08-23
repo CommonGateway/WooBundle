@@ -6,7 +6,7 @@
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
-    "oidn": "{% if oidn|default %}oidn{% else %}unknown{% endif %}",
+    "oidn": "{% if oidn|default %}{{ oidn }}{% else %}unknown{% endif %}",
     "UUID": "case.class_uuid",
     "ID": "id",
     "Object_ID": "object_id",
