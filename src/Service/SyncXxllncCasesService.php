@@ -126,10 +126,20 @@ class SyncXxllncCasesService
 
         isset($this->style) === true && $this->style->success('SyncXxllncCasesService triggered');
 
-        $sourceRef = 'https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json';
-        $source    = $this->resourceService->getSource($sourceRef, 'common-gateway/pdd-bundle');
+        if (isset($this->configuration['source']) === false) {
+            isset($this->style) === true && $this->style->error('No source configured on this action, ending action.');
+
+            return [];
+        }
+        if (isset($this->configuration['oidn']) === false) {
+            isset($this->style) === true && $this->style->error('No oidn configured on this action, ending action.');
+
+            return [];
+        }
+
+        $source    = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/pdd-bundle');
         if ($source === null) {
-            isset($this->style) === true && $this->style->error("$sourceRef not found.");
+            isset($this->style) === true && $this->style->error("{$this->configuration['source']} not found.");
             return [];
         }
 
@@ -156,6 +166,7 @@ class SyncXxllncCasesService
 
         $responseItems = [];
         foreach ($decodedResponse['result'] as $result) {
+            $result = array_merge($result, ['oidn' => $this->configuration['oidn']]);
             $result           = $this->mappingService->mapping($mapping, $result);
             $hydrationService = new HydrationService($this->syncService, $this->entityManager);
             $object           = $hydrationService->searchAndReplaceSynchronizations(

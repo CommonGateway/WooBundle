@@ -2,10 +2,11 @@
   "title": "XxllncCaseToWoo",
   "$id": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
+    "oidn": "{% if oidn|default %}oidn{% else %}unknown{% endif %}",
     "UUID": "case.class_uuid",
     "ID": "id",
     "Object_ID": "object_id",
