@@ -2,10 +2,14 @@
   "title": "OpenWOO",
   "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "object",
   "description": "",
   "properties": {
+    "oidn": {
+      "type": "string",
+      "description": "The public available code for the designated organisation (municipality) this object is meant for."
+    },
     "UUID": {
       "type": "string"
     },
