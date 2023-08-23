@@ -131,13 +131,14 @@ class SyncXxllncCasesService
 
             return [];
         }
+
         if (isset($this->configuration['oidn']) === false) {
             isset($this->style) === true && $this->style->error('No oidn configured on this action, ending action.');
 
             return [];
         }
 
-        $source    = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/pdd-bundle');
+        $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/pdd-bundle');
         if ($source === null) {
             isset($this->style) === true && $this->style->error("{$this->configuration['source']} not found.");
             return [];
@@ -166,7 +167,7 @@ class SyncXxllncCasesService
 
         $responseItems = [];
         foreach ($decodedResponse['result'] as $result) {
-            $result = array_merge($result, ['oidn' => $this->configuration['oidn']]);
+            $result           = array_merge($result, ['oidn' => $this->configuration['oidn']]);
             $result           = $this->mappingService->mapping($mapping, $result);
             $hydrationService = new HydrationService($this->syncService, $this->entityManager);
             $object           = $hydrationService->searchAndReplaceSynchronizations(

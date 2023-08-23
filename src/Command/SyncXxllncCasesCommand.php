@@ -54,7 +54,7 @@ class SyncXxllncCasesCommand extends Command
     public function __construct(SyncXxllncCasesService $syncXxllncCasesService, EntityManagerInterface $entityManager)
     {
         $this->syncXxllncCasesService = $syncXxllncCasesService;
-        $this->entityManager   = $entityManager;
+        $this->entityManager          = $entityManager;
         parent::__construct();
 
     }//end __construct()
@@ -96,7 +96,7 @@ class SyncXxllncCasesCommand extends Command
     {
         $style = new SymfonyStyle($input, $output);
         $this->syncXxllncCasesService->setStyle($style);
-        $caseId = $input->getArgument('id');
+        $caseId    = $input->getArgument('id');
         $actionRef = $input->getArgument('action');
 
         $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => $actionRef]);
