@@ -37,6 +37,7 @@
     "Themas": ""
 },
   "cast": {
-      "Bijlagen": "jsonToArray"
+    "Bijlagen": "jsonToArray",
+    "Object_ID": "integer"
   }
 }
