@@ -180,6 +180,7 @@ class SyncXxllncCasesService
 
         $response        = $this->callService->call($source, '', 'GET', $sourceConfig);
         $decodedResponse = $this->callService->decodeResponse($source, $response);
+        $this->entityManager->flush();
 
         $responseItems = [];
         foreach ($decodedResponse['result'] as $result) {
