@@ -18,7 +18,7 @@
     "Beschrijving": "values.case&#46;subject",
     "Samenvatting": "values.case&#46;subject",
     "Verzoeker": "values.case&#46;requestor&#46;name",
-    "Ontvangstdatum": "{{ 'now'|date('Y-m-dTH:i:sZ') }}",
+    "Ontvangstdatum": "{{ 'now'|date('Y-m-dTH:i:s') }}",
     "Besluitdatum": "values.case&#46;date_target",
     "Behandelstatus": "values.case&#46;status",
     "Besluit": "",
