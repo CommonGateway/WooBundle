@@ -3,7 +3,7 @@
 namespace CommonGateway\PDDBundle\Command;
 
 use App\Entity\Action;
-use CommonGateway\PDDBundle\Service\SyncCasesService;
+use CommonGateway\PDDBundle\Service\SyncXxllncCasesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * This class handles the command for the synchronization of a xxllnc case to a woo object.
  *
- * This Command executes the syncCaseService->syncCasesHandler.
+ * This Command executes the syncXxllncCasesService->syncXxllncCasesHandler.
  *
  * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
@@ -23,7 +23,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @package  CommonGateway\PDDBundle
  * @category Command
  */
-class SyncCasesCommand extends Command
+class SyncXxllncCasesCommand extends Command
 {
 
     /**
@@ -36,9 +36,9 @@ class SyncCasesCommand extends Command
     /**
      * The case service.
      *
-     * @var SyncCasesService
+     * @var SyncXxllncCasesService
      */
-    private SyncCasesService $syncCaseService;
+    private SyncXxllncCasesService $syncXxllncCasesService;
 
     /**
      * @var EntityManagerInterface
@@ -49,12 +49,12 @@ class SyncCasesCommand extends Command
     /**
      * Class constructor.
      *
-     * @param SyncCasesService $syncCaseService The case service
+     * @param SyncXxllncCasesService $syncXxllncCasesService The case service
      */
-    public function __construct(SyncCasesService $syncCaseService, EntityManagerInterface $entityManager)
+    public function __construct(SyncXxllncCasesService $syncXxllncCasesService, EntityManagerInterface $entityManager)
     {
-        $this->syncCaseService = $syncCaseService;
-        $this->entityManager   = $entityManager;
+        $this->syncXxllncCasesService = $syncXxllncCasesService;
+        $this->entityManager          = $entityManager;
         parent::__construct();
 
     }//end __construct()
@@ -68,19 +68,24 @@ class SyncCasesCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('This command triggers SyncCasesService')
-            ->setHelp('This command triggers SyncCasesService')
+            ->setDescription('This command triggers SyncXxllncCasesService')
+            ->setHelp('This command triggers SyncXxllncCasesService')
             ->addArgument(
                 'id',
                 InputArgument::OPTIONAL,
                 'Case id to fetch from xxllnc'
+            )
+            ->addArgument(
+                'action',
+                InputArgument::OPTIONAL,
+                'Action reference to find the action and execute for different organizations (municipalities)'
             );
 
     }//end configure()
 
 
     /**
-     * Executes syncCaseService->syncCasesHandler or syncCaseService->getCase if a id is given.
+     * Executes syncXxllncCasesService->syncXxllncCasesHandler or syncXxllncCasesService->getCase if a id is given.
      *
      * @param InputInterface  Handles input from cli
      * @param OutputInterface Handles output from cli
@@ -90,12 +95,13 @@ class SyncCasesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new SymfonyStyle($input, $output);
-        $this->syncCaseService->setStyle($style);
-        $caseId = $input->getArgument('id');
+        $this->syncXxllncCasesService->setStyle($style);
+        $caseId    = $input->getArgument('id');
+        $actionRef = $input->getArgument('action');
 
-        $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => 'https://commongateway.nl/pdd.SyncCasesAction.action.json']);
+        $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => $actionRef]);
         if ($action instanceof Action === null) {
-            $style->error('Action with reference https://commongateway.nl/pdd.SyncCasesAction.action.json not found');
+            $style->error("Action with reference $actionRef not found");
 
             return Command::FAILURE;
         }
@@ -103,7 +109,7 @@ class SyncCasesCommand extends Command
         if (isset($caseId) === true
             && Uuid::isValid($caseId) === true
         ) {
-            // if ($this->syncCaseService->getZaak($action->getConfiguration(), $caseId) === true) {
+            // if ($this->syncXxllncCasesService->getZaak($action->getConfiguration(), $caseId) === true) {
             // return Command::FAILURE;
             // }
             isset($style) === true && $style->info("Succesfully synced and created a WOO object from xxllnc case: $caseId.");
@@ -111,7 +117,7 @@ class SyncCasesCommand extends Command
             return Command::SUCCESS;
         }//end if
 
-        if ($this->syncCaseService->syncCasesHandler([], $action->getConfiguration()) === null) {
+        if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $action->getConfiguration()) === null) {
             return Command::FAILURE;
         }
 

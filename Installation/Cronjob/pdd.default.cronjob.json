@@ -1,8 +1,8 @@
 {
-    "title": "PDD cronjob",
+    "title": "PDD default cronjob",
     "$id": "https://commongateway.nl/pdd.default.cronjob.json",
     "$schema": "https://docs.commongateway.nl/schemas/Cronjob.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "This cronjob fires all the pdd actions every 5 minutes",
     "crontab": "*/5 * * * *",
     "throws": [

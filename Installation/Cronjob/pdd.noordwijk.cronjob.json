@@ -1,0 +1,12 @@
+{
+    "title": "PDD noordwijk cronjob",
+    "$id": "https://commongateway.nl/pdd.noordwijk.cronjob.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Cronjob.schema.json",
+    "version": "0.0.1",
+    "description": "This cronjob fires the Noordwijk actions every 5 minutes",
+    "crontab": "*/5 * * * *",
+    "throws": [
+        "pdd.noordwijk.listens"
+    ],
+    "isEnabled": false
+}

@@ -1,0 +1,16 @@
+{
+    "title": "SyncNoordwijkCasesAction",
+    "$id": "https://commongateway.nl/pdd.SyncNoordwijkAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["pdd.default.listens","pdd.noordwijk.listens"],
+    "configuration": {
+        "oidn": "unknown",
+        "source": "https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json"
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\PDDBundle\\ActionHandler\\SyncXxllncCasesHandler"
+}
