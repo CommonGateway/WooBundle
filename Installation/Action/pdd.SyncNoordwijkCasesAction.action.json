@@ -5,7 +5,7 @@
     "version": "0.0.1",
     "listens": ["pdd.default.listens","pdd.noordwijk.listens"],
     "configuration": {
-        "oidn": "unknown",
+        "oidn": "00000001825792150000",
         "source": "https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json"
     },
     "conditions":
