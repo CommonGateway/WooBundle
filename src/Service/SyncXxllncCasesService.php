@@ -96,6 +96,7 @@ class SyncXxllncCasesService
         $this->entityManager   = $entityManager;
         $this->mappingService  = $mappingService;
         $this->logger          = $pluginLogger;
+
     }//end __construct()
 
 
@@ -198,8 +199,8 @@ class SyncXxllncCasesService
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
-        isset($this->style) === true && $this->style->success("Synchronized cases to woo objects for " . $source->getName());
-        $this->logger->info("Synchronized cases to woo objects for " . $source->getName());
+        isset($this->style) === true && $this->style->success("Synchronized cases to woo objects for ".$source->getName());
+        $this->logger->info("Synchronized cases to woo objects for ".$source->getName());
 
         return $this->data;
 
