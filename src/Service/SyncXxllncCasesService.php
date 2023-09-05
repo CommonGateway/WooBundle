@@ -184,6 +184,11 @@ class SyncXxllncCasesService
 
         $responseItems = [];
         foreach ($decodedResponse['result'] as $result) {
+            // Check valid categorie.
+            if (isset($result['values']['attribute.woo_categorie']) === false || $result['values']['attribute.woo_categorie'] !== 'Woo-verzoeken, -besluiten en verstrekte informatie') {
+                continue;
+            }
+
             $result           = array_merge($result, ['oidn' => $this->configuration['oidn']]);
             $result           = $this->mappingService->mapping($mapping, $result);
             $hydrationService = new HydrationService($this->syncService, $this->entityManager);
