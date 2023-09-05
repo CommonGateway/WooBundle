@@ -1,0 +1,15 @@
+{
+    "title": "Ede zaaksysteem",
+    "$id": "https://commongateway.woo.nl/source/ede.zaaksysteem.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "description": "Ede zaaksysteem api",
+    "location": "!ChangeMe!",
+    "headers": {
+        "accept": "application/json",
+        "query": {
+            "zql": "case.status%2C case.num_unaccepted_updates%2C case.num_unaccepted_files%2C case.num_unread_communication%2C case.number%2C date_created%2C case.date_of_completion%2C case.number_previous%2C case.subject_external%2C attribute.test_documenten%2C case.newtab%2C case.casetype.name%2C case.subject%2C case.requestor.name%2C case.days_left%2C case.archival_state%2C case.destructable%2C case.date_target FROM case WHERE (case.status %3D \"resolved\") AND (case.casetype.id %3D 1511) ORDER BY case.number DESC%26zapi_num_rows=20%26zapi_order_by=case.number%26zapi_order_by_direction=desc%26zapi_page=1"
+        }
+    },
+    "isEnabled": false
+}
