@@ -121,10 +121,10 @@ class SyncXxllncCasesService
 
     /**
      * Checks if existing objects still exist in the source, if not deletes them.
-     * 
-     * @param array $idsSynced ID's from objects we just synced from the source.
-     * @param Schema $schame   These objects belong to.
-     * 
+     *
+     * @param array  $idsSynced ID's from objects we just synced from the source.
+     * @param Schema $schame    These objects belong to.
+     *
      * @return void Returns nothing.
      */
     private function deleteNonExistingObjects(array $idsSynced, Schema $schema): void
@@ -133,8 +133,8 @@ class SyncXxllncCasesService
         $schema = $this->entityManager->find('App:Entity', $schema->getId()->toString());
         foreach ($schema->getObjectEntities() as $objectEntity) {
             if (empty($objectEntity->getSynchronizations()) === false && $objectEntity->getSynchronizations()[0]->getSourceId() !== null) {
-                $existingSourceIds[] =  $objectEntity->getSynchronizations()[0]->getSourceId();
-                $existingObjects[] =  $objectEntity;
+                $existingSourceIds[] = $objectEntity->getSynchronizations()[0]->getSourceId();
+                $existingObjects[]   = $objectEntity;
             }
         }
 
@@ -146,8 +146,10 @@ class SyncXxllncCasesService
             $this->logger->info("Object $id does not exist at the source, deleting.");
             $this->entityManager->remove($existingObjects[$key]);
         }
+
         $this->entityManager->flush();
-    }//end deleteNonExistingObjects
+
+    }//end deleteNonExistingObjects()
 
 
     /**
