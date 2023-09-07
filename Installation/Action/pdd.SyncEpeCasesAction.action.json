@@ -1,12 +1,12 @@
 {
-    "title": "SyncEdeCasesAction",
-    "$id": "https://commongateway.nl/pdd.SyncEdeAction.action.json",
+    "title": "SyncEpeCasesAction",
+    "$id": "https://commongateway.nl/pdd.SyncEpeAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
     "version": "0.0.1",
-    "listens": ["pdd.default.listens","pdd.ede.listens"],
+    "listens": ["pdd.default.listens","pdd.epe.listens"],
     "configuration": {
         "oidn": "00000001001104524000",
-        "source": "https://commongateway.woo.nl/source/ede.zaaksysteem.source.json"
+        "source": "https://commongateway.woo.nl/source/epe.zaaksysteem.source.json"
     },
     "conditions":
     {
