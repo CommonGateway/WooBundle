@@ -1,5 +1,5 @@
 {
-    "name": "common-gateway/pdd-bundle",
+    "name": "common-gateway/woo-bundle",
     "description": "An example package for creating symfony flex bundles as plugins",
     "type": "symfony-bundle",
     "keywords": [
@@ -9,7 +9,7 @@
         "conduction",
         "symfony",
         "common-gateway-plugin",
-        "pdd"
+        "woo"
     ],
     "homepage": "https://commongateway.nl",
     "license": "EUPL-1.2",
@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CommonGateway\\PDDBundle\\": "src/"
+            "CommonGateway\\WOOBundle\\": "src/"
         }
     }
 }

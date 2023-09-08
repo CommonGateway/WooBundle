@@ -1,5 +1,5 @@
 {
-  "installationService": "CommonGateway\\PDDBundle\\Service\\InstallationService",
+  "installationService": "CommonGateway\\WOOBundle\\Service\\InstallationService",
   "endpoints": {
     "schemas": [
       {

@@ -1,4 +1,4 @@
-# CommonGateway\PDDBundle\Command\SyncXxllncCasesCommand  
+# CommonGateway\WOOBundle\Command\SyncXxllncCasesCommand  
 
 This class handles the command for the synchronization of a xxllnc case to a woo object.
 

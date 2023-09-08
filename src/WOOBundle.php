@@ -1,16 +1,16 @@
 <?php
 /**
- * The PDD bundle aims at providing an example common gateway plugin
+ * The WOO bundle aims at providing an example common gateway plugin
  *
  * @author  Conduction.nl <info@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-namespace CommonGateway\PDDBundle;
+namespace CommonGateway\WOOBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class PDDBundle extends Bundle
+class WOOBundle extends Bundle
 {
 
 

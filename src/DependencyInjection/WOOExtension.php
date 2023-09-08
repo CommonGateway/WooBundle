@@ -6,7 +6,7 @@
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-namespace CommonGateway\PDDBundle\DependencyInjection;
+namespace CommonGateway\WOOBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * This class adds dependency injection.
  */
-class PDDExtension extends Extension
+class WOOExtension extends Extension
 {
 
 

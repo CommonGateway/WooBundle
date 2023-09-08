@@ -1,12 +1,11 @@
 <?php
 return (object)[
-    'rootNamespace' => 'CommonGateway\PDDBundle',
+    'rootNamespace' => 'CommonGateway\WOOBundle',
     'destDirectory' => 'docs/classes',
     'format' => 'github',
     'classes' => [
-        '\CommonGateway\PDDBundle\Service\InstallationService',
-        '\CommonGateway\PDDBundle\Service\PDDService',
-        '\CommonGateway\PDDBundle\Service\SyncXxllncCasesService',
-        '\CommonGateway\PDDBundle\Command\SyncXxllncCasesCommand'
+        '\CommonGateway\WOOBundle\Service\InstallationService',
+        '\CommonGateway\WOOBundle\Service\SyncXxllncCasesService',
+        '\CommonGateway\WOOBundle\Command\SyncXxllncCasesCommand'
     ],
 ];

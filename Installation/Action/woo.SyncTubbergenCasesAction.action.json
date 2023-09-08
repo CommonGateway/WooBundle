@@ -2,8 +2,8 @@
     "title": "SyncTubbergenCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncTubbergenAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.1",
-    "listens": ["pdd.default.listens","pdd.tubbergen.listens"],
+    "version": "0.0.2",
+    "listens": ["woo.default.listens","woo.tubbergen.listens"],
     "configuration": {
         "oidn": "00000001002172859000",
         "source": "https://commongateway.woo.nl/source/tubbergen.zaaksysteem.source.json"
@@ -12,5 +12,5 @@
     {
         "==": [1, 1]
     },
-    "class": "CommonGateway\\PDDBundle\\ActionHandler\\SyncXxllncCasesHandler"
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncXxllncCasesHandler"
 }

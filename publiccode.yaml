@@ -1,6 +1,6 @@
 publiccodeYmlVersion: "0.1"
-name: "PDDBundle"
-url: "https://github.com/CommonGateway/PDDBundle"
+name: "WOOBundle"
+url: "https://github.com/CommonGateway/WOOBundle"
 releaseDate: "2022-10-01"
 softwareType: addon
 
@@ -14,6 +14,6 @@ categories:
 developmentStatus: beta
 description:
   nl:
-    shortDescription: "PDDBundle"
+    shortDescription: "WOOBundle"
   en:
-    shortDescription: "PDDBundle"
+    shortDescription: "WOOBundle"
