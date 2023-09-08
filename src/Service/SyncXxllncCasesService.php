@@ -13,6 +13,7 @@ use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
+use App\Entity\Entity as Schema;
 
 /**
  * Service responsible for synchronizing xxllnc cases to woo objects.
@@ -119,6 +120,39 @@ class SyncXxllncCasesService
 
 
     /**
+     * Checks if existing objects still exist in the source, if not deletes them.
+     *
+     * @param array  $idsSynced ID's from objects we just synced from the source.
+     * @param Schema $schame    These objects belong to.
+     *
+     * @return void Returns nothing.
+     */
+    private function deleteNonExistingObjects(array $idsSynced, Schema $schema): void
+    {
+        // Get all existing sourceIds.
+        $schema = $this->entityManager->find('App:Entity', $schema->getId()->toString());
+        foreach ($schema->getObjectEntities() as $objectEntity) {
+            if (empty($objectEntity->getSynchronizations()) === false && $objectEntity->getSynchronizations()[0]->getSourceId() !== null) {
+                $existingSourceIds[] = $objectEntity->getSynchronizations()[0]->getSourceId();
+                $existingObjects[]   = $objectEntity;
+            }
+        }
+
+        // Check if existing sourceIds are in the array of new synced sourceIds.
+        $objectIdsToDelete = array_diff($existingSourceIds, $idsSynced);
+
+        // If not it means the object does not exist in the source anymore and should be deleted here.
+        foreach ($objectIdsToDelete as $key => $id) {
+            $this->logger->info("Object $id does not exist at the source, deleting.");
+            $this->entityManager->remove($existingObjects[$key]);
+        }
+
+        $this->entityManager->flush();
+
+    }//end deleteNonExistingObjects()
+
+
+    /**
      * Handles the synchronization of xxllnc cases.
      *
      * @param array $data
@@ -195,13 +229,23 @@ class SyncXxllncCasesService
                 true
             );
 
+            // Get all synced sourceIds.
+            if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
+                $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
+            }
+
             $responseItems[] = $object;
         }
 
+        $this->deleteNonExistingObjects($idsSynced, $schema);
+
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
-        isset($this->style) === true && $this->style->success("Synchronized cases to woo objects for ".$source->getName());
-        $this->logger->info("Synchronized cases to woo objects for ".$source->getName());
+        $countItems = count($responseItems);
+        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName();
+        isset($this->style) === true && $this->style->success($logMessage);
+        $this->logger->info($logMessage);
+
 
         return $this->data;
 
