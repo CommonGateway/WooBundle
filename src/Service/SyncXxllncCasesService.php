@@ -246,7 +246,6 @@ class SyncXxllncCasesService
         isset($this->style) === true && $this->style->success($logMessage);
         $this->logger->info($logMessage);
 
-
         return $this->data;
 
     }//end syncXxllncCasesHandler()
