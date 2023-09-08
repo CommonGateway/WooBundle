@@ -1,0 +1,12 @@
+{
+    "title": "PDD dinkelland cronjob",
+    "$id": "https://commongateway.nl/pdd.dinkelland.cronjob.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Cronjob.schema.json",
+    "version": "0.0.1",
+    "description": "This cronjob fires the dinkelland actions every 5 minutes",
+    "crontab": "*/10 * * * *",
+    "throws": [
+        "pdd.dinkelland.listens"
+    ],
+    "isEnabled": false
+}
