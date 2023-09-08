@@ -3,7 +3,7 @@
     "$id": "https://commongateway.nl/pdd.SyncDinkellandCasesAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
     "version": "0.0.1",
-    "listens": ["pdd.default.listens","pdd.epe.listens"],
+    "listens": ["pdd.default.listens","pdd.dinkelland.listens"],
     "configuration": {
         "oidn": "00000001809245206000",
         "source": "https://commongateway.woo.nl/source/dinkelland.zaaksysteem.source.json"
