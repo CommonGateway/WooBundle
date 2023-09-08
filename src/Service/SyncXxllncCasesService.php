@@ -241,8 +241,11 @@ class SyncXxllncCasesService
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
-        isset($this->style) === true && $this->style->success("Synchronized cases to woo objects for ".$source->getName());
-        $this->logger->info("Synchronized cases to woo objects for ".$source->getName());
+        $countItems = count($responseItems);
+        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName();
+        isset($this->style) === true && $this->style->success($logMessage);
+        $this->logger->info($logMessage);
+
 
         return $this->data;
 
