@@ -1,4 +1,4 @@
-# CommonGateway\PDDBundle\Service\InstallationService  
+# CommonGateway\WOOBundle\Service\InstallationService  
 
 The installation service for this plugin.
 

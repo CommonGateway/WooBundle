@@ -1,4 +1,4 @@
-# CommonGateway\PDDBundle\Service\PDDService  
+# CommonGateway\WOOBundle\Service\PDDService  
 
 An example service for adding business logic to your class.
 

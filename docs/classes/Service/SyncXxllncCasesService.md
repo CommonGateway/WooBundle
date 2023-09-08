@@ -1,4 +1,4 @@
-# CommonGateway\PDDBundle\Service\SyncXxllncCasesService  
+# CommonGateway\WOOBundle\Service\SyncXxllncCasesService  
 
 Service responsible for synchronizing xxllnc cases to woo objects.
 

@@ -1,12 +1,12 @@
 {
-    "title": "PDD epe cronjob",
+    "title": "WOO epe cronjob",
     "$id": "https://commongateway.nl/pdd.epe.cronjob.json",
     "$schema": "https://docs.commongateway.nl/schemas/Cronjob.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "This cronjob fires the epe actions every 5 minutes",
     "crontab": "*/10 * * * *",
     "throws": [
-        "pdd.epe.listens"
+        "woo.epe.listens"
     ],
     "isEnabled": false
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace CommonGateway\PDDBundle\ActionHandler;
+namespace CommonGateway\WOOBundle\ActionHandler;
 
-use CommonGateway\PDDBundle\Service\SyncXxllncCasesService;
+use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -15,7 +15,7 @@ use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
  * @author  Conduction BV (info@conduction.nl), Barry Brands (barry@conduction.nl)
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
- * @package  CommonGateway\PDDBundle
+ * @package  CommonGateway\WOOBundle
  * @category ActionHandler
  */
 class SyncXxllncCasesHandler implements ActionHandlerInterface

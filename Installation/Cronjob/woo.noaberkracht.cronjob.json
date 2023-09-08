@@ -1,12 +1,12 @@
 {
-    "title": "PDD noaberkracht cronjob",
+    "title": "WOO noaberkracht cronjob",
     "$id": "https://commongateway.nl/pdd.noaberkracht.cronjob.json",
     "$schema": "https://docs.commongateway.nl/schemas/Cronjob.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "This cronjob fires the Noaberkracht actions every 5 minutes",
     "crontab": "*/5 * * * *",
     "throws": [
-        "pdd.noaberkracht.listens"
+        "woo.noaberkracht.listens"
     ],
     "isEnabled": false
 }

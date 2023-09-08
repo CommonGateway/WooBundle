@@ -1,9 +1,9 @@
 <?php
 
-namespace CommonGateway\PDDBundle\Command;
+namespace CommonGateway\WOOBundle\Command;
 
 use App\Entity\Action;
-use CommonGateway\PDDBundle\Service\SyncXxllncCasesService;
+use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -20,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  *
- * @package  CommonGateway\PDDBundle
+ * @package  CommonGateway\WOOBundle
  * @category Command
  */
 class SyncXxllncCasesCommand extends Command
@@ -31,7 +31,7 @@ class SyncXxllncCasesCommand extends Command
      *
      * @var static
      */
-    protected static $defaultName = 'pdd:case:synchronize';
+    protected static $defaultName = 'woo:case:synchronize';
 
     /**
      * The case service.

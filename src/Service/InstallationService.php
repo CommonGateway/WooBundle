@@ -1,6 +1,6 @@
 <?php
 
-namespace CommonGateway\PDDBundle\Service;
+namespace CommonGateway\WOOBundle\Service;
 
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -56,7 +56,7 @@ class InstallationService implements InstallerInterface
      */
     public function install()
     {
-        $this->logger->debug("PDDBundle -> Install()");
+        $this->logger->debug("WOOBundle -> Install()");
 
         $this->checkDataConsistency();
 
@@ -70,7 +70,7 @@ class InstallationService implements InstallerInterface
      */
     public function update()
     {
-        $this->logger->debug("PDDBundle -> Update()");
+        $this->logger->debug("WOOBundle -> Update()");
 
         $this->checkDataConsistency();
 
@@ -84,7 +84,7 @@ class InstallationService implements InstallerInterface
      */
     public function uninstall()
     {
-        $this->logger->debug("PDDBundle -> Uninstall()");
+        $this->logger->debug("WOOBundle -> Uninstall()");
 
         // Do some cleanup to uninstall correctly...
 

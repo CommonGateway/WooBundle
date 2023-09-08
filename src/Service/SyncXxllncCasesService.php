@@ -1,6 +1,6 @@
 <?php
 
-namespace CommonGateway\PDDBundle\Service;
+namespace CommonGateway\WOOBundle\Service;
 
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
@@ -21,7 +21,7 @@ use App\Entity\Entity as Schema;
  * @author  Conduction BV (info@conduction.nl), Barry Brands (barry@conduction.nl).
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
- * @package  CommonGateway\PDDBundle
+ * @package  CommonGateway\WOOBundle
  * @category Service
  */
 class SyncXxllncCasesService
@@ -184,7 +184,7 @@ class SyncXxllncCasesService
             return [];
         }
 
-        $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/pdd-bundle');
+        $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
         if ($source === null) {
             isset($this->style) === true && $this->style->error("{$this->configuration['source']} not found, ending syncXxllncCasesHandler");
             $this->logger->error("{$this->configuration['source']} not found, ending syncXxllncCasesHandler");
@@ -192,7 +192,7 @@ class SyncXxllncCasesService
         }
 
         $schemaRef = 'https://commongateway.nl/pdd.openWOO.schema.json';
-        $schema    = $this->resourceService->getSchema($schemaRef, 'common-gateway/pdd-bundle');
+        $schema    = $this->resourceService->getSchema($schemaRef, 'common-gateway/woo-bundle');
         if ($schema === null) {
             isset($this->style) === true && $this->style->error("$schemaRef not found, ending syncXxllncCasesHandler");
             $this->logger->error("$schemaRef not found, ending syncXxllncCasesHandlerr");
@@ -200,7 +200,7 @@ class SyncXxllncCasesService
         }
 
         $mappingRef = 'https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json';
-        $mapping    = $this->resourceService->getMapping($mappingRef, 'common-gateway/pdd-bundle');
+        $mapping    = $this->resourceService->getMapping($mappingRef, 'common-gateway/woo-bundle');
         if ($mapping === null) {
             isset($this->style) === true && $this->style->error("$mappingRef not found, ending syncXxllncCasesHandler");
             $this->logger->error("$mappingRef not found, ending syncXxllncCasesHandlerr");
