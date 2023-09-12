@@ -1,116 +1,119 @@
 {
-  "title": "OpenWOO",
-  "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
-  "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.2",
-  "type": "object",
-  "description": "",
-  "properties": {
-    "oidn": {
-      "type": "string",
-      "description": "The public available code for the designated organisation (municipality) this object is meant for."
-    },
-    "UUID": {
-      "type": "string"
-    },
-    "ID": {
-      "type": "string"
-    },
-    "Object_ID": {
-      "type": "integer"
-    },
-    "Portal_url": {
-      "type": "string",
-      "format": "url"
-    },
-    "Behandelend_bestuursorgaan": {
-      "type": "string"
-    },
-    "Ontvanger_informatieverzoek": {
-      "type": "string"
-    },
-    "Volgnummer": {
-      "type": "string"
-    },
-    "Titel": {
-      "type": "string"
-    },
-    "Beschrijving": {
-      "type": "string"
-    },
-    "Samenvatting": {
-      "type": "string"
-    },
-    "Verzoeker": {
-      "type": "string"
-    },
-    "Ontvangstdatum": {
-      "type": "date",
-      "description": "format: Y-m-d"
-    },
-    "Besluitdatum": {
-      "type": "date",
-      "description": "format: Y-m-d"
-    },
-    "Behandelstatus": {
-      "type": "string"
-    },
-    "Besluit": {
-      "type": "string"
-    },
-    "Termijnoverschrijding": {
-      "type": "string"
-    },
-    "URL_informatieverzoek": {
-      "type": "string",
-      "format": "url"
-    },
-    "URL_inventarisatielijst": {
-      "type": "string",
-      "format": "url"
-    },
-    "URL_besluit": {
-      "type": "string",
-      "format": "url"
-    },
-    "Geografisch_gebied": {
-      "type": "string"
-    },
-    "BAG_ID": {
-      "type": "string"
-    },
-    "BGT_ID": {
-      "type": "string"
-    },
-    "Postcodegebied": {
-      "type": "string"
-    },
-    "Adres": {
-      "type": "string"
-    },
-    "COORDS": {
-      "type": "array",
-      "items": {
-        "$ref": "https://commongateway.nl/pdd.coords.schema.json"
-      }
-    },
-    "Geografische_positie": {
-      "type": "array",
-      "items": {
-        "$ref": "https://commongateway.nl/pdd.geografischePositie.schema.json"
-      }
-    },
-    "Bijlagen": {
-      "type": "array",
-      "items": {
-        "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
-      }
-    },
-    "Themas": {
-      "type": "array",
-      "items": {
-        "$ref": "https://commongateway.nl/pdd.thema.schema.json"
-      }
+    "title": "OpenWOO",
+    "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.0.3",
+    "type": "object",
+    "description": "",
+    "properties": {
+        "oidn": {
+            "type": "string",
+            "description": "The public available code for the designated organisation (municipality) this object is meant for."
+        },
+        "UUID": {
+            "type": "string"
+        },
+        "ID": {
+            "type": "string"
+        },
+        "Object_ID": {
+            "type": "integer"
+        },
+        "Portal_url": {
+            "type": "string",
+            "format": "url"
+        },
+        "Behandelend_bestuursorgaan": {
+            "type": "string"
+        },
+        "Ontvanger_informatieverzoek": {
+            "type": "string"
+        },
+        "Volgnummer": {
+            "type": "string"
+        },
+        "Titel": {
+            "type": "string"
+        },
+        "Beschrijving": {
+            "type": "string"
+        },
+        "Samenvatting": {
+            "type": "string"
+        },
+        "Categorie": {
+            "type": "string"
+        },
+        "Verzoeker": {
+            "type": "string"
+        },
+        "Ontvangstdatum": {
+            "type": "date",
+            "description": "format: Y-m-d"
+        },
+        "Besluitdatum": {
+            "type": "date",
+            "description": "format: Y-m-d"
+        },
+        "Behandelstatus": {
+            "type": "string"
+        },
+        "Besluit": {
+            "type": "string"
+        },
+        "Termijnoverschrijding": {
+            "type": "string"
+        },
+        "URL_informatieverzoek": {
+            "type": "string",
+            "format": "url"
+        },
+        "URL_inventarisatielijst": {
+            "type": "string",
+            "format": "url"
+        },
+        "URL_besluit": {
+            "type": "string",
+            "format": "url"
+        },
+        "Geografisch_gebied": {
+            "type": "string"
+        },
+        "BAG_ID": {
+            "type": "string"
+        },
+        "BGT_ID": {
+            "type": "string"
+        },
+        "Postcodegebied": {
+            "type": "string"
+        },
+        "Adres": {
+            "type": "string"
+        },
+        "COORDS": {
+            "type": "array",
+            "items": {
+                "$ref": "https://commongateway.nl/pdd.coords.schema.json"
+            }
+        },
+        "Geografische_positie": {
+            "type": "array",
+            "items": {
+                "$ref": "https://commongateway.nl/pdd.geografischePositie.schema.json"
+            }
+        },
+        "Bijlagen": {
+            "type": "array",
+            "items": {
+                "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+            }
+        },
+        "Themas": {
+            "type": "array",
+            "items": {
+                "$ref": "https://commongateway.nl/pdd.thema.schema.json"
+            }
+        }
     }
-  }
 }
