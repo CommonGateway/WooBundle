@@ -105,6 +105,7 @@ class SyncXxllncCasesService
         $this->mappingService    = $mappingService;
         $this->logger            = $pluginLogger;
         $this->validationService = $validationService;
+
     }//end __construct()
 
 
@@ -223,11 +224,11 @@ class SyncXxllncCasesService
         $decodedResponse = $this->callService->decodeResponse($source, $response);
         $this->entityManager->flush();
 
-        $responseItems = [];
+        $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-            $result           = array_merge($result, ['oidn' => $this->configuration['oidn']]);
-            $result           = $this->mappingService->mapping($mapping, $result);
+            $result = array_merge($result, ['oidn' => $this->configuration['oidn']]);
+            $result = $this->mappingService->mapping($mapping, $result);
 
             $validationErrors = $this->validationService->validateData($this->content, $this->schema, 'POST');
             if ($validationErrors !== null) {
@@ -250,7 +251,7 @@ class SyncXxllncCasesService
             }
 
             $responseItems[] = $object;
-        }
+        }//end foreach
 
         $this->deleteNonExistingObjects($idsSynced, $schema);
 
