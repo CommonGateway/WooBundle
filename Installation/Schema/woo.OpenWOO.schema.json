@@ -2,7 +2,7 @@
     "title": "OpenWOO",
     "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "type": "object",
     "description": "",
     "properties": {
@@ -42,7 +42,8 @@
             "type": "string"
         },
         "Categorie": {
-            "type": "string"
+            "type": "string",
+            "required": true,
         },
         "Verzoeker": {
             "type": "string"
@@ -53,7 +54,7 @@
         },
         "Besluitdatum": {
             "type": "date",
-            "description": "format: Y-m-d"
+            "description": "format: Y-m-d",
         },
         "Behandelstatus": {
             "type": "string"
@@ -115,5 +116,8 @@
                 "$ref": "https://commongateway.nl/pdd.thema.schema.json"
             }
         }
-    }
+    },
+    "required": [
+        "Categorie"
+    ]
 }
