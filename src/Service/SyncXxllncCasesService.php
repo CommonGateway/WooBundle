@@ -132,8 +132,9 @@ class SyncXxllncCasesService
         // Get all existing sourceIds.
         $schema = $this->entityManager->find('App:Entity', $schema->getId()->toString());
         foreach ($schema->getObjectEntities() as $objectEntity) {
-            if (empty($objectEntity->getSynchronizations()) === false && $objectEntity->getSynchronizations()[0]->getSourceId() !== null) {
-                $existingSourceIds[] = $objectEntity->getSynchronizations()[0]->getSourceId();
+            $synchronizations = $objectEntity->getSynchronizations();
+            if (isset($synchronizations[0]) === true && $synchronizations[0]->getSourceId() !== null) {
+                $existingSourceIds[] = $synchronizations[0]->getSourceId();
                 $existingObjects[]   = $objectEntity;
             }
         }
