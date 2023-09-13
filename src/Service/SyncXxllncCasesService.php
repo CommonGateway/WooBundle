@@ -7,6 +7,7 @@ use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
+use CommonGateway\CoreBundle\Service\ValidationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
@@ -63,6 +64,11 @@ class SyncXxllncCasesService
     private LoggerInterface $logger;
 
     /**
+     * @var ValidationService $validationService.
+     */
+    private ValidationService $validationService;
+
+    /**
      * @var array
      */
     private array $data;
@@ -89,14 +95,16 @@ class SyncXxllncCasesService
         SynchronizationService $syncService,
         EntityManagerInterface $entityManager,
         MappingService $mappingService,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        ValidationService $validationService
     ) {
-        $this->resourceService = $resourceService;
-        $this->callService     = $callService;
-        $this->syncService     = $syncService;
-        $this->entityManager   = $entityManager;
-        $this->mappingService  = $mappingService;
-        $this->logger          = $pluginLogger;
+        $this->resourceService   = $resourceService;
+        $this->callService       = $callService;
+        $this->syncService       = $syncService;
+        $this->entityManager     = $entityManager;
+        $this->mappingService    = $mappingService;
+        $this->logger            = $pluginLogger;
+        $this->validationService = $validationService;
 
     }//end __construct()
 
@@ -217,12 +225,20 @@ class SyncXxllncCasesService
         $decodedResponse = $this->callService->decodeResponse($source, $response);
         $this->entityManager->flush();
 
-        $responseItems = [];
+        $responseItems    = [];
+        $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-            $result           = array_merge($result, ['oidn' => $this->configuration['oidn']]);
-            $result           = $this->mappingService->mapping($mapping, $result);
-            $hydrationService = new HydrationService($this->syncService, $this->entityManager);
-            $object           = $hydrationService->searchAndReplaceSynchronizations(
+            $result = array_merge($result, ['oidn' => $this->configuration['oidn']]);
+            $result = $this->mappingService->mapping($mapping, $result);
+
+            $validationErrors = $this->validationService->validateData($this->content, $this->schema, 'POST');
+            if ($validationErrors !== null) {
+                $validationErrors = implode(', ', $validationErrors);
+                $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
+                continue;
+            }
+
+            $object = $hydrationService->searchAndReplaceSynchronizations(
                 $result,
                 $source,
                 $schema,
@@ -236,7 +252,7 @@ class SyncXxllncCasesService
             }
 
             $responseItems[] = $object;
-        }
+        }//end foreach
 
         $this->deleteNonExistingObjects($idsSynced, $schema);
 
