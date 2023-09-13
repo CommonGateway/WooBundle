@@ -49,12 +49,12 @@
             "type": "string"
         },
         "Ontvangstdatum": {
-            "type": "date",
+            "type": "string",
             "description": "format: Y-m-d"
         },
         "Besluitdatum": {
-            "type": "date",
-            "description": "format: Y-m-d",
+            "type": "string",
+            "description": "format: Y-m-d"
         },
         "Behandelstatus": {
             "type": "string"
