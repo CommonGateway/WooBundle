@@ -2,7 +2,7 @@
   "title": "XxllncCaseToWoo",
   "$id": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
@@ -21,7 +21,7 @@
     "Verzoeker": "values.case&#46;requestor&#46;name",
     "Ontvangstdatum": "values.case&#46;date_of_registration",
     "Besluitdatum": "values.case&#46;date_target",
-    "Behandelstatus": "values.case&#46;status",
+    "Behandelstatus": "{% if values['case&#46;status']|default %}{% if values['case&#46;status'] == 'resolved' %}Afgehandeld{% elseif values['case&#46;status'] == 'open'  %}In behandeling{% elseif values['case&#46;status'] == 'closed'  %}Opgeschort{% elseif values['case&#46;status'] == 'new'  %}Nieuw{% endif %}{% endif %}",
     "Besluit": "",
     "Termijnoverschrijding": "",
     "URL_informatieverzoek": "",
