@@ -231,7 +231,7 @@ class SyncXxllncCasesService
             $result = array_merge($result, ['oidn' => $this->configuration['oidn']]);
             $result = $this->mappingService->mapping($mapping, $result);
 
-            $validationErrors = $this->validationService->validateData($this->content, $this->schema, 'POST');
+            $validationErrors = $this->validationService->validateData($result, $schema, 'POST');
             if ($validationErrors !== null) {
                 $validationErrors = implode(', ', $validationErrors);
                 $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
