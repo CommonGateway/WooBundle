@@ -19,7 +19,7 @@
     "Samenvatting": "values.case&#46;subject",
         "Categorie": "values.attribute&#46;woo_categorie",
     "Verzoeker": "values.case&#46;requestor&#46;name",
-    "Ontvangstdatum": "values.case&#46;date_of_registration",
+    "Ontvangstdatum": "{% if values['case&#46;date_of_registration']|default %}{{ values['case&#46;date_of_registration'] }}{% endif %}",
     "Besluitdatum": "values.case&#46;date_target",
     "Behandelstatus": "{% if values['case&#46;status']|default %}{% if values['case&#46;status'] == 'resolved' %}Afgehandeld{% elseif values['case&#46;status'] == 'open'  %}In behandeling{% elseif values['case&#46;status'] == 'closed'  %}Opgeschort{% elseif values['case&#46;status'] == 'new'  %}Nieuw{% endif %}{% endif %}",
     "Besluit": "",
