@@ -131,7 +131,7 @@ class SyncXxllncCasesService
      * Checks if existing objects still exist in the source, if not deletes them.
      *
      * @param array  $idsSynced ID's from objects we just synced from the source.
-     * @param Source $source These objects belong to.
+     * @param Source $source    These objects belong to.
      * @param string $schemaRef These objects belong to.
      *
      * @return int Count of deleted objects.
@@ -145,7 +145,7 @@ class SyncXxllncCasesService
                 $existingSourceIds[] = $synchronization->getSourceId();
                 $existingObjects[]   = $synchronization->getObject();
             }
-        }    
+        }
 
         // Check if existing sourceIds are in the array of new synced sourceIds.
         $objectIdsToDelete = array_diff($existingSourceIds, $idsSynced);
@@ -241,6 +241,7 @@ class SyncXxllncCasesService
                 $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
                 continue;
             }
+
             if (isset($result['Categorie']) === false) {
                 continue;
             }
@@ -266,7 +267,7 @@ class SyncXxllncCasesService
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
         $countItems = count($responseItems);
-        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName() ." and deleted $deletedObjectsCount objects";
+        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
         isset($this->style) === true && $this->style->success($logMessage);
         $this->logger->info($logMessage);
 
