@@ -4,7 +4,7 @@
 
 ### How does synchronization work
 
-In short: when synchronization triggers cases are fetched from the xxllnc zaaksysteem and mapped to a OpenWebConcept WOO publicatie object.
+In short: when synchronization triggers cases are fetched from a xxllnc zaaksysteem and mapped to a OpenWebConcept WOO publicatie object.
 The mapping schema can be found here: https://github.com/CommonGateway/WooBundle/blob/main/Installation/Mapping/woo.xxllncCaseToWoo.mapping.json
 Some custom logic for the Portal\_url or other properties can be found in the SyncXxllncCasesService.
 
