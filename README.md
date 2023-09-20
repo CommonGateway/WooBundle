@@ -13,7 +13,7 @@ Some custom logic for the Portal_url or other properties can be found in the Syn
 To synchronize publications from the xxllnc zaaksysteem for a municipality, check if its Source is configured properly with info about the zaaksysteem for that municipality: an location, the proper zql query, and make sure the Source is enabled.
 Also find the Action for that municipality and check if the oidn is set properly, the Action is enabled, and then copy the Action reference.
 
-Then in the php container you can execute
+Then in the php container you can execute the following command:
 `bin/console woo:case:synchronize null {action reference}`
 to start synchronizing zaaksysteem cases to woo publications.
 For example: 
