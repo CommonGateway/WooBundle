@@ -6,7 +6,7 @@
 
 In short: when synchronization triggers cases are fetched from the xxllnc zaaksysteem and mapped to a OpenWebConcept WOO publicatie object.
 The mapping schema can be found here: https://github.com/CommonGateway/WooBundle/blob/main/Installation/Mapping/woo.xxllncCaseToWoo.mapping.json
-Some custom logic for the Portal_url or other properties can be found in the SyncXxllncCasesService.
+Some custom logic for the Portal\_url or other properties can be found in the SyncXxllncCasesService.
 
 ### How to synchronize
 
@@ -16,11 +16,10 @@ Also find the Action for that municipality and check if the oidn is set properly
 Then in the php container you can execute the following command:
 `bin/console woo:case:synchronize null {action reference}`
 to start synchronizing zaaksysteem cases to woo publications.
-For example: 
+For example:
 `bin/console woo:case:synchronize null https://commongateway.nl/pdd.SyncNoordwijkAction.action.json`
 
 There are also Cronjobs for existing Actions that run the synchronization each 10 minutes when the Action and Source are configured properly. Make sure the Cronjob is also enabled.
 
 Then you can fetch the objects by just requesting `/api/openWOO` to fetch all publications or `/api/openWOO?oidn={your muncipality oidn}` to fetch the publications belonging to a single municipality.
-Make sure here the oidn parameter value is the same that is set as configuration on the Action of that municipality. 
-
+Make sure here the oidn parameter value is the same that is set as configuration on the Action of that municipality.
