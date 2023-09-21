@@ -35,9 +35,11 @@
     "COORDS": "",
     "Geografische_positie": "",
     "Bijlagen": "[{% set index=0 %}{% if values['attribute&#46;test_documenten']|default %}{% for document in values['attribute&#46;test_documenten'] %}{% if index != 0 %},{% endif %}{{ map('https://commongateway.nl/mapping/pdd.xxllncTestDocumentToBijlage.schema.json', document)|json_encode }}{% set index=index+1 %}{% endfor %}{% endif %}]",
-    "Themas": ""
-},
+    "Themas.0.Hoofdthema": "{% if values['attribute&#46;woo_thema']|default %}{{ values['attribute&#46;woo_thema'] }}{% endif %}"
+  },
   "cast": {
+    "Themas.0.Hoofdthema": "unsetIfValue==",
+    "Themas.0": "unsetIfValue==",
     "Bijlagen": "jsonToArray",
     "Object_ID": "integer"
   }
