@@ -234,7 +234,7 @@ class SyncXxllncCasesService
                 continue;
             }
 
-            if (isset($result['Categorie']) === false || isset($result['Publicatiedatum']) === false || new DateTime($result['Publicatiedatum']) > new DateTime()) {
+            if (isset($result['Categorie']) === false || empty($result['Categorie']) === true || isset($result['Publicatiedatum']) === false || empty($result['Publicatiedatum']) === true ||  new DateTime($result['Publicatiedatum']) > new DateTime()) {
                 continue;
             }
 
