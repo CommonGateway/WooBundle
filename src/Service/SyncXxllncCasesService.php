@@ -249,7 +249,7 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-            $bijlagen = $result['values']['attribute.ztc_bijlagen'] ?? [];
+            $bijlagen = ($result['values']['attribute.ztc_bijlagen'] ?? []);
 
             $result = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
             $result = $this->mappingService->mapping($mapping, $result);
