@@ -247,7 +247,6 @@ class SyncXxllncCasesService
 
             $object->hydrate(['Portal_url' => $this->configuration['portalUrl'].'/'.$object->getId()->toString()]);
             $this->entityManager->persist($object);
-            $this->entityManager->flush();
 
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
@@ -256,6 +255,8 @@ class SyncXxllncCasesService
 
             $responseItems[] = $object;
         }//end foreach
+
+        $this->entityManager->flush();
 
         $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
 
