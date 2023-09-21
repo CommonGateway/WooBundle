@@ -2,11 +2,14 @@
     "title": "SyncNoordwijkCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncNoordwijkAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "listens": ["woo.default.listens","woo.noordwijk.listens"],
     "configuration": {
         "oidn": "00000001825792150000",
-        "source": "https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json"
+        "portalUrl": "https://conductionnl.github.io/woo-website-noordwijk",
+        "source": "https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json",
+        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json"
     },
     "conditions":
     {
