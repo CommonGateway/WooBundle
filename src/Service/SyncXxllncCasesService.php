@@ -247,6 +247,8 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
+            $bijlagen = $result['values']['attribute.ztc_bijlagen'] ?? [];
+
             $result = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
             $result = $this->mappingService->mapping($mapping, $result);
 
@@ -261,12 +263,10 @@ class SyncXxllncCasesService
                 continue;
             }
 
-            // $documents here is temporary for testing
-            $documents = [];
-            $fetchedDocuments = [];
+            $fetchedBijlagen = [];
             // @todo test with documents from $result.
-            foreach ($documents as $document) {
-                $fetchedDocuments[] = $this->getInhoudDocument($result['UUID'], $document['uuid'], $document['mimetype'], $source);
+            foreach ($bijlagen as $bijlage) {
+                $fetchedBijlagen[] = $this->getInhoudDocument($result['UUID'], $bijlage['uuid'], $bijlage['mimetype'], $source);
             }
 
 
