@@ -2,16 +2,16 @@
   "title": "XxllncCaseToWoo",
   "$id": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
     "oidn": "{% if oidn|default %}{{ oidn }}{% else %}unknown{% endif %}",
-    "UUID": "case.class_uuid",
+    "UUID": "id",
     "ID": "id",
     "Object_ID": "object_id",
     "Portal_url": "",
-    "Behandelend_bestuursorgaan": "",
+    "Behandelend_bestuursorgaan": "bestuursorgaan",
     "Ontvanger_informatieverzoek": "",
     "Volgnummer": "",
     "Titel": "values.case&#46;casetype&#46;name",
@@ -35,9 +35,11 @@
     "COORDS": "",
     "Geografische_positie": "",
     "Bijlagen": "[{% set index=0 %}{% if values['attribute&#46;test_documenten']|default %}{% for document in values['attribute&#46;test_documenten'] %}{% if index != 0 %},{% endif %}{{ map('https://commongateway.nl/mapping/pdd.xxllncTestDocumentToBijlage.schema.json', document)|json_encode }}{% set index=index+1 %}{% endfor %}{% endif %}]",
-    "Themas": ""
-},
+    "Themas.0.Hoofdthema": "{% if values['attribute&#46;woo_thema']|default %}{{ values['attribute&#46;woo_thema'] }}{% endif %}"
+  },
   "cast": {
+    "Themas.0.Hoofdthema": "unsetIfValue==",
+    "Themas.0": "unsetIfValue==",
     "Bijlagen": "jsonToArray",
     "Object_ID": "integer"
   }
