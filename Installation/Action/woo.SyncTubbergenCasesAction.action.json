@@ -10,7 +10,7 @@
         "source": "https://commongateway.woo.nl/source/tubbergen.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
         "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
-        "bestuurorgaan": "Gemeente Tubbergen"
+        "bestuursorgaan": "Gemeente Tubbergen"
     },
     "conditions":
     {

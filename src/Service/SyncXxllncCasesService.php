@@ -188,13 +188,13 @@ class SyncXxllncCasesService
 
         if (isset($this->configuration['source']) === false
             || isset($this->configuration['oidn']) === false
-            || isset($this->configuration['bestuurorgaan']) === false
+            || isset($this->configuration['bestuursorgaan']) === false
             || isset($this->configuration['portalUrl']) === false
             || isset($this->configuration['schema']) === false
             || isset($this->configuration['mapping']) === false
         ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, oidn, bestuurorgaan or portalUrl configured on this action, ending syncXxllncCasesHandler');
-            $this->logger->error('No source, schema, mapping, oidn or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            isset($this->style) === true && $this->style->error('No source, schema, mapping, oidn, bestuursorgaan or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            $this->logger->error('No source, schema, mapping, oidn, bestuursorgaan or portalUrl configured on this action, ending syncXxllncCasesHandler');
 
             return [];
         }
@@ -223,7 +223,7 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-            $result = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuurorgaan' => $this->configuration['bestuurorgaan']]);
+            $result = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
             $result = $this->mappingService->mapping($mapping, $result);
 
             $validationErrors = $this->validationService->validateData($result, $schema, 'POST');

@@ -10,7 +10,7 @@
         "source": "https://commongateway.woo.nl/source/noaberkracht.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
         "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
-        "bestuurorgaan": "Gemeente Noaberkracht"
+        "bestuursorgaan": "Gemeente Noaberkracht"
     },
     "conditions":
     {

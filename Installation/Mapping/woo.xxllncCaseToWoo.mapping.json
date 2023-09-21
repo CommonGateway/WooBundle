@@ -11,7 +11,7 @@
     "ID": "id",
     "Object_ID": "object_id",
     "Portal_url": "",
-    "Behandelend_bestuursorgaan": "bestuurorgaan",
+    "Behandelend_bestuursorgaan": "bestuursorgaan",
     "Ontvanger_informatieverzoek": "",
     "Volgnummer": "",
     "Titel": "values.case&#46;casetype&#46;name",

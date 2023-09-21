@@ -10,7 +10,7 @@
         "source": "https://commongateway.woo.nl/source/dinkelland.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
         "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
-        "bestuurorgaan": "Gemeente Dinkelland"
+        "bestuursorgaan": "Gemeente Dinkelland"
     },
     "conditions":
     {
