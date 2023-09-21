@@ -231,10 +231,13 @@ class SyncXxllncCasesService
             if ($validationErrors !== null) {
                 $validationErrors = implode(', ', $validationErrors);
                 $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
+                isset($this->style) === true && $this->style->error("SyncXxllncCases validation errors: $validationErrors");
                 continue;
             }
 
             if (isset($result['Categorie']) === false || empty($result['Categorie']) === true || isset($result['Publicatiedatum']) === false || empty($result['Publicatiedatum']) === true ||  new DateTime($result['Publicatiedatum']) > new DateTime()) {
+                $this->logger->error("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
+                isset($this->style) === true && $this->style->error("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
                 continue;
             }
 
