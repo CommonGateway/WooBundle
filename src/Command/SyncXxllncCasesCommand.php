@@ -99,7 +99,7 @@ class SyncXxllncCasesCommand extends Command
 
         if (($caseId = $input->getArgument('id')) === null
             || ($actionRef = $input->getArgument('action')) === null
-        ){
+        ) {
             $style->error("no argument argument id and/or caseId given");
 
             return Command::FAILURE;

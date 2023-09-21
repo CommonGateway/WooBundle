@@ -134,7 +134,7 @@ class SyncXxllncCasesService
      * Checks if existing objects still exist in the source, if not deletes them.
      *
      * @param array  $idsSynced ID's from objects we just synced from the source.
-     * @param Source $source These objects belong to.
+     * @param Source $source    These objects belong to.
      * @param string $schemaRef These objects belong to.
      *
      * @return int Count of deleted objects.
@@ -198,9 +198,9 @@ class SyncXxllncCasesService
             return [];
         }
 
-        $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        $schema    = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
-        $mapping    = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+        $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
         if ($source instanceof Gateway === false
             || $schema instanceof Entity === false
             || $mapping instanceof Mapping === false
@@ -222,7 +222,6 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-
             $result = array_merge($result, ['oidn' => $this->configuration['oidn']]);
             $result = $this->mappingService->mapping($mapping, $result);
 
@@ -232,6 +231,7 @@ class SyncXxllncCasesService
                 $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
                 continue;
             }
+
             if (isset($result['Categorie']) === false) {
                 continue;
             }
@@ -251,7 +251,6 @@ class SyncXxllncCasesService
             $this->entityManager->persist($object);
             $this->entityManager->flush();
 
-
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
@@ -265,7 +264,7 @@ class SyncXxllncCasesService
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
         $countItems = count($responseItems);
-        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName() ." and deleted $deletedObjectsCount objects";
+        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
         isset($this->style) === true && $this->style->success($logMessage);
         $this->logger->info($logMessage);
 
