@@ -2,13 +2,10 @@
     "title": "Noaberkracht zaaksysteem",
     "$id": "https://commongateway.woo.nl/source/noaberkracht.zaaksysteem.source.json",
     "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Noaberkracht zaaksysteem api",
     "location": "https://zaaksysteem-accept.noaberkracht.nl/api/public_search/450/search",
     "headers": {
-        "accept": "application/json",
-        "query": {
-            "zql": "SELECT%20case.status%2C%20case.num_unaccepted_updates%2C%20case.num_unaccepted_files%2C%20case.num_unread_communication%2C%20case.number%2C%20attribute.woo_categorie%2C%20attribute.woo_thema%2C%20attribute.woo_publicatiedatum%2C%20attribute.ztc_bijlagen%2C%20case.days_left%2C%20case.newtab%2C%20case.casetype.name%2C%20case.subject%2C%20case.requestor.name%2C%20case.archival_state%2C%20case.destructable%2C%20case.date_target%20FROM%20case%20WHERE%20(case.casetype.id%20%3D%201918)%20ORDER%20BY%20case.number%20DESC"
-        }
+        "accept": "application/json"
     }
 }

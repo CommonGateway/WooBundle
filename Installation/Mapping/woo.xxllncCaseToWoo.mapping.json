@@ -2,7 +2,7 @@
   "title": "XxllncCaseToWoo",
   "$id": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
@@ -11,7 +11,7 @@
     "ID": "id",
     "Object_ID": "object_id",
     "Portal_url": "",
-    "Behandelend_bestuursorgaan": "",
+    "Behandelend_bestuursorgaan": "bestuursorgaan",
     "Ontvanger_informatieverzoek": "",
     "Volgnummer": "",
     "Titel": "values.case&#46;casetype&#46;name",

@@ -2,14 +2,15 @@
     "title": "SyncEpeCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncEpeAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "listens": ["woo.default.listens","woo.epe.listens"],
     "configuration": {
         "oidn": "00000001001104524000",
         "portalUrl": "https://conductionnl.github.io/woo-website-epe",
         "source": "https://commongateway.woo.nl/source/epe.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
-        "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json"
+        "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
+        "bestuursorgaan": "Gemeente Epe"
     },
     "conditions":
     {
