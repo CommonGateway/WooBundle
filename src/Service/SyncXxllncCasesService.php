@@ -167,6 +167,7 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
+
     /**
      * Gets the inhoud of the document from a different endpoint that has the metadata.
      *
@@ -268,7 +269,6 @@ class SyncXxllncCasesService
             foreach ($bijlagen as $bijlage) {
                 $fetchedBijlagen[] = $this->getInhoudDocument($result['UUID'], $bijlage['uuid'], $bijlage['mimetype'], $source);
             }
-
 
             $object = $hydrationService->searchAndReplaceSynchronizations(
                 $result,
