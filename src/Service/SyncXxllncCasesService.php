@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
+use DateTime;
 
 /**
  * Service responsible for synchronizing xxllnc cases to woo objects.
@@ -233,7 +234,7 @@ class SyncXxllncCasesService
                 continue;
             }
 
-            if (isset($result['Categorie']) === false) {
+            if (isset($result['Categorie']) === false || empty($result['Categorie']) === true || isset($result['Publicatiedatum']) === false || empty($result['Publicatiedatum']) === true ||  new DateTime($result['Publicatiedatum']) > new DateTime()) {
                 continue;
             }
 
