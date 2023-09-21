@@ -56,6 +56,10 @@
             "type": "string",
             "description": "format: Y-m-d"
         },
+        "Publicatiedatum": {
+            "type": "string",
+            "required": true
+        },
         "Behandelstatus": {
             "type": "string"
         },
@@ -118,6 +122,7 @@
         }
     },
     "required": [
-        "Categorie"
+        "Categorie",
+        "Publicatiedatum"
     ]
 }
