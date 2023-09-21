@@ -167,6 +167,30 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
+    /**
+     * Gets the inhoud of the document from a different endpoint that has the metadata.
+     *
+     * @param string $caseId      Case id.
+     * @param string $documentId  Document id.
+     * @param Source $zaaksysteem Xxllnc zaaksysteem api v1.
+     *
+     * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
+     */
+    private function getInhoudDocument(string $caseId, string $documentId, string $mimeType, Source $zaaksysteem): ?string
+    {
+        try {
+            isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case $caseId");
+            $this->logger->info("Fetching inhoud document: $documentId for case $caseId");
+            $response = $this->callService->call($zaaksysteem, "/case/$caseId/document/$documentid/download", 'GET', false, false);
+            return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType)['base64'];
+        } catch (Exception $e) {
+            isset($this->style) === true && $this->style->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
+            $this->logger->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
+            return null;
+        }
+
+    }//end getInhoudDocument()
+
 
     /**
      * Handles the synchronization of xxllnc cases.
@@ -236,6 +260,15 @@ class SyncXxllncCasesService
             if (isset($result['Categorie']) === false) {
                 continue;
             }
+
+            // $documents here is temporary for testing
+            $documents = [];
+            $fetchedDocuments = [];
+            // @todo test with documents from $result.
+            foreach ($documents as $document) {
+                $fetchedDocuments[] = $this->getInhoudDocument($result['UUID'], $document['uuid'], $document['mimetype'], $source);
+            }
+
 
             $object = $hydrationService->searchAndReplaceSynchronizations(
                 $result,
