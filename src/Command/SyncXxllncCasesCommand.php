@@ -96,18 +96,23 @@ class SyncXxllncCasesCommand extends Command
     {
         $style = new SymfonyStyle($input, $output);
         $this->syncXxllncCasesService->setStyle($style);
-        $caseId    = $input->getArgument('id');
-        $actionRef = $input->getArgument('action');
+
+        if (($caseId = $input->getArgument('id')) === null
+            || ($actionRef = $input->getArgument('action')) === null
+        ) {
+            $style->error("no argument argument id and/or caseId given");
+
+            return Command::FAILURE;
+        }
 
         $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => $actionRef]);
-        if ($action instanceof Action === null) {
+        if ($action instanceof Action === false) {
             $style->error("Action with reference $actionRef not found");
 
             return Command::FAILURE;
         }
 
-        if (isset($caseId) === true
-            && Uuid::isValid($caseId) === true
+        if (Uuid::isValid($caseId) === true
         ) {
             // if ($this->syncXxllncCasesService->getZaak($action->getConfiguration(), $caseId) === true) {
             // return Command::FAILURE;

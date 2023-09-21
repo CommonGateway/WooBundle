@@ -2,11 +2,15 @@
     "title": "SyncNoaberkrachtAction",
     "$id": "https://commongateway.nl/pdd.SyncNoaberkrachtAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "listens": ["woo.default.listens","woo.noaberkracht.listens"],
     "configuration": {
         "oidn": "00000001852070706000",
-        "source": "https://commongateway.woo.nl/source/noaberkracht.zaaksysteem.source.json"
+        "portalUrl": "https://conductionnl.github.io/woo-website-noaberkracht",
+        "source": "https://commongateway.woo.nl/source/noaberkracht.zaaksysteem.source.json",
+        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
+        "bestuurorgaan": "Gemeente Noaberkracht"
     },
     "conditions":
     {

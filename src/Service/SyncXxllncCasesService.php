@@ -2,6 +2,9 @@
 
 namespace CommonGateway\WOOBundle\Service;
 
+use App\Entity\Entity;
+use App\Entity\Gateway;
+use App\Entity\Mapping;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
@@ -131,7 +134,7 @@ class SyncXxllncCasesService
      * Checks if existing objects still exist in the source, if not deletes them.
      *
      * @param array  $idsSynced ID's from objects we just synced from the source.
-     * @param Source $source    These objects belong to.
+     * @param Source $source These objects belong to.
      * @param string $schemaRef These objects belong to.
      *
      * @return int Count of deleted objects.
@@ -183,40 +186,28 @@ class SyncXxllncCasesService
         isset($this->style) === true && $this->style->success('SyncXxllncCasesService triggered');
         $this->logger->info('SyncXxllncCasesService triggered');
 
-        if (isset($this->configuration['source']) === false) {
-            isset($this->style) === true && $this->style->error('No source configured on this action, ending syncXxllncCasesHandler');
-            $this->logger->error('No source configured on this action, ending syncXxllncCasesHandler');
-
-            return [];
-        }
-
-        if (isset($this->configuration['oidn']) === false) {
-            isset($this->style) === true && $this->style->error('No oidn configured on this action, ending syncXxllncCasesHandler');
-            $this->logger->error('No oidn configured on this action, ending syncXxllncCasesHandler');
+        if (isset($this->configuration['source']) === false
+            || isset($this->configuration['oidn']) === false
+            || isset($this->configuration['bestuurorgaan']) === false
+            || isset($this->configuration['portalUrl']) === false
+            || isset($this->configuration['schema']) === false
+            || isset($this->configuration['mapping']) === false
+        ) {
+            isset($this->style) === true && $this->style->error('No source, schema, mapping, oidn, bestuurorgaan or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            $this->logger->error('No source, schema, mapping, oidn or portalUrl configured on this action, ending syncXxllncCasesHandler');
 
             return [];
         }
 
         $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        if ($source === null) {
-            isset($this->style) === true && $this->style->error("{$this->configuration['source']} not found, ending syncXxllncCasesHandler");
-            $this->logger->error("{$this->configuration['source']} not found, ending syncXxllncCasesHandler");
-            return [];
-        }
+        $schema    = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping    = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        if ($source instanceof Gateway === false
+            || $schema instanceof Entity === false
+            || $mapping instanceof Mapping === false
+        ) {
+            isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncXxllncCasesHandler");
 
-        $schemaRef = 'https://commongateway.nl/pdd.openWOO.schema.json';
-        $schema    = $this->resourceService->getSchema($schemaRef, 'common-gateway/woo-bundle');
-        if ($schema === null) {
-            isset($this->style) === true && $this->style->error("$schemaRef not found, ending syncXxllncCasesHandler");
-            $this->logger->error("$schemaRef not found, ending syncXxllncCasesHandlerr");
-            return [];
-        }
-
-        $mappingRef = 'https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json';
-        $mapping    = $this->resourceService->getMapping($mappingRef, 'common-gateway/woo-bundle');
-        if ($mapping === null) {
-            isset($this->style) === true && $this->style->error("$mappingRef not found, ending syncXxllncCasesHandler");
-            $this->logger->error("$mappingRef not found, ending syncXxllncCasesHandlerr");
             return [];
         }
 
@@ -232,7 +223,8 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-            $result = array_merge($result, ['oidn' => $this->configuration['oidn']]);
+
+            $result = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuurorgaan' => $this->configuration['bestuurorgaan']]);
             $result = $this->mappingService->mapping($mapping, $result);
 
             $validationErrors = $this->validationService->validateData($result, $schema, 'POST');
@@ -241,7 +233,6 @@ class SyncXxllncCasesService
                 $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
                 continue;
             }
-
             if (isset($result['Categorie']) === false) {
                 continue;
             }
@@ -254,6 +245,11 @@ class SyncXxllncCasesService
                 true
             );
 
+            $object->hydrate(['Portal_url' => $this->configuration['portalUrl'].'/'.$object->getId()->toString()]);
+            $this->entityManager->persist($object);
+            $this->entityManager->flush();
+
+
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
@@ -262,12 +258,12 @@ class SyncXxllncCasesService
             $responseItems[] = $object;
         }//end foreach
 
-        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $schemaRef);
+        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
         $countItems = count($responseItems);
-        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
+        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName() ." and deleted $deletedObjectsCount objects";
         isset($this->style) === true && $this->style->success($logMessage);
         $this->logger->info($logMessage);
 
