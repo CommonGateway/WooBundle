@@ -267,7 +267,6 @@ class SyncXxllncCasesService
         $this->logger->info($logMessage);
 
         return $this->data;
-        
 
     }//end syncXxllncCasesHandler()
 
