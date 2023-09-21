@@ -2,11 +2,14 @@
     "title": "SyncDinkellandCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncDinkellandCasesAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "listens": ["woo.default.listens","woo.dinkelland.listens"],
     "configuration": {
         "oidn": "00000001809245206000",
-        "source": "https://commongateway.woo.nl/source/dinkelland.zaaksysteem.source.json"
+        "portalUrl": "https://conductionnl.github.io/woo-website-dinkelland",
+        "source": "https://commongateway.woo.nl/source/dinkelland.zaaksysteem.source.json",
+        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json"
     },
     "conditions":
     {
