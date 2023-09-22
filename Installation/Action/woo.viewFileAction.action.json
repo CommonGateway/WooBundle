@@ -1,0 +1,13 @@
+{
+    "title": "ViewFileAction",
+    "$id": "https://commongateway.nl/woo.ViewFileAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.file.view"],
+    "configuration": {},
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\ViewFileHandler"
+}

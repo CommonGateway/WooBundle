@@ -2,7 +2,7 @@
     "title": "SyncNoordwijkCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncNoordwijkAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "listens": ["woo.default.listens","woo.noordwijk.listens"],
     "configuration": {
         "oidn": "00000001825792150000",
@@ -10,7 +10,9 @@
         "source": "https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
         "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
-        "bestuursorgaan": "Gemeente Noordwijk"
+        "bestuursorgaan": "Gemeente Noordwijk",
+        "zaaksysteemSearchEndpoint": "/public_search/548/search",
+        "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json"
     },
     "conditions":
     {

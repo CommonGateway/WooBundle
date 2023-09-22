@@ -2,15 +2,17 @@
 
 namespace CommonGateway\WOOBundle\Service;
 
-use App\Entity\Entity;
-use App\Entity\Gateway;
+use App\Entity\Entity as Schema;
 use App\Entity\Mapping;
+use App\Entity\Endpoint;
+use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
+use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
@@ -72,6 +74,12 @@ class SyncXxllncCasesService
      */
     private ValidationService $validationService;
 
+
+    /**
+     * @var FileService $fileService.
+     */
+    private FileService $fileService;
+
     /**
      * @var array
      */
@@ -92,6 +100,7 @@ class SyncXxllncCasesService
      * @param EntityManagerInterface $entityManager
      * @param MappingService         $mappingService
      * @param LoggerInterface        $pluginLogger
+     * @param FileService            $fileService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -100,7 +109,8 @@ class SyncXxllncCasesService
         EntityManagerInterface $entityManager,
         MappingService $mappingService,
         LoggerInterface $pluginLogger,
-        ValidationService $validationService
+        ValidationService $validationService,
+        FileService $fileService
     ) {
         $this->resourceService   = $resourceService;
         $this->callService       = $callService;
@@ -109,6 +119,7 @@ class SyncXxllncCasesService
         $this->mappingService    = $mappingService;
         $this->logger            = $pluginLogger;
         $this->validationService = $validationService;
+        $this->fileService       = $fileService;
 
     }//end __construct()
 
@@ -168,30 +179,33 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
-
-    /**
-     * Gets the inhoud of the document from a different endpoint that has the metadata.
-     *
-     * @param string $caseId      Case id.
-     * @param string $documentId  Document id.
-     * @param Source $zaaksysteem Xxllnc zaaksysteem api v1.
-     *
-     * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
-     */
-    private function getInhoudDocument(string $caseId, string $documentId, string $mimeType, Source $zaaksysteem): ?string
+    private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source, ?bool &$check = false)
     {
-        try {
-            isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case $caseId");
-            $this->logger->info("Fetching inhoud document: $documentId for case $caseId");
-            $response = $this->callService->call($zaaksysteem, "/case/$caseId/document/$documentid/download", 'GET', false, false);
-            return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType)['base64'];
-        } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
-            $this->logger->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
-            return null;
+        $fileFields = ['informatieverzoek', 'inventarisatielijst', 'besluit'];
+        $fileURLS = [];
+        foreach ($fileFields as $field) {
+            if (isset($result['values']["attribute.woo_$field"]) === true) {
+                $base64 = $this->fileService->getInhoudDocument($result['id'], $result['values']["attribute.woo_$field"]['uuid'], $result['values']["attribute.woo_$field"]['mimetype'], $source);
+                $value = $object->getValueObject("URL_$field");
+                $title = $result['values']["attribute.woo_$field"]['filename'];
+                $mimeType = $result['values']["attribute.woo_$field"]['mimetype'];
+                $fileURLS[$field] = $this->fileService->createOrUpdateFile($value, $title, $base64, $mimeType, $fileEndpoint);
+                $check = true;
+            }
         }
+        $hydrateArray = [
+            'Portal_url' => $this->configuration['portalUrl'].'/'.$object->getId()->toString(),
+            'URL_informatieverzoek' => $fileURLS['informatieverzoek'] ?? null,
+            'URL_inventarisatielijst' => $fileURLS['inventarisatielijst'] ?? null,
+            'URL_besluit' => $fileURLS['besluit'] ?? null,
+        ];
+        if ($check === true) {
+            var_dump($hydrateArray);
+        }
+        $object->hydrate($hydrateArray);
 
-    }//end getInhoudDocument()
+        return $object;
+    }//end handleCustomLogic()
 
 
     /**
@@ -218,18 +232,21 @@ class SyncXxllncCasesService
             || isset($this->configuration['portalUrl']) === false
             || isset($this->configuration['schema']) === false
             || isset($this->configuration['mapping']) === false
+            || isset($this->configuration['fileEndpointReference']) === false
+            || isset($this->configuration['zaaksysteemSearchEndpoint']) === false
         ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, oidn, bestuursorgaan or portalUrl configured on this action, ending syncXxllncCasesHandler');
-            $this->logger->error('No source, schema, mapping, oidn, bestuursorgaan or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            isset($this->style) === true && $this->style->error('No source, schema, mapping, oidn, bestuursorgaan, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            $this->logger->error('No source, schema, mapping, oidn, bestuursorgaan, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
 
             return [];
         }
 
+        $fileEndpoint  = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
         $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
         $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
         $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
-        if ($source instanceof Gateway === false
-            || $schema instanceof Entity === false
+        if ($source instanceof Source === false
+            || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
         ) {
             isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncXxllncCasesHandler");
@@ -242,54 +259,61 @@ class SyncXxllncCasesService
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
         $this->logger->info("Fetching cases from {$source->getLocation()}");
 
-        $response        = $this->callService->call($source, '', 'GET', $sourceConfig);
+        $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', $sourceConfig);
         $decodedResponse = $this->callService->decodeResponse($source, $response);
         $this->entityManager->flush();
 
+        $idsSynced        = [];
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-            $bijlagen = ($result['values']['attribute.ztc_bijlagen'] ?? []);
 
             $result = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
-            $result = $this->mappingService->mapping($mapping, $result);
+            $mappedResult = $this->mappingService->mapping($mapping, $result);
 
-            $validationErrors = $this->validationService->validateData($result, $schema, 'POST');
+            $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
             if ($validationErrors !== null) {
                 $validationErrors = implode(', ', $validationErrors);
                 $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
                 continue;
             }
 
-            if (isset($result['Categorie']) === false || empty($result['Categorie']) === true || isset($result['Publicatiedatum']) === false || empty($result['Publicatiedatum']) === true ||  new DateTime($result['Publicatiedatum']) > new DateTime()) {
+            if (isset($mappedResult['Categorie']) === false || empty($mappedResult['Categorie']) === true || isset($mappedResult['Publicatiedatum']) === false || empty($mappedResult['Publicatiedatum']) === true ||  new DateTime($mappedResult['Publicatiedatum']) > new DateTime()) {
                 continue;
             }
 
-            $fetchedBijlagen = [];
-            // @todo test with documents from $result.
-            foreach ($bijlagen as $bijlage) {
-                $fetchedBijlagen[] = $this->getInhoudDocument($result['UUID'], $bijlage['uuid'], $bijlage['mimetype'], $source);
+            // @todo remove
+            if (isset($result['values']['attribute.test_documenten'][0]) === true) {
+                $result['values']['attribute.woo_besluit'] = $result['values']['attribute.test_documenten'][0];
             }
 
             $object = $hydrationService->searchAndReplaceSynchronizations(
-                $result,
+                $mappedResult,
                 $source,
                 $schema,
                 true,
                 true
             );
 
-            $object->hydrate(['Portal_url' => $this->configuration['portalUrl'].'/'.$object->getId()->toString()]);
-            $this->entityManager->persist($object);
+            // Some custom logic.
+            $check = false;
+            $object = $this->handleCustomLogic($object, $result, $fileEndpoint, $source);
+            if ($check === true) {
+                die;
+            }
+
 
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
             }
 
+            var_dump('before persist');
+            $this->entityManager->persist($object);
             $responseItems[] = $object;
         }//end foreach
 
+        var_dump('before flush');
         $this->entityManager->flush();
 
         $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
