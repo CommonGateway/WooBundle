@@ -74,7 +74,6 @@ class SyncXxllncCasesService
      */
     private ValidationService $validationService;
 
-
     /**
      * @var FileService $fileService.
      */
@@ -179,32 +178,40 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
-    private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source, ?bool &$check = false)
+
+    private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source, ?bool &$check=false)
     {
-        $fileFields = ['informatieverzoek', 'inventarisatielijst', 'besluit'];
-        $fileURLS = [];
+        $fileFields = [
+            'informatieverzoek',
+            'inventarisatielijst',
+            'besluit',
+        ];
+        $fileURLS   = [];
         foreach ($fileFields as $field) {
             if (isset($result['values']["attribute.woo_$field"]) === true) {
-                $base64 = $this->fileService->getInhoudDocument($result['id'], $result['values']["attribute.woo_$field"]['uuid'], $result['values']["attribute.woo_$field"]['mimetype'], $source);
-                $value = $object->getValueObject("URL_$field");
-                $title = $result['values']["attribute.woo_$field"]['filename'];
-                $mimeType = $result['values']["attribute.woo_$field"]['mimetype'];
+                $base64           = $this->fileService->getInhoudDocument($result['id'], $result['values']["attribute.woo_$field"]['uuid'], $result['values']["attribute.woo_$field"]['mimetype'], $source);
+                $value            = $object->getValueObject("URL_$field");
+                $title            = $result['values']["attribute.woo_$field"]['filename'];
+                $mimeType         = $result['values']["attribute.woo_$field"]['mimetype'];
                 $fileURLS[$field] = $this->fileService->createOrUpdateFile($value, $title, $base64, $mimeType, $fileEndpoint);
-                $check = true;
+                $check            = true;
             }
         }
+
         $hydrateArray = [
-            'Portal_url' => $this->configuration['portalUrl'].'/'.$object->getId()->toString(),
-            'URL_informatieverzoek' => $fileURLS['informatieverzoek'] ?? null,
+            'Portal_url'              => $this->configuration['portalUrl'].'/'.$object->getId()->toString(),
+            'URL_informatieverzoek'   => $fileURLS['informatieverzoek'] ?? null,
             'URL_inventarisatielijst' => $fileURLS['inventarisatielijst'] ?? null,
-            'URL_besluit' => $fileURLS['besluit'] ?? null,
+            'URL_besluit'             => $fileURLS['besluit'] ?? null,
         ];
         if ($check === true) {
             var_dump($hydrateArray);
         }
+
         $object->hydrate($hydrateArray);
 
         return $object;
+
     }//end handleCustomLogic()
 
 
@@ -241,10 +248,10 @@ class SyncXxllncCasesService
             return [];
         }
 
-        $fileEndpoint  = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
-        $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
-        $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $fileEndpoint = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
+        $source       = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+        $schema       = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping      = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
         if ($source instanceof Source === false
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
@@ -267,8 +274,7 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-
-            $result = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
+            $result       = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
             $mappedResult = $this->mappingService->mapping($mapping, $result);
 
             $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
@@ -299,12 +305,11 @@ class SyncXxllncCasesService
             );
 
             // Some custom logic.
-            $check = false;
+            $check  = false;
             $object = $this->handleCustomLogic($object, $result, $fileEndpoint, $source);
             if ($check === true) {
                 die;
             }
-
 
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {

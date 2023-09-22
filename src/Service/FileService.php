@@ -4,7 +4,7 @@ namespace CommonGateway\WOOBundle\Service;
 
 use App\Entity\Value;
 use App\Entity\Endpoint;
-use App\Entity\File; 
+use App\Entity\File;
 use CommonGateway\CoreBundle\Service\CallService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -75,10 +75,10 @@ class FileService
         LoggerInterface $pluginLogger,
         ParameterBagInterface $parameterBag
     ) {
-        $this->callService       = $callService;
-        $this->entityManager     = $entityManager;
-        $this->logger            = $pluginLogger;
-        $this->parameterBag      = $parameterBag;
+        $this->callService   = $callService;
+        $this->entityManager = $entityManager;
+        $this->logger        = $pluginLogger;
+        $this->parameterBag  = $parameterBag;
 
     }//end __construct()
 
@@ -125,6 +125,7 @@ class FileService
 
     }//end getInhoudDocument()
 
+
     /**
      * Creates or updates a file associated with a given Value instance.
      *
@@ -159,7 +160,9 @@ class FileService
         $this->entityManager->flush();
 
         return $this->generateDownloadEndpoint($file->getId()->toString(), $downloadEndpoint);
+
     }//end createOrUpdateFile()
+
 
     /**
      * Generates a download endpoint from the id of an 'WOO Object' and the endpoint for downloads.
@@ -185,6 +188,7 @@ class FileService
 
     }//end generateDownloadEndpoint()
 
+
     /**
      * Returns the data from an document as a response.
      *
@@ -196,19 +200,20 @@ class FileService
     public function viewFileHandler(array $data, array $configuration): array
     {
         $this->data = $data;
-        var_dump("view file handler");die;
+        var_dump("view file handler");
+        die;
 
         $parameters = $this->data;
         $path       = $this->data['path'];
 
-        $file         = $this->entityManager->getRepository('App:File')->find($path['id']);
+        $file = $this->entityManager->getRepository('App:File')->find($path['id']);
         if ($file instanceof File === false) {
             return $this->data;
         }
 
         $this->data['response'] = new Response(\Safe\base64_decode($file->getBase64()), 200, ['content-type' => $file->getMimeType()]);
 
-    }//end downloadInhoudHandler()
+    }//end viewFileHandler()
 
 
 }//end class
