@@ -221,6 +221,7 @@ class SyncXxllncCasesService
         $decodedResponse = $this->callService->decodeResponse($source, $response);
         $this->entityManager->flush();
 
+        $idsSynced        = [];
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
