@@ -270,7 +270,6 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
-
             $result       = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
             $mappedResult = $this->mappingService->mapping($mapping, $result);
 

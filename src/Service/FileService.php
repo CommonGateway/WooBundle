@@ -207,14 +207,14 @@ class FileService
         $file = $this->entityManager->getRepository('App:File')->find($path['id']);
 
         // Make sure only files for the configured schema are retrievable.
-        if ($file instanceof File === false ||
-            $file->getValue() === null ||
-            $file->getValue()->getObjectEntity() === null ||
-            $file->getValue()->getObjectEntity()->getEntity() === null ||
-            $file->getValue()->getObjectEntity()->getEntity()->getReference() === null ||
-            isset($configuration['schemaThisFileBelongsTo']) === false || 
-            $file->getValue()->getObjectEntity()->getEntity()->getReference() !== $configuration['schemaThisFileBelongsTo']
-            ) {
+        if ($file instanceof File === false
+            || $file->getValue() === null
+            || $file->getValue()->getObjectEntity() === null
+            || $file->getValue()->getObjectEntity()->getEntity() === null
+            || $file->getValue()->getObjectEntity()->getEntity()->getReference() === null
+            || isset($configuration['schemaThisFileBelongsTo']) === false
+            || $file->getValue()->getObjectEntity()->getEntity()->getReference() !== $configuration['schemaThisFileBelongsTo']
+        ) {
             return ['response' => new Response('{"message" => "File not found or file doesn\'t belong to the configured schema."}', 400, ['content-type' => 'application/json'])];
         }
 
