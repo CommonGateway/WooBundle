@@ -179,7 +179,7 @@ class SyncXxllncCasesService
     }//end deleteNonExistingObjects()
 
 
-    private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source, ?bool &$check=false)
+    private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source)
     {
         $fileFields = [
             'informatieverzoek',
@@ -194,7 +194,6 @@ class SyncXxllncCasesService
                 $title            = $result['values']["attribute.woo_$field"]['filename'];
                 $mimeType         = $result['values']["attribute.woo_$field"]['mimetype'];
                 $fileURLS[$field] = $this->fileService->createOrUpdateFile($value, $title, $base64, $mimeType, $fileEndpoint);
-                $check            = true;
             }
         }
 
@@ -204,9 +203,6 @@ class SyncXxllncCasesService
             'URL_inventarisatielijst' => $fileURLS['inventarisatielijst'] ?? null,
             'URL_besluit'             => $fileURLS['besluit'] ?? null,
         ];
-        if ($check === true) {
-            var_dump($hydrateArray);
-        }
 
         $object->hydrate($hydrateArray);
 
@@ -274,6 +270,7 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($decodedResponse['result'] as $result) {
+
             $result       = array_merge($result, ['oidn' => $this->configuration['oidn'], 'bestuursorgaan' => $this->configuration['bestuursorgaan']]);
             $mappedResult = $this->mappingService->mapping($mapping, $result);
 
@@ -291,7 +288,7 @@ class SyncXxllncCasesService
                 continue;
             }
 
-            // @todo remove
+            // @todo remove when correct fields are configured in zaaksysteem.
             if (isset($result['values']['attribute.test_documenten'][0]) === true) {
                 $result['values']['attribute.woo_besluit'] = $result['values']['attribute.test_documenten'][0];
             }
@@ -305,23 +302,17 @@ class SyncXxllncCasesService
             );
 
             // Some custom logic.
-            $check  = false;
             $object = $this->handleCustomLogic($object, $result, $fileEndpoint, $source);
-            if ($check === true) {
-                die;
-            }
 
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
             }
 
-            var_dump('before persist');
             $this->entityManager->persist($object);
             $responseItems[] = $object;
         }//end foreach
 
-        var_dump('before flush');
         $this->entityManager->flush();
 
         $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);

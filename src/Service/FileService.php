@@ -200,18 +200,25 @@ class FileService
     public function viewFileHandler(array $data, array $configuration): array
     {
         $this->data = $data;
-        var_dump("view file handler");
-        die;
 
         $parameters = $this->data;
         $path       = $this->data['path'];
 
         $file = $this->entityManager->getRepository('App:File')->find($path['id']);
-        if ($file instanceof File === false) {
-            return $this->data;
+
+        // Make sure only files for the configured schema are retrievable.
+        if ($file instanceof File === false ||
+            $file->getValue() === null ||
+            $file->getValue()->getObjectEntity() === null ||
+            $file->getValue()->getObjectEntity()->getEntity() === null ||
+            $file->getValue()->getObjectEntity()->getEntity()->getReference() === null ||
+            isset($configuration['schemaThisFileBelongsTo']) === false || 
+            $file->getValue()->getObjectEntity()->getEntity()->getReference() !== $configuration['schemaThisFileBelongsTo']
+            ) {
+            return ['response' => new Response('{"message" => "File not found or file doesn\'t belong to the configured schema."}', 400, ['content-type' => 'application/json'])];
         }
 
-        $this->data['response'] = new Response(\Safe\base64_decode($file->getBase64()), 200, ['content-type' => $file->getMimeType()]);
+        return ['response' => new Response(\Safe\base64_decode($file->getBase64()), 200, ['content-type' => $file->getMimeType()])];
 
     }//end viewFileHandler()
 
