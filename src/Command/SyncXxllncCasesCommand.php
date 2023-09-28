@@ -100,7 +100,7 @@ class SyncXxllncCasesCommand extends Command
         if (($caseId = $input->getArgument('id')) === null
             || ($actionRef = $input->getArgument('action')) === null
         ) {
-            $style->error("no argument argument id and/or caseId given");
+            $style->error("No id and/or caseId given to the command");
 
             return Command::FAILURE;
         }
@@ -117,9 +117,9 @@ class SyncXxllncCasesCommand extends Command
             // if ($this->syncXxllncCasesService->getZaak($action->getConfiguration(), $caseId) === true) {
             // return Command::FAILURE;
             // }
-            isset($style) === true && $style->info("Succesfully synced and created a WOO object from xxllnc case: $caseId.");
+            isset($style) === true && $style->error("Single object synchronization not supported yet.");
 
-            return Command::SUCCESS;
+            return Command::FAILURE;
         }//end if
 
         if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $action->getConfiguration()) === null) {

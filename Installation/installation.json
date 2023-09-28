@@ -36,6 +36,16 @@
         "reference": "https://commongateway.nl/pdd.openConvenant.schema.json",
         "path": "openconvenanten",
         "methods": []
+      },
+      {
+        "$id": "https://commongateway.nl/woo.ViewFile.endpoint.json",
+        "version": "0.0.1",
+        "reference": "https://commongateway.nl/pdd.bijlage.schema.json",
+        "path": "view-file",
+        "methods": ["GET"],
+        "throws": [
+          "woo.file.view"
+        ]
       }
     ]
   }

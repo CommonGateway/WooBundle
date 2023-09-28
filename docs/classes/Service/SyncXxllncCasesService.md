@@ -22,7 +22,7 @@ Service responsible for synchronizing xxllnc cases to woo objects.
 **Description**
 
 ```php
-public __construct (\GatewayResourceService $resourceService, \CallService $callService, \SynchronizationService $syncService, \EntityManagerInterface $entityManager, \MappingService $mappingService, \LoggerInterface $pluginLogger)
+public __construct (\GatewayResourceService $resourceService, \CallService $callService, \SynchronizationService $syncService, \EntityManagerInterface $entityManager, \MappingService $mappingService, \LoggerInterface $pluginLogger, \FileService $fileService)
 ```
 
 SyncXxllncCasesService constructor. 
@@ -37,6 +37,7 @@ SyncXxllncCasesService constructor.
 * `(\EntityManagerInterface) $entityManager`
 * `(\MappingService) $mappingService`
 * `(\LoggerInterface) $pluginLogger`
+* `(\FileService) $fileService`
 
 **Return Values**
 

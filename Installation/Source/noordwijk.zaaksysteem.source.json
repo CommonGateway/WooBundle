@@ -2,10 +2,15 @@
     "title": "Noordwijk zaaksysteem",
     "$id": "https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json",
     "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Noordwijk zaaksysteem api",
-    "location": "https://zaaksysteem-accept.noordwijk.nl/api/public_search/548/search",
+    "location": "!ChangeMe!",
+    "authorizationHeader": "API-KEY",
     "headers": {
-        "accept": "application/json"
-    }
+        "Accept": "*/*",
+        "API-Interface-ID": "!ChangeMe!",
+        "API-KEY": "!ChangeMe!",
+        "Content-Type": "application/json"
+    },
+    "isEnabled": false
 }

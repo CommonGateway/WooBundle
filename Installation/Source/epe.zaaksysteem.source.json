@@ -5,8 +5,12 @@
     "version": "0.0.2",
     "description": "Epe zaaksysteem api",
     "location": "!ChangeMe!",
+    "authorizationHeader": "API-KEY",
     "headers": {
-        "accept": "application/json"
+        "Accept": "*/*",
+        "API-Interface-ID": "!ChangeMe!",
+        "API-KEY": "!ChangeMe!",
+        "Content-Type": "application/json"
     },
     "isEnabled": false
 }

@@ -2,7 +2,7 @@
     "title": "SyncDinkellandCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncDinkellandCasesAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "listens": ["woo.default.listens","woo.dinkelland.listens"],
     "configuration": {
         "oidn": "00000001809245206000",
@@ -10,7 +10,9 @@
         "source": "https://commongateway.woo.nl/source/dinkelland.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
         "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
-        "bestuursorgaan": "Gemeente Dinkelland"
+        "bestuursorgaan": "Gemeente Dinkelland",
+        "zaaksysteemSearchEndpoint": "/public_search/517/search",
+        "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json"
     },
     "conditions":
     {
