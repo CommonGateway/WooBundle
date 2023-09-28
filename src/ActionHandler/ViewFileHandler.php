@@ -47,10 +47,10 @@ class ViewFileHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://commongateway.nl/pdd.SyncCasesAction.action.json',
+            '$id'         => 'https://commongateway.nl/woo.ViewFileAction.action.json',
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'ViewFileHandler',
-            'description' => 'Handles the sync for xxllnc cases.',
+            'description' => 'Handles the file view for woo bijlagen and documents.',
             'required'    => [],
             'properties'  => [],
         ];
