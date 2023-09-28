@@ -213,7 +213,7 @@ class FileService
             || $file->getValue()->getObjectEntity()->getEntity() === null
             || $file->getValue()->getObjectEntity()->getEntity()->getReference() === null
             || isset($configuration['schemaThisFileBelongsTo']) === false
-            || $file->getValue()->getObjectEntity()->getEntity()->getReference() !== $configuration['schemaThisFileBelongsTo']
+            || in_array($file->getValue()->getObjectEntity()->getEntity()->getReference(), $configuration['schemaThisFileBelongsTo']) === false
         ) {
             return ['response' => new Response('{"message" => "File not found or file doesn\'t belong to the configured schema."}', 400, ['content-type' => 'application/json'])];
         }
