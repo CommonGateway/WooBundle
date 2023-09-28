@@ -5,7 +5,7 @@
     "version": "0.0.1",
     "listens": ["woo.file.view"],
     "configuration": {
-        "schemaThisFileBelongsTo": "https://commongateway.nl/pdd.openWOO.schema.json"
+        "schemaThisFileBelongsTo": ["https://commongateway.nl/pdd.openWOO.schema.json", "https://commongateway.nl/pdd.bijlage.schema.json"]
     },
     "conditions":
     {
