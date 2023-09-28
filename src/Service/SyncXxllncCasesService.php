@@ -153,9 +153,9 @@ class SyncXxllncCasesService
     private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef): int
     {
         // Get all existing sourceIds.
-        $source = $this->entityManager->find('App:Gateway', $source->getId()->toString());
+        $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
         $existingSourceIds = [];
-        $existingObjects = [];
+        $existingObjects   = [];
         foreach ($source->getSynchronizations() as $synchronization) {
             if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null) {
                 $existingSourceIds[] = $synchronization->getSourceId();
@@ -180,6 +180,7 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
+
     /**
      * Handles custom logic for processing and hydrating file fields from the given result.
      *
@@ -189,8 +190,6 @@ class SyncXxllncCasesService
      * @param Source       $source       The source entity that provides the source of the result data.
      *
      * @return ObjectEntity              The hydrated object entity.
-     *
-     * 
      */
     private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source)
     {
@@ -202,8 +201,8 @@ class SyncXxllncCasesService
         $fileURLS   = [];
         foreach ($fileFields as $field) {
             if (isset($result['values']["attribute.woo_$field"][0]) === true) {
-                $mimeType         = $result['values']["attribute.woo_$field"][0]['mimetype'];
-                $base64           = $this->fileService->getInhoudDocument($result['id'], $result['values']["attribute.woo_$field"][0]['uuid'], $mimeType, $source);
+                $mimeType = $result['values']["attribute.woo_$field"][0]['mimetype'];
+                $base64   = $this->fileService->getInhoudDocument($result['id'], $result['values']["attribute.woo_$field"][0]['uuid'], $mimeType, $source);
                 // Finds the existing ValueObject for the URL property or creates a new one.
                 // ^ Note: This is important because a File is attached to a Value.
                 $value            = $object->getValueObject("URL_$field");
@@ -215,30 +214,30 @@ class SyncXxllncCasesService
         $bijlagen = [];
         if (isset($result['values']["attribute.woo_publicatie"]) === true) {
             foreach ($result['values']["attribute.woo_publicatie"] as $field) {
-                $fileName         = $field['filename'];
+                $fileName = $field['filename'];
 
                 // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
                 // ^ Note: this is necessary so we always have a ObjectEntity and Value to attach the File to so we don't create duplicated Files when syncing every 10 minutes.
                 $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($field['uuid']);
-                $mimeType         = $field['mimetype'];
-                $base64           = $this->fileService->getInhoudDocument($result['id'], $field['uuid'], $mimeType, $source);
+                $mimeType      = $field['mimetype'];
+                $base64        = $this->fileService->getInhoudDocument($result['id'], $field['uuid'], $mimeType, $source);
 
                 // This finds the existing Value or creates a new one.
-                $value            = $bijlageObject->getValueObject("URL_Bijlage");
+                $value = $bijlageObject->getValueObject("URL_Bijlage");
                 $this->entityManager->persist($value);
 
                 $now = new DateTime('now');
 
                 // @Todo could be done with mapping
                 $bijlagen[] = [
-                    "Titel_Bijlage" => $fileName,
-                    "URL_Bijlage" => $this->fileService->createOrUpdateFile($value, $fileName, $base64, $mimeType, $fileEndpoint),
-                    "Status_Bijlage" => (isset($field['accepted']) === true && $field['accepted'] == 1) ? 'accepted' : null,
+                    "Titel_Bijlage"                      => $fileName,
+                    "URL_Bijlage"                        => $this->fileService->createOrUpdateFile($value, $fileName, $base64, $mimeType, $fileEndpoint),
+                    "Status_Bijlage"                     => (isset($field['accepted']) === true && $field['accepted'] == 1) ? 'accepted' : null,
                     "Tijdstip_laatste_wijziging_bijlage" => $now->format('Y-m-d H:i:s'),
-                    "_sourceId" => $field['uuid']
+                    "_sourceId"                          => $field['uuid'],
                 ];
-            }
-        }
+            }//end foreach
+        }//end if
 
         // @Todo could be done with mapping
         $hydrateArray = [
@@ -246,7 +245,7 @@ class SyncXxllncCasesService
             'URL_inventarisatielijst' => $fileURLS['inventarisatielijst'] ?? null,
             'URL_besluit'             => $fileURLS['besluit'] ?? null,
             'Bijlagen'                => $bijlagen,
-            'Portal_url'              => $this->configuration['portalUrl'].'/'.$object->getId()->toString()
+            'Portal_url'              => $this->configuration['portalUrl'].'/'.$object->getId()->toString(),
         ];
 
         $object->hydrate($hydrateArray);
@@ -254,6 +253,7 @@ class SyncXxllncCasesService
         return $object;
 
     }//end handleCustomLogic()
+
 
     /**
      * Handles the synchronization of xxllnc cases.
@@ -323,11 +323,12 @@ class SyncXxllncCasesService
                 continue;
             }
 
-            if (isset($mappedResult['Categorie']) === false || 
-                empty($mappedResult['Categorie']) === true || 
-                isset($mappedResult['Publicatiedatum']) === false || 
-                empty($mappedResult['Publicatiedatum']) === true ||  
-                new DateTime($mappedResult['Publicatiedatum']) > new DateTime()) {
+            if (isset($mappedResult['Categorie']) === false
+                || empty($mappedResult['Categorie']) === true
+                || isset($mappedResult['Publicatiedatum']) === false
+                || empty($mappedResult['Publicatiedatum']) === true
+                || new DateTime($mappedResult['Publicatiedatum']) > new DateTime()
+            ) {
                 $this->logger->error("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
                 isset($this->style) === true && $this->style->error("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
                 continue;
