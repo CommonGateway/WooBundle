@@ -23,3 +23,7 @@ There are also Cronjobs for existing Actions that run the synchronization each 1
 
 Then you can fetch the objects by just requesting `/api/openWOO` to fetch all publications or `/api/openWOO?oidn={your muncipality oidn}` to fetch the publications belonging to a single municipality.
 Make sure here the oidn parameter value is the same that is set as configuration on the Action of that municipality.
+
+## Deploying
+
+Before rolling out a new bundle update, disable all Cronjobs so not every 10 minutes errors are getting logged if the synchronizations might go wrong.
