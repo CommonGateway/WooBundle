@@ -116,7 +116,7 @@ class FileService
             isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case $caseId");
             $this->logger->info("Fetching inhoud document: $documentId for case $caseId");
             $response = $this->callService->call($zaaksysteem, "/v1/case/$caseId/document/$documentId/download", 'GET', [], false);
-            return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType)['base64'];
+            return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType);
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
             $this->logger->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
@@ -218,8 +218,13 @@ class FileService
             return ['response' => new Response('{"message" => "File not found or file doesn\'t belong to the configured schema."}', 400, ['content-type' => 'application/json'])];
         }
 
-        return ['response' => new Response(\Safe\base64_decode($file->getBase64()), 200, ['content-type' => $file->getMimeType()])];
-
+        if ($file->getMimeType() === "text/plain") {                                                                                
+            $responseBody = $file->getBase64();                                                                                                                                   
+        } else {                                                                                                                    
+            $responseBody = \Safe\base64_decode($file->getBase64());                                                                     
+        }                                                                                                                           
+                                                                                                                                    
+        return ['response' => new Response($responseBody, 200, ['content-type' => $file->getMimeType()])];  
     }//end viewFileHandler()
 
 
