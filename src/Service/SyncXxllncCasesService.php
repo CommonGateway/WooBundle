@@ -180,14 +180,15 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
+
     /**
      * Generates file view urls for woo informatieverzoek, inventarisatielijst and besluit documents.
-     * 
+     *
      * @param ObjectEntity $object       The main object entity that will be hydrated.
      * @param array        $result       The result data that contains the information of file fields.
      * @param Endpoint     $fileEndpoint The endpoint entity for the file.
      * @param Source       $source       The source entity that provides the source of the result data.
-     * 
+     *
      * @return array       $fileURLS     The view urls for files.
      */
     private function getFileUrls(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source): array
@@ -195,7 +196,7 @@ class SyncXxllncCasesService
         $fileFields = [
             'informatieverzoek',
             'inventarisatielijst',
-            'besluit'
+            'besluit',
         ];
         $fileURLS   = [];
         foreach ($fileFields as $field) {
@@ -211,16 +212,18 @@ class SyncXxllncCasesService
         }//end foreach
 
         return $fileURLS;
+
     }//end getFileUrls()
+
 
     /**
      * Generates file view urls for woo bijlagen documents.
-     * 
-     * @param array        $result          The result data that contains the information of file fields.
-     * @param Endpoint     $fileEndpoint    The endpoint entity for the file.
-     * @param Source       $source          The source entity that provides the source of the result data.
-     * @param Mapping     $documentMapping The source entity that provides the source of the result data.
-     * 
+     *
+     * @param array    $result          The result data that contains the information of file fields.
+     * @param Endpoint $fileEndpoint    The endpoint entity for the file.
+     * @param Source   $source          The source entity that provides the source of the result data.
+     * @param Mapping  $documentMapping The source entity that provides the source of the result data.
+     *
      * @return array       $fileURLS     The view urls for files.
      */
     private function getBijlagen(array $result, Endpoint $fileEndpoint, Source $source, Mapping $documentMapping): array
@@ -238,13 +241,14 @@ class SyncXxllncCasesService
                 $value = $bijlageObject->getValueObject("URL_Bijlage");
                 $this->entityManager->persist($value);
 
-                $url = $this->fileService->createOrUpdateFile($value, $field['filename'], $base64, $mimeType, $fileEndpoint);
-                $bijlage = $this->mappingService->mapping($documentMapping, array_merge($field, ['url' => $url]));
+                $url        = $this->fileService->createOrUpdateFile($value, $field['filename'], $base64, $mimeType, $fileEndpoint);
+                $bijlage    = $this->mappingService->mapping($documentMapping, array_merge($field, ['url' => $url]));
                 $bijlagen[] = $bijlage;
             }//end foreach
         }//end if
 
         return $bijlagen;
+
     }//end getBijlagen()
 
 
@@ -263,8 +267,8 @@ class SyncXxllncCasesService
         $documentMapping     = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.schema.json", "common-gateway/woo-bundle");
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.schema.json", "common-gateway/woo-bundle");
 
-        $fileURLS = $this->getFileUrls($object, $result, $fileEndpoint, $source);
-        $bijlagen = $this->getBijlagen($result, $fileEndpoint, $source, $documentMapping);
+        $fileURLS  = $this->getFileUrls($object, $result, $fileEndpoint, $source);
+        $bijlagen  = $this->getBijlagen($result, $fileEndpoint, $source, $documentMapping);
         $portalURL = $this->configuration['portalUrl'].'/'.$object->getId()->toString();
 
         $hydrateArray = $this->mappingService->mapping($customFieldsMapping, array_merge($fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL]));
