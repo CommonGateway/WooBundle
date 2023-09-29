@@ -260,8 +260,8 @@ class SyncXxllncCasesService
      */
     private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source)
     {
-        $documentMapping     = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.schema.json", "common-gateway/woo-bundle");
-        $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.schema.json", "common-gateway/woo-bundle");
+        $documentMapping     = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.mapping.json", "common-gateway/woo-bundle");
+        $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
 
         $fileURLS = $this->getFileUrls($object, $result, $fileEndpoint, $source);
         $bijlagen = $this->getBijlagen($result, $fileEndpoint, $source, $documentMapping);
