@@ -180,72 +180,60 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
-
-    /**
-     * Generates file view urls for woo informatieverzoek, inventarisatielijst and besluit documents.
-     *
-     * @param ObjectEntity $object       The main object entity that will be hydrated.
-     * @param array        $result       The result data that contains the information of file fields.
-     * @param Endpoint     $fileEndpoint The endpoint entity for the file.
-     * @param Source       $source       The source entity that provides the source of the result data.
-     *
-     * @return array       $fileURLS     The view urls for files.
-     */
-    private function getFileUrls(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source): array
-    {
-        $fileFields = [
-            'informatieverzoek',
-            'inventarisatielijst',
-            'besluit',
-        ];
-        $fileURLS   = [];
-        foreach ($fileFields as $field) {
-            if (isset($result['values']["attribute.woo_$field"][0]) === true) {
-                $mimeType = $result['values']["attribute.woo_$field"][0]['mimetype'];
-                $base64   = $this->fileService->getInhoudDocument($result['id'], $result['values']["attribute.woo_$field"][0]['uuid'], $mimeType, $source);
-                // Finds the existing ValueObject for the URL property or creates a new one.
-                // ^ Note: This is important because a File is attached to a Value.
-                $value            = $object->getValueObject("URL_$field");
-                $fileName         = $result['values']["attribute.woo_$field"][0]['filename'];
-                $fileURLS[$field] = $this->fileService->createOrUpdateFile($value, $fileName, $base64, $mimeType, $fileEndpoint);
-            }//end if
-        }//end foreach
-
-        return $fileURLS;
-
-    }//end getFileUrls()
-
-
     /**
      * Generates file view urls for woo bijlagen documents.
      *
-     * @param array    $result          The result data that contains the information of file fields.
-     * @param Endpoint $fileEndpoint    The endpoint entity for the file.
-     * @param Source   $source          The source entity that provides the source of the result data.
-     * @param Mapping  $documentMapping The source entity that provides the source of the result data.
+     * @param ObjectEntity $object          The main object entity that will be hydrated.
+     * @param array        $result          The result data that contains the information of file fields.
+     * @param Endpoint     $fileEndpoint    The endpoint entity for the file.
+     * @param Source       $source          The source entity that provides the source of the result data.
+     * @param Mapping      $documentMapping The source entity that provides the source of the result data.
      *
-     * @return array       $fileURLS     The view urls for files.
+     * @return array   $fileURLS        The view urls for files.
      */
-    private function getBijlagen(array $result, Endpoint $fileEndpoint, Source $source, Mapping $documentMapping): array
+    private function getBijlagen(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source, Mapping $documentMapping, array &$fileURLS): array
     {
         $bijlagen = [];
         if (isset($result['values']["attribute.woo_publicatie"]) === true) {
-            foreach ($result['values']["attribute.woo_publicatie"] as $field) {
+            foreach ($result['values']["attribute.woo_publicatie"] as $document) {
                 // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
                 // ^ Note: this is necessary so we always have a ObjectEntity and Value to attach the File to so we don't create duplicated Files when syncing every 10 minutes.
-                $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($field['uuid']);
-                $mimeType      = $field['mimetype'];
-                $base64        = $this->fileService->getInhoudDocument($result['id'], $field['uuid'], $mimeType, $source);
+                $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($document['uuid']);
+                $mimeType      = $document['mimetype'];
+                $base64        = $this->fileService->getInhoudDocument($result['id'], $document['uuid'], $mimeType, $source);
 
                 // This finds the existing Value or creates a new one.
                 $value = $bijlageObject->getValueObject("URL_Bijlage");
                 $this->entityManager->persist($value);
 
-                $url        = $this->fileService->createOrUpdateFile($value, $field['filename'], $base64, $mimeType, $fileEndpoint);
-                $bijlage    = $this->mappingService->mapping($documentMapping, array_merge($field, ['url' => $url]));
+                $url        = $this->fileService->createOrUpdateFile($value, $document['filename'], $base64, $mimeType, $fileEndpoint);
+                $bijlage    = $this->mappingService->mapping($documentMapping, array_merge($document, ['url' => $url]));
                 $bijlagen[] = $bijlage;
             }//end foreach
         }//end if
+
+        $fileFields = [
+            'informatieverzoek',
+            'inventarisatielijst',
+            'besluit',
+        ];
+
+        foreach ($fileFields as $field) {
+            if (isset($result['values']["attribute.woo_$field"][0]) === true) {
+                $document = $result['values']["attribute.woo_$field"][0];
+                $mimeType = $document['mimetype'];
+                $base64   = $this->fileService->getInhoudDocument($result['id'], $document['uuid'], $mimeType, $source);
+                // Finds the existing ValueObject for the URL property or creates a new one.
+                // ^ Note: This is important because a File is attached to a Value.
+                $value            = $object->getValueObject("URL_$field");
+                $fileName         = $document['filename'];
+                $url              = $this->fileService->createOrUpdateFile($value, $fileName, $base64, $mimeType, $fileEndpoint);
+                $fileURLS[$field] = $url;
+                
+                $bijlage    = $this->mappingService->mapping($documentMapping, array_merge($document, ['url' => $url]));
+                $bijlagen[] = $bijlage;
+            }//end if
+        }//end foreach
 
         return $bijlagen;
 
@@ -267,8 +255,9 @@ class SyncXxllncCasesService
         $documentMapping     = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.mapping.json", "common-gateway/woo-bundle");
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
 
-        $fileURLS  = $this->getFileUrls($object, $result, $fileEndpoint, $source);
-        $bijlagen  = $this->getBijlagen($result, $fileEndpoint, $source, $documentMapping);
+        // $fileURLS  = $this->getFileUrls($object, $result, $fileEndpoint, $source);
+        $fileURLS = [];
+        $bijlagen  = $this->getBijlagen($object, $result, $fileEndpoint, $source, $documentMapping, $fileURLS);
         $portalURL = $this->configuration['portalUrl'].'/'.$object->getId()->toString();
 
         $hydrateArray = $this->mappingService->mapping($customFieldsMapping, array_merge($fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL]));

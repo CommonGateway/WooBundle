@@ -218,14 +218,13 @@ class FileService
             return ['response' => new Response('{"message" => "File not found or file doesn\'t belong to the configured schema."}', 400, ['content-type' => 'application/json'])];
         }
 
-        if ($file->getMimeType() === "text/plain") {
-            $responseBody = $file->getBase64();
-        } else {
-            $responseBody = \Safe\base64_decode($file->getBase64());
-        }
-
-        return ['response' => new Response($responseBody, 200, ['content-type' => $file->getMimeType()])];
-
+        if ($file->getMimeType() === "text/plain") {                                                                                
+            $responseBody = $file->getBase64();                                                                                                                                   
+        } else {                                                                                                                    
+            $responseBody = \Safe\base64_decode($file->getBase64());                                                                     
+        }                                                                                                                           
+                                                                                                                                    
+        return ['response' => new Response($responseBody, 200, ['content-type' => $file->getMimeType()])];  
     }//end viewFileHandler()
 
 
