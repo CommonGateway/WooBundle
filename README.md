@@ -5,6 +5,7 @@
 You can install the bundle with a command in php bash `composer require common-gateway/woo-bundle` or through the Gateway UI plugins page.
 
 Make sure a few things are set up:
+
 1. Check the Sources are configured and enabled for the municipalities.
 2. Check the Cronjobs are enabled and dont show any errors after the configured crontab time has passed.
 
@@ -35,4 +36,3 @@ There are also Cronjobs for existing Actions that run the synchronization each 1
 
 Then you can fetch the objects by just requesting `/api/openWOO` to fetch all publications or `/api/openWOO?oidn={your muncipality oidn}` to fetch the publications belonging to a single municipality.
 Make sure here the oidn parameter value is the same that is set as configuration on the Action of that municipality.
-
