@@ -180,6 +180,7 @@ class SyncXxllncCasesService
 
     }//end deleteNonExistingObjects()
 
+
     /**
      * Generates file view urls for woo bijlagen documents.
      *
@@ -187,7 +188,7 @@ class SyncXxllncCasesService
      * @param array        $result   The result data that contains the information of file fields.
      * @param array        $config   Gateway config objects.
      * @param array        $fileURLS File urls we also return.
-     * 
+     *
      * @return array   $fileURLS        The view urls for files.
      */
     private function getBijlagen(ObjectEntity $object, array $result, array $config, array &$fileURLS): array
@@ -228,7 +229,7 @@ class SyncXxllncCasesService
                 $fileName         = $document['filename'];
                 $url              = $this->fileService->createOrUpdateFile($value, $fileName, $base64, $mimeType, $config['endpoint']);
                 $fileURLS[$field] = $url;
-                
+
                 $bijlage    = $this->mappingService->mapping($config['mapping'], array_merge($document, ['url' => $url]));
                 $bijlagen[] = $bijlage;
             }//end if
@@ -255,7 +256,7 @@ class SyncXxllncCasesService
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
 
         // $fileURLS  = $this->getFileUrls($object, $result, $fileEndpoint, $source);
-        $fileURLS = [];
+        $fileURLS  = [];
         $bijlagen  = $this->getBijlagen($object, $result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
         $portalURL = $this->configuration['portalUrl'].'/'.$object->getId()->toString();
 
