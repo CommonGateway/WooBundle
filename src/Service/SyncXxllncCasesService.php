@@ -182,16 +182,16 @@ class SyncXxllncCasesService
 
 
     /**
-     * Handles custom logic for processing and hydrating file fields from the given result.
+     * Generates file view urls for woo informatieverzoek, inventarisatielijst and besluit documents.
      *
      * @param ObjectEntity $object       The main object entity that will be hydrated.
      * @param array        $result       The result data that contains the information of file fields.
      * @param Endpoint     $fileEndpoint The endpoint entity for the file.
      * @param Source       $source       The source entity that provides the source of the result data.
      *
-     * @return ObjectEntity              The hydrated object entity.
+     * @return array       $fileURLS     The view urls for files.
      */
-    private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source)
+    private function getFileUrls(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source): array
     {
         $fileFields = [
             'informatieverzoek',
@@ -208,14 +208,29 @@ class SyncXxllncCasesService
                 $value            = $object->getValueObject("URL_$field");
                 $fileName         = $result['values']["attribute.woo_$field"][0]['filename'];
                 $fileURLS[$field] = $this->fileService->createOrUpdateFile($value, $fileName, $base64, $mimeType, $fileEndpoint);
-            }
-        }
+            }//end if
+        }//end foreach
 
+        return $fileURLS;
+
+    }//end getFileUrls()
+
+
+    /**
+     * Generates file view urls for woo bijlagen documents.
+     *
+     * @param array    $result          The result data that contains the information of file fields.
+     * @param Endpoint $fileEndpoint    The endpoint entity for the file.
+     * @param Source   $source          The source entity that provides the source of the result data.
+     * @param Mapping  $documentMapping The source entity that provides the source of the result data.
+     *
+     * @return array       $fileURLS     The view urls for files.
+     */
+    private function getBijlagen(array $result, Endpoint $fileEndpoint, Source $source, Mapping $documentMapping): array
+    {
         $bijlagen = [];
         if (isset($result['values']["attribute.woo_publicatie"]) === true) {
             foreach ($result['values']["attribute.woo_publicatie"] as $field) {
-                $fileName = $field['filename'];
-
                 // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
                 // ^ Note: this is necessary so we always have a ObjectEntity and Value to attach the File to so we don't create duplicated Files when syncing every 10 minutes.
                 $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($field['uuid']);
@@ -226,28 +241,37 @@ class SyncXxllncCasesService
                 $value = $bijlageObject->getValueObject("URL_Bijlage");
                 $this->entityManager->persist($value);
 
-                $now = new DateTime('now');
-
-                // @Todo could be done with mapping
-                $bijlagen[] = [
-                    "Titel_Bijlage"                      => $fileName,
-                    "URL_Bijlage"                        => $this->fileService->createOrUpdateFile($value, $fileName, $base64, $mimeType, $fileEndpoint),
-                    "Status_Bijlage"                     => (isset($field['accepted']) === true && $field['accepted'] == 1) ? 'accepted' : null,
-                    "Tijdstip_laatste_wijziging_bijlage" => $now->format('Y-m-d H:i:s'),
-                    "_sourceId"                          => $field['uuid'],
-                ];
+                $url        = $this->fileService->createOrUpdateFile($value, $field['filename'], $base64, $mimeType, $fileEndpoint);
+                $bijlage    = $this->mappingService->mapping($documentMapping, array_merge($field, ['url' => $url]));
+                $bijlagen[] = $bijlage;
             }//end foreach
         }//end if
 
-        // @Todo could be done with mapping
-        $hydrateArray = [
-            'URL_informatieverzoek'   => $fileURLS['informatieverzoek'] ?? null,
-            'URL_inventarisatielijst' => $fileURLS['inventarisatielijst'] ?? null,
-            'URL_besluit'             => $fileURLS['besluit'] ?? null,
-            'Bijlagen'                => $bijlagen,
-            'Portal_url'              => $this->configuration['portalUrl'].'/'.$object->getId()->toString(),
-        ];
+        return $bijlagen;
 
+    }//end getBijlagen()
+
+
+    /**
+     * Handles custom logic for processing and hydrating file fields from the given result.
+     *
+     * @param ObjectEntity $object       The main object entity that will be hydrated.
+     * @param array        $result       The result data that contains the information of file fields.
+     * @param Endpoint     $fileEndpoint The endpoint entity for the file.
+     * @param Source       $source       The source entity that provides the source of the result data.
+     *
+     * @return ObjectEntity              The hydrated object entity.
+     */
+    private function handleCustomLogic(ObjectEntity $object, array $result, Endpoint $fileEndpoint, Source $source)
+    {
+        $documentMapping     = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.mapping.json", "common-gateway/woo-bundle");
+        $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
+
+        $fileURLS  = $this->getFileUrls($object, $result, $fileEndpoint, $source);
+        $bijlagen  = $this->getBijlagen($result, $fileEndpoint, $source, $documentMapping);
+        $portalURL = $this->configuration['portalUrl'].'/'.$object->getId()->toString();
+
+        $hydrateArray = $this->mappingService->mapping($customFieldsMapping, array_merge($fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL]));
         $object->hydrate($hydrateArray);
 
         return $object;
@@ -286,7 +310,7 @@ class SyncXxllncCasesService
             $this->logger->error('No source, schema, mapping, oidn, bestuursorgaan, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
 
             return [];
-        }
+        }//end if
 
         $fileEndpoint = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
         $source       = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
@@ -299,7 +323,7 @@ class SyncXxllncCasesService
             isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncXxllncCasesHandler");
 
             return [];
-        }
+        }//end if
 
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
         $this->logger->info("Fetching cases from {$source->getLocation()}");
@@ -318,8 +342,8 @@ class SyncXxllncCasesService
             $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
             if ($validationErrors !== null) {
                 $validationErrors = implode(', ', $validationErrors);
-                $this->logger->error("SyncXxllncCases validation errors: $validationErrors");
-                isset($this->style) === true && $this->style->error("SyncXxllncCases validation errors: $validationErrors");
+                $this->logger->warning("SyncXxllncCases validation errors: $validationErrors");
+                isset($this->style) === true && $this->style->warning("SyncXxllncCases validation errors: $validationErrors");
                 continue;
             }
 
@@ -329,8 +353,8 @@ class SyncXxllncCasesService
                 || empty($mappedResult['Publicatiedatum']) === true
                 || new DateTime($mappedResult['Publicatiedatum']) > new DateTime()
             ) {
-                $this->logger->error("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
-                isset($this->style) === true && $this->style->error("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
+                $this->logger->warning("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
+                isset($this->style) === true && $this->style->warning("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
                 continue;
             }
 
@@ -341,6 +365,9 @@ class SyncXxllncCasesService
                 true,
                 true
             );
+
+            // Prevents empty Bijlagen.
+            $object->setValue('Bijlagen', null);
 
             // Some custom logic.
             $object = $this->handleCustomLogic($object, $result, $fileEndpoint, $source);
