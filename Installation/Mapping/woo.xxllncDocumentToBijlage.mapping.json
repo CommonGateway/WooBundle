@@ -1,0 +1,14 @@
+{
+  "title": "XxllncDocumentToBijlage",
+  "$id": "https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.schema.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "_sourceId": "uuid",
+    "Titel_Bijlage": "filename",
+    "URL_Bijlage": "url",
+    "Tijdstip_laatste_wijziging_bijlage": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}",
+    "Status_Bijlage": "{% if accepted|default and accepted == 1 %}{{ \"accepted\" }}{% endif %}"
+  }
+}
