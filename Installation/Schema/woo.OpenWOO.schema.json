@@ -2,7 +2,7 @@
     "title": "OpenWOO",
     "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "type": "object",
     "description": "",
     "properties": {
@@ -70,16 +70,16 @@
             "type": "string"
         },
         "URL_informatieverzoek": {
-            "type": "string",
-            "format": "url"
+            "type": "object",
+            "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
         },
         "URL_inventarisatielijst": {
-            "type": "string",
-            "format": "url"
+            "type": "object",
+            "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
         },
         "URL_besluit": {
-            "type": "string",
-            "format": "url"
+            "type": "object",
+            "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
         },
         "Geografisch_gebied": {
             "type": "string"

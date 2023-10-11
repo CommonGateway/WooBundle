@@ -2,7 +2,7 @@
   "title": "XxllncCaseToWoo",
   "$id": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
@@ -20,12 +20,18 @@
     "Publicatiedatum": "{% if values['attribute&#46;woo_publicatiedatum']|default %}{{ values['attribute&#46;woo_publicatiedatum'] }}{% endif %}",
     "Behandelstatus": "{% if values['case&#46;status']|default %}{% if values['case&#46;status'] == 'resolved' %}Afgehandeld{% elseif values['case&#46;status'] == 'open'  %}In behandeling{% elseif values['case&#46;status'] == 'closed'  %}Opgeschort{% elseif values['case&#46;status'] == 'new'  %}Nieuw{% endif %}{% endif %}",
     "Termijnoverschrijding": "{% if values['case&#46;date_target']|default and values['case&#46;date_of_completion']|default %}{% set dateTarget = date(values['case&#46;date_target']) %}{% set dateOfCompletion = date(values['case&#46;date_of_completion']) %}{% set interval = dateTarget.diff(dateOfCompletion) %}{{ interval.days }}{% endif %}",
+    "URL_informatieverzoek": "{% if values['attribute&#46;woo_informatieverzoek'][0]|default %}{{ map('https://commongateway.nl/mapping/pdd.xxllncDocumentSetSourceId.schema.json', values['attribute&#46;woo_informatieverzoek'][0])|json_encode }}{% endif %}",
+    "URL_inventarisatielijst": "{% if values['attribute&#46;woo_inventarisatielijst'][0]|default %}{{ map('https://commongateway.nl/mapping/pdd.xxllncDocumentSetSourceId.schema.json', values['attribute&#46;woo_inventarisatielijst'][0])|json_encode }}{% endif %}",
+    "URL_besluit": "{% if values['attribute&#46;woo_besluit'][0]|default %}{{ map('https://commongateway.nl/mapping/pdd.xxllncDocumentSetSourceId.schema.json', values['attribute&#46;woo_besluit'][0])|json_encode }}{% endif %}",
     "Bijlagen": "[{% set index=0 %}{% if values['attribute&#46;woo_publicatie']|default %}{% for document in values['attribute&#46;woo_publicatie'] %}{% if index != 0 %},{% endif %}{{ map('https://commongateway.nl/mapping/pdd.xxllncDocumentSetSourceId.schema.json', document)|json_encode }}{% set index=index+1 %}{% endfor %}{% endif %}]",
     "Themas.0.Hoofdthema": "{% if values['attribute&#46;woo_thema']|default %}{{ values['attribute&#46;woo_thema'] }}{% endif %}"
   },
   "cast": {
     "Themas.0.Hoofdthema": "unsetIfValue==",
     "Themas.0": "unsetIfValue==",
+    "URL_informatieverzoek": "jsonToArray",
+    "URL_inventarisatielijst": "jsonToArray",
+    "URL_besluit": "jsonToArray",
     "Bijlagen": "jsonToArray",
     "Object_ID": "integer",
     "Portal_url": "unsetIfValue==",
