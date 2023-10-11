@@ -195,14 +195,18 @@ class SyncXxllncCasesService
         // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
         // ^ Note: this is necessary so we always have a ObjectEntity and Value to attach the File to so we don't create duplicated Files when syncing every 10 minutes.
         $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($documentMeta['uuid']);
+
         $mimeType      = $documentMeta['mimetype'];
+
         $base64        = $this->fileService->getInhoudDocument($result['id'], $documentMeta['uuid'], $mimeType, $config['source']);
 
         // This finds the existing Value or creates a new one.
         $value = $bijlageObject->getValueObject("URL_Bijlage");
+
         $this->entityManager->persist($value);
 
         $url = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url]));
 
     }//end retrieveFile()
