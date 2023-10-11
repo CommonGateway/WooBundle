@@ -362,7 +362,7 @@ class SyncXxllncCasesService
                 true,
                 true
             );
-            
+
             // Some custom logic.
             $hydrateArray = $this->handleCustomLogic($object->toArray(), $result, $fileEndpoint, $source);
 
