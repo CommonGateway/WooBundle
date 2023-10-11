@@ -269,7 +269,7 @@ class SyncXxllncCasesService
         $bijlagen     = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
         $portalURL    = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
 
-        $hydrateArray = $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL]));
+        $hydrateArray = $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id']]));
 
         return $hydrateArray;
 
@@ -362,9 +362,7 @@ class SyncXxllncCasesService
                 true,
                 true
             );
-
-            // Prevents empty Bijlagen.
-            // $object->setValue('Bijlagen', null);
+            
             // Some custom logic.
             $hydrateArray = $this->handleCustomLogic($object->toArray(), $result, $fileEndpoint, $source);
 
@@ -373,7 +371,7 @@ class SyncXxllncCasesService
                 $hydrateArray,
                 $source,
                 $schema,
-                true,
+                false,
                 true
             );
 

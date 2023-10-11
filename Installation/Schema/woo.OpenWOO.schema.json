@@ -70,14 +70,23 @@
             "type": "string"
         },
         "URL_informatieverzoek": {
-            "type": "object",
-            "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+            "type": "string"
         },
         "URL_inventarisatielijst": {
+            "type": "string"
+        },
+        "URL_besluit": {
+            "type": "string"
+        },
+        "informatieverzoek": {
             "type": "object",
             "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
         },
-        "URL_besluit": {
+        "inventarisatielijst": {
+            "type": "object",
+            "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+        },
+        "besluit": {
             "type": "object",
             "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
         },
