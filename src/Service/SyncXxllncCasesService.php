@@ -184,9 +184,9 @@ class SyncXxllncCasesService
     /**
      * Retrieves files at the zaaksystem and maps them to bijlagen.
      *
-     * @param array   $result       The result data that contains the information of file fields.
-     * @param array   $documentMeta Metadata about a document, including the id.
-     * @param array   $fileURLS     File urls we also return.
+     * @param array $result       The result data that contains the information of file fields.
+     * @param array $documentMeta Metadata about a document, including the id.
+     * @param array $fileURLS     File urls we also return.
      *
      * @return array  $fileURLS The view urls for files.
      */
@@ -202,17 +202,18 @@ class SyncXxllncCasesService
         $value = $bijlageObject->getValueObject("URL_Bijlage");
         $this->entityManager->persist($value);
 
-        $url        = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        $url = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url]));
+
     }//end retrieveFile()
 
 
     /**
      * Generates file view urls for woo bijlagen documents.
      *
-     * @param array  $result   The result data that contains the information of file fields.
-     * @param array  $config   Gateway config objects.
-     * @param array  $fileURLS File urls we also return.
+     * @param array $result   The result data that contains the information of file fields.
+     * @param array $config   Gateway config objects.
+     * @param array $fileURLS File urls we also return.
      *
      * @return array $fileURLS The view urls for files.
      */
@@ -233,7 +234,7 @@ class SyncXxllncCasesService
 
         foreach ($fileFields as $field) {
             if (isset($result['values']["attribute.woo_$field"][0]) === true) {
-                $documentMeta = $result['values']["attribute.woo_$field"][0];
+                $documentMeta     = $result['values']["attribute.woo_$field"][0];
                 $fileURLS[$field] = $this->retrieveFile($result, $documentMeta, $config);
             }//end if
         }//end foreach
@@ -246,10 +247,10 @@ class SyncXxllncCasesService
     /**
      * Handles custom logic for processing and hydrating file fields from the given result.
      *
-     * @param array        $objectArray  Self array of object.
-     * @param array        $result       The result data that contains the information of file fields.
-     * @param Endpoint     $fileEndpoint The endpoint entity for the file.
-     * @param Source       $source       The source entity that provides the source of the result data.
+     * @param array    $objectArray  Self array of object.
+     * @param array    $result       The result data that contains the information of file fields.
+     * @param Endpoint $fileEndpoint The endpoint entity for the file.
+     * @param Source   $source       The source entity that provides the source of the result data.
      *
      * @return array                     The hydrated object.
      */
@@ -259,10 +260,10 @@ class SyncXxllncCasesService
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
 
         // $fileURLS get set from $this->getBijlagen (see arguments).
-        $fileURLS  = [];
+        $fileURLS     = [];
         $hydrateArray = [];
-        $bijlagen  = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
-        $portalURL = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
+        $bijlagen     = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
+        $portalURL    = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
 
         $hydrateArray = $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL]));
 
@@ -360,7 +361,6 @@ class SyncXxllncCasesService
 
             // Prevents empty Bijlagen.
             // $object->setValue('Bijlagen', null);
-
             // Some custom logic.
             $hydrateArray = $this->handleCustomLogic($object->toArray(), $result, $fileEndpoint, $source);
 
