@@ -16,7 +16,7 @@
     "Samenvatting": "{% if values['attribute&#46;woo_samenvatting']|default %}{{ values['attribute&#46;woo_samenvatting'] }}{% endif %}",
     "Categorie": "values.attribute&#46;woo_categorie",
     "Ontvangstdatum": "{% if values['case&#46;date_of_registration']|default %}{{ values['case&#46;date_of_registration'] }}{% endif %}",
-    "Besluitdatum": "{% if values['attribute&#46;woo_datum_besluit']|default %}{{ values['attribute&#46;woo_datum_besluit'] }}{% endif %}",
+    "Besluitdatum": "{% if values['attribute&#46;woo_datum_besluit']|default %}{{ values['attribute&#46;woo_datum_besluit'] }}{% elseif values['attribute&#46;ztc_datum_besluit']|default %}{{ values['attribute&#46;ztc_datum_besluit'] }}{% endif %}",
     "Publicatiedatum": "{% if values['attribute&#46;woo_publicatiedatum']|default %}{{ values['attribute&#46;woo_publicatiedatum'] }}{% endif %}",
     "Behandelstatus": "{% if values['case&#46;status']|default %}{% if values['case&#46;status'] == 'resolved' %}Afgehandeld{% elseif values['case&#46;status'] == 'open'  %}In behandeling{% elseif values['case&#46;status'] == 'closed'  %}Opgeschort{% elseif values['case&#46;status'] == 'new'  %}Nieuw{% endif %}{% endif %}",
     "Termijnoverschrijding": "{% if values['case&#46;date_target']|default and values['case&#46;date_of_completion']|default %}{% set dateTarget = date(values['case&#46;date_target']) %}{% set dateOfCompletion = date(values['case&#46;date_of_completion']) %}{% set interval = dateTarget.diff(dateOfCompletion) %}{{ interval.days }}{% endif %}",
