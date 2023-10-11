@@ -371,8 +371,8 @@ class SyncXxllncCasesService
                 $hydrateArray,
                 $source,
                 $schema,
-                false,
-                true
+                true,
+                false
             );
 
             $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['id']);
