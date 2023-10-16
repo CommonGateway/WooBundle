@@ -2,7 +2,7 @@
     "title": "OpenWOO",
     "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "type": "object",
     "description": "",
     "properties": {
@@ -57,7 +57,9 @@
             "description": "format: Y-m-d"
         },
         "Publicatiedatum": {
+            "description": "Publicatiedatum van een Woo object is nooit in de toekomst.",
             "type": "string",
+            "maxDate": "now",
             "required": true
         },
         "Behandelstatus": {
