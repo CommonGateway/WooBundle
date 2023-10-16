@@ -2,7 +2,7 @@
   "title": "XxllncCaseToWoo",
   "$id": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
@@ -40,6 +40,7 @@
     "Samenvatting": "unsetIfValue==",
     "Ontvangstdatum": "unsetIfValue==",
     "Besluitdatum": "unsetIfValue==",
+    "Categorie": "unsetIfValue==values.attribute&#46;woo_categorie",
     "Publicatiedatum": "unsetIfValue==",
     "Behandelstatus": "unsetIfValue=="
   }

@@ -344,17 +344,6 @@ class SyncXxllncCasesService
                 continue;
             }
 
-            if (isset($mappedResult['Categorie']) === false
-                || empty($mappedResult['Categorie']) === true
-                || isset($mappedResult['Publicatiedatum']) === false
-                || empty($mappedResult['Publicatiedatum']) === true
-                || new DateTime($mappedResult['Publicatiedatum']) > new DateTime()
-            ) {
-                $this->logger->warning("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
-                isset($this->style) === true && $this->style->warning("Categorie or Publicatiedatum is not set or invalid, skipping this case..");
-                continue;
-            }
-
             $object = $hydrationService->searchAndReplaceSynchronizations(
                 $mappedResult,
                 $source,
