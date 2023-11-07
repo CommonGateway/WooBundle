@@ -236,7 +236,7 @@ class SyncXxllncCasesService
             if (isset($result['values']["attribute.woo_$field"][0]) === true && in_array($result['values']["attribute.woo_$field"][0]['filename'], $fileNames) === false) {
                 $documentMeta     = $result['values']["attribute.woo_$field"][0];
                 $fileURLS[$field] = $this->retrieveFile($result, $documentMeta, $config);
-                $fileNames[] = $result['values']["attribute.woo_$field"][0]['filename'];
+                $fileNames[]      = $result['values']["attribute.woo_$field"][0]['filename'];
             }//end if
         }//end foreach
 
@@ -244,7 +244,7 @@ class SyncXxllncCasesService
         if (isset($result['values']["attribute.woo_publicatie"]) === true) {
             foreach ($result['values']["attribute.woo_publicatie"] as $documentMeta) {
                 if (in_array($documentMeta['filename'], $fileNames) === false) {
-                    $bijlagen[] = $this->retrieveFile($result, $documentMeta, $config);
+                    $bijlagen[]  = $this->retrieveFile($result, $documentMeta, $config);
                     $fileNames[] = $documentMeta['filename'];
                 }
             }//end foreach
