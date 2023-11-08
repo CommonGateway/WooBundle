@@ -223,25 +223,32 @@ class SyncXxllncCasesService
      */
     private function getBijlagen(array $result, array $config, array &$fileURLS): array
     {
-        $bijlagen = [];
-        if (isset($result['values']["attribute.woo_publicatie"]) === true) {
-            foreach ($result['values']["attribute.woo_publicatie"] as $documentMeta) {
-                $bijlagen[] = $this->retrieveFile($result, $documentMeta, $config);
-            }//end foreach
-        }//end if
-
         $fileFields = [
             'informatieverzoek',
             'inventarisatielijst',
             'besluit',
         ];
 
+        // Prevent having documents with the same names.
+        $fileNames = [];
+
         foreach ($fileFields as $field) {
-            if (isset($result['values']["attribute.woo_$field"][0]) === true) {
+            if (isset($result['values']["attribute.woo_$field"][0]) === true && in_array($result['values']["attribute.woo_$field"][0]['filename'], $fileNames) === false) {
                 $documentMeta     = $result['values']["attribute.woo_$field"][0];
                 $fileURLS[$field] = $this->retrieveFile($result, $documentMeta, $config);
+                $fileNames[]      = $result['values']["attribute.woo_$field"][0]['filename'];
             }//end if
         }//end foreach
+
+        $bijlagen = [];
+        if (isset($result['values']["attribute.woo_publicatie"]) === true) {
+            foreach ($result['values']["attribute.woo_publicatie"] as $documentMeta) {
+                if (in_array($documentMeta['filename'], $fileNames) === false) {
+                    $bijlagen[]  = $this->retrieveFile($result, $documentMeta, $config);
+                    $fileNames[] = $documentMeta['filename'];
+                }
+            }//end foreach
+        }//end if
 
         return $bijlagen;
 
