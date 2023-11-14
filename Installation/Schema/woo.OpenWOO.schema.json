@@ -2,73 +2,58 @@
     "title": "OpenWOO",
     "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "type": "object",
     "description": "",
     "properties": {
-        "oidn": {
-            "type": "string",
-            "description": "The public available code for the designated organisation (municipality) this object is meant for."
-        },
-        "UUID": {
+        "id": {
             "type": "string"
         },
-        "ID": {
-            "type": "string"
-        },
-        "Object_ID": {
-            "type": "integer"
-        },
-        "Portal_url": {
+        "portal_url": {
             "type": "string",
             "format": "url"
         },
-        "Behandelend_bestuursorgaan": {
+        "behandelend_bestuursorgaan": {
+            "type": "object",
+            "$ref": "https://commongateway.nl/woo.behandelendBestuursorgaan.schema.json"
+        },
+        "metadata": {
+            "type": "object",
+            "$ref": "https://commongateway.nl/woo.metadata.schema.json"
+        },
+        "ontvanger_informatieverzoek": {
             "type": "string"
         },
-        "Ontvanger_informatieverzoek": {
+        "titel": {
             "type": "string"
         },
-        "Volgnummer": {
+        "beschrijving": {
             "type": "string"
         },
-        "Titel": {
+        "samenvatting": {
             "type": "string"
         },
-        "Beschrijving": {
-            "type": "string"
-        },
-        "Samenvatting": {
-            "type": "string"
-        },
-        "Categorie": {
+        "categorie": {
             "type": "string",
             "required": true
         },
-        "Verzoeker": {
-            "type": "string"
-        },
-        "Ontvangstdatum": {
+        "ontvangstdatum": {
             "type": "string",
             "description": "format: Y-m-d"
         },
-        "Besluitdatum": {
-            "type": "string",
-            "description": "format: Y-m-d"
-        },
-        "Publicatiedatum": {
+        "publicatiedatum": {
             "description": "Publicatiedatum van een Woo object is nooit in de toekomst.",
             "type": "string",
             "maxDate": "now",
             "required": true
         },
-        "Behandelstatus": {
+        "behandelstatus": {
             "type": "string"
         },
         "Besluit": {
             "type": "string"
         },
-        "Termijnoverschrijding": {
+        "termijnoverschrijding": {
             "type": "string"
         },
         "URL_informatieverzoek": {
@@ -92,40 +77,13 @@
             "type": "object",
             "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
         },
-        "Geografisch_gebied": {
-            "type": "string"
-        },
-        "BAG_ID": {
-            "type": "string"
-        },
-        "BGT_ID": {
-            "type": "string"
-        },
-        "Postcodegebied": {
-            "type": "string"
-        },
-        "Adres": {
-            "type": "string"
-        },
-        "COORDS": {
-            "type": "array",
-            "items": {
-                "$ref": "https://commongateway.nl/pdd.coords.schema.json"
-            }
-        },
-        "Geografische_positie": {
-            "type": "array",
-            "items": {
-                "$ref": "https://commongateway.nl/pdd.geografischePositie.schema.json"
-            }
-        },
-        "Bijlagen": {
+        "bijlagen": {
             "type": "array",
             "items": {
                 "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
             }
         },
-        "Themas": {
+        "themas": {
             "type": "array",
             "items": {
                 "$ref": "https://commongateway.nl/pdd.thema.schema.json"
