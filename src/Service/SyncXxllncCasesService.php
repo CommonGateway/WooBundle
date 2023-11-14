@@ -282,7 +282,6 @@ class SyncXxllncCasesService
 
     }//end handleCustomLogic()
 
-
     /**
      * Fetches objects from xxllnc with pagination.
      *
@@ -292,21 +291,21 @@ class SyncXxllncCasesService
      *
      * @return array The fetched objects.
      */
-    private function fetchObjects(Source $source, ?int $page=1, array $results=[])
+    private function fetchObjects(Source $source, ?int $page = 1,  array $results = []) 
     {
         $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', ['query' => ['zapi_page' => $page]]);
         $decodedResponse = $this->callService->decodeResponse($source, $response);
+
 
         $results = array_merge($results, $decodedResponse['result']);
 
         // Pagination xxllnc.
         if (isset($decodedResponse['next']) === true) {
             $page++;
-            $results = array_merge($results, $this->fetchObjects($source, $page, $results));
+            $results = $this->fetchObjects($source, $page, $results);
         }
 
         return $results;
-
     }//end fetchObjects()
 
 
@@ -358,6 +357,7 @@ class SyncXxllncCasesService
 
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
         $this->logger->info("Fetching cases from {$source->getLocation()}");
+
 
         $results = $this->fetchObjects($source);
         $this->entityManager->flush();
