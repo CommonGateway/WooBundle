@@ -2,10 +2,10 @@
   "title": "XxllncDocumentSetSourceId",
   "$id": "https://commongateway.nl/mapping/pdd.xxllncDocumentSetSourceId.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "passTrough": false,
   "mapping": {
     "_sourceId": "uuid",
-    "Titel_Bijlage": "Temporarily title so a object gets created for file fetching and url genering."
+    "titel": "Temporarily title so a object gets created for file fetching and url genering."
   }
 }
