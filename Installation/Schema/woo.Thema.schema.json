@@ -5,7 +5,7 @@
   "version": "0.0.2",
   "type": "object",
   "description": "",
-  "required": ["Hoofdthema"],
+  "required": ["hoofdthema"],
   "properties": {
     "hoofdthema": {
       "type": "string",
