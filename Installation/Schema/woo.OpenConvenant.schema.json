@@ -2,7 +2,7 @@
   "title": "OpenConvenant",
   "$id": "https://commongateway.nl/pdd.openConvenant.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "object",
   "description": "",
   "properties": {
@@ -39,7 +39,7 @@
     "Bijlagen": {
       "type": "array",
       "items": {
-        "$ref": "https://commongateway.nl/pdd.bijlageConvenant.schema.json"
+        "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
       }
     }
   }

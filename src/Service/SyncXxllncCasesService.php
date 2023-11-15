@@ -5,7 +5,6 @@ namespace CommonGateway\WOOBundle\Service;
 use App\Entity\Entity as Schema;
 use App\Entity\Mapping;
 use App\Entity\Endpoint;
-use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
@@ -20,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
-use DateTime;
 
 /**
  * Service responsible for synchronizing xxllnc cases to woo objects.
@@ -201,7 +199,7 @@ class SyncXxllncCasesService
         $base64 = $this->fileService->getInhoudDocument($result['id'], $documentMeta['uuid'], $mimeType, $config['source']);
 
         // This finds the existing Value or creates a new one.
-        $value = $bijlageObject->getValueObject("URL_Bijlage");
+        $value = $bijlageObject->getValueObject("URL");
 
         $this->entityManager->persist($value);
 

@@ -7,8 +7,8 @@
   "mapping": {
     "_sourceId": "id",
     "id": "id",
-    "behandelend_bestuursorgaan.oidn": "{% if oidn|default %}{{ oidn }}{% else %}unknown{% endif %}",
-    "behandelend_bestuursorgaan.naam": "bestuursorgaan",
+    "behandelend_bestuursorgaan.oidn": "{% if behandelend_bestuursorgaan.oidn|default %}{{ behandelend_bestuursorgaan.oidn }}{% else %}unknown{% endif %}",
+    "behandelend_bestuursorgaan.naam": "behandelend_bestuursorgaan.naam",
     "titel": "{% if values['case&#46;subject_external']|default %}{{ values['case&#46;subject_external'] }}{% endif %}",
     "beschrijving": "{% if values['attribute&#46;woo_beschrijving']|default %}{{ values['attribute&#46;woo_beschrijving'] }}{% endif %}",
     "samenvatting": "{% if values['attribute&#46;woo_samenvatting']|default %}{{ values['attribute&#46;woo_samenvatting'] }}{% endif %}",
