@@ -282,6 +282,33 @@ class SyncXxllncCasesService
 
 
     /**
+     * Fetches objects from xxllnc with pagination.
+     *
+     * @param Source   $source  The source entity that provides the source of the result data.
+     * @param int|null $page    The page we are fetching, increments each iteration.
+     * @param array    $results The results from xxllnc api we merge each iteration.
+     *
+     * @return array The fetched objects.
+     */
+    private function fetchObjects(Source $source, ?int $page=1, array $results=[])
+    {
+        $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', ['query' => ['zapi_page' => $page]]);
+        $decodedResponse = $this->callService->decodeResponse($source, $response);
+
+        $results = array_merge($results, $decodedResponse['result']);
+
+        // Pagination xxllnc.
+        if (isset($decodedResponse['next']) === true) {
+            $page++;
+            $results = $this->fetchObjects($source, $page, $results);
+        }
+
+        return $results;
+
+    }//end fetchObjects()
+
+
+    /**
      * Handles the synchronization of xxllnc cases.
      *
      * @param array $data
@@ -330,14 +357,13 @@ class SyncXxllncCasesService
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
         $this->logger->info("Fetching cases from {$source->getLocation()}");
 
-        $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', []);
-        $decodedResponse = $this->callService->decodeResponse($source, $response);
+        $results = $this->fetchObjects($source);
         $this->entityManager->flush();
 
         $idsSynced        = [];
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
-        foreach ($decodedResponse['result'] as $result) {
+        foreach ($results as $result) {
             $result       = array_merge($result, ['behandelend_bestuursorgaan' => ['oidn' => $this->configuration['oidn'], 'naam' => $this->configuration['bestuursorgaan']]]);
             $mappedResult = $this->mappingService->mapping($mapping, $result);
 
