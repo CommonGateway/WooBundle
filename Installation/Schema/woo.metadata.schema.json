@@ -1,0 +1,21 @@
+{
+  "title": "Metadata",
+  "$id": "https://commongateway.nl/woo.metadata.schema.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+  "version": "0.0.1",
+  "type": "object",
+  "description": "Metadata object for Woo object",
+  "required": [],
+  "properties": {
+    "volgnummer": {
+        "type": "string"
+    },
+    "besluitdatum": {
+        "type": "string",
+        "description": "format: Y-m-d"
+    },
+    "verzoeker": {
+        "type": "string"
+    }
+  }
+}

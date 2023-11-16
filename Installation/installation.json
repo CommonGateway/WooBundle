@@ -13,16 +13,6 @@
         "methods": []
       },
       {
-        "reference": "https://commongateway.nl/pdd.geografischePositie.schema.json",
-        "path": "geografischePosities",
-        "methods": []
-      },
-      {
-        "reference": "https://commongateway.nl/pdd.coords.schema.json",
-        "path": "coords",
-        "methods": []
-      },
-      {
         "reference": "https://commongateway.nl/pdd.bijlage.schema.json",
         "path": "bijlagen",
         "methods": []
@@ -35,6 +25,16 @@
       {
         "reference": "https://commongateway.nl/pdd.openConvenant.schema.json",
         "path": "openconvenanten",
+        "methods": []
+      },
+      {
+        "reference": "https://commongateway.nl/woo.behandelendBestuursorgaan.schema.json",
+        "path": "behandelend_bestuursorganen",
+        "methods": []
+      },
+      {
+        "reference": "https://commongateway.nl/woo.metadata.schema.json",
+        "path": "metadata",
         "methods": []
       },
       {

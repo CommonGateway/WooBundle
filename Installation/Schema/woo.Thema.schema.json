@@ -2,19 +2,19 @@
   "title": "Thema",
   "$id": "https://commongateway.nl/pdd.thema.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "object",
   "description": "",
-  "required": ["Hoofdthema"],
+  "required": ["hoofdthema"],
   "properties": {
-    "Hoofdthema": {
+    "hoofdthema": {
       "type": "string",
       "required": true
     },
-    "Subthema": {
+    "subthema": {
       "type": "string"
     },
-    "Aanvullend_thema": {
+    "aanvullendThema": {
       "type": "string"
     }
   }

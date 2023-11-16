@@ -2,13 +2,14 @@
   "title": "XxllncDocumentToBijlage",
   "$id": "https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "passTrough": false,
   "mapping": {
     "_sourceId": "uuid",
-    "Titel_Bijlage": "filename",
-    "URL_Bijlage": "url",
-    "Tijdstip_laatste_wijziging_bijlage": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}",
-    "Status_Bijlage": "{% if accepted|default and accepted == 1 %}{{ \"accepted\" }}{% endif %}"
+    "titel": "filename",
+    "label": "filename",
+    "url": "url",
+    "tijdstip_laatste_wijziging": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}",
+    "status": "{% if accepted|default and accepted == 1 %}{{ \"accepted\" }}{% endif %}"
   }
 }
