@@ -8,7 +8,7 @@
     "_sourceId": "uuid",
     "titel": "filename",
     "label": "filename",
-    "URL": "url",
+    "url": "url",
     "tijdstip_laatste_wijziging": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}",
     "status": "{% if accepted|default and accepted == 1 %}{{ \"accepted\" }}{% endif %}"
   }

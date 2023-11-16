@@ -2,7 +2,7 @@
   "https://commongateway.nl/pdd.openWOO.schema.json": [
     {
       "id": "2023-002106",
-      "portal_url": "https://www.barendrecht.nl/openwoo/werkprocedure-aanleg-glasvezelnetwerk/8c713806-6372-4630-95f4-a9021b2a41c9",
+      "portalUrl": "https://www.barendrecht.nl/openwoo/werkprocedure-aanleg-glasvezelnetwerk/8c713806-6372-4630-95f4-a9021b2a41c9",
       "titel": "Werkprocedure aanleg glasvezelnetwerk",
       "samenvatting": "Dit verzoek is een vervolg op het Woo-besluit van 8 juni 2023 waarbij informatie openbaar is gemaakt over de voorbereiding en plaatsing van een schakelkast glasvezelnetwerk. In dit verzoek is met een beroep op de Wet open overheid om informatie gevraagd over de werkprocedure voor de aanleg van glasvezelnetwerk en dan met name de plaatsing van een schakelkast glasvezelnetwerk.",
       "ontvangstdatum": "2023-06-14",
@@ -11,25 +11,25 @@
       },
       "Besluit": "Deels openbaar gemaakt",
       "termijnoverschrijding": "Nee",
-      "URL_informatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-verzoek-geanonimiseerd-2.pdf",
-      "URL_inventarisatielijst": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Inventarisatielijst-1.pdf",
-      "URL_besluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd-2.pdf",
+      "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-verzoek-geanonimiseerd-2.pdf",
+      "urlInventarisatielijst": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Inventarisatielijst-1.pdf",
+      "urlBesluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd-2.pdf",
       "bijlagen": [
         {
           "titel": "07Werkprocedure-Beheer-aanleg-glasvezelnetwerk-BAR-organisatie-V2.0-22-juni-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07Werkprocedure-Beheer-aanleg-glasvezelnetwerk-BAR-organisatie-V2.0-22-juni-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07Werkprocedure-Beheer-aanleg-glasvezelnetwerk-BAR-organisatie-V2.0-22-juni-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "07Werkprocedure-Beheer-aanleg-glasvezelnetwerk-BAR-organisatie-V1.0-14-maart-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07Werkprocedure-Beheer-aanleg-glasvezelnetwerk-BAR-organisatie-V1.0-14-maart-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07Werkprocedure-Beheer-aanleg-glasvezelnetwerk-BAR-organisatie-V1.0-14-maart-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "07E-mail-Samenvatting-van-het-overleg-Verwachtingen-en-afspraken-aanleg-glasvezelnetwerk-23-februari-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07E-mail-Samenvatting-van-het-overleg-Verwachtingen-en-afspraken-aanleg-glasvezelnetwerk-23-februari-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07E-mail-Samenvatting-van-het-overleg-Verwachtingen-en-afspraken-aanleg-glasvezelnetwerk-23-februari-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "07Conceptversie-Werkprocedure-Beheer-aanleg-glasvezelnetwerk-17-februari-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07Conceptversie-Werkprocedure-Beheer-aanleg-glasvezelnetwerk-17-februari-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/07Conceptversie-Werkprocedure-Beheer-aanleg-glasvezelnetwerk-17-februari-2023-geanonimiseerd.pdf"
         }
       ],
       "themas": [
@@ -40,7 +40,7 @@
     },
     {
       "id": "775323",
-      "portal_url": "https://www.barendrecht.nl/openwoo/voorbereiding-en-plaatsing-schakelkast-glasvezelnetwerk/cc14482c-0f88-4941-a1f7-c2822dc658cd",
+      "portalUrl": "https://www.barendrecht.nl/openwoo/voorbereiding-en-plaatsing-schakelkast-glasvezelnetwerk/cc14482c-0f88-4941-a1f7-c2822dc658cd",
       "titel": "Voorbereiding en plaatsing schakelkast glasvezelnetwerk",
       "samenvatting": "Een bewoner van de gemeente Barendrecht was het niet eens met de plaatsing van de  schakelkast voor het glasvezelnetwerk.  De bewoner heeft hierover een klacht ingediend. Alle documentatie over zowel de voorbereiding en de plaatsing van de schakelkast als de behandeling van de klacht is opgevraagd.",
       "ontvangstdatum": "2023-04-14",
@@ -49,201 +49,201 @@
       },
       "Besluit": "Deels openbaar gemaakt",
       "termijnoverschrijding": "Nee",
-      "URL_informatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-verzoek-geanonimiseerd-1.pdf",
-      "URL_inventarisatielijst": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Inventarisatielijst.pdf",
-      "URL_besluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd-1.pdf",
+      "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-verzoek-geanonimiseerd-1.pdf",
+      "urlInventarisatielijst": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Inventarisatielijst.pdf",
+      "urlBesluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd-1.pdf",
       "bijlagen": [
         {
           "titel": "Whatsappberichten-bewoner-en-gemeente-2022-en-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Whathsappberichten-bewoner-en-gemeente-2022-en-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Whathsappberichten-bewoner-en-gemeente-2022-en-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Whatsappberichten-bewoner-en-gemeente-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06/Whathsappberichten-bewoner-en-gemeente-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06/Whathsappberichten-bewoner-en-gemeente-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Vergunningstekening-Barendrecht-Nieuwland-Vergunning-Overzicht-TOTAAL-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Vergunningstekening-Barendrecht-Nieuwland-Vergunning-Overzicht-TOTAAL-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Vergunningstekening-Barendrecht-Nieuwland-Vergunning-Overzicht-TOTAAL-geanonimiseerd.pdf"
         },
         {
           "titel": "Uitvoeringstekening-verplaatsen-kast-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Uitvoeringstekening-verplaatsen-kast-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Uitvoeringstekening-verplaatsen-kast-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Tekening-Brd-AHY-DP-Areas-Brd-AHY-DP007-2vd2-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Tekening-Brd-AHY-DP-Areas-Brd-AHY-DP007-2vd2-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Tekening-Brd-AHY-DP-Areas-Brd-AHY-DP007-2vd2-geanonimiseerd.pdf"
         },
         {
           "titel": "Tekening-Brd-AHY-DP-Areas-Brd-AHY-DP007-1vd2-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Tekening-Brd-AHY-DP-Areas-Brd-AHY-DP007-1vd2-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Tekening-Brd-AHY-DP-Areas-Brd-AHY-DP007-1vd2-geanonimiseerd.pdf"
         },
         {
           "titel": "Ondertekend-contract-KPN-NEM-SOK-Glasvezel-Barendrecht-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Ondertekend-contract-KPN-NEM-SOK-Glasvezel-Barendrecht-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Ondertekend-contract-KPN-NEM-SOK-Glasvezel-Barendrecht-geanonimiseerd.pdf"
         },
         {
           "titel": "Offerte-Verplaatsen-OAP-AHW-11-01-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Offerte-Verplaatsen-OAP-AHW-11-01-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Offerte-Verplaatsen-OAP-AHW-11-01-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "OAP-Tekening-Barendrecht-Nieuwland.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06OAP-Tekening-Barendrecht-Nieuwland.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06OAP-Tekening-Barendrecht-Nieuwland.pdf"
         },
         {
           "titel": "Notulen-gespreksverslag-klacht-08-02-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Notulen-gespreksverslag-klacht-08-02-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Notulen-gespreksverslag-klacht-08-02-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Moor-379451-tekening-10-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Moor-379451-tekening-10-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Moor-379451-tekening-10-geanonimiseerd.pdf"
         },
         {
           "titel": "Memo-Klachtenbehandeling-klacht-plaatsing-OAP-kast-24-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Memo-Klachtenbehandeling-klacht-plaatsing-OAP-kast-24-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Memo-Klachtenbehandeling-klacht-plaatsing-OAP-kast-24-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-VWT-kast-06-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-VWT-kast-06-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-VWT-kast-06-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-van-VWT-Kast-compleet-17-03-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-VWT-Kast-compleet-17-03-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-VWT-Kast-compleet-17-03-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-van-KPN-verplaatsing-mogelijk-07-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-KPN-verplaatsing-mogelijk-07-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-KPN-verplaatsing-mogelijk-07-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-van-KPN-kosten-verplaatsen-Kast-03-03-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-KPN-kosten-verplaatsen-Kast-03-03-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-KPN-kosten-verplaatsen-Kast-03-03-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-van-bewoner-reactie-klacht-30-01-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-bewoner-reactie-klacht-30-01-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-van-bewoner-reactie-klacht-30-01-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-KPN-Procedure-verplaatsing-kast-07-03-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-KPN-Procedure-verplaatsing-kast-07-03-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-KPN-Procedure-verplaatsing-kast-07-03-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-verzoek-klacht-oppakken-25-10-2022-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-verzoek-klacht-oppakken-25-10-2022-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-verzoek-klacht-oppakken-25-10-2022-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-Schakelkast-KPN-21-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-Schakelkast-KPN-21-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-Schakelkast-KPN-21-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-oppakken-klacht-637384-info-–-24-03-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-oppakken-klacht-637384-info-–-24-03-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-oppakken-klacht-637384-info-–-24-03-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-Klacht-bespreken-17-03-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-Klacht-bespreken-17-03-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-Klacht-bespreken-17-03-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-klacht-637384-aanvulling-info-–-23-03-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-klacht-637384-aanvulling-info-–-23-03-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-klacht-637384-aanvulling-info-–-23-03-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-Dringend-verzoek-locatie-kast-–-14-02-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-–-Dringend-verzoek-locatie-kast-–-14-02-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-–-Dringend-verzoek-locatie-kast-–-14-02-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-bewoner-Schakelkast-KPN-–-19-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-Schakelkast-KPN-–-19-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-Schakelkast-KPN-–-19-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-bewoner-reactie-gespreksverslag-V2-24-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-reactie-gespreksverslag-V2-24-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-reactie-gespreksverslag-V2-24-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-bewoner-klacht-637384-gespreksnotitie-14-02-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-klacht-637384-gespreksnotitie-14-02-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-klacht-637384-gespreksnotitie-14-02-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-bewoner-kast-andere-locatie-–-10-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-kast-andere-locatie-–-10-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-kast-andere-locatie-–-10-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-bewoner-info-klachtencoordinator-14-02-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-info-klachtencoordinator-14-02-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-info-klachtencoordinator-14-02-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-bewoner-indiening-WOO-verzoek-–-14-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-indiening-WOO-verzoek-–-14-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-bewoner-indiening-WOO-verzoek-–-14-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-aan-KPN-Voorstel-locatie-–-06-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-KPN-Voorstel-locatie-–-06-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-KPN-Voorstel-locatie-–-06-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-aan-KPN-akkoord-verplaatsing-OAP-kast-19-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-KPN-akkoord-verplaatsing-OAP-kast-19-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-KPN-akkoord-verplaatsing-OAP-kast-19-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-aan-bewoner-Klacht-schakelkast-16-02-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-bewoner-Klacht-schakelkast-16-02-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-bewoner-Klacht-schakelkast-16-02-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-aan-bewoner-gespreksverslag-klacht-V2-21-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-bewoner-gespreksverslag-klacht-V2-21-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-bewoner-gespreksverslag-klacht-V2-21-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-aan-bewoner-Contactgegevens-wethouder-24-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-bewoner-Contactgegevens-wethouder-24-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-aan-bewoner-Contactgegevens-wethouder-24-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-Klachten-kast-on-hold-09-02-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-Klachten-kast-on-hold-09-02-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Mail-intern-Klachten-kast-on-hold-09-02-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Luchtfoto-voorstel-verplaatsen-kast-04-2023.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Luchtfoto-voorstel-verplaatsen-kast-04-2023.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Luchtfoto-voorstel-verplaatsen-kast-04-2023.pdf"
         },
         {
           "titel": "Klacht-zaaksysteem-23-10-2022-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Klacht-zaaksysteem-23-10-2022-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Klacht-zaaksysteem-23-10-2022-geanonimiseerd.pdf"
         },
         {
           "titel": "Instemmingsbesluit_392417-05-09-2022-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Instemmingsbesluit_392417-05-09-2022-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Instemmingsbesluit_392417-05-09-2022-geanonimiseerd.pdf"
         },
         {
           "titel": "Foto-nieuwe-locatie-kast.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Foto-nieuwe-locatie-kast.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Foto-nieuwe-locatie-kast.pdf"
         },
         {
           "titel": "Foto-2-nieuwe-locatie-kast-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Foto-2-nieuwe-locatie-kast-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Foto-2-nieuwe-locatie-kast-geanonimiseerd.pdf"
         },
         {
           "titel": "Extra-info-klacht-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Extra-info-klacht-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Extra-info-klacht-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Brief-aan-bewoner-Formele-verklaring-wethouder-18-04-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Brief-aan-bewoner-Formele-verklaring-wethouder-18-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Brief-aan-bewoner-Formele-verklaring-wethouder-18-04-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Brief-bewoner-Conclusie-onderzoek-klacht-04-05-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Brief-bewoner-Conclusie-onderzoek-klacht-04-05-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Brief-bewoner-Conclusie-onderzoek-klacht-04-05-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Bewoner-klacht-gemeente-23-10-2022-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Bewoner-klacht-gemeente-23-10-2022-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Bewoner-klacht-gemeente-23-10-2022-geanonimiseerd.pdf"
         },
         {
           "titel": "Bewoner-aanvullende-klacht-gemeente-glasvezel-–-29-01-2023-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Bewoner-aanvullende-klacht-gemeente-glasvezel-–-29-01-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Bewoner-aanvullende-klacht-gemeente-glasvezel-–-29-01-2023-geanonimiseerd.pdf"
         },
         {
           "titel": "Besluit-Glasvezel-11-mei-2021-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Besluit-Glasvezel-11-mei-2021-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06Besluit-Glasvezel-11-mei-2021-geanonimiseerd.pdf"
         },
         {
           "titel": "Mail-intern-vergunningtraject-MOOR-19-04-2023-geanonimiseerd",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06/Mail-intern-vergunningtraject-MOOR-19-04-2023-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/06/Mail-intern-vergunningtraject-MOOR-19-04-2023-geanonimiseerd.pdf"
         }
       ],
       "themas": [
@@ -254,7 +254,7 @@
     },
     {
       "id": "719709",
-      "portal_url": "https://www.barendrecht.nl/openwoo/aantal-wmo-vragen-ingediend-in-2020-2021-en-2022/2d583d8c-0415-4b7f-957c-f3713e6a000c",
+      "portalUrl": "https://www.barendrecht.nl/openwoo/aantal-wmo-vragen-ingediend-in-2020-2021-en-2022/2d583d8c-0415-4b7f-957c-f3713e6a000c",
       "titel": "Aantal WMO-vragen ingediend in 2020, 2021 en 2022",
       "samenvatting": "Opgevraagd is het aantal WMO-aanvragen in de jaren 2020, 2021 en 2022. Hierbij is ook opgevraagd wanneer de WMO-aanvragen zijn ingediend, of de WMO-aanvragen zijn toe- of afgewezen en wat de reden was van de eventuele afwijzing.  Het Woo-verzoek was echter niet via de juiste (elektronische) kanaal ingediend. Het Woo-verzoek wordt daarom niet behandeld.",
       "ontvangstdatum": "2023-02-04",
@@ -263,8 +263,8 @@
     },
       "Besluit": "Niet openbaar gemaakt",
       "termijnoverschrijding": "Ja",
-      "URL_informatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/WOO-verzoek-geanonimiseerd.pdf",
-      "URL_besluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-Barendrecht-geanonimiseerd.pdf",
+      "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/WOO-verzoek-geanonimiseerd.pdf",
+      "urlBesluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-Barendrecht-geanonimiseerd.pdf",
       "themas": [
         {
           "hoofdthema": "Sociale zekerheid"
@@ -273,7 +273,7 @@
     },
     {
       "id": "746778",
-      "portal_url": "https://www.barendrecht.nl/openwoo/locaties-en-aantallen-toezichtcameras-en-anpr-cameras-in-de-gemeente/3a502d29-2f87-4976-b75e-b32a42e9ae91",
+      "portalUrl": "https://www.barendrecht.nl/openwoo/locaties-en-aantallen-toezichtcameras-en-anpr-cameras-in-de-gemeente/3a502d29-2f87-4976-b75e-b32a42e9ae91",
       "titel": "Locaties en aantallen toezichtcamera's en ANPR-camera's in de gemeente",
       "samenvatting": "De locaties en aantallen toezichtcamera's en ANPR-camera's in de gemeente zijn opgevraagd. Bij NS Station Barendrecht zijn 10 toezichtcamera's geïnstalleerd en operationeel en bij het winkelcentrum Carnisse Veste zijn 35 toezichtcamera's geïnstalleerd en operationeel. Er zijn 8 ANPR camera's geplaatst op de Kilweg en bij de IJsselmondse Knoop.",
       "ontvangstdatum": "2023-03-10",
@@ -282,8 +282,8 @@
     },
       "Besluit": "Deels openbaar gemaakt",
       "termijnoverschrijding": "Nee",
-      "URL_informatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/WOO_verzoek-geanonimiseerd.pdf",
-      "URL_besluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd1.pdf",
+      "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/WOO_verzoek-geanonimiseerd.pdf",
+      "urlBesluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd1.pdf",
       "themas": [
         {
           "hoofdthema": "Openbare orde en veiligheid"
@@ -292,7 +292,7 @@
     },
     {
       "id": "733982",
-      "portal_url": "https://www.barendrecht.nl/openwoo/exploitatievergunningen-diggels-barendrecht-b-v-ristorante-papi-en-cafe-de-uitspanning-b-v/c20eb54d-f1dc-4bbd-94c0-59d218e5186c",
+      "portalUrl": "https://www.barendrecht.nl/openwoo/exploitatievergunningen-diggels-barendrecht-b-v-ristorante-papi-en-cafe-de-uitspanning-b-v/c20eb54d-f1dc-4bbd-94c0-59d218e5186c",
       "titel": "Exploitatievergunningen Diggels Barendrecht B.V., Ristorante Papi en Café De Uitspanning B.V.",
       "samenvatting": "De exploitatievergunningen van Diggels Barendrecht B.V., Ristorante Papi en Café De Uitspanning B.V. zijn opgevraagd en worden gedeeltelijk openbaar gemaakt.",
       "ontvangstdatum": "2023-02-22",
@@ -301,20 +301,20 @@
       },
       "Besluit": "Deels openbaar gemaakt",
       "termijnoverschrijding": "Nee",
-      "URL_informatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-verzoek-geanonimiseerd.pdf",
-      "URL_besluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd.pdf",
+      "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-verzoek-geanonimiseerd.pdf",
+      "urlBesluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd.pdf",
       "bijlagen": [
         {
           "titel": "04Exploitatievergunning-Uitspanning-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/04Exploitatievergunning-Uitspanning-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/04Exploitatievergunning-Uitspanning-geanonimiseerd.pdf"
         },
         {
           "titel": "04Exploitatievergunning-PaPi-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/04Exploitatievergunning-PaPi-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/04Exploitatievergunning-PaPi-geanonimiseerd.pdf"
         },
         {
           "titel": "04Exploitatievergunning-Diggels-geanonimiseerd.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/04Exploitatievergunning-Diggels-geanonimiseerd.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/04Exploitatievergunning-Diggels-geanonimiseerd.pdf"
         }
       ],
       "themas": [
@@ -325,11 +325,11 @@
     },
     {
       "id": "691879",
-      "portal_url": "https://www.barendrecht.nl/openwoo/verzoek-tot-inzien-horecavergunning-de-uitspanning-en-diggels/6eb9cf29-6d9a-47f2-957f-4c37a5b957d3",
-      "behandelend_bestuursorgaan": {
+      "portalUrl": "https://www.barendrecht.nl/openwoo/verzoek-tot-inzien-horecavergunning-de-uitspanning-en-diggels/6eb9cf29-6d9a-47f2-957f-4c37a5b957d3",
+      "behandelendBestuursorgaan": {
         "naam": "College van burgemeester en wethouders"
       },
-      "ontvanger_informatieverzoek": "Barendrecht",
+      "ontvangerInformatieverzoek": "Barendrecht",
       "titel": "Verzoek tot inzien horecavergunning De Uitspanning en Diggels",
       "beschrijving": "",
       "samenvatting": "Inzien horecavergunning van:<br />\r\nDe Uitspanning, Doormanplein 7<br />\r\nDiggels, Dorpsstraat 141<br />\r\n<br />\r\nWegens herbestrating van openbare weg zonder vergunning.",
@@ -339,14 +339,14 @@
       },
       "Besluit": "Deels openbaar gemaakt",
       "termijnoverschrijding": "Nee",
-      "URL_informatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2023/03WOO-verzoek-Verzoek-tot-inzien-horecavergunning-De-Uitspanning-en-Diggels.pdf",
-      "URL_inventarisatielijst": "https://openpub.barendrecht.nl/wp-content/uploads/2023/03Ondertekende-toewijzing-Woo-verzoek-Verzoek-tot-inzien-horecavergunning-De-Uitspanning-en-Diggels.pdf",
+      "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2023/03WOO-verzoek-Verzoek-tot-inzien-horecavergunning-De-Uitspanning-en-Diggels.pdf",
+      "urlInventarisatielijst": "https://openpub.barendrecht.nl/wp-content/uploads/2023/03Ondertekende-toewijzing-Woo-verzoek-Verzoek-tot-inzien-horecavergunning-De-Uitspanning-en-Diggels.pdf",
       "bijlagen": [
         {
           "Type": "Inhoudelijk",
           "Status": "Nieuw",
           "titel": "03Horecavergunning-de-Uitspanning.pdf",
-          "URL": "https://openpub.barendrecht.nl/wp-content/uploads/2023/03Horecavergunning-de-Uitspanning.pdf"
+          "url": "https://openpub.barendrecht.nl/wp-content/uploads/2023/03Horecavergunning-de-Uitspanning.pdf"
         }
       ],
       "themas": [

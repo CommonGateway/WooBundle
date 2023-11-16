@@ -6,19 +6,19 @@
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
-    "URL_informatieverzoek": "{% if informatieverzoek.URL|default %}{{ informatieverzoek.URL }}{% endif %}",
-    "URL_inventarisatielijst": "{% if inventarisatielijst.URL|default %}{{ inventarisatielijst.URL }}{% endif %}",
-    "URL_besluit": "{% if besluit.URL|default %}{{ besluit.URL }}{% endif %}",
+    "urlInformatieverzoek": "{% if informatieverzoek.url|default %}{{ informatieverzoek.url }}{% endif %}",
+    "urlInventarisatielijst": "{% if inventarisatielijst.url|default %}{{ inventarisatielijst.url }}{% endif %}",
+    "urlBesluit": "{% if besluit.url|default %}{{ besluit.url }}{% endif %}",
     "informatieverzoek": "{% if informatieverzoek|default %}{{ informatieverzoek|json_encode }}{% endif %}",
     "inventarisatielijst": "{% if inventarisatielijst|default %}{{ inventarisatielijst|json_encode }}{% endif %}",
     "besluit": "{% if besluit|default %}{{ besluit|json_encode }}{% endif %}",
     "bijlagen": "{{ bijlagen|json_encode }}",
-    "portal_url": "portalUrl"
+    "portalUrl": "portalUrl"
   },
   "cast": {
-    "URL_informatieverzoek": "unsetIfValue==",
-    "URL_inventarisatielijst": "unsetIfValue==",
-    "URL_besluit": "unsetIfValue==",
+    "urlInformatieverzoek": "unsetIfValue==",
+    "urlInventarisatielijst": "unsetIfValue==",
+    "urlBesluit": "unsetIfValue==",
     "informatieverzoek": "jsonToArray",
     "inventarisatielijst": "jsonToArray",
     "besluit": "jsonToArray",

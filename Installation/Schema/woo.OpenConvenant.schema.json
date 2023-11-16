@@ -6,28 +6,28 @@
   "type": "object",
   "description": "",
   "properties": {
-    "ID": {
+    "id": {
       "type": "string"
     },
-    "Samenvatting": {
+    "status": {
       "type": "string"
     },
-    "Onderwerp": {
+    "onderwerp": {
       "type": "string"
     },
     "Beleidsterrein": {
       "type": "string"
     },
-    "Partijen": {
+    "partijen": {
         "type": "array",
         "items": {
           "$ref": "https://commongateway.nl/pdd.partij.schema.json"
         }
     },
-    "Duur": {
+    "duur": {
       "type": "string"
     },
-    "Datum_ondertekening": {
+    "datumOndertekening": {
       "type": "string"
     },
     "slug": {
@@ -36,7 +36,7 @@
     "identifier": {
       "type": "string"
     },
-    "Bijlagen": {
+    "bijlagen": {
       "type": "array",
       "items": {
         "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"

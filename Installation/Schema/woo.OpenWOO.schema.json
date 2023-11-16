@@ -9,11 +9,11 @@
         "id": {
             "type": "string"
         },
-        "portal_url": {
+        "portalUrl": {
             "type": "string",
             "format": "url"
         },
-        "behandelend_bestuursorgaan": {
+        "behandelendBestuursorgaan": {
             "type": "object",
             "$ref": "https://commongateway.nl/woo.behandelendBestuursorgaan.schema.json"
         },
@@ -21,7 +21,7 @@
             "type": "object",
             "$ref": "https://commongateway.nl/woo.metadata.schema.json"
         },
-        "ontvanger_informatieverzoek": {
+        "ontvangerInformatieverzoek": {
             "type": "string"
         },
         "titel": {
@@ -56,13 +56,13 @@
         "termijnoverschrijding": {
             "type": "string"
         },
-        "URL_informatieverzoek": {
+        "urlInformatieverzoek": {
             "type": "string"
         },
-        "URL_inventarisatielijst": {
+        "urlInventarisatielijst": {
             "type": "string"
         },
-        "URL_besluit": {
+        "urlBesluit": {
             "type": "string"
         },
         "informatieverzoek": {

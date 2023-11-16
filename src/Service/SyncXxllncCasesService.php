@@ -199,7 +199,7 @@ class SyncXxllncCasesService
         $base64 = $this->fileService->getInhoudDocument($result['id'], $documentMeta['uuid'], $mimeType, $config['source']);
 
         // This finds the existing Value or creates a new one.
-        $value = $bijlageObject->getValueObject("URL");
+        $value = $bijlageObject->getValueObject("url");
 
         $this->entityManager->persist($value);
 
@@ -364,7 +364,7 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
-            $result       = array_merge($result, ['behandelend_bestuursorgaan' => ['oidn' => $this->configuration['oidn'], 'naam' => $this->configuration['bestuursorgaan']]]);
+            $result       = array_merge($result, ['behandelendBestuursorgaan' => ['oidn' => $this->configuration['oidn'], 'naam' => $this->configuration['bestuursorgaan']]]);
             $mappedResult = $this->mappingService->mapping($mapping, $result);
 
             $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');

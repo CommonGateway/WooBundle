@@ -16,7 +16,7 @@
     "status": {
       "type": "string"
     },
-    "tijdstip_laatste_wijziging": {
+    "tijdstipLaatsteWijziging": {
       "type": "datetime",
       "description": "format: Y-m-d\\TH:i:s"
     },
@@ -27,7 +27,7 @@
     "label": {
       "type": "string"
     },
-    "URL": {
+    "url": {
       "type": "string",
       "format": "url"
     }

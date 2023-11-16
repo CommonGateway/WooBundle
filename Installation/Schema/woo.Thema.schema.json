@@ -14,7 +14,7 @@
     "subthema": {
       "type": "string"
     },
-    "aanvullend_thema": {
+    "aanvullendThema": {
       "type": "string"
     }
   }
