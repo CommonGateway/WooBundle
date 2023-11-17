@@ -6,7 +6,7 @@
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
-    "id": "id",
+    "id": "object_id",
     "behandelendBestuursorgaan.oidn": "{% if behandelendBestuursorgaan.oidn|default %}{{ behandelendBestuursorgaan.oidn }}{% else %}unknown{% endif %}",
     "behandelendBestuursorgaan.naam": "behandelendBestuursorgaan.naam",
     "titel": "{% if values['case&#46;subject_external']|default %}{{ values['case&#46;subject_external'] }}{% endif %}",
