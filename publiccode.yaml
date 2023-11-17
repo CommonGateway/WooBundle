@@ -1,5 +1,5 @@
 publiccodeYmlVersion: "0.1"
-name: "WOOBundle"
+name: "WOO Bundle"
 url: "https://github.com/CommonGateway/WOOBundle"
 releaseDate: "2022-10-01"
 softwareType: addon
@@ -14,6 +14,6 @@ categories:
 developmentStatus: beta
 description:
   nl:
-    shortDescription: "WOOBundle"
+    shortDescription: "WOO Bundle"
   en:
-    shortDescription: "WOOBundle"
+    shortDescription: "WOO Bundle"
