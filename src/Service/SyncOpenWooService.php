@@ -230,9 +230,9 @@ class SyncOpenWooService
             return [];
         }//end if
 
-        $source       = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        $schema       = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
-        $mapping      = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+        $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
         if ($source instanceof Source === false
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
@@ -257,12 +257,11 @@ class SyncOpenWooService
 
             // $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
             // if ($validationErrors !== null) {
-            //     $validationErrors = implode(', ', $validationErrors);
-            //     $this->logger->warning("SyncOpenWoo validation errors: $validationErrors");
-            //     isset($this->style) === true && $this->style->warning("SyncOpenWoo validation errors: $validationErrors");
-            //     continue;
+            // $validationErrors = implode(', ', $validationErrors);
+            // $this->logger->warning("SyncOpenWoo validation errors: $validationErrors");
+            // isset($this->style) === true && $this->style->warning("SyncOpenWoo validation errors: $validationErrors");
+            // continue;
             // }
-
             $object = $hydrationService->searchAndReplaceSynchronizations(
                 $mappedResult,
                 $source,
