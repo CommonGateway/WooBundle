@@ -1,0 +1,22 @@
+{
+    "title": "SyncBarendrechtOpenWooAction",
+    "$id": "https://commongateway.nl/woo.SyncBarendrechtOpenWooAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.default.listens","woo.barendrecht.listens"],
+    "configuration": {
+        "oidn": "24494374",
+        "portalUrl": "https://conductionnl.github.io/woo-website-barendrecht",
+        "source": "https://commongateway.woo.nl/source/barendrecht.openwoo.source.json",
+        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.schema.json",
+        "sourceType": "openWoo",
+        "bestuursorgaan": "Gemeente Barendrecht",
+        "sourceEndpoint": ""
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncOpenWooHandler"
+}

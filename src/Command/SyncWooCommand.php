@@ -4,6 +4,7 @@ namespace CommonGateway\WOOBundle\Command;
 
 use App\Entity\Action;
 use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
+use CommonGateway\WOOBundle\Service\SyncOpenWooService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -13,9 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * This class handles the command for the synchronization of a xxllnc case to a woo object.
+ * This class handles the command for the synchronization of woo objects.
  *
- * This Command executes the syncXxllncCasesService->syncXxllncCasesHandler.
+ * This Command can execute multiple services.
  *
  * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
@@ -23,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @package  CommonGateway\WOOBundle
  * @category Command
  */
-class SyncXxllncCasesCommand extends Command
+class SyncWooCommand extends Command
 {
 
     /**
@@ -31,7 +32,7 @@ class SyncXxllncCasesCommand extends Command
      *
      * @var static
      */
-    protected static $defaultName = 'woo:case:synchronize';
+    protected static $defaultName = 'woo:objects:synchronize';
 
     /**
      * The case service.
@@ -39,6 +40,13 @@ class SyncXxllncCasesCommand extends Command
      * @var SyncXxllncCasesService
      */
     private SyncXxllncCasesService $syncXxllncCasesService;
+
+    /**
+     * The OpenWoo service.
+     *
+     * @var SyncOpenWooService
+     */
+    private SyncOpenWooService $syncOpenWooService;
 
     /**
      * @var EntityManagerInterface
@@ -50,10 +58,12 @@ class SyncXxllncCasesCommand extends Command
      * Class constructor.
      *
      * @param SyncXxllncCasesService $syncXxllncCasesService The case service
+     * @param SyncOpenWooService $syncOpenWooService The OpenWoo service
      */
-    public function __construct(SyncXxllncCasesService $syncXxllncCasesService, EntityManagerInterface $entityManager)
+    public function __construct(SyncXxllncCasesService $syncXxllncCasesService, SyncOpenWooService $syncOpenWooService, EntityManagerInterface $entityManager)
     {
         $this->syncXxllncCasesService = $syncXxllncCasesService;
+        $this->syncOpenWooService = $syncXxllncCasesService;
         $this->entityManager          = $entityManager;
         parent::__construct();
 
@@ -68,12 +78,12 @@ class SyncXxllncCasesCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('This command triggers SyncXxllncCasesService')
-            ->setHelp('This command triggers SyncXxllncCasesService')
+            ->setDescription('This command can trigger multiple types of synchronization')
+            ->setHelp('This command can trigger multiple types of synchronization')
             ->addArgument(
                 'id',
                 InputArgument::OPTIONAL,
-                'Case id to fetch from xxllnc'
+                'Case id to fetch'
             )
             ->addArgument(
                 'action',
@@ -122,8 +132,15 @@ class SyncXxllncCasesCommand extends Command
             return Command::FAILURE;
         }//end if
 
-        if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $action->getConfiguration()) === null) {
-            return Command::FAILURE;
+        $config = $action->getConfiguration();
+        if (isset($config['sourceType']) === true && $config['sourceType'] ==='openWoo') {
+            if ($this->syncOpenWooService->syncOpenWooHandler([], $config) === null) {
+                return Command::FAILURE;
+            }
+        } else {
+            if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $config) === null) {
+                return Command::FAILURE;
+            }
         }
 
         return Command::SUCCESS;
