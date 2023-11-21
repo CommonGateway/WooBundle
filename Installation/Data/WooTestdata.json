@@ -1,12 +1,14 @@
 {
   "https://commongateway.nl/pdd.openWOO.schema.json": [
     {
+      "_id": "efa25dc8-da29-4d77-a41a-634709a353b6",
       "id": "2023-002106",
       "portalUrl": "https://www.barendrecht.nl/openwoo/werkprocedure-aanleg-glasvezelnetwerk/8c713806-6372-4630-95f4-a9021b2a41c9",
       "titel": "Werkprocedure aanleg glasvezelnetwerk",
       "samenvatting": "Dit verzoek is een vervolg op het Woo-besluit van 8 juni 2023 waarbij informatie openbaar is gemaakt over de voorbereiding en plaatsing van een schakelkast glasvezelnetwerk. In dit verzoek is met een beroep op de Wet open overheid om informatie gevraagd over de werkprocedure voor de aanleg van glasvezelnetwerk en dan met name de plaatsing van een schakelkast glasvezelnetwerk.",
       "ontvangstdatum": "2023-06-14",
       "metadata": {
+        "_id": "29550aa6-c50b-4a89-92a6-bee4ec180a33",
         "besluitdatum": "2023-07-11"
       },
       "Besluit": "Deels openbaar gemaakt",
@@ -34,17 +36,20 @@
       ],
       "themas": [
         {
+          "_id": "6e9e78b8-989e-4b2b-8453-899d08a5f309",
           "hoofdthema": "Ruimte en infrastructuur"
         }
       ]
     },
     {
+      "_id": "819d6188-5415-46ca-b539-6d1e91cff6dc",
       "id": "775323",
       "portalUrl": "https://www.barendrecht.nl/openwoo/voorbereiding-en-plaatsing-schakelkast-glasvezelnetwerk/cc14482c-0f88-4941-a1f7-c2822dc658cd",
       "titel": "Voorbereiding en plaatsing schakelkast glasvezelnetwerk",
       "samenvatting": "Een bewoner van de gemeente Barendrecht was het niet eens met de plaatsing van de  schakelkast voor het glasvezelnetwerk.  De bewoner heeft hierover een klacht ingediend. Alle documentatie over zowel de voorbereiding en de plaatsing van de schakelkast als de behandeling van de klacht is opgevraagd.",
       "ontvangstdatum": "2023-04-14",
       "metadata": {
+        "_id": "f72f0a47-aaf4-4454-a3e8-1facb73d12ce",
         "besluitdatum": "2023-06-08"
       },
       "Besluit": "Deels openbaar gemaakt",
@@ -248,55 +253,64 @@
       ],
       "themas": [
         {
+          "_id": "46971424-311d-4cd7-afc2-5c08c6e13466",
           "hoofdthema": "Ruimte en infrastructuur"
         }
       ]
     },
     {
+      "_id": "7c9172c6-b48a-4866-99b7-56b123d42b9f",
       "id": "719709",
       "portalUrl": "https://www.barendrecht.nl/openwoo/aantal-wmo-vragen-ingediend-in-2020-2021-en-2022/2d583d8c-0415-4b7f-957c-f3713e6a000c",
       "titel": "Aantal WMO-vragen ingediend in 2020, 2021 en 2022",
       "samenvatting": "Opgevraagd is het aantal WMO-aanvragen in de jaren 2020, 2021 en 2022. Hierbij is ook opgevraagd wanneer de WMO-aanvragen zijn ingediend, of de WMO-aanvragen zijn toe- of afgewezen en wat de reden was van de eventuele afwijzing.  Het Woo-verzoek was echter niet via de juiste (elektronische) kanaal ingediend. Het Woo-verzoek wordt daarom niet behandeld.",
       "ontvangstdatum": "2023-02-04",
       "metadata": {
-      "besluitdatum": "2023-05-16"
-    },
+        "_id": "011a0d8b-cc4d-41e9-8435-1e1778aec3ac",
+        "besluitdatum": "2023-05-16"
+      },
       "Besluit": "Niet openbaar gemaakt",
       "termijnoverschrijding": "Ja",
       "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/WOO-verzoek-geanonimiseerd.pdf",
       "urlBesluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-Barendrecht-geanonimiseerd.pdf",
       "themas": [
         {
+          "_id": "c520ead7-bd70-4307-8235-b9b70f17c72a",
           "hoofdthema": "Sociale zekerheid"
         }
       ]
     },
     {
+      "_id": "1d70469d-6136-46de-b99d-a8e19c24a7d5",
       "id": "746778",
       "portalUrl": "https://www.barendrecht.nl/openwoo/locaties-en-aantallen-toezichtcameras-en-anpr-cameras-in-de-gemeente/3a502d29-2f87-4976-b75e-b32a42e9ae91",
       "titel": "Locaties en aantallen toezichtcamera's en ANPR-camera's in de gemeente",
       "samenvatting": "De locaties en aantallen toezichtcamera's en ANPR-camera's in de gemeente zijn opgevraagd. Bij NS Station Barendrecht zijn 10 toezichtcamera's geïnstalleerd en operationeel en bij het winkelcentrum Carnisse Veste zijn 35 toezichtcamera's geïnstalleerd en operationeel. Er zijn 8 ANPR camera's geplaatst op de Kilweg en bij de IJsselmondse Knoop.",
       "ontvangstdatum": "2023-03-10",
       "metadata": {
-      "besluitdatum": "2023-04-18"
-    },
+        "_id": "8d82e172-8f70-4c9c-8800-2623425c6cb8",
+        "besluitdatum": "2023-04-18"
+      },
       "Besluit": "Deels openbaar gemaakt",
       "termijnoverschrijding": "Nee",
       "urlInformatieverzoek": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/WOO_verzoek-geanonimiseerd.pdf",
       "urlBesluit": "https://openpub.barendrecht.nl/wp-content/uploads/2022/08/Woo-besluit-geanonimiseerd1.pdf",
       "themas": [
         {
+          "_id": "b47c7823-3897-45bf-8104-e5a351820b43",
           "hoofdthema": "Openbare orde en veiligheid"
         }
       ]
     },
     {
+      "_id": "bb7f2713-d28f-4164-aa64-335feb21a417",
       "id": "733982",
       "portalUrl": "https://www.barendrecht.nl/openwoo/exploitatievergunningen-diggels-barendrecht-b-v-ristorante-papi-en-cafe-de-uitspanning-b-v/c20eb54d-f1dc-4bbd-94c0-59d218e5186c",
       "titel": "Exploitatievergunningen Diggels Barendrecht B.V., Ristorante Papi en Café De Uitspanning B.V.",
       "samenvatting": "De exploitatievergunningen van Diggels Barendrecht B.V., Ristorante Papi en Café De Uitspanning B.V. zijn opgevraagd en worden gedeeltelijk openbaar gemaakt.",
       "ontvangstdatum": "2023-02-22",
       "metadata": {
+        "_id": "acafeecf-6ee2-4cbb-b4c7-0226070c7446",
         "besluitdatum": "2023-04-11"
       },
       "Besluit": "Deels openbaar gemaakt",
@@ -319,11 +333,13 @@
       ],
       "themas": [
         {
+          "_id": "cdf9a784-dff5-49e0-a898-cacdd7415dac",
           "hoofdthema": "Openbare orde en veiligheid"
         }
       ]
     },
     {
+      "_id": "ec4bda12-7e8c-451b-b5cb-da94a1cdef92",
       "id": "691879",
       "portalUrl": "https://www.barendrecht.nl/openwoo/verzoek-tot-inzien-horecavergunning-de-uitspanning-en-diggels/6eb9cf29-6d9a-47f2-957f-4c37a5b957d3",
       "behandelendBestuursorgaan": {
@@ -335,6 +351,7 @@
       "samenvatting": "Inzien horecavergunning van:<br />\r\nDe Uitspanning, Doormanplein 7<br />\r\nDiggels, Dorpsstraat 141<br />\r\n<br />\r\nWegens herbestrating van openbare weg zonder vergunning.",
       "ontvangstdatum": "2023-01-02",
       "metadata": {
+        "_id": "4cceb823-8dfc-4463-b783-4d40a2137505",
         "besluitdatum": "2023-01-30"
       },
       "Besluit": "Deels openbaar gemaakt",
@@ -351,6 +368,7 @@
       ],
       "themas": [
         {
+          "_id": "e875711c-a2d6-4413-9343-4c03c6dee77f",
           "hoofdthema": "Ruimte en infrastructuur"
         }
       ]
