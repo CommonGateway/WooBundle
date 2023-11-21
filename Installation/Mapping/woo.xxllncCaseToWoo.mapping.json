@@ -25,6 +25,7 @@
     "themas.0.hoofdthema": "{% if values['attribute&#46;woo_thema']|default %}{{ values['attribute&#46;woo_thema'] }}{% endif %}"
   },
   "cast": {
+    "id": "string",
     "themas.0.hoofdthema": "unsetIfValue==",
     "themas.0": "unsetIfValue==",
     "informatieverzoek": "jsonToArray",
