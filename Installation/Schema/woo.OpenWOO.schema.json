@@ -2,7 +2,7 @@
     "title": "OpenWOO",
     "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "type": "object",
     "description": "",
     "properties": {
@@ -91,7 +91,7 @@
         }
     },
     "required": [
-        "Categorie",
-        "Publicatiedatum"
+        "categorie",
+        "publicatiedatum"
     ]
 }
