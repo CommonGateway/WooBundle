@@ -1,6 +1,6 @@
 {
     "title": "Barendrecht OpenWoo",
-    "$id": "https://commongateway.woo.nl/source/barendrecht.openwoo.source.json",
+    "$id": "https://commongateway.woo.nl/source/albrandswaard.openwoo.source.json",
     "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
     "version": "0.0.1",
     "description": "Barendrecht OpenWoo api",
