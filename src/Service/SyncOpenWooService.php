@@ -254,8 +254,11 @@ class SyncOpenWooService
         }
 
         $customFields = [
-            'behandelendBestuursorgaan' => ['oidn' => $this->configuration['oidn'], 'naam' => $this->configuration['bestuursorgaan']],
-            'categorie'                 => $categorie
+            'behandelendBestuursorgaan' => [
+                'oidn' => $this->configuration['oidn'],
+                'naam' => $this->configuration['bestuursorgaan'],
+            ],
+            'categorie'                 => $categorie,
         ];
 
         $idsSynced        = [];
@@ -281,11 +284,10 @@ class SyncOpenWooService
                 true
             );
 
-
             $objectArray = $object->toArray();
-            $portalURL    = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
+            $portalURL   = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
             $object->setValue('portalUrl', $portalURL);
-            
+
             $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['UUID']);
 
             // Get all synced sourceIds.
