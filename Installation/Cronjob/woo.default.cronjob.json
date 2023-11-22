@@ -2,9 +2,9 @@
     "title": "WOO default cronjob",
     "$id": "https://commongateway.nl/pdd.default.cronjob.json",
     "$schema": "https://docs.commongateway.nl/schemas/Cronjob.schema.json",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "This cronjob fires all the pdd actions every 5 minutes",
-    "crontab": "*/5 * * * *",
+    "crontab": "*/10 * * * *",
     "throws": [
         "woo.default.listens"
     ],
