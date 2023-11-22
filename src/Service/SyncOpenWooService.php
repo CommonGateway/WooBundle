@@ -230,9 +230,9 @@ class SyncOpenWooService
             return [];
         }//end if
 
-        $source       = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        $schema       = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
-        $mapping      = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+        $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
         if ($source instanceof Source === false
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
@@ -248,20 +248,30 @@ class SyncOpenWooService
         $results = $this->fetchObjects($source);
         $this->entityManager->flush();
 
+        $categorie = '';
+        if ($mapping->getReference() === 'https://commongateway.nl/mapping/woo.openWooToWoo.schema.json') {
+            $categorie = 'Woo verzoek';
+        }
+
+        $customFields = [
+            'behandelendBestuursorgaan' => ['oidn' => $this->configuration['oidn'], 'naam' => $this->configuration['bestuursorgaan']],
+            'categorie'                 => $categorie
+        ];
+
         $idsSynced        = [];
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
-            $result       = array_merge($result, ['behandelendBestuursorgaan' => ['oidn' => $this->configuration['oidn'], 'naam' => $this->configuration['bestuursorgaan']]]);
+            $result       = array_merge($result, $customFields);
             $mappedResult = $this->mappingService->mapping($mapping, $result);
 
-            // $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
-            // if ($validationErrors !== null) {
-            //     $validationErrors = implode(', ', $validationErrors);
-            //     $this->logger->warning("SyncOpenWoo validation errors: $validationErrors");
-            //     isset($this->style) === true && $this->style->warning("SyncOpenWoo validation errors: $validationErrors");
-            //     continue;
-            // }
+            $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
+            if ($validationErrors !== null) {
+                $validationErrors = implode(', ', $validationErrors);
+                $this->logger->warning("SyncOpenWoo validation errors: $validationErrors");
+                isset($this->style) === true && $this->style->warning("SyncOpenWoo validation errors: $validationErrors");
+                continue;
+            }
 
             $object = $hydrationService->searchAndReplaceSynchronizations(
                 $mappedResult,
@@ -271,6 +281,11 @@ class SyncOpenWooService
                 true
             );
 
+
+            $objectArray = $object->toArray();
+            $portalURL    = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
+            $object->setValue('portalUrl', $portalURL);
+            
             $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['UUID']);
 
             // Get all synced sourceIds.
