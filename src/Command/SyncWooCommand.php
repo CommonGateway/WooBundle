@@ -58,12 +58,12 @@ class SyncWooCommand extends Command
      * Class constructor.
      *
      * @param SyncXxllncCasesService $syncXxllncCasesService The case service
-     * @param SyncOpenWooService $syncOpenWooService The OpenWoo service
+     * @param SyncOpenWooService     $syncOpenWooService     The OpenWoo service
      */
     public function __construct(SyncXxllncCasesService $syncXxllncCasesService, SyncOpenWooService $syncOpenWooService, EntityManagerInterface $entityManager)
     {
         $this->syncXxllncCasesService = $syncXxllncCasesService;
-        $this->syncOpenWooService = $syncXxllncCasesService;
+        $this->syncOpenWooService     = $syncOpenWooService;
         $this->entityManager          = $entityManager;
         parent::__construct();
 
@@ -133,7 +133,8 @@ class SyncWooCommand extends Command
         }//end if
 
         $config = $action->getConfiguration();
-        if (isset($config['sourceType']) === true && $config['sourceType'] ==='openWoo') {
+        if (isset($config['sourceType']) === true && $config['sourceType'] === 'openWoo') {
+            $this->syncOpenWooService->setStyle($style);
             if ($this->syncOpenWooService->syncOpenWooHandler([], $config) === null) {
                 return Command::FAILURE;
             }
