@@ -137,17 +137,18 @@ class SyncOpenWooService
      * @param array  $idsSynced ID's from objects we just synced from the source.
      * @param Source $source    These objects belong to.
      * @param string $schemaRef These objects belong to.
+     * @param string $categorie The categorie these objects came from.
      *
      * @return int Count of deleted objects.
      */
-    private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef): int
+    private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie): int
     {
         // Get all existing sourceIds.
         $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
         $existingSourceIds = [];
         $existingObjects   = [];
         foreach ($source->getSynchronizations() as $synchronization) {
-            if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null) {
+            if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null && $synchronization->getObject()->getValue('categorie') === $categorie) {
                 $existingSourceIds[] = $synchronization->getSourceId();
                 $existingObjects[]   = $synchronization->getObject();
             }
@@ -326,7 +327,7 @@ class SyncOpenWooService
 
         $this->entityManager->flush();
 
-        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
