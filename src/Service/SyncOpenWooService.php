@@ -188,7 +188,7 @@ class SyncOpenWooService
         $results = array_merge($results, $decodedResponse['WOOverzoeken']);
 
         // Pagination xxllnc.
-        if (isset($decodedResponse['pagination']) === true && $decodedResponse['pagination']['pages']['current'] !== $decodedResponse['pagination']['pages']['total']) {
+        if (isset($decodedResponse['pagination']) === true && $decodedResponse['pagination']['pages']['current'] < $decodedResponse['pagination']['pages']['total']) {
             $page++;
             $results = $this->fetchObjects($source, $page, $results);
         }
@@ -246,6 +246,10 @@ class SyncOpenWooService
         $this->logger->info("Fetching objects from {$source->getLocation()}");
 
         $results = $this->fetchObjects($source);
+        if (empty($results) === true) {
+            $this->logger->info('No results found, ending SyncOpenWooService');
+            return $this->data;
+        }
         $this->entityManager->flush();
 
         $categorie = '';
