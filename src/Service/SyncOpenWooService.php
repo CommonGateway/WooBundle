@@ -252,10 +252,10 @@ class SyncOpenWooService
 
         $categorie = '';
         switch ($mapping->getReference()) {
-            case 'https://commongateway.nl/mapping/woo.openWooToWoo.schema.json':
+            case 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json':
                 $categorie = 'Woo verzoek';
                 break;
-            case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.schema.json':
+            case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json':
                 $categorie = 'Convenant';
                 break;
         }

@@ -9,7 +9,7 @@
         "portalUrl": "https://conductionnl.github.io/woo-website-dinkelland",
         "source": "https://commongateway.woo.nl/source/dinkelland.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
-        "mapping": "https://commongateway.nl/mapping/pdd.xxllncCaseToWoo.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json",
         "bestuursorgaan": "Gemeente Dinkelland",
         "zaaksysteemSearchEndpoint": "/public_search/517/search",
         "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json"

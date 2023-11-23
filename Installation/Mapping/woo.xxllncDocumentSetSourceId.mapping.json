@@ -1,6 +1,6 @@
 {
   "title": "XxllncDocumentSetSourceId",
-  "$id": "https://commongateway.nl/mapping/pdd.xxllncDocumentSetSourceId.schema.json",
+  "$id": "https://commongateway.nl/mapping/woo.xxllncDocumentSetSourceId.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
   "version": "0.0.2",
   "passTrough": false,

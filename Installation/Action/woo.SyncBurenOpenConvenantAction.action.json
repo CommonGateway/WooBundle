@@ -9,7 +9,7 @@
         "portalUrl": "https://conductionnl.github.io/woo-website-buren",
         "source": "https://commongateway.woo.nl/source/buren.openwoo.source.json",
         "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
-        "mapping": "https://commongateway.nl/mapping/woo.openConvenantToWoo.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
         "sourceType": "openWoo",
         "bestuursorgaan": "Gemeente Buren",
         "sourceEndpoint": "/owc/openconvenanten/v1/items"
