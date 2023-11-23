@@ -1,0 +1,14 @@
+{
+  "title": "OpenConvenantBijlageToWooBijlage",
+  "$id": "https://commongateway.nl/mapping/woo.openConvenantBijlageToWooBijlage.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "_sourceId": "URL_Bijlage",
+    "titel": "Naam_Bijlage",
+    "label": "Naam_Bijlage",
+    "url": "URL_Bijlage",
+    "tijdstip_laatste_wijziging": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}"
+  }
+}
