@@ -2,7 +2,7 @@
     "title": "SyncDinkellandCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncDinkellandCasesAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "listens": ["woo.default.listens"],
     "configuration": {
         "oidn": "00000001809245206000",
