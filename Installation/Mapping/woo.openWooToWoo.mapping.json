@@ -1,8 +1,8 @@
 {
   "title": "OpenWooToWoo",
-  "$id": "https://commongateway.nl/mapping/woo.openWooToWoo.schema.json",
+  "$id": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "passTrough": false,
   "mapping": {
     "_sourceId": "UUID",
@@ -38,6 +38,8 @@
     "beschrijving": "unsetIfValue==",
     "samenvatting": "unsetIfValue==",
     "ontvangstdatum": "unsetIfValue==",
+    "termijnoverschrijding": "unsetIfValue==",
+    "behandelstatus": "unsetIfValue==",
     "metadata.besluitdatum": "unsetIfValue==",
     "categorie": "unsetIfValue==",
     "publicatiedatum": "unsetIfValue==",
