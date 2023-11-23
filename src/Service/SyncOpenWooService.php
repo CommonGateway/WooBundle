@@ -250,6 +250,7 @@ class SyncOpenWooService
             $this->logger->info('No results found, ending SyncOpenWooService');
             return $this->data;
         }
+
         $this->entityManager->flush();
 
         $categorie = '';
