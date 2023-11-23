@@ -174,23 +174,31 @@ class SyncOpenWooService
     /**
      * Fetches objects from openWoo with pagination.
      *
-     * @param Source   $source  The source entity that provides the source of the result data.
-     * @param int|null $page    The page we are fetching, increments each iteration.
-     * @param array    $results The results from xxllnc api we merge each iteration.
+     * @param Source   $source    The source entity that provides the source of the result data.
+     * @param int|null $page      The page we are fetching, increments each iteration.
+     * @param array    $results   The results from xxllnc api we merge each iteration.
+     * @param string   $categorie The type of object we are fetching.
      *
      * @return array The fetched objects.
      */
-    private function fetchObjects(Source $source, ?int $page=1, array $results=[])
+    private function fetchObjects(Source $source, ?int $page=1, array $results=[], string $categorie)
     {
         $response        = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET', ['query' => ['page' => $page]]);
         $decodedResponse = $this->callService->decodeResponse($source, $response);
 
-        $results = array_merge($results, $decodedResponse['WOOverzoeken']);
+        switch ($categorie) {
+            case 'Woo verzoek':
+                $results = array_merge($results, $decodedResponse['WOOverzoeken']);
+                break;
+            case 'Convenant':
+                $results = array_merge($results, $decodedResponse['Convenantenverzoeken']);
+                break;
+        }
 
         // Pagination xxllnc.
         if (isset($decodedResponse['pagination']) === true && $decodedResponse['pagination']['pages']['current'] < $decodedResponse['pagination']['pages']['total']) {
             $page++;
-            $results = $this->fetchObjects($source, $page, $results);
+            $results = $this->fetchObjects($source, $page, $results, $categorie);
         }
 
         return $results;
@@ -242,21 +250,26 @@ class SyncOpenWooService
             return [];
         }//end if
 
+        $categorie = '';
+        switch ($mapping->getReference()) {
+            case 'https://commongateway.nl/mapping/woo.openWooToWoo.schema.json':
+                $categorie = 'Woo verzoek';
+                break;
+            case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.schema.json':
+                $categorie = 'Convenant';
+                break;
+        }
+
         isset($this->style) === true && $this->style->info("Fetching objects from {$source->getLocation()}");
         $this->logger->info("Fetching objects from {$source->getLocation()}");
 
-        $results = $this->fetchObjects($source);
+        $results = $this->fetchObjects($source, 1, [], $categorie);
         if (empty($results) === true) {
             $this->logger->info('No results found, ending SyncOpenWooService');
             return $this->data;
         }
-
         $this->entityManager->flush();
 
-        $categorie = '';
-        if ($mapping->getReference() === 'https://commongateway.nl/mapping/woo.openWooToWoo.schema.json') {
-            $categorie = 'Woo verzoek';
-        }
 
         $customFields = [
             'behandelendBestuursorgaan' => [
@@ -293,7 +306,14 @@ class SyncOpenWooService
             $portalURL   = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
             $object->setValue('portalUrl', $portalURL);
 
-            $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['UUID']);
+            switch ($categorie) {
+                case 'Woo verzoek':
+                    $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['UUID']);
+                    break;
+                case 'Convenant':
+                    $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['ID']);
+                    break;
+            }
 
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
