@@ -1,0 +1,22 @@
+{
+    "title": "SyncLansingerlandOpenWooAction",
+    "$id": "https://commongateway.nl/woo.SyncLansingerlandOpenWooAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.default.listens"],
+    "configuration": {
+        "oidn": "lansingerland",
+        "portalUrl": "https://conductionnl.github.io/woo-website-lansingerland",
+        "source": "https://commongateway.woo.nl/source/lansingerland.openwoo.source.json",
+        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
+        "sourceType": "openWoo",
+        "bestuursorgaan": "Gemeente Lansingerland",
+        "sourceEndpoint": "/owc/openwoo/v1/items"
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncOpenWooHandler"
+}
