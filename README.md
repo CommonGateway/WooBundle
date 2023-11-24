@@ -1,5 +1,9 @@
 # WOOBundle [![Codacy Badge](https://app.codacy.com/project/badge/Grade/980ea2efc85a427ea909518f29506ff6)](https://app.codacy.com/gh/CommonGateway/WOOBundle/dashboard?utm_source=gh&)
 
+This bundle is used for storing OpenWoo objects and synchronizing these objects from OpenWoo & xxllnc zaaksysteem.
+
+For the api specifications of this bundle see: [redocly](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/CommonGateway/WooBundle/ce02a6928bc469e4965715ed899e5f6608cc3791/docs/openapi.json#tag/openwoo/operation/openwoo-put-item)
+
 ## Installation
 
 You can install the bundle with a command in php bash `composer require common-gateway/woo-bundle` or through the Gateway UI plugins page.
@@ -22,10 +26,10 @@ And while deploying these synchronization might go wrong.
 In short: when synchronization is triggered all cases are fetched from a xxllnc zaaksysteem and mapped to an OpenWebConcept WOO publicatie object.\
 The mapping schema can be found here: https://github.com/CommonGateway/WooBundle/blob/main/Installation/Mapping/woo.xxllncCaseToWoo.mapping.json \\
 
-Besides just mapping through a [Gateway mapping](https://commongateway.github.io/CoreBundle/pages/Features/Mappings) there is some custom logic for the Portal\_url and the document URL properties.
+Besides just mapping through a [Gateway mapping](https://commongateway.github.io/CoreBundle/pages/Features/Mappings) there is some custom logic for the portalUrl and the bijlagen (documents) properties.
 This can be found in the SyncXxllncCasesService. \
-For documents, an extra call to the xxllnc zaaksysteem is needed to get the document data.
-And the Portal\_url property is configured through the Action->configuration.
+For bijlagen, an extra call to the xxllnc zaaksysteem is needed to get the document data.
+And the portalUrl property is configured through the Action->configuration. 
 
 ### How to synchronize
 
