@@ -29,7 +29,7 @@ The mapping schema can be found here: https://github.com/CommonGateway/WooBundle
 Besides just mapping through a [Gateway mapping](https://commongateway.github.io/CoreBundle/pages/Features/Mappings) there is some custom logic for the portalUrl and the bijlagen (documents) properties.
 This can be found in the SyncXxllncCasesService. \
 For bijlagen, an extra call to the xxllnc zaaksysteem is needed to get the document data.
-And the portalUrl property is configured through the Action->configuration. 
+And the portalUrl property is configured through the Action->configuration.
 
 ### How to synchronize
 
