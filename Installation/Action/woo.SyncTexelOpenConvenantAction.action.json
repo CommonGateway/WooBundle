@@ -1,0 +1,22 @@
+{
+    "title": "SyncTexelOpenConvenantAction",
+    "$id": "https://commongateway.nl/woo.SyncTexelOpenConvenantAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.default.listens"],
+    "configuration": {
+        "oidn": "texel",
+        "portalUrl": "https://conductionnl.github.io/woo-website-texel",
+        "source": "https://commongateway.woo.nl/source/texel.openwoo.source.json",
+        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
+        "sourceType": "openWoo",
+        "bestuursorgaan": "Gemeente Texel",
+        "sourceEndpoint": "/owc/openconvenanten/v1/items"
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncOpenWooHandler"
+}
