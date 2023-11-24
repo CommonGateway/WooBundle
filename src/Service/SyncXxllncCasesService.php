@@ -86,19 +86,19 @@ class SyncXxllncCasesService
      * @var array
      */
     private array $configuration;
-    
-    
+
+
     /**
      * SyncXxllncCasesService constructor.
      *
      * @param GatewayResourceService $resourceService
-     * @param CallService $callService
+     * @param CallService            $callService
      * @param SynchronizationService $syncService
      * @param EntityManagerInterface $entityManager
-     * @param MappingService $mappingService
-     * @param LoggerInterface $pluginLogger
-     * @param ValidationService $validationService
-     * @param FileService $fileService
+     * @param MappingService         $mappingService
+     * @param LoggerInterface        $pluginLogger
+     * @param ValidationService      $validationService
+     * @param FileService            $fileService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -270,10 +270,10 @@ class SyncXxllncCasesService
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
 
         // $fileURLS get set from $this->getBijlagen (see arguments).
-        $fileURLS     = [];
-        $bijlagen     = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
-        $portalURL    = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
-        
+        $fileURLS  = [];
+        $bijlagen  = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
+        $portalURL = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
+
         return $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id']]));
 
     }//end handleCustomLogic()
