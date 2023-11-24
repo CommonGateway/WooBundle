@@ -97,6 +97,7 @@ class SyncXxllncCasesService
      * @param EntityManagerInterface $entityManager
      * @param MappingService         $mappingService
      * @param LoggerInterface        $pluginLogger
+     * @param ValidationService      $validationService
      * @param FileService            $fileService
      */
     public function __construct(
@@ -184,14 +185,14 @@ class SyncXxllncCasesService
      *
      * @param array $result       The result data that contains the information of file fields.
      * @param array $documentMeta Metadata about a document, including the id.
-     * @param array $fileURLS     File urls we also return.
+     * @param array $config       Gateway config objects.
      *
-     * @return array  $fileURLS The view urls for files.
+     * @return array The view urls for files.
      */
     private function retrieveFile(array $result, array $documentMeta, array $config): array
     {
         // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
-        // ^ Note: this is necessary so we always have a ObjectEntity and Value to attach the File to so we don't create duplicated Files when syncing every 10 minutes.
+        // ^ Note: this is necessary, so we always have a ObjectEntity and Value to attach the File to, so we don't create duplicated Files when syncing every 10 minutes.
         $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($documentMeta['uuid']);
 
         $mimeType = $documentMeta['mimetype'];
@@ -269,14 +270,11 @@ class SyncXxllncCasesService
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
 
         // $fileURLS get set from $this->getBijlagen (see arguments).
-        $fileURLS     = [];
-        $hydrateArray = [];
-        $bijlagen     = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
-        $portalURL    = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
+        $fileURLS  = [];
+        $bijlagen  = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
+        $portalURL = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
 
-        $hydrateArray = $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id']]));
-
-        return $hydrateArray;
+        return $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id']]));
 
     }//end handleCustomLogic()
 
@@ -290,7 +288,7 @@ class SyncXxllncCasesService
      *
      * @return array The fetched objects.
      */
-    private function fetchObjects(Source $source, ?int $page=1, array $results=[])
+    private function fetchObjects(Source $source, ?int $page=1, array $results=[]): array
     {
         $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', ['query' => ['zapi_page' => $page]]);
         $decodedResponse = $this->callService->decodeResponse($source, $response);

@@ -1,6 +1,6 @@
 {
     "name": "common-gateway/woo-bundle",
-    "description": "An example package for creating symfony flex bundles as plugins",
+    "description": "A bundle for storing OpenWoo objects and synchronizing these objects from OpenWoo & xxllnc zaaksysteem.",
     "type": "symfony-bundle",
     "keywords": [
         "commongateway",
