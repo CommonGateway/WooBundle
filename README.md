@@ -21,7 +21,7 @@ And while deploying these synchronization might go wrong.
 
 In short: when synchronization is triggered all cases are fetched from a xxllnc zaaksysteem and mapped to an OpenWebConcept WOO publicatie object.\
 The mapping schema can be found here: https://github.com/CommonGateway/WooBundle/blob/main/Installation/Mapping/woo.xxllncCaseToWoo.mapping.json \
-Some custom logic for the Portal_url and document URL properties can be found in the SyncXxllncCasesService.
+Some custom logic for the Portal\_url and document URL properties can be found in the SyncXxllncCasesService.
 
 ### How to synchronize
 
