@@ -1,1 +1,3614 @@
-{"openapi":"3.0.0","info":{"title":"Common Gateway","description":"The Common Gateway is a further Dutch development of the European API Platform. API Platform is a project of Les Tilleus and, in itself, an extension of the Symfony framework. API Platform is a tool for delivering APIs based on standardized documentation and is used for various French and German government projects. Including Digital state, a precursor to Xroute, GOV.UK and Common Ground. The project is now part of joinup.eu (the European equivalent of Common Ground).","version":"1.0.3"},"servers":[{"url":"http://localhost","description":"The kubernetes server"}],"paths":{"/openWOO/{id}":{"get":{"operationId":"openwoo-get-item","summary":"OpenWOO","tags":["openwoo"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenWOO"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenWOO"}}}}}},"put":{"operationId":"openwoo-put-item","summary":"OpenWOO","tags":["openwoo"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenWOO"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenWOO"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenWOO"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenWOO"}}}}}},"patch":{"operationId":"openwoo-patch-item","summary":"OpenWOO","tags":["openwoo"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenWOO"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenWOO"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenWOO"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenWOO"}}}}}},"delete":{"operationId":"openwoo-delete-item","summary":"OpenWOO","tags":["openwoo"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"string","example":"Object is successfully deleted"}},"application/xml":{"schema":{"type":"string","example":"Object is successfully deleted"}}}}}}},"/openWOO":{"get":{"operationId":"openwoo-get-collection","summary":"OpenWOO","tags":["openwoo"],"description":"","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/OpenWOO"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/OpenWOO"}}}}}}}},"parameters":[{"name":"themas","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"hoofdthema":{"type":"string","nullable":true,"cascade":true},"subthema":{"type":"string","nullable":true,"cascade":true},"aanvullendThema":{"type":"string","nullable":true,"cascade":true}}}},{"name":"bijlagen","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"id":{"type":"string","nullable":true,"cascade":true},"type":{"type":"string","nullable":true,"cascade":true},"status":{"type":"string","nullable":true,"cascade":true},"tijdstipLaatsteWijziging":{"type":"string","format":"datetime","description":"format: Y-m-d\\TH:i:s","nullable":true,"cascade":true},"titel":{"type":"string","nullable":true,"cascade":true},"label":{"type":"string","nullable":true,"cascade":true},"url":{"type":"string","format":"url","nullable":true,"cascade":true}}}},{"name":"besluit","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"id":{"type":"string","nullable":true,"cascade":true},"type":{"type":"string","nullable":true,"cascade":true},"status":{"type":"string","nullable":true,"cascade":true},"tijdstipLaatsteWijziging":{"type":"string","format":"datetime","description":"format: Y-m-d\\TH:i:s","nullable":true,"cascade":true},"titel":{"type":"string","nullable":true,"cascade":true},"label":{"type":"string","nullable":true,"cascade":true},"url":{"type":"string","format":"url","nullable":true,"cascade":true}}}},{"name":"inventarisatielijst","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"id":{"type":"string","nullable":true,"cascade":true},"type":{"type":"string","nullable":true,"cascade":true},"status":{"type":"string","nullable":true,"cascade":true},"tijdstipLaatsteWijziging":{"type":"string","format":"datetime","description":"format: Y-m-d\\TH:i:s","nullable":true,"cascade":true},"titel":{"type":"string","nullable":true,"cascade":true},"label":{"type":"string","nullable":true,"cascade":true},"url":{"type":"string","format":"url","nullable":true,"cascade":true}}}},{"name":"informatieverzoek","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"id":{"type":"string","nullable":true,"cascade":true},"type":{"type":"string","nullable":true,"cascade":true},"status":{"type":"string","nullable":true,"cascade":true},"tijdstipLaatsteWijziging":{"type":"string","format":"datetime","description":"format: Y-m-d\\TH:i:s","nullable":true,"cascade":true},"titel":{"type":"string","nullable":true,"cascade":true},"label":{"type":"string","nullable":true,"cascade":true},"url":{"type":"string","format":"url","nullable":true,"cascade":true}}}},{"name":"metadata","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"volgnummer":{"type":"string","nullable":true,"cascade":true},"besluitdatum":{"type":"string","description":"format: Y-m-d","nullable":true,"cascade":true},"verzoeker":{"type":"string","nullable":true,"cascade":true}}}},{"name":"behandelendBestuursorgaan","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"urlBesluit","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"urlInventarisatielijst","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"urlInformatieverzoek","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"termijnoverschrijding","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"Besluit","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"behandelstatus","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"publicatiedatum","in":"query","description":"Publicatiedatum van een Woo object is nooit in de toekomst.","required":true,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"ontvangstdatum","in":"query","description":"format: Y-m-d","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"categorie","in":"query","description":"","required":true,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"samenvatting","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"beschrijving","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"titel","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"ontvangerInformatieverzoek","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"portalUrl","in":"query","description":"","required":false,"schema":{"type":"string","format":"url","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}},{"name":"id","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}}}}]},"post":{"operationId":"openwoo-post-item","summary":"OpenWOO","tags":["openwoo"],"description":"","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenWOO"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenWOO"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenWOO"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenWOO"}}}}}}},"/themas/{id}":{"get":{"operationId":"thema-get-item","summary":"Thema","tags":["thema"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Thema"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Thema"}}}}}},"put":{"operationId":"thema-put-item","summary":"Thema","tags":["thema"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Thema"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Thema"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Thema"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Thema"}}}}}},"patch":{"operationId":"thema-patch-item","summary":"Thema","tags":["thema"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Thema"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Thema"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Thema"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Thema"}}}}}},"delete":{"operationId":"thema-delete-item","summary":"Thema","tags":["thema"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"string","example":"Object is successfully deleted"}},"application/xml":{"schema":{"type":"string","example":"Object is successfully deleted"}}}}}}},"/themas":{"get":{"operationId":"thema-get-collection","summary":"Thema","tags":["thema"],"description":"","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Thema"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Thema"}}}}}}}},"parameters":[{"name":"hoofdthema","in":"query","description":"","required":true,"schema":{"type":"string"}},{"name":"subthema","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"aanvullendThema","in":"query","description":"","required":false,"schema":{"type":"string"}}]},"post":{"operationId":"thema-post-item","summary":"Thema","tags":["thema"],"description":"","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Thema"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Thema"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Thema"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Thema"}}}}}}},"/bijlagen/{id}":{"get":{"operationId":"bijlage-get-item","summary":"Bijlage","tags":["bijlage"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}}}},"put":{"operationId":"bijlage-put-item","summary":"Bijlage","tags":["bijlage"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}}}},"patch":{"operationId":"bijlage-patch-item","summary":"Bijlage","tags":["bijlage"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}}}},"delete":{"operationId":"bijlage-delete-item","summary":"Bijlage","tags":["bijlage"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"string","example":"Object is successfully deleted"}},"application/xml":{"schema":{"type":"string","example":"Object is successfully deleted"}}}}}}},"/bijlagen":{"get":{"operationId":"bijlage-get-collection","summary":"Bijlage","tags":["bijlage"],"description":"","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Bijlage"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Bijlage"}}}}}}}},"parameters":[{"name":"id","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"type","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"status","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"tijdstipLaatsteWijziging","in":"query","description":"format: Y-m-d\\TH:i:s","required":false,"schema":{"type":"string","format":"datetime"}},{"name":"titel","in":"query","description":"","required":true,"schema":{"type":"string"}},{"name":"label","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"url","in":"query","description":"","required":false,"schema":{"type":"string","format":"url"}}]},"post":{"operationId":"bijlage-post-item","summary":"Bijlage","tags":["bijlage"],"description":"","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}}}}},"/partijen/{id}":{"get":{"operationId":"partij-get-item","summary":"Partij","tags":["partij"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Partij"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Partij"}}}}}},"put":{"operationId":"partij-put-item","summary":"Partij","tags":["partij"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Partij"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Partij"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Partij"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Partij"}}}}}},"patch":{"operationId":"partij-patch-item","summary":"Partij","tags":["partij"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Partij"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Partij"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Partij"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Partij"}}}}}},"delete":{"operationId":"partij-delete-item","summary":"Partij","tags":["partij"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"string","example":"Object is successfully deleted"}},"application/xml":{"schema":{"type":"string","example":"Object is successfully deleted"}}}}}}},"/partijen":{"get":{"operationId":"partij-get-collection","summary":"Partij","tags":["partij"],"description":"","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Partij"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Partij"}}}}}}}},"parameters":[{"name":"naam","in":"query","description":"","required":true,"schema":{"type":"string"}}]},"post":{"operationId":"partij-post-item","summary":"Partij","tags":["partij"],"description":"","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Partij"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Partij"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Partij"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Partij"}}}}}}},"/openconvenanten/{id}":{"get":{"operationId":"openconvenant-get-item","summary":"OpenConvenant","tags":["openconvenant"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}}}}}},"put":{"operationId":"openconvenant-put-item","summary":"OpenConvenant","tags":["openconvenant"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}}}}}},"patch":{"operationId":"openconvenant-patch-item","summary":"OpenConvenant","tags":["openconvenant"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}}}}}},"delete":{"operationId":"openconvenant-delete-item","summary":"OpenConvenant","tags":["openconvenant"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"string","example":"Object is successfully deleted"}},"application/xml":{"schema":{"type":"string","example":"Object is successfully deleted"}}}}}}},"/openconvenanten":{"get":{"operationId":"openconvenant-get-collection","summary":"OpenConvenant","tags":["openconvenant"],"description":"","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/OpenConvenant"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/OpenConvenant"}}}}}}}},"parameters":[{"name":"bijlagen","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"id":{"type":"string","nullable":true,"cascade":true},"type":{"type":"string","nullable":true,"cascade":true},"status":{"type":"string","nullable":true,"cascade":true},"tijdstipLaatsteWijziging":{"type":"string","format":"datetime","description":"format: Y-m-d\\TH:i:s","nullable":true,"cascade":true},"titel":{"type":"string","nullable":true,"cascade":true},"label":{"type":"string","nullable":true,"cascade":true},"url":{"type":"string","format":"url","nullable":true,"cascade":true}}}},{"name":"partijen","in":"query","description":"","required":false,"schema":{"type":"object","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"identifier","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"slug","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"datumOndertekening","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"duur","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"Beleidsterrein","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"onderwerp","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"status","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}},{"name":"id","in":"query","description":"","required":false,"schema":{"type":"string","properties":{"naam":{"type":"string","nullable":true,"cascade":true}}}}]},"post":{"operationId":"openconvenant-post-item","summary":"OpenConvenant","tags":["openconvenant"],"description":"","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}},"application/xml":{"schema":{"$ref":"#/components/schemas/OpenConvenant"}}}}}}},"/behandelend_bestuursorganen/{id}":{"get":{"operationId":"behandelend bestuursorgaan-get-item","summary":"Behandelend bestuursorgaan","tags":["behandelend bestuursorgaan"],"description":"Behandelend bestuursorgaan object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"Behandelend bestuursorgaan object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}}}},"put":{"operationId":"behandelend bestuursorgaan-put-item","summary":"Behandelend bestuursorgaan","tags":["behandelend bestuursorgaan"],"description":"Behandelend bestuursorgaan object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}},"responses":{"200":{"description":"Behandelend bestuursorgaan object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}}}},"patch":{"operationId":"behandelend bestuursorgaan-patch-item","summary":"Behandelend bestuursorgaan","tags":["behandelend bestuursorgaan"],"description":"Behandelend bestuursorgaan object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}},"responses":{"200":{"description":"Behandelend bestuursorgaan object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}}}},"delete":{"operationId":"behandelend bestuursorgaan-delete-item","summary":"Behandelend bestuursorgaan","tags":["behandelend bestuursorgaan"],"description":"Behandelend bestuursorgaan object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"Behandelend bestuursorgaan object for Woo object","content":{"application/json":{"schema":{"type":"string","example":"Object is successfully deleted"}},"application/xml":{"schema":{"type":"string","example":"Object is successfully deleted"}}}}}}},"/behandelend_bestuursorganen":{"get":{"operationId":"behandelend bestuursorgaan-get-collection","summary":"Behandelend bestuursorgaan","tags":["behandelend bestuursorgaan"],"description":"Behandelend bestuursorgaan object for Woo object","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}}}}}},"parameters":[{"name":"naam","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"oidn","in":"query","description":"The public available code for the designated organisation (municipality) this object is meant for.","required":false,"schema":{"type":"string"}}]},"post":{"operationId":"behandelend bestuursorgaan-post-item","summary":"Behandelend bestuursorgaan","tags":["behandelend bestuursorgaan"],"description":"Behandelend bestuursorgaan object for Woo object","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}},"responses":{"200":{"description":"Behandelend bestuursorgaan object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Behandelend bestuursorgaan"}}}}}}},"/metadata/{id}":{"get":{"operationId":"metadata-get-item","summary":"Metadata","tags":["metadata"],"description":"Metadata object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"Metadata object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Metadata"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Metadata"}}}}}},"put":{"operationId":"metadata-put-item","summary":"Metadata","tags":["metadata"],"description":"Metadata object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Metadata"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Metadata"}}}},"responses":{"200":{"description":"Metadata object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Metadata"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Metadata"}}}}}},"patch":{"operationId":"metadata-patch-item","summary":"Metadata","tags":["metadata"],"description":"Metadata object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Metadata"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Metadata"}}}},"responses":{"200":{"description":"Metadata object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Metadata"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Metadata"}}}}}},"delete":{"operationId":"metadata-delete-item","summary":"Metadata","tags":["metadata"],"description":"Metadata object for Woo object","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"Metadata object for Woo object","content":{"application/json":{"schema":{"type":"string","example":"Object is successfully deleted"}},"application/xml":{"schema":{"type":"string","example":"Object is successfully deleted"}}}}}}},"/metadata":{"get":{"operationId":"metadata-get-collection","summary":"Metadata","tags":["metadata"],"description":"Metadata object for Woo object","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Metadata"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Metadata"}}}}}}}},"parameters":[{"name":"volgnummer","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"besluitdatum","in":"query","description":"format: Y-m-d","required":false,"schema":{"type":"string"}},{"name":"verzoeker","in":"query","description":"","required":false,"schema":{"type":"string"}}]},"post":{"operationId":"metadata-post-item","summary":"Metadata","tags":["metadata"],"description":"Metadata object for Woo object","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Metadata"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Metadata"}}}},"responses":{"200":{"description":"Metadata object for Woo object","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Metadata"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Metadata"}}}}}}},"/view-file/{id}":{"get":{"operationId":"bijlage-get-item","summary":"Bijlage","tags":["bijlage"],"description":"","parameters":[{"name":"id","in":"path","description":"","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Bijlage"}},"application/xml":{"schema":{"$ref":"#/components/schemas/Bijlage"}}}}}}},"/view-file":{"get":{"operationId":"bijlage-get-collection","summary":"Bijlage","tags":["bijlage"],"description":"","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Bijlage"}}}}},"application/xml":{"schema":{"required":["count","results"],"type":"object","properties":{"count":{"type":"integer","example":1},"next":{"type":"string","format":"uri","nullable":true},"previous":{"type":"string","format":"uri","nullable":true},"results":{"type":"array","items":{"$ref":"#/components/schemas/Bijlage"}}}}}}}},"parameters":[{"name":"id","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"type","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"status","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"tijdstipLaatsteWijziging","in":"query","description":"format: Y-m-d\\TH:i:s","required":false,"schema":{"type":"string","format":"datetime"}},{"name":"titel","in":"query","description":"","required":true,"schema":{"type":"string"}},{"name":"label","in":"query","description":"","required":false,"schema":{"type":"string"}},{"name":"url","in":"query","description":"","required":false,"schema":{"type":"string","format":"url"}}]}}},"components":{"schemas":{"OpenWOO":{"$id":"https://commongateway.nl/pdd.openWOO.schema.json","$schema":"https://docs.commongateway.nl/schemas/Entity.schema.json","title":"OpenWOO","description":"","version":"0.0.10","exclude":false,"maxDepth":3,"nameProperties":[],"createAuditTrails":false,"required":["publicatiedatum","categorie"],"properties":{"themas":{"_list":"/admin/objects?_self.schema.id=27c990fe-0a03-4d06-9c96-9b53c77f6118","type":"object","nullable":true,"multiple":true,"cascade":true},"bijlagen":{"_list":"/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741","type":"object","nullable":true,"multiple":true,"cascade":true},"besluit":{"_list":"/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741","type":"object","nullable":true,"cascade":true},"inventarisatielijst":{"_list":"/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741","type":"object","nullable":true,"cascade":true},"informatieverzoek":{"_list":"/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741","type":"object","nullable":true,"cascade":true},"metadata":{"_list":"/admin/objects?_self.schema.id=63eae61c-62ff-4050-a781-185c0dd0e47f","type":"object","nullable":true,"cascade":true},"behandelendBestuursorgaan":{"_list":"/admin/objects?_self.schema.id=013c22a1-b1bd-49ad-86b8-b9f97f249fca","type":"object","nullable":true,"cascade":true},"urlBesluit":{"type":"string","nullable":true,"cascade":true},"urlInventarisatielijst":{"type":"string","nullable":true,"cascade":true},"urlInformatieverzoek":{"type":"string","nullable":true,"cascade":true},"termijnoverschrijding":{"type":"string","nullable":true,"cascade":true},"Besluit":{"type":"string","nullable":true,"cascade":true},"behandelstatus":{"type":"string","nullable":true,"cascade":true},"publicatiedatum":{"type":"string","description":"Publicatiedatum van een Woo object is nooit in de toekomst.","nullable":true,"maxDate":"now","cascade":true},"ontvangstdatum":{"type":"string","description":"format: Y-m-d","nullable":true,"cascade":true},"categorie":{"type":"string","nullable":true,"cascade":true},"samenvatting":{"type":"string","nullable":true,"cascade":true},"beschrijving":{"type":"string","nullable":true,"cascade":true},"titel":{"type":"string","nullable":true,"cascade":true},"ontvangerInformatieverzoek":{"type":"string","nullable":true,"cascade":true},"portalUrl":{"type":"string","format":"url","nullable":true,"cascade":true},"id":{"type":"string","nullable":true,"cascade":true}},"type":"object"},"Thema":{"$id":"https://commongateway.nl/pdd.thema.schema.json","$schema":"https://docs.commongateway.nl/schemas/Entity.schema.json","title":"Thema","description":"","version":"0.0.2","exclude":false,"maxDepth":3,"nameProperties":[],"createAuditTrails":false,"required":["hoofdthema"],"properties":{"hoofdthema":{"type":"string","nullable":true,"cascade":true},"subthema":{"type":"string","nullable":true,"cascade":true},"aanvullendThema":{"type":"string","nullable":true,"cascade":true}},"type":"object"},"Bijlage":{"$id":"https://commongateway.nl/pdd.bijlage.schema.json","$schema":"https://docs.commongateway.nl/schemas/Entity.schema.json","title":"Bijlage","description":"","version":"0.0.3","exclude":false,"maxDepth":3,"nameProperties":[],"createAuditTrails":false,"required":["titel"],"properties":{"id":{"type":"string","nullable":true,"cascade":true},"type":{"type":"string","nullable":true,"cascade":true},"status":{"type":"string","nullable":true,"cascade":true},"tijdstipLaatsteWijziging":{"type":"string","format":"datetime","description":"format: Y-m-d\\TH:i:s","nullable":true,"cascade":true},"titel":{"type":"string","nullable":true,"cascade":true},"label":{"type":"string","nullable":true,"cascade":true},"url":{"type":"string","format":"url","nullable":true,"cascade":true}},"type":"object"},"Partij":{"$id":"https://commongateway.nl/pdd.partij.schema.json","$schema":"https://docs.commongateway.nl/schemas/Entity.schema.json","title":"Partij","description":"","version":"0.0.2","exclude":false,"maxDepth":3,"nameProperties":[],"createAuditTrails":false,"required":["naam"],"properties":{"naam":{"type":"string","nullable":true,"cascade":true}},"type":"object"},"OpenConvenant":{"$id":"https://commongateway.nl/pdd.openConvenant.schema.json","$schema":"https://docs.commongateway.nl/schemas/Entity.schema.json","title":"OpenConvenant","description":"","version":"0.0.2","exclude":false,"maxDepth":3,"nameProperties":[],"createAuditTrails":false,"properties":{"bijlagen":{"_list":"/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741","type":"object","nullable":true,"multiple":true,"cascade":true},"partijen":{"_list":"/admin/objects?_self.schema.id=4e4e95cb-5333-49f0-91c2-cc49794349fb","type":"object","nullable":true,"multiple":true,"cascade":true},"identifier":{"type":"string","nullable":true,"cascade":true},"slug":{"type":"string","nullable":true,"cascade":true},"datumOndertekening":{"type":"string","nullable":true,"cascade":true},"duur":{"type":"string","nullable":true,"cascade":true},"Beleidsterrein":{"type":"string","nullable":true,"cascade":true},"onderwerp":{"type":"string","nullable":true,"cascade":true},"status":{"type":"string","nullable":true,"cascade":true},"id":{"type":"string","nullable":true,"cascade":true}},"type":"object"},"Behandelend bestuursorgaan":{"$id":"https://commongateway.nl/woo.behandelendBestuursorgaan.schema.json","$schema":"https://docs.commongateway.nl/schemas/Entity.schema.json","title":"Behandelend bestuursorgaan","description":"Behandelend bestuursorgaan object for Woo object","version":"0.0.1","exclude":false,"maxDepth":3,"nameProperties":[],"createAuditTrails":false,"properties":{"naam":{"type":"string","nullable":true,"cascade":true},"oidn":{"type":"string","description":"The public available code for the designated organisation (municipality) this object is meant for.","nullable":true,"cascade":true}},"type":"object"},"Metadata":{"$id":"https://commongateway.nl/woo.metadata.schema.json","$schema":"https://docs.commongateway.nl/schemas/Entity.schema.json","title":"Metadata","description":"Metadata object for Woo object","version":"0.0.1","exclude":false,"maxDepth":3,"nameProperties":[],"createAuditTrails":false,"properties":{"volgnummer":{"type":"string","nullable":true,"cascade":true},"besluitdatum":{"type":"string","description":"format: Y-m-d","nullable":true,"cascade":true},"verzoeker":{"type":"string","nullable":true,"cascade":true}},"type":"object"}}},"security":[],"tags":[]}
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Common Gateway",
+    "description": "The Common Gateway is a further Dutch development of the European API Platform. API Platform is a project of Les Tilleus and, in itself, an extension of the Symfony framework. API Platform is a tool for delivering APIs based on standardized documentation and is used for various French and German government projects. Including Digital state, a precursor to Xroute, GOV.UK and Common Ground. The project is now part of joinup.eu (the European equivalent of Common Ground).",
+    "version": "1.0.3"
+  },
+  "servers": [
+    {
+      "url": "http://localhost",
+      "description": "The kubernetes server"
+    }
+  ],
+  "paths": {
+    "/openWOO/{id}": {
+      "get": {
+        "operationId": "openwoo-get-item",
+        "summary": "OpenWOO",
+        "tags": [
+          "openwoo"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "openwoo-put-item",
+        "summary": "OpenWOO",
+        "tags": [
+          "openwoo"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenWOO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenWOO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "openwoo-patch-item",
+        "summary": "OpenWOO",
+        "tags": [
+          "openwoo"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenWOO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenWOO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "openwoo-delete-item",
+        "summary": "OpenWOO",
+        "tags": [
+          "openwoo"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openWOO": {
+      "get": {
+        "operationId": "openwoo-get-collection",
+        "summary": "OpenWOO",
+        "tags": [
+          "openwoo"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OpenWOO"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OpenWOO"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "themas",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hoofdthema": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "subthema": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "aanvullendThema": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "bijlagen",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "status": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "tijdstipLaatsteWijziging": {
+                  "type": "string",
+                  "format": "datetime",
+                  "description": "format: Y-m-d\\TH:i:s",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "titel": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "label": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "url": {
+                  "type": "string",
+                  "format": "url",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "besluit",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "status": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "tijdstipLaatsteWijziging": {
+                  "type": "string",
+                  "format": "datetime",
+                  "description": "format: Y-m-d\\TH:i:s",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "titel": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "label": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "url": {
+                  "type": "string",
+                  "format": "url",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "inventarisatielijst",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "status": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "tijdstipLaatsteWijziging": {
+                  "type": "string",
+                  "format": "datetime",
+                  "description": "format: Y-m-d\\TH:i:s",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "titel": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "label": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "url": {
+                  "type": "string",
+                  "format": "url",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "informatieverzoek",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "status": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "tijdstipLaatsteWijziging": {
+                  "type": "string",
+                  "format": "datetime",
+                  "description": "format: Y-m-d\\TH:i:s",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "titel": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "label": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "url": {
+                  "type": "string",
+                  "format": "url",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "metadata",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "volgnummer": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "besluitdatum": {
+                  "type": "string",
+                  "description": "format: Y-m-d",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "verzoeker": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "behandelendBestuursorgaan",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "urlBesluit",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "urlInventarisatielijst",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "urlInformatieverzoek",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "termijnoverschrijding",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "Besluit",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "behandelstatus",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "publicatiedatum",
+            "in": "query",
+            "description": "Publicatiedatum van een Woo object is nooit in de toekomst.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "ontvangstdatum",
+            "in": "query",
+            "description": "format: Y-m-d",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "categorie",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "samenvatting",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "beschrijving",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "ontvangerInformatieverzoek",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "portalUrl",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "url",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "oidn": {
+                  "type": "string",
+                  "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "openwoo-post-item",
+        "summary": "OpenWOO",
+        "tags": [
+          "openwoo"
+        ],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenWOO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenWOO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenWOO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/themas/{id}": {
+      "get": {
+        "operationId": "thema-get-item",
+        "summary": "Thema",
+        "tags": [
+          "thema"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "thema-put-item",
+        "summary": "Thema",
+        "tags": [
+          "thema"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Thema"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Thema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "thema-patch-item",
+        "summary": "Thema",
+        "tags": [
+          "thema"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Thema"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Thema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "thema-delete-item",
+        "summary": "Thema",
+        "tags": [
+          "thema"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/themas": {
+      "get": {
+        "operationId": "thema-get-collection",
+        "summary": "Thema",
+        "tags": [
+          "thema"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Thema"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Thema"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "hoofdthema",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subthema",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "aanvullendThema",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "thema-post-item",
+        "summary": "Thema",
+        "tags": [
+          "thema"
+        ],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Thema"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Thema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bijlagen/{id}": {
+      "get": {
+        "operationId": "bijlage-get-item",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "bijlage-put-item",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Bijlage"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Bijlage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "bijlage-patch-item",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Bijlage"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Bijlage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "bijlage-delete-item",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bijlagen": {
+      "get": {
+        "operationId": "bijlage-get-collection",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Bijlage"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Bijlage"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tijdstipLaatsteWijziging",
+            "in": "query",
+            "description": "format: Y-m-d\\TH:i:s",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "datetime"
+            }
+          },
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "url"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "bijlage-post-item",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Bijlage"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Bijlage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partijen/{id}": {
+      "get": {
+        "operationId": "partij-get-item",
+        "summary": "Partij",
+        "tags": [
+          "partij"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "partij-put-item",
+        "summary": "Partij",
+        "tags": [
+          "partij"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Partij"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Partij"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "partij-patch-item",
+        "summary": "Partij",
+        "tags": [
+          "partij"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Partij"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Partij"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "partij-delete-item",
+        "summary": "Partij",
+        "tags": [
+          "partij"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partijen": {
+      "get": {
+        "operationId": "partij-get-collection",
+        "summary": "Partij",
+        "tags": [
+          "partij"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Partij"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Partij"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "naam",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "partij-post-item",
+        "summary": "Partij",
+        "tags": [
+          "partij"
+        ],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Partij"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Partij"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partij"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openconvenanten/{id}": {
+      "get": {
+        "operationId": "openconvenant-get-item",
+        "summary": "OpenConvenant",
+        "tags": [
+          "openconvenant"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "openconvenant-put-item",
+        "summary": "OpenConvenant",
+        "tags": [
+          "openconvenant"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenConvenant"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenConvenant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "openconvenant-patch-item",
+        "summary": "OpenConvenant",
+        "tags": [
+          "openconvenant"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenConvenant"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenConvenant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "openconvenant-delete-item",
+        "summary": "OpenConvenant",
+        "tags": [
+          "openconvenant"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openconvenanten": {
+      "get": {
+        "operationId": "openconvenant-get-collection",
+        "summary": "OpenConvenant",
+        "tags": [
+          "openconvenant"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OpenConvenant"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OpenConvenant"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "bijlagen",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "status": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "tijdstipLaatsteWijziging": {
+                  "type": "string",
+                  "format": "datetime",
+                  "description": "format: Y-m-d\\TH:i:s",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "titel": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "label": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                },
+                "url": {
+                  "type": "string",
+                  "format": "url",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "partijen",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "identifier",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "slug",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "datumOndertekening",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "duur",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "Beleidsterrein",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "onderwerp",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "naam": {
+                  "type": "string",
+                  "nullable": true,
+                  "cascade": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "openconvenant-post-item",
+        "summary": "OpenConvenant",
+        "tags": [
+          "openconvenant"
+        ],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenConvenant"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenConvenant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenConvenant"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/behandelend_bestuursorganen/{id}": {
+      "get": {
+        "operationId": "behandelend bestuursorgaan-get-item",
+        "summary": "Behandelend bestuursorgaan",
+        "tags": [
+          "behandelend bestuursorgaan"
+        ],
+        "description": "Behandelend bestuursorgaan object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Behandelend bestuursorgaan object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "behandelend bestuursorgaan-put-item",
+        "summary": "Behandelend bestuursorgaan",
+        "tags": [
+          "behandelend bestuursorgaan"
+        ],
+        "description": "Behandelend bestuursorgaan object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Behandelend bestuursorgaan object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "behandelend bestuursorgaan-patch-item",
+        "summary": "Behandelend bestuursorgaan",
+        "tags": [
+          "behandelend bestuursorgaan"
+        ],
+        "description": "Behandelend bestuursorgaan object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Behandelend bestuursorgaan object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "behandelend bestuursorgaan-delete-item",
+        "summary": "Behandelend bestuursorgaan",
+        "tags": [
+          "behandelend bestuursorgaan"
+        ],
+        "description": "Behandelend bestuursorgaan object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Behandelend bestuursorgaan object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/behandelend_bestuursorganen": {
+      "get": {
+        "operationId": "behandelend bestuursorgaan-get-collection",
+        "summary": "Behandelend bestuursorgaan",
+        "tags": [
+          "behandelend bestuursorgaan"
+        ],
+        "description": "Behandelend bestuursorgaan object for Woo object",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "naam",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "oidn",
+            "in": "query",
+            "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "behandelend bestuursorgaan-post-item",
+        "summary": "Behandelend bestuursorgaan",
+        "tags": [
+          "behandelend bestuursorgaan"
+        ],
+        "description": "Behandelend bestuursorgaan object for Woo object",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Behandelend bestuursorgaan object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metadata/{id}": {
+      "get": {
+        "operationId": "metadata-get-item",
+        "summary": "Metadata",
+        "tags": [
+          "metadata"
+        ],
+        "description": "Metadata object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Metadata object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "metadata-put-item",
+        "summary": "Metadata",
+        "tags": [
+          "metadata"
+        ],
+        "description": "Metadata object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metadata object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "metadata-patch-item",
+        "summary": "Metadata",
+        "tags": [
+          "metadata"
+        ],
+        "description": "Metadata object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metadata object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "metadata-delete-item",
+        "summary": "Metadata",
+        "tags": [
+          "metadata"
+        ],
+        "description": "Metadata object for Woo object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Metadata object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "example": "Object is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metadata": {
+      "get": {
+        "operationId": "metadata-get-collection",
+        "summary": "Metadata",
+        "tags": [
+          "metadata"
+        ],
+        "description": "Metadata object for Woo object",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Metadata"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Metadata"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "volgnummer",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "besluitdatum",
+            "in": "query",
+            "description": "format: Y-m-d",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verzoeker",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "operationId": "metadata-post-item",
+        "summary": "Metadata",
+        "tags": [
+          "metadata"
+        ],
+        "description": "Metadata object for Woo object",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metadata object for Woo object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/view-file/{id}": {
+      "get": {
+        "operationId": "bijlage-get-item",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bijlage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/view-file": {
+      "get": {
+        "operationId": "bijlage-get-collection",
+        "summary": "Bijlage",
+        "tags": [
+          "bijlage"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Bijlage"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "results"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "next": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Bijlage"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tijdstipLaatsteWijziging",
+            "in": "query",
+            "description": "format: Y-m-d\\TH:i:s",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "datetime"
+            }
+          },
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "url"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OpenWOO": {
+        "$id": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+        "title": "OpenWOO",
+        "description": "",
+        "version": "0.0.10",
+        "exclude": false,
+        "maxDepth": 3,
+        "nameProperties": [],
+        "createAuditTrails": false,
+        "required": [
+          "publicatiedatum",
+          "categorie"
+        ],
+        "properties": {
+          "themas": {
+            "_list": "/admin/objects?_self.schema.id=27c990fe-0a03-4d06-9c96-9b53c77f6118",
+            "type": "array",
+            "nullable": true,
+            "multiple": true,
+            "cascade": true,
+            "items": {
+              "type": "object",
+              "$ref":  "#/components/schemas/Thema"
+            }
+          },
+          "bijlagen": {
+            "_list": "/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741",
+            "type": "array",
+            "nullable": true,
+            "multiple": true,
+            "cascade": true,
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Bijlage"
+            }
+
+          },
+          "besluit": {
+            "_list": "/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741",
+            "type": "object",
+            "nullable": true,
+            "cascade": true,
+            "$ref": "#/components/schemas/Bijlage"
+          },
+          "inventarisatielijst": {
+            "_list": "/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741",
+            "type": "object",
+            "nullable": true,
+            "cascade": true,
+            "$ref": "#/components/schemas/Bijlage"
+          },
+          "informatieverzoek": {
+            "_list": "/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741",
+            "type": "object",
+            "nullable": true,
+            "cascade": true,
+            "$ref": "#/components/schemas/Bijlage"
+          },
+          "metadata": {
+            "_list": "/admin/objects?_self.schema.id=63eae61c-62ff-4050-a781-185c0dd0e47f",
+            "type": "object",
+            "nullable": true,
+            "cascade": true,
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "behandelendBestuursorgaan": {
+            "_list": "/admin/objects?_self.schema.id=013c22a1-b1bd-49ad-86b8-b9f97f249fca",
+            "type": "object",
+            "nullable": true,
+            "cascade": true,
+            "$ref": "#/components/schemas/Behandelend bestuursorgaan"
+          },
+          "urlBesluit": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "urlInventarisatielijst": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "urlInformatieverzoek": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "termijnoverschrijding": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "Besluit": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "behandelstatus": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "publicatiedatum": {
+            "type": "string",
+            "description": "Publicatiedatum van een Woo object is nooit in de toekomst.",
+            "nullable": true,
+            "maxDate": "now",
+            "cascade": true
+          },
+          "ontvangstdatum": {
+            "type": "string",
+            "description": "format: Y-m-d",
+            "nullable": true,
+            "cascade": true
+          },
+          "categorie": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "samenvatting": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "beschrijving": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "titel": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "ontvangerInformatieverzoek": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "portalUrl": {
+            "type": "string",
+            "format": "url",
+            "nullable": true,
+            "cascade": true
+          },
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          }
+        },
+        "type": "object"
+      },
+      "Thema": {
+        "$id": "https://commongateway.nl/pdd.thema.schema.json",
+        "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+        "title": "Thema",
+        "description": "",
+        "version": "0.0.2",
+        "exclude": false,
+        "maxDepth": 3,
+        "nameProperties": [],
+        "createAuditTrails": false,
+        "required": [
+          "hoofdthema"
+        ],
+        "properties": {
+          "hoofdthema": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "subthema": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "aanvullendThema": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          }
+        },
+        "type": "object"
+      },
+      "Bijlage": {
+        "$id": "https://commongateway.nl/pdd.bijlage.schema.json",
+        "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+        "title": "Bijlage",
+        "description": "",
+        "version": "0.0.3",
+        "exclude": false,
+        "maxDepth": 3,
+        "nameProperties": [],
+        "createAuditTrails": false,
+        "required": [
+          "titel"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "tijdstipLaatsteWijziging": {
+            "type": "string",
+            "format": "datetime",
+            "description": "format: Y-m-d\\TH:i:s",
+            "nullable": true,
+            "cascade": true
+          },
+          "titel": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "url": {
+            "type": "string",
+            "format": "url",
+            "nullable": true,
+            "cascade": true
+          }
+        },
+        "type": "object"
+      },
+      "Partij": {
+        "$id": "https://commongateway.nl/pdd.partij.schema.json",
+        "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+        "title": "Partij",
+        "description": "",
+        "version": "0.0.2",
+        "exclude": false,
+        "maxDepth": 3,
+        "nameProperties": [],
+        "createAuditTrails": false,
+        "required": [
+          "naam"
+        ],
+        "properties": {
+          "naam": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          }
+        },
+        "type": "object"
+      },
+      "OpenConvenant": {
+        "$id": "https://commongateway.nl/pdd.openConvenant.schema.json",
+        "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+        "title": "OpenConvenant",
+        "description": "",
+        "version": "0.0.2",
+        "exclude": false,
+        "maxDepth": 3,
+        "nameProperties": [],
+        "createAuditTrails": false,
+        "properties": {
+          "bijlagen": {
+            "_list": "/admin/objects?_self.schema.id=be875145-e01b-4d9d-af75-a11d24754741",
+            "type": "array",
+            "nullable": true,
+            "multiple": true,
+            "cascade": true,
+            "items": {
+              "type": "object" ,
+              "$ref": "#/components/schemas/Bijlage"
+            }
+          },
+          "partijen": {
+            "_list": "/admin/objects?_self.schema.id=4e4e95cb-5333-49f0-91c2-cc49794349fb",
+            "type": "array",
+            "nullable": true,
+            "multiple": true,
+            "cascade": true,
+            "items": {
+              "type": "object" ,
+              "$ref": "#/components/schemas/Partij"
+            }
+          },
+          "identifier": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "datumOndertekening": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "duur": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "Beleidsterrein": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "onderwerp": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          }
+        },
+        "type": "object"
+      },
+      "Behandelend bestuursorgaan": {
+        "$id": "https://commongateway.nl/woo.behandelendBestuursorgaan.schema.json",
+        "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+        "title": "Behandelend bestuursorgaan",
+        "description": "Behandelend bestuursorgaan object for Woo object",
+        "version": "0.0.1",
+        "exclude": false,
+        "maxDepth": 3,
+        "nameProperties": [],
+        "createAuditTrails": false,
+        "properties": {
+          "naam": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "oidn": {
+            "type": "string",
+            "description": "The public available code for the designated organisation (municipality) this object is meant for.",
+            "nullable": true,
+            "cascade": true
+          }
+        },
+        "type": "object"
+      },
+      "Metadata": {
+        "$id": "https://commongateway.nl/woo.metadata.schema.json",
+        "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+        "title": "Metadata",
+        "description": "Metadata object for Woo object",
+        "version": "0.0.1",
+        "exclude": false,
+        "maxDepth": 3,
+        "nameProperties": [],
+        "createAuditTrails": false,
+        "properties": {
+          "volgnummer": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          },
+          "besluitdatum": {
+            "type": "string",
+            "description": "format: Y-m-d",
+            "nullable": true,
+            "cascade": true
+          },
+          "verzoeker": {
+            "type": "string",
+            "nullable": true,
+            "cascade": true
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "security": [],
+  "tags": []
+}
