@@ -16,11 +16,11 @@
     },
     "informatieverzoek": {
       "type": "object",
-      "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+      "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
     },
     "inventarisatielijst": {
       "type": "object",
-      "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+      "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
     },
     "ontvangerInformatieverzoek": {
       "type": "string"
@@ -30,15 +30,6 @@
       "description": "format: Y-m-d"
     },
     "termijnoverschrijding": {
-      "type": "string"
-    },
-    "urlBesluit": {
-      "type": "string"
-    },
-    "urlInformatieverzoek": {
-      "type": "string"
-    },
-    "urlInventarisatielijst": {
       "type": "string"
     }
   }

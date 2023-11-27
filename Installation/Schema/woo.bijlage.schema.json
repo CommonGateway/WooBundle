@@ -1,8 +1,8 @@
 {
   "title": "Bijlage",
-  "$id": "https://commongateway.nl/pdd.bijlage.schema.json",
+  "$id": "https://commongateway.nl/woo.bijlage.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "object",
   "description": "",
   "required": ["titel"],
@@ -26,7 +26,7 @@
       "description": "mime-type"
     },
     "categorie": {
-      "type": "E.g besluit"
+      "type": "string"
     }
   }
 }

@@ -2,7 +2,7 @@
     "title": "Publicatie",
     "$id": "https://commongateway.nl/woo.publicatie.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.10",
+    "version": "0.0.1",
     "type": "object",
     "description": "",
     "properties": {
@@ -39,7 +39,7 @@
         "bijlagen": {
             "type": "array",
             "items": {
-                "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+                "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
             }
         },
         "metadata": {
@@ -49,7 +49,7 @@
         "themas": {
             "type": "array",
             "items": {
-                "$ref": "https://commongateway.nl/pdd.thema.schema.json"
+                "$ref": "https://commongateway.nl/woo.thema.schema.json"
             }
         }
     },

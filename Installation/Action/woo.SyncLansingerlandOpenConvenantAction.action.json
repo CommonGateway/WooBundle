@@ -8,7 +8,7 @@
         "oidn": "lansingerland",
         "portalUrl": "https://conductionnl.github.io/woo-website-lansingerland",
         "source": "https://commongateway.woo.nl/source/lansingerland.openwoo.source.json",
-        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
         "sourceType": "openWoo",
         "bestuursorgaan": "Gemeente Lansingerland",

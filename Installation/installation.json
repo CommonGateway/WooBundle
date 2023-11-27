@@ -3,44 +3,39 @@
   "endpoints": {
     "schemas": [
       {
-        "reference": "https://commongateway.nl/pdd.openWOO.schema.json",
-        "path": "openWOO",
-        "methods": []
+        "reference": "https://commongateway.nl/woo.publicatie.schema.json",
+        "path": "publicaties",
+        "methods": [],
+        "version": "0.0.2"
       },
       {
-        "reference": "https://commongateway.nl/pdd.thema.schema.json",
+        "reference": "https://commongateway.nl/woo.thema.schema.json",
         "path": "themas",
-        "methods": []
+        "methods": [],
+        "version": "0.0.2"
       },
       {
-        "reference": "https://commongateway.nl/pdd.bijlage.schema.json",
+        "reference": "https://commongateway.nl/woo.bijlage.schema.json",
         "path": "bijlagen",
-        "methods": []
+        "methods": [],
+        "version": "0.0.2"
       },
       {
-        "reference": "https://commongateway.nl/pdd.partij.schema.json",
-        "path": "partijen",
-        "methods": []
-      },
-      {
-        "reference": "https://commongateway.nl/pdd.openConvenant.schema.json",
-        "path": "openconvenanten",
-        "methods": []
-      },
-      {
-        "reference": "https://commongateway.nl/woo.behandelendBestuursorgaan.schema.json",
-        "path": "behandelend_bestuursorganen",
-        "methods": []
+        "reference": "https://commongateway.nl/woo.organisatie.schema.json",
+        "path": "organisatie",
+        "methods": [],
+        "version": "0.0.2"
       },
       {
         "reference": "https://commongateway.nl/woo.metadata.schema.json",
         "path": "metadata",
-        "methods": []
+        "methods": [],
+        "version": "0.0.2"
       },
       {
         "$id": "https://commongateway.nl/woo.ViewFile.endpoint.json",
-        "version": "0.0.1",
-        "reference": "https://commongateway.nl/pdd.bijlage.schema.json",
+        "version": "0.0.2",
+        "reference": "https://commongateway.nl/woo.bijlage.schema.json",
         "path": "view-file",
         "methods": ["GET"],
         "throws": [

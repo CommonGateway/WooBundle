@@ -1,8 +1,8 @@
 {
   "title": "Thema",
-  "$id": "https://commongateway.nl/pdd.thema.schema.json",
+  "$id": "https://commongateway.nl/woo.thema.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "object",
   "description": "",
   "required": ["hoofdthema"],
