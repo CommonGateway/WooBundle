@@ -10,6 +10,7 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
+use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
@@ -72,6 +73,11 @@ class SyncOpenWooService
     private ValidationService $validationService;
 
     /**
+     * @var CacheService $cacheService.
+     */
+    private CacheService $cacheService;
+
+    /**
      * @var array
      */
     private array $data;
@@ -100,7 +106,8 @@ class SyncOpenWooService
         EntityManagerInterface $entityManager,
         MappingService $mappingService,
         LoggerInterface $pluginLogger,
-        ValidationService $validationService
+        ValidationService $validationService,
+        CacheService $cacheService
     ) {
         $this->resourceService   = $resourceService;
         $this->callService       = $callService;
@@ -109,6 +116,7 @@ class SyncOpenWooService
         $this->mappingService    = $mappingService;
         $this->logger            = $pluginLogger;
         $this->validationService = $validationService;
+        $this->cacheService      = $cacheService;
 
     }//end __construct()
 
@@ -306,22 +314,14 @@ class SyncOpenWooService
             $objectArray = $object->toArray();
             $portalURL   = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
             $object->setValue('portalUrl', $portalURL);
-
-            switch ($categorie) {
-            case 'Woo verzoek':
-                $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['UUID']);
-                break;
-            case 'Convenant':
-                $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['ID']);
-                break;
-            }
+            $this->entityManager->persist($object);
 
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
             }
 
-            $this->entityManager->persist($object);
+            $this->cacheService->cacheObject($object);
             $responseItems[] = $object;
         }//end foreach
 
