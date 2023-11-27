@@ -10,26 +10,23 @@
     "id": {
       "type": "string"
     },
-    "type": {
-      "type": "string"
-    },
-    "status": {
-      "type": "string"
-    },
-    "tijdstipLaatsteWijziging": {
-      "type": "datetime",
-      "description": "format: Y-m-d\\TH:i:s"
-    },
     "titel": {
       "type": "string",
       "required": true
     },
-    "label": {
-      "type": "string"
-    },
     "url": {
       "type": "string",
       "format": "url"
+    },
+    "status": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "description": "mime-type"
+    },
+    "categorie": {
+      "type": "E.g besluit"
     }
   }
 }

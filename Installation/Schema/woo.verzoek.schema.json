@@ -1,0 +1,45 @@
+{
+  "title": "Verzoek",
+  "$id": "https://commongateway.nl/woo.verzoek.schema.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+  "version": "0.0.1",
+  "type": "object",
+  "description": "Verzoek object.",
+  "required": [],
+  "properties": {
+    "status": {
+        "type": "string"
+    },
+    "besluit": {
+        "type": "string",
+        "description": "format: Y-m-d"
+    },
+    "informatieverzoek": {
+      "type": "object",
+      "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+    },
+    "inventarisatielijst": {
+      "type": "object",
+      "$ref": "https://commongateway.nl/pdd.bijlage.schema.json"
+    },
+    "ontvangerInformatieverzoek": {
+      "type": "string"
+    },
+    "ontvangstdatum": {
+      "type": "string",
+      "description": "format: Y-m-d"
+    },
+    "termijnoverschrijding": {
+      "type": "string"
+    },
+    "urlBesluit": {
+      "type": "string"
+    },
+    "urlInformatieverzoek": {
+      "type": "string"
+    },
+    "urlInventarisatielijst": {
+      "type": "string"
+    }
+  }
+}

@@ -14,8 +14,9 @@
         "type": "string",
         "description": "format: Y-m-d"
     },
-    "verzoeker": {
-        "type": "string"
+    "verzoek": {
+        "type": "object",
+        "$ref": "https://commongateway.nl/woo.verzoek.schema.json"
     }
   }
 }

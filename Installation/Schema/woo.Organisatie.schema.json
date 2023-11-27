@@ -1,0 +1,32 @@
+{
+    "title": "Organisatie",
+    "$id": "https://commongateway.nl/woo.organisatie.schema.jsonn",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.0.1",
+    "type": "object",
+    "description": "",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "uuid": {
+            "type": "string"
+        },
+        "oin": {
+            "type": "string"
+        },
+        "tooi": {
+            "type": "string"
+        },
+        "rsin": {
+            "type": "string"
+        },
+        "naam": {
+            "type": "string",
+            "required": true
+        }
+    },
+    "required": [
+        "naam"
+    ]
+}
