@@ -62,58 +62,58 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                 'fileEndpointReference',
             ],
             'properties'  => [
-                'oidn'             => [
+                'oidn'                      => [
                     'type'        => 'string',
                     'description' => 'The oidn of the publication.',
                     'example'     => 'buren',
-                    'required'    => true
+                    'required'    => true,
                 ],
-                'portalUrl'             => [
+                'portalUrl'                 => [
                     'type'        => 'string',
                     'description' => 'The portal url of the publication.',
                     'example'     => 'https://conductionnl.github.io/woo-website-buren',
-                    'required'    => true
+                    'required'    => true,
                 ],
-                'source'             => [
+                'source'                    => [
                     'type'        => 'string',
                     'description' => 'The source where the publication belongs to.',
                     'example'     => 'https://commongateway.woo.nl/source/buren.openwoo.source.json',
                     'required'    => true,
                 ],
-                'schema'  => [
+                'schema'                    => [
                     'type'        => 'string',
                     'description' => 'The publication schema.',
                     'example'     => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'reference'   => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'required'    => true,
                 ],
-                'mapping' => [
+                'mapping'                   => [
                     'type'        => 'string',
                     'description' => 'The mapping for xxllnc case to publication.',
                     'example'     => 'https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json',
                     'reference'   => 'https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json',
                     'required'    => true,
                 ],
-                'bestuursorgaan'             => [
+                'bestuursorgaan'            => [
                     'type'        => 'string',
                     'description' => 'The bestuursorgaan.',
                     'example'     => 'Gemeente Buren',
-                    'required'    => true
+                    'required'    => true,
                 ],
                 'zaaksysteemSearchEndpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint of the source.',
                     'example'     => '/public_search/517/search',
-                    'required'    => true
+                    'required'    => true,
                 ],
-                'fileEndpointReference'             => [
+                'fileEndpointReference'     => [
                     'type'        => 'string',
                     'description' => 'The file endpoint reference.',
                     'example'     => 'https://commongateway.nl/woo.ViewFile.endpoint.json',
                     'reference'   => 'https://commongateway.nl/woo.ViewFile.endpoint.json',
-                    'required'    => true
+                    'required'    => true,
                 ],
-            ]
+            ],
         ];
 
     }//end getConfiguration()

@@ -59,60 +59,60 @@ class SyncOpenWooHandler implements ActionHandlerInterface
                 'mapping',
                 'sourceType',
                 'bestuursorgaan',
-                'sourceEndpoint'
+                'sourceEndpoint',
             ],
             'properties'  => [
-                'oidn'             => [
+                'oidn'           => [
                     'type'        => 'string',
                     'description' => 'The oidn of the publication.',
                     'example'     => 'buren',
-                    'required'    => true
+                    'required'    => true,
                 ],
-                'portalUrl'             => [
+                'portalUrl'      => [
                     'type'        => 'string',
                     'description' => 'The portal url of the publication.',
                     'example'     => 'https://conductionnl.github.io/woo-website-buren',
-                    'required'    => true
+                    'required'    => true,
                 ],
-                'source'             => [
+                'source'         => [
                     'type'        => 'string',
                     'description' => 'The source where the publication belongs to.',
                     'example'     => 'https://commongateway.woo.nl/source/buren.openwoo.source.json',
                     'required'    => true,
                 ],
-                'schema'  => [
+                'schema'         => [
                     'type'        => 'string',
                     'description' => 'The publication schema.',
                     'example'     => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'reference'   => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'required'    => true,
                 ],
-                'mapping' => [
+                'mapping'        => [
                     'type'        => 'string',
                     'description' => 'The mapping for open woo to publication.',
                     'example'     => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
                     'reference'   => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
                     'required'    => true,
                 ],
-                'sourceType'             => [
+                'sourceType'     => [
                     'type'        => 'string',
                     'description' => 'The source type.',
                     'example'     => 'openWoo',
-                    'required'    => true
+                    'required'    => true,
                 ],
-                'bestuursorgaan'             => [
+                'bestuursorgaan' => [
                     'type'        => 'string',
                     'description' => 'The bestuursorgaan.',
                     'example'     => 'Gemeente Buren',
-                    'required'    => true
+                    'required'    => true,
                 ],
-                'sourceEndpoint'             => [
+                'sourceEndpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint of the source.',
                     'example'     => '/owc/openwoo/v1/items',
-                    'required'    => true
+                    'required'    => true,
                 ],
-            ]
+            ],
         ];
 
     }//end getConfiguration()
