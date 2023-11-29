@@ -274,10 +274,10 @@ class SyncOpenWooService
 
         $customFields = [
             'organisatie' => [
-                'oin' => $this->configuration['oin'],
+                'oin'  => $this->configuration['oin'],
                 'naam' => $this->configuration['organisatie'],
             ],
-            'categorie'                 => $categorie,
+            'categorie'   => $categorie,
         ];
 
         $idsSynced        = [];

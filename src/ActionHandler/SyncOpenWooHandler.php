@@ -62,7 +62,7 @@ class SyncOpenWooHandler implements ActionHandlerInterface
                 'sourceEndpoint',
             ],
             'properties'  => [
-                'oin'           => [
+                'oin'            => [
                     'type'        => 'string',
                     'description' => 'The oin of the publication.',
                     'example'     => 'buren',
@@ -100,7 +100,7 @@ class SyncOpenWooHandler implements ActionHandlerInterface
                     'example'     => 'openWoo',
                     'required'    => true,
                 ],
-                'organisatie' => [
+                'organisatie'    => [
                     'type'        => 'string',
                     'description' => 'The organisatie.',
                     'example'     => 'Gemeente Buren',

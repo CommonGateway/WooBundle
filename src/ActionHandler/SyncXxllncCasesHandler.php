@@ -62,7 +62,7 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                 'fileEndpointReference',
             ],
             'properties'  => [
-                'oin'                      => [
+                'oin'                       => [
                     'type'        => 'string',
                     'description' => 'The oin of the publication.',
                     'example'     => 'buren',
@@ -94,7 +94,7 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                     'reference'   => 'https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json',
                     'required'    => true,
                 ],
-                'organisatie'            => [
+                'organisatie'               => [
                     'type'        => 'string',
                     'description' => 'The organisatie.',
                     'example'     => 'Gemeente Buren',
