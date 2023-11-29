@@ -2,16 +2,16 @@
     "title": "SyncBurenOpenWooAction",
     "$id": "https://commongateway.nl/woo.SyncBurenOpenWooAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "listens": ["woo.default.listens"],
     "configuration": {
-        "oidn": "buren",
+        "oin": "00000001807287684000",
         "portalUrl": "https://conductionnl.github.io/woo-website-buren",
         "source": "https://commongateway.woo.nl/source/buren.openwoo.source.json",
-        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
         "sourceType": "openWoo",
-        "bestuursorgaan": "Gemeente Buren",
+        "organisatie": "Gemeente Buren",
         "sourceEndpoint": "/owc/openwoo/v1/items"
     },
     "conditions":

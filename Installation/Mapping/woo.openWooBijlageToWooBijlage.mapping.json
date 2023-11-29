@@ -2,14 +2,17 @@
   "title": "OpenWooBijlageToWooBijlage",
   "$id": "https://commongateway.nl/mapping/woo.openWooBijlageToWooBijlage.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "passTrough": false,
   "mapping": {
     "_sourceId": "URL_Bijlage",
     "titel": "Titel_Bijlage",
-    "label": "Titel_Bijlage",
     "url": "URL_Bijlage",
-    "tijdstip_laatste_wijziging": "{% if Tijdstip_laatste_wijziging_bijlage|default %}{{ Tijdstip_laatste_wijziging_bijlage }}{% else %}{{ \"now\"|date(\"Y-m-d H:i:s\") }}{% endif %}",
     "status": "Status_Bijlage"
+  },
+  "unset": {
+    "titel": "unsetIfValue==",
+    "url": "unsetIfValue==",
+    "status": "unsetIfValue=="
   }
 }

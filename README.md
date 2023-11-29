@@ -36,7 +36,7 @@ And the portalUrl property is configured through the Action->configuration.
 To synchronize publications for a specific municipality from the xxllnc zaaksysteem,
 first, check if its Source is configured properly with information about the zaaksysteem for that municipality.
 Does it have the correct location (URL)? And make sure the Source is enabled.
-Then find the Action for that municipality, check if the oidn is set properly, and also check if the Action is enabled.
+Then find the Action for that municipality, check if the oin is set properly, and also check if the Action is enabled.
 After this, copy the Action reference.
 
 Then in the PHP container you can execute the following command:
@@ -51,5 +51,5 @@ For this, the Cronjob itself has to be enabled as well.
 
 ### Getting the synchronized objects
 
-After synchronizing objects, you can fetch the objects by just requesting `GET /api/openWOO` to fetch all publications or `GET /api/openWOO?oidn={your municipality oidn}` to fetch the publications belonging to a single municipality.
-Make sure here the oidn parameter value is the same that is set as configuration on the Action of that municipality.
+After synchronizing objects, you can fetch the objects by just requesting `GET /api/openWOO` to fetch all publications or `GET /api/openWOO?oin={your municipality oin}` to fetch the publications belonging to a single municipality.
+Make sure here the oin parameter value is the same that is set as configuration on the Action of that municipality.

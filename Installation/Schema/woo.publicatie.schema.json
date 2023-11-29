@@ -1,0 +1,64 @@
+{
+    "title": "Publicatie",
+    "$id": "https://commongateway.nl/woo.publicatie.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.0.1",
+    "type": "object",
+    "description": "",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "titel": {
+            "type": "string"
+        },
+        "beschrijving": {
+            "type": "string"
+        },
+        "samenvatting": {
+            "type": "string"
+        },
+        "categorie": {
+            "type": "string",
+            "required": true
+        },
+        "portalUrl": {
+            "type": "string",
+            "format": "url"
+        },
+        "publicatiedatum": {
+            "description": "Publicatiedatum van een Woo object is nooit in de toekomst.",
+            "type": "string",
+            "maxDate": "now",
+            "required": true
+        },
+        "organisatie": {
+            "type": "object",
+            "$ref": "https://commongateway.nl/woo.organisatie.schema.json",
+            "format": "json"
+        },
+        "bijlagen": {
+            "type": "array",
+            "items": {
+                "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
+            },
+            "format": "json"
+        },
+        "metadata": {
+            "type": "object",
+            "$ref": "https://commongateway.nl/woo.metadata.schema.json",
+            "format": "json"
+        },
+        "themas": {
+            "type": "array",
+            "items": {
+                "$ref": "https://commongateway.nl/woo.thema.schema.json"
+            },
+            "format": "json"
+        }
+    },
+    "required": [
+        "categorie",
+        "publicatiedatum"
+    ]
+}

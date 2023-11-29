@@ -2,16 +2,16 @@
     "title": "SyncTexelOpenWooAction",
     "$id": "https://commongateway.nl/woo.SyncTexelOpenWooAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "listens": ["woo.default.listens"],
     "configuration": {
-        "oidn": "texel",
+        "oin": "00000001002000155000",
         "portalUrl": "https://conductionnl.github.io/woo-website-texel",
         "source": "https://commongateway.woo.nl/source/texel.openwoo.source.json",
-        "schema": "https://commongateway.nl/pdd.openWOO.schema.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
         "sourceType": "openWoo",
-        "bestuursorgaan": "Gemeente Texel",
+        "organisatie": "Gemeente Texel",
         "sourceEndpoint": "/owc/openwoo/v1/items"
     },
     "conditions":

@@ -40,7 +40,7 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
 
 
     /**
-     *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
+     *  This function returns the required configuration as a [json-schema](https://json-schema.org/) array.
      *
      * @throws array a [json-schema](https://json-schema.org/) that this  action should comply to
      */
@@ -51,8 +51,69 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'SyncXxllncCasesHandler',
             'description' => 'Handles the sync for xxllnc cases.',
-            'required'    => [],
-            'properties'  => [],
+            'required'    => [
+                'oin',
+                'portalUrl',
+                'source',
+                'schema',
+                'mapping',
+                'organisatie',
+                'zaaksysteemSearchEndpoint',
+                'fileEndpointReference',
+            ],
+            'properties'  => [
+                'oin'                       => [
+                    'type'        => 'string',
+                    'description' => 'The oin of the publication.',
+                    'example'     => 'buren',
+                    'required'    => true,
+                ],
+                'portalUrl'                 => [
+                    'type'        => 'string',
+                    'description' => 'The portal url of the publication.',
+                    'example'     => 'https://conductionnl.github.io/woo-website-buren',
+                    'required'    => true,
+                ],
+                'source'                    => [
+                    'type'        => 'string',
+                    'description' => 'The source where the publication belongs to.',
+                    'example'     => 'https://commongateway.woo.nl/source/buren.openwoo.source.json',
+                    'required'    => true,
+                ],
+                'schema'                    => [
+                    'type'        => 'string',
+                    'description' => 'The publication schema.',
+                    'example'     => 'https://commongateway.nl/woo.publicatie.schema.json',
+                    'reference'   => 'https://commongateway.nl/woo.publicatie.schema.json',
+                    'required'    => true,
+                ],
+                'mapping'                   => [
+                    'type'        => 'string',
+                    'description' => 'The mapping for xxllnc case to publication.',
+                    'example'     => 'https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json',
+                    'reference'   => 'https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json',
+                    'required'    => true,
+                ],
+                'organisatie'               => [
+                    'type'        => 'string',
+                    'description' => 'The organisatie.',
+                    'example'     => 'Gemeente Buren',
+                    'required'    => true,
+                ],
+                'zaaksysteemSearchEndpoint' => [
+                    'type'        => 'string',
+                    'description' => 'The endpoint of the source.',
+                    'example'     => '/public_search/517/search',
+                    'required'    => true,
+                ],
+                'fileEndpointReference'     => [
+                    'type'        => 'string',
+                    'description' => 'The file endpoint reference.',
+                    'example'     => 'https://commongateway.nl/woo.ViewFile.endpoint.json',
+                    'reference'   => 'https://commongateway.nl/woo.ViewFile.endpoint.json',
+                    'required'    => true,
+                ],
+            ],
         ];
 
     }//end getConfiguration()
