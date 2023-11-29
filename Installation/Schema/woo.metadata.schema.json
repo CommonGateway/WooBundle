@@ -16,7 +16,8 @@
     },
     "verzoek": {
         "type": "object",
-        "$ref": "https://commongateway.nl/woo.verzoek.schema.json"
+        "$ref": "https://commongateway.nl/woo.verzoek.schema.json",
+        "format": "json"
     }
   }
 }

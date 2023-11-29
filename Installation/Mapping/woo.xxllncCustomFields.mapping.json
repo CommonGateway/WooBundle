@@ -2,13 +2,10 @@
   "title": "XxllncCustomFields",
   "$id": "https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
-    "urlInformatieverzoek": "{% if informatieverzoek.url|default %}{{ informatieverzoek.url }}{% endif %}",
-    "urlInventarisatielijst": "{% if inventarisatielijst.url|default %}{{ inventarisatielijst.url }}{% endif %}",
-    "urlBesluit": "{% if besluit.url|default %}{{ besluit.url }}{% endif %}",
     "informatieverzoek": "{% if informatieverzoek|default %}{{ informatieverzoek|json_encode }}{% endif %}",
     "inventarisatielijst": "{% if inventarisatielijst|default %}{{ inventarisatielijst|json_encode }}{% endif %}",
     "besluit": "{% if besluit|default %}{{ besluit|json_encode }}{% endif %}",
@@ -16,9 +13,6 @@
     "portalUrl": "portalUrl"
   },
   "cast": {
-    "urlInformatieverzoek": "unsetIfValue==",
-    "urlInventarisatielijst": "unsetIfValue==",
-    "urlBesluit": "unsetIfValue==",
     "informatieverzoek": "jsonToArray",
     "inventarisatielijst": "jsonToArray",
     "besluit": "jsonToArray",

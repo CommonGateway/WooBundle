@@ -11,16 +11,19 @@
         "type": "string"
     },
     "besluit": {
-        "type": "string",
-        "description": "format: Y-m-d"
+        "type": "object",
+        "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
+        "format": "json"
     },
     "informatieverzoek": {
       "type": "object",
-      "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
+      "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
+      "format": "json"
     },
     "inventarisatielijst": {
       "type": "object",
-      "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
+      "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
+      "format": "json"
     },
     "ontvangerInformatieverzoek": {
       "type": "string"

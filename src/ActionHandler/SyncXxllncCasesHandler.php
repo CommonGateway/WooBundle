@@ -52,19 +52,19 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
             'title'       => 'SyncXxllncCasesHandler',
             'description' => 'Handles the sync for xxllnc cases.',
             'required'    => [
-                'oidn',
+                'oin',
                 'portalUrl',
                 'source',
                 'schema',
                 'mapping',
-                'bestuursorgaan',
+                'organisatie',
                 'zaaksysteemSearchEndpoint',
                 'fileEndpointReference',
             ],
             'properties'  => [
-                'oidn'                      => [
+                'oin'                      => [
                     'type'        => 'string',
-                    'description' => 'The oidn of the publication.',
+                    'description' => 'The oin of the publication.',
                     'example'     => 'buren',
                     'required'    => true,
                 ],
@@ -94,9 +94,9 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                     'reference'   => 'https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json',
                     'required'    => true,
                 ],
-                'bestuursorgaan'            => [
+                'organisatie'            => [
                     'type'        => 'string',
-                    'description' => 'The bestuursorgaan.',
+                    'description' => 'The organisatie.',
                     'example'     => 'Gemeente Buren',
                     'required'    => true,
                 ],

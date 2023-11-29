@@ -2,15 +2,15 @@
     "title": "SyncDinkellandCasesAction",
     "$id": "https://commongateway.nl/pdd.SyncDinkellandCasesAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "listens": ["woo.default.listens"],
     "configuration": {
-        "oidn": "00000001809245206000",
+        "oin": "00000001809245206000",
         "portalUrl": "https://conductionnl.github.io/woo-website-dinkelland",
         "source": "https://commongateway.woo.nl/source/dinkelland.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json",
-        "bestuursorgaan": "Gemeente Dinkelland",
+        "organisatie": "Gemeente Dinkelland",
         "zaaksysteemSearchEndpoint": "/public_search/517/search",
         "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json"
     },

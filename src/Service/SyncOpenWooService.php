@@ -226,15 +226,15 @@ class SyncOpenWooService
         $this->logger->info('SyncOpenWooService triggered');
 
         if (isset($this->configuration['source']) === false
-            || isset($this->configuration['oidn']) === false
-            || isset($this->configuration['bestuursorgaan']) === false
+            || isset($this->configuration['oin']) === false
+            || isset($this->configuration['organisatie']) === false
             || isset($this->configuration['portalUrl']) === false
             || isset($this->configuration['schema']) === false
             || isset($this->configuration['mapping']) === false
             || isset($this->configuration['sourceEndpoint']) === false
         ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, oidn, bestuursorgaan, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler');
-            $this->logger->error('No source, schema, mapping, oidn, bestuursorgaan, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler');
+            isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler');
+            $this->logger->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler');
 
             return [];
         }//end if
@@ -273,9 +273,9 @@ class SyncOpenWooService
         $this->entityManager->flush();
 
         $customFields = [
-            'behandelendBestuursorgaan' => [
-                'oidn' => $this->configuration['oidn'],
-                'naam' => $this->configuration['bestuursorgaan'],
+            'organisatie' => [
+                'oin' => $this->configuration['oin'],
+                'naam' => $this->configuration['organisatie'],
             ],
             'categorie'                 => $categorie,
         ];

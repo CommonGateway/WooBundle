@@ -325,16 +325,16 @@ class SyncXxllncCasesService
         $this->logger->info('SyncXxllncCasesService triggered');
 
         if (isset($this->configuration['source']) === false
-            || isset($this->configuration['oidn']) === false
-            || isset($this->configuration['bestuursorgaan']) === false
+            || isset($this->configuration['oin']) === false
+            || isset($this->configuration['organisatie']) === false
             || isset($this->configuration['portalUrl']) === false
             || isset($this->configuration['schema']) === false
             || isset($this->configuration['mapping']) === false
             || isset($this->configuration['fileEndpointReference']) === false
             || isset($this->configuration['zaaksysteemSearchEndpoint']) === false
         ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, oidn, bestuursorgaan, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
-            $this->logger->error('No source, schema, mapping, oidn, bestuursorgaan, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            $this->logger->error('No source, schema, mapping, oin, organisatie, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
 
             return [];
         }//end if
@@ -362,7 +362,7 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
-            $result       = array_merge($result, ['behandelendBestuursorgaan' => ['oidn' => $this->configuration['oidn'], 'naam' => $this->configuration['bestuursorgaan']]]);
+            $result       = array_merge($result, ['organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
             $mappedResult = $this->mappingService->mapping($mapping, $result);
 
             $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');

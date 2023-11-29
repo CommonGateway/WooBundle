@@ -2,16 +2,16 @@
     "title": "SyncLansingerlandOpenWooAction",
     "$id": "https://commongateway.nl/woo.SyncLansingerlandOpenWooAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "listens": ["woo.default.listens"],
     "configuration": {
-        "oidn": "lansingerland",
+        "oin": "00000001817291295000",
         "portalUrl": "https://conductionnl.github.io/woo-website-lansingerland",
         "source": "https://commongateway.woo.nl/source/lansingerland.openwoo.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
         "sourceType": "openWoo",
-        "bestuursorgaan": "Gemeente Lansingerland",
+        "organisatie": "Gemeente Lansingerland",
         "sourceEndpoint": "/owc/openwoo/v1/items"
     },
     "conditions":

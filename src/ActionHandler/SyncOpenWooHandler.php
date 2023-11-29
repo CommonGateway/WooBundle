@@ -52,19 +52,19 @@ class SyncOpenWooHandler implements ActionHandlerInterface
             'title'       => 'SyncOpenWooHandler',
             'description' => 'Handles the sync for open woo requests.',
             'required'    => [
-                'oidn',
+                'oin',
                 'portalUrl',
                 'source',
                 'schema',
                 'mapping',
                 'sourceType',
-                'bestuursorgaan',
+                'organisatie',
                 'sourceEndpoint',
             ],
             'properties'  => [
-                'oidn'           => [
+                'oin'           => [
                     'type'        => 'string',
-                    'description' => 'The oidn of the publication.',
+                    'description' => 'The oin of the publication.',
                     'example'     => 'buren',
                     'required'    => true,
                 ],
@@ -100,9 +100,9 @@ class SyncOpenWooHandler implements ActionHandlerInterface
                     'example'     => 'openWoo',
                     'required'    => true,
                 ],
-                'bestuursorgaan' => [
+                'organisatie' => [
                     'type'        => 'string',
-                    'description' => 'The bestuursorgaan.',
+                    'description' => 'The organisatie.',
                     'example'     => 'Gemeente Buren',
                     'required'    => true,
                 ],

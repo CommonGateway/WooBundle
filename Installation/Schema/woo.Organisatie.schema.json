@@ -1,6 +1,6 @@
 {
     "title": "Organisatie",
-    "$id": "https://commongateway.nl/woo.organisatie.schema.jsonn",
+    "$id": "https://commongateway.nl/woo.organisatie.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
     "version": "0.0.1",
     "type": "object",

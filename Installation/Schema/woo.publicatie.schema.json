@@ -34,23 +34,27 @@
         },
         "organisatie": {
             "type": "object",
-            "$ref": "https://commongateway.nl/woo.organisatie.schema.json"
+            "$ref": "https://commongateway.nl/woo.organisatie.schema.json",
+            "format": "json"
         },
         "bijlagen": {
             "type": "array",
             "items": {
                 "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
-            }
+            },
+            "format": "json"
         },
         "metadata": {
             "type": "object",
-            "$ref": "https://commongateway.nl/woo.metadata.schema.json"
+            "$ref": "https://commongateway.nl/woo.metadata.schema.json",
+            "format": "json"
         },
         "themas": {
             "type": "array",
             "items": {
                 "$ref": "https://commongateway.nl/woo.thema.schema.json"
-            }
+            },
+            "format": "json"
         }
     },
     "required": [
