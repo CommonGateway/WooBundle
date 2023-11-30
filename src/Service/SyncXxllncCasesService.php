@@ -408,8 +408,8 @@ class SyncXxllncCasesService
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
             }
 
-            $this->cacheService->cacheObject($object);
             $this->entityManager->persist($object);
+            $this->cacheService->cacheObject($object);
             $responseItems[] = $object;
         }//end foreach
 
