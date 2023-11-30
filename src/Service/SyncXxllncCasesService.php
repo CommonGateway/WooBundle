@@ -11,6 +11,7 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
+use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
@@ -73,6 +74,11 @@ class SyncXxllncCasesService
     private ValidationService $validationService;
 
     /**
+     * @var CacheService $cacheService.
+     */
+    private CacheService $cacheService;
+
+    /**
      * @var FileService $fileService.
      */
     private FileService $fileService;
@@ -108,7 +114,8 @@ class SyncXxllncCasesService
         MappingService $mappingService,
         LoggerInterface $pluginLogger,
         ValidationService $validationService,
-        FileService $fileService
+        FileService $fileService,
+        CacheService $cacheService
     ) {
         $this->resourceService   = $resourceService;
         $this->callService       = $callService;
@@ -118,6 +125,7 @@ class SyncXxllncCasesService
         $this->logger            = $pluginLogger;
         $this->validationService = $validationService;
         $this->fileService       = $fileService;
+        $this->cacheService      = $cacheService;
 
     }//end __construct()
 
@@ -400,6 +408,7 @@ class SyncXxllncCasesService
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
             }
 
+            $this->cacheService->cacheObject($object);
             $this->entityManager->persist($object);
             $responseItems[] = $object;
         }//end foreach
