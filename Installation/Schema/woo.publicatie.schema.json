@@ -42,7 +42,7 @@
             "type": "object",
             "$ref": "https://commongateway.nl/woo.organisatie.schema.json",
             "format": "json",
-            "description": "De organisatie waarvan deze publicatie is. Publicaties zonder organisatie kunnen op het algemene endpoint zonder oin of ander filter opgehaald worden."
+            "description": "De organisatie waarvan deze publicatie is. Een organisatie met een oin nummer is nodig als je daarop later wilt filteren."
         },
         "bijlagen": {
             "type": "array",
