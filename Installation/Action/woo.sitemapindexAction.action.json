@@ -1,0 +1,15 @@
+{
+    "title": "Sitemapindex",
+    "$id": "https://commongateway.nl/woo.sitemapindex.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.sitemapindex"],
+    "configuration": {
+      "type": "sitemapindex"
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SitemapHandler"
+}
