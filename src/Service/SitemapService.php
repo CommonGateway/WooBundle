@@ -83,13 +83,13 @@ class SitemapService
     /**
      * SitemapService constructor.
      *
-     * @param EntityManagerInterface $entityManager The Entity Manager Interface
-     * @param LoggerInterface        $pluginLogger The Logger Interface
-     * @param GatewayResourceService $resourceService The Gateway Resource Service
-     * @param CacheService $cacheService The Cache Service
-     * @param MappingService $mappingService The Mapping Service
-     * @param DownloadService $downloadService The Download Service
-     * @param ApplicationService $applicationService The Application Service
+     * @param EntityManagerInterface $entityManager      The Entity Manager Interface
+     * @param LoggerInterface        $pluginLogger       The Logger Interface
+     * @param GatewayResourceService $resourceService    The Gateway Resource Service
+     * @param CacheService           $cacheService       The Cache Service
+     * @param MappingService         $mappingService     The Mapping Service
+     * @param DownloadService        $downloadService    The Download Service
+     * @param ApplicationService     $applicationService The Application Service
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -100,31 +100,33 @@ class SitemapService
         DownloadService $downloadService,
         ApplicationService $applicationService
     ) {
-        $this->entityManager = $entityManager;
-        $this->logger        = $pluginLogger;
-        $this->resourceService = $resourceService;
-        $this->cacheService = $cacheService;
-        $this->mappingService = $mappingService;
-        $this->downloadService = $downloadService;
+        $this->entityManager      = $entityManager;
+        $this->logger             = $pluginLogger;
+        $this->resourceService    = $resourceService;
+        $this->cacheService       = $cacheService;
+        $this->mappingService     = $mappingService;
+        $this->downloadService    = $downloadService;
         $this->applicationService = $applicationService;
+
     }//end __construct()
 
+
     // Get applicationService -> getApplication->getDomain
+
 
     /**
      * Generates a sitemap for the given organization
      *
      * @param string $queryKey The key of the query from the request.
-     * @param array $query The query array from the request.
+     * @param array  $query    The query array from the request.
      *
      * @return array
      */
     public function getSitemap(string $queryKey, array $query): array
     {
         // TODO: Generate the sitemaps with the type.
-
         // Get the publication schema and the sitemap mapping.
-        $mapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
+        $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
         if ($publicatieSchema instanceof Schema === false
             || $mapping instanceof Mapping === false
@@ -144,19 +146,21 @@ class SitemapService
         foreach ($objects as $object) {
             // TODO: Verschillede sitemaps voor de categorieen
             $publicatie['object'] = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
-            $sitemap['url'][] = $this->mappingService->mapping($mapping, $publicatie);
+            $sitemap['url'][]     = $this->mappingService->mapping($mapping, $publicatie);
         }
 
         // Return the sitemap response.
         $this->data['response'] = $this->createResponse($sitemap, 200, 'urlset');
         return $this->data;
-    }
+
+    }//end getSitemap()
+
 
     /**
      * Generates a sitemapindex for the given organization
      *
      * @param string $queryKey The key of the query from the request.
-     * @param array $query The query array from the request.
+     * @param array  $query    The query array from the request.
      *
      * @return array
      */
@@ -171,27 +175,28 @@ class SitemapService
         $domain = $this->applicationService->getApplication()->getDomains()[0];
 
         // TODO: Get the type of the sitemapindex.
-
         // The location of the sitemap file is the endpoint of the sitemap.
-        $location['location'] = 'https://'.$domain.'/api/sitemaps?'.$queryKey.'='.$query[$queryKey];
+        $location['location']      = 'https://'.$domain.'/api/sitemaps?'.$queryKey.'='.$query[$queryKey];
         $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
 
         // Return the sitemapindex response.
         $this->data['response'] = $this->createResponse($sitemapindex, 200, 'sitemapindex');
         return $this->data;
-    }
+
+    }//end getSitemapindex()
+
 
     /**
      * Generates a robot.txt for the given organization
      *
      * @param string $queryKey The key of the query from the request.
-     * @param array $query The query array from the request.
+     * @param array  $query    The query array from the request.
      *
      * @return array
      */
     public function getRobot(string $queryKey, array $query): array
     {
-        $mapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.robot.txt.mapping.json', 'common-gateway/woo-bundle');
+        $mapping       = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.robot.txt.mapping.json', 'common-gateway/woo-bundle');
         $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         if ($sitemapSchema instanceof Schema === false
             || $mapping instanceof Mapping === false
@@ -208,13 +213,15 @@ class SitemapService
         $robotArray['location'] = 'https://'.$domain.'/api/sitemapindex-diwoo-infocat?'.$queryKey.'='.$query[$queryKey];
         // Set the id of the schema to the array so that the downloadService can work with that.
         $robotArray['_self']['schema']['id'] = $sitemapSchema->getId()->toString();
-        $robot = $this->downloadService->render($robotArray);
+        $robot                               = $this->downloadService->render($robotArray);
 
         $this->data['response'] = new Response($robot, 200, ['Content-Type' => 'text/plain']);
         $this->data['response']->headers->set('Content-Disposition', 'attachment; filename="Robot.txt"');
 
         return $this->data;
-    }
+
+    }//end getRobot()
+
 
     /**
      * Generates a sitemap, sitemapindex or robot.txt for the given organization
@@ -226,7 +233,7 @@ class SitemapService
      */
     public function sitemapHandler(array $data, array $configuration): array
     {
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         // Get the type from the action so that we know what to generate.
@@ -243,28 +250,30 @@ class SitemapService
 
         // Get the key of the given query.
         $queryKey = key($query);
-        switch ($this->configuration['type']){
-            case 'sitemap':
-                return $this->getSitemap($queryKey, $query);
+        switch ($this->configuration['type']) {
+        case 'sitemap':
+            return $this->getSitemap($queryKey, $query);
                 break;
-            case 'sitemapindex':
-                return $this->getSitemapindex($queryKey, $query);
+        case 'sitemapindex':
+            return $this->getSitemapindex($queryKey, $query);
                 break;
-            case 'robot.txt':
-                return $this->getRobot($queryKey, $query);
+        case 'robot.txt':
+            return $this->getRobot($queryKey, $query);
                 break;
-            default:
-                // Throw an error.
+        default:
+            // Throw an error.
         }
 
         return $this->data;
-    }//end sidemapHandler()
+
+    }//end sitemapHandler()
+
 
     /**
      * Creates a response based on content.
      *
-     * @param array $content The content to incorporate in the response
-     * @param int $status The status code of the response
+     * @param array  $content  The content to incorporate in the response
+     * @param int    $status   The status code of the response
      * @param string $rootName The rootName of the xml.
      *
      * @return Response
@@ -272,13 +281,15 @@ class SitemapService
     public function createResponse(array $content, int $status, string $rootName): Response
     {
         $this->logger->debug('Creating XML response');
-        $xmlEncoder    = new XmlEncoder(['xml_root_node_name' => $rootName]);
-        $xml = ['@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9'];
-        $content = array_merge($xml, $content);
+        $xmlEncoder = new XmlEncoder(['xml_root_node_name' => $rootName]);
+        $xml        = ['@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9'];
+        $content    = array_merge($xml, $content);
 
         $contentString = $xmlEncoder->encode($content, 'xml', ['xml_encoding' => 'utf-8', 'remove_empty_tags' => true]);
 
         return new Response($contentString, $status);
+
     }//end createResponse()
+
 
 }//end class
