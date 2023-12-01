@@ -1,0 +1,11 @@
+{
+  "title": "Sitemap",
+  "$id": "https://commongateway.nl/mapping/woo.sitemap.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "loc": "{{ selfUrl(object) }}",
+    "lastmod": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Sitemap",
+  "$id": "https://commongateway.nl/woo.sitemap.schema.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+  "version": "0.0.1",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "loc": {
+        "type": "string"
+    },
+    "lastmod": {
+        "type": "string"
+    },
+    "changefreq": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string"
+    }
+  }
+}

@@ -1,5 +1,15 @@
 {
   "installationService": "CommonGateway\\WOOBundle\\Service\\InstallationService",
+  "templates": [
+    {
+      "$id": "https://commongateway.nl/Template/woo.robot.txt.template.json",
+      "version": "0.0.1",
+      "name": "Robot.txt",
+      "description": "The template for a robot.txt file",
+      "content": "Sitemap: {{ body.location }}",
+      "supportedSchemas": ["https://commongateway.nl/woo.sitemap.schema.json"]
+    }
+  ],
   "endpoints": {
     "schemas": [
       {
@@ -40,6 +50,36 @@
         "methods": ["GET"],
         "throws": [
           "woo.file.view"
+        ]
+      },
+      {
+        "$id": "https://commongateway.nl/woo.sitemap.endpoint.json",
+        "version": "0.0.1",
+        "reference": "https://commongateway.nl/woo.sitemap.schema.json",
+        "path": "sitemaps",
+        "methods": ["GET"],
+        "throws": [
+          "woo.get.sitemap"
+        ]
+      },
+      {
+        "$id": "https://commongateway.nl/woo.sitemapindex.endpoint.json",
+        "version": "0.0.1",
+        "reference": "https://commongateway.nl/woo.sitemap.schema.json",
+        "path": "sitemapindex-diwoo-infocat",
+        "methods": ["GET"],
+        "throws": [
+          "woo.sitemapindex"
+        ]
+      },
+      {
+        "$id": "https://commongateway.nl/woo.robot.txt.endpoint.json",
+        "version": "0.0.1",
+        "reference": "https://commongateway.nl/woo.sitemap.schema.json",
+        "path": "robot",
+        "methods": ["GET"],
+        "throws": [
+          "woo.get.robot.txt"
         ]
       }
     ]
