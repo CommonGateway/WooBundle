@@ -8,7 +8,7 @@
     "properties": {
         "id": {
             "type": "string",
-            "description": "Identificatie nummer"
+            "description": "identificatienummer"
         },
         "titel": {
             "type": "string",
@@ -43,7 +43,7 @@
             "type": "object",
             "$ref": "https://commongateway.nl/woo.organisatie.schema.json",
             "format": "json",
-            "description": "De organisatie waarvan deze publicatie is. Een organisatie met een oin nummer is nodig als je daarop later wilt filteren."
+            "description": "De organisatie waarvan deze publicatie is. Een organisatie met een OIN-nummer is nodig als je daarop later wilt filteren."
         },
         "bijlagen": {
             "type": "array",
@@ -57,7 +57,7 @@
             "type": "object",
             "$ref": "https://commongateway.nl/woo.metadata.schema.json",
             "format": "json",
-            "description": "In de metadata zijn er velden met data te vinden die niet voor alle typen publicaties standaard gevuld zouden zijn."
+            "description": "In de metadata zijn velden aanwezig die data bevatten welke niet standaard ingevuld zijn voor alle typen publicaties."
         },
         "themas": {
             "type": "array",

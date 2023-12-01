@@ -9,7 +9,7 @@
   "properties": {
     "volgnummer": {
         "type": "string",
-        "description": "Extra identificatie nummer van de publicatie."
+        "description": "Extra identificatienummer van de publicatie."
     },
     "besluitdatum": {
         "type": "string",

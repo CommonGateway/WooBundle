@@ -8,23 +8,23 @@
     "properties": {
         "id": {
             "type": "string",
-            "description": "Identificatie nummer"
+            "description": "identificatienummer"
         },
         "uuid": {
             "type": "string",
-            "description": "UUID Identificatie nummer"
+            "description": "UUID identificatienummer"
         },
         "oin": {
             "type": "string",
-            "description": "OIN nummer van de organisatie te vinden in het register van Logius."
+            "description": "Organisatie-identificatienummer (OIN) van de organisatie in het register van Logius"
         },
         "tooi": {
             "type": "string",
-            "description": "TOOI nummer van de organisatie."
+            "description": "TOOI-nummer van de organisatie."
         },
         "rsin": {
             "type": "string",
-            "description": "RSIN nummer van de organisatie."
+            "description": "RSIN-nummer van de organisatie."
         },
         "naam": {
             "type": "string",

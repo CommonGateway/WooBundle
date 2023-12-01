@@ -9,7 +9,7 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "Identificatie nummer"
+      "description": "identificatienummer"
     },
     "titel": {
       "type": "string",
@@ -19,7 +19,7 @@
     "url": {
       "type": "string",
       "format": "url",
-      "description": "De bekijk url van deze bijlage, dit zou een link moeten zijn wat in je browser de bijlage download of bekijkt."
+      "description": "De URL voor het bekijken van deze bijlage; dit zou een link moeten zijn die, wanneer geopend in een browser, de bijlage downloadt of weergeeft."
     },
     "status": {
       "type": "string",
