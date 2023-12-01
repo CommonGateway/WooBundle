@@ -193,11 +193,8 @@ class SitemapService
      */
     public function getRobot(string $queryKey, array $query): array
     {
-        $mapping       = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.robot.txt.mapping.json', 'common-gateway/woo-bundle');
         $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
-        if ($sitemapSchema instanceof Schema === false
-            || $mapping instanceof Mapping === false
-        ) {
+        if ($sitemapSchema instanceof Schema === false) {
             $this->logger->error('The publication schema or the sitemap mapping cannot be found.');
             return $this->data;
         }
