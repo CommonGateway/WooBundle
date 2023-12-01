@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 /**
  * Service responsible for woo sitemaps, sitemapindex and robot.txt.
  *
- * @author  Conduction BV (info@conduction.nl), Barry Brands (barry@conduction.nl).
+ * @author  Conduction BV (info@conduction.nl), Sarai Misidjan (sarai@conduction.nl).
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
  * @package  CommonGateway\WOOBundle
@@ -109,10 +109,6 @@ class SitemapService
         $this->applicationService = $applicationService;
 
     }//end __construct()
-
-
-    // Get applicationService -> getApplication->getDomain
-
 
     /**
      * Generates a sitemap for the given organization
