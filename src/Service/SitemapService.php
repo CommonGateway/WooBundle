@@ -110,6 +110,7 @@ class SitemapService
 
     }//end __construct()
 
+
     /**
      * Generates a sitemap for the given organization
      *
