@@ -1,5 +1,15 @@
 {
   "installationService": "CommonGateway\\WOOBundle\\Service\\InstallationService",
+  "templates": [
+    {
+      "$id": "https://commongateway.nl/Template/woo.robot.txt.template.json",
+      "version": "0.0.1",
+      "name": "Robot.txt",
+      "description": "The template for a robot.txt file",
+      "content": "Sitemap: {{ body.location }}",
+      "supportedSchemas": ["https://commongateway.nl/woo.sitemap.schema.json"]
+    }
+  ],
   "endpoints": {
     "schemas": [
       {
