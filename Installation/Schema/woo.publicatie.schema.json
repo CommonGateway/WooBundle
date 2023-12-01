@@ -33,7 +33,7 @@
             "description": "De portalUrl is een url naar de frontend detail pagina van deze publicatie en moet dus een url zijn."
         },
         "publicatiedatum": {
-            "description": "De publicatiedatum is wanneer het de publicatie gepubliceerrd is. Dat mag nooit in de toekomst zijn.",
+            "description": "De publicatiedatum is wanneer het de publicatie gepubliceerd is. Dat mag nooit in de toekomst zijn.",
             "type": "string",
             "maxDate": "now",
             "required": true
