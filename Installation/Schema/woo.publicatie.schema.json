@@ -12,7 +12,8 @@
         },
         "titel": {
             "type": "string",
-            "description": "Titel van de publicatie"
+            "description": "Titel van de publicatie, dit veld moet ingevuld zijn.",
+            "required": true
         },
         "beschrijving": {
             "type": "string",
@@ -25,7 +26,7 @@
         "categorie": {
             "type": "string",
             "required": true,
-            "description": "De categorie is bijvoorbeeld dat de publicatie een \"Woo publicatie\" is of bijvoorbeeld een \"Convenant\". Er kunnen meerdere categorieen zijn dan deze 2 voorbeelden."
+            "description": "De categorie is bijvoorbeeld dat de publicatie een \"Woo publicatie\" is of bijvoorbeeld een \"Convenant\". Er kunnen meerdere categorieen zijn dan deze 2 voorbeelden. Dit veld moet ingevuld zijn."
         },
         "portalUrl": {
             "type": "string",
@@ -33,7 +34,7 @@
             "description": "De portalUrl is een url naar de frontend detail pagina van deze publicatie en moet dus een url zijn."
         },
         "publicatiedatum": {
-            "description": "De publicatiedatum is wanneer het de publicatie gepubliceerd is. Dat mag nooit in de toekomst zijn.",
+            "description": "De publicatiedatum is wanneer het de publicatie gepubliceerd is. Dat mag nooit in de toekomst zijn. Dit veld moet ingevuld zijn.",
             "type": "string",
             "maxDate": "now",
             "required": true
@@ -69,6 +70,7 @@
     },
     "required": [
         "categorie",
-        "publicatiedatum"
+        "publicatiedatum",
+        "titel"
     ]
 }
