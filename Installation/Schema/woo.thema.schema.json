@@ -2,20 +2,23 @@
   "title": "Thema",
   "$id": "https://commongateway.nl/woo.thema.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "object",
   "description": "",
   "required": ["hoofdthema"],
   "properties": {
     "hoofdthema": {
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "Het thema wat het meest past bij de publicatie."
     },
     "subthema": {
-      "type": "string"
+      "type": "string",
+      "description": "Het thema waar de publicatie deels of minder over gaat dan het hoofdthema"
     },
     "aanvullendThema": {
-      "type": "string"
+      "type": "string",
+      "description": "Het thema wat mogelijk het minst benoemd wordt in de publicatie."
     }
   }
 }

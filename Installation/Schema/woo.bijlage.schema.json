@@ -2,31 +2,36 @@
   "title": "Bijlage",
   "$id": "https://commongateway.nl/woo.bijlage.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "object",
   "description": "",
   "required": ["titel"],
   "properties": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "description": "Identificatie nummer"
     },
     "titel": {
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "Titel van deze bijlage"
     },
     "url": {
       "type": "string",
-      "format": "url"
+      "format": "url",
+      "description": "De bekijk url van deze bijlage, dit zou een link moeten zijn wat in je browser de bijlage download of bekijkt."
     },
     "status": {
-      "type": "string"
+      "type": "string",
+      "description": "Status van deze bijlage"
     },
     "type": {
       "type": "string",
-      "description": "mime-type"
+      "description": "mime-type van deze bijlage oftewel bestandsextensie bijv (.pdf)"
     },
     "categorie": {
-      "type": "string"
+      "type": "string",
+      "description": "Categorie van deze bijlage"
     }
   }
 }

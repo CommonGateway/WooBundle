@@ -2,28 +2,34 @@
     "title": "Organisatie",
     "$id": "https://commongateway.nl/woo.organisatie.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "object",
     "description": "",
     "properties": {
         "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Identificatie nummer"
         },
         "uuid": {
-            "type": "string"
+            "type": "string",
+            "description": "UUID Identificatie nummer"
         },
         "oin": {
-            "type": "string"
+            "type": "string",
+            "description": "OIN nummer van de organisatie te vinden in het register van Logius."
         },
         "tooi": {
-            "type": "string"
+            "type": "string",
+            "description": "TOOI nummer van de organisatie."
         },
         "rsin": {
-            "type": "string"
+            "type": "string",
+            "description": "RSIN nummer van de organisatie."
         },
         "naam": {
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "De naam van deze organisatie"
         }
     },
     "required": [

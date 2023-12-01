@@ -2,38 +2,44 @@
   "title": "Verzoek",
   "$id": "https://commongateway.nl/woo.verzoek.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "object",
   "description": "Verzoek object.",
   "required": [],
   "properties": {
     "status": {
-        "type": "string"
+        "type": "string",
+        "description": "Status van de publicatie."
     },
     "besluit": {
         "type": "object",
         "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
-        "format": "json"
+        "format": "json",
+        "description": "Besluit bijlage van deze publicatie."
     },
     "informatieverzoek": {
       "type": "object",
       "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
-      "format": "json"
+      "format": "json",
+      "description": "Informatieverzoek bijlage van deze publicatie."
     },
     "inventarisatielijst": {
       "type": "object",
       "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
-      "format": "json"
+      "format": "json",
+      "description": "Inventarisatielijst bijlage van deze publicatie."
     },
     "ontvangerInformatieverzoek": {
-      "type": "string"
+      "type": "string",
+      "description": "De ontvanger van het informatieverzoek."
     },
     "ontvangstdatum": {
       "type": "string",
-      "description": "format: Y-m-d"
+      "description": "De datum waarop deze publicatie ontvangen is bij de ontvanger"
     },
     "termijnoverschrijding": {
-      "type": "string"
+      "type": "string",
+      "description": "Besluit bijlage van deze publicatie."
     }
   }
 }
