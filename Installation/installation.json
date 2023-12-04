@@ -1,12 +1,24 @@
 {
   "installationService": "CommonGateway\\WOOBundle\\Service\\InstallationService",
+  "applications": [
+    {
+      "title": "Woo default application",
+      "$id": "https://docs.commongateway.nl/application/default.application.json",
+      "$schema": "https://docs.commongateway.nl/schemas/Application.schema.json",
+      "version": "0.0.1",
+      "description": "The woo application. (Domain is used in the robot.txt file).",
+      "domains": [
+        "https://api.gateway.commonground.nu"
+      ]
+    }
+  ],
   "templates": [
     {
       "$id": "https://commongateway.nl/Template/woo.robot.txt.template.json",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "name": "Robot.txt",
       "description": "The template for a robot.txt file",
-      "content": "Sitemap: {{ body.location }}",
+      "content": "Sitemap: {{ object.location }}",
       "supportedSchemas": ["https://commongateway.nl/woo.sitemap.schema.json"]
     }
   ],

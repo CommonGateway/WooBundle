@@ -195,7 +195,7 @@ class SitemapService
     {
         $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         if ($sitemapSchema instanceof Schema === false) {
-            $this->logger->error('The publication schema or the sitemap mapping cannot be found.');
+            $this->logger->error('The sitemap schema cannot be found.');
             return $this->data;
         }
 
@@ -204,7 +204,7 @@ class SitemapService
 
         // The location of the robot.txt file is the endpoint of the sitemapindex.
         // TODO: Get the type of the sitemapindex.
-        $robotArray['location'] = 'https://'.$domain.'/api/sitemapindex-diwoo-infocat?'.$queryKey.'='.$query[$queryKey];
+        $robotArray['location'] = $domain.'/api/sitemapindex-diwoo-infocat?'.$queryKey.'='.$query[$queryKey];
         // Set the id of the schema to the array so that the downloadService can work with that.
         $robotArray['_self']['schema']['id'] = $sitemapSchema->getId()->toString();
         $robot                               = $this->downloadService->render($robotArray);
