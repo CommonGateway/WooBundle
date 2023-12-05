@@ -1,0 +1,27 @@
+{
+  "title": "Sitemap index informatie categorie",
+  "$id": "https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "description": "maps informatiecategorie from https://standaarden.overheid.nl/diwoo/metadata/diwoo-handleiding-sitemapindex-en-sitemaps",
+  "mapping": {
+    "001": "Wetten en algemeen verbindende voorschriften",
+    "002": "Overige besluiten van algemene strekking",
+    "003": "Ontwerpen van wet- en regelgeving met adviesaanvraag",
+    "004": "Organisatie en werkwijze",
+    "005": "Bereikbaarheidsgegevens",
+    "006": "Bij vertegenwoordigende organen ingekomen stukken",
+    "007": "Vergaderstukken Staten-Generaal",
+    "008": "Vergaderstukken decentrale overheden",
+    "009": "Agenda's en besluitenlijsten bestuurscolleges",
+    "010": "Adviezen",
+    "011": "Convenanten",
+    "012": "Jaarplannen en jaarverslagen",
+    "013": "Subsidieverplichtingen anders dan met beschikking",
+    "014": "Woo verzoek",
+    "015": "Onderzoeksrapporten",
+    "016": "Beschikkingen",
+    "017": "Klachtoordelen"
+  }
+}

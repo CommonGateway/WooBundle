@@ -132,27 +132,20 @@ class SitemapService
 
         // Get the query from the call. This has to be any identification for an organization.
         $query = $this->data['query'];
-
-        if ($this->configuration['type'] === 'sitemap' && isset($query['_page']) === true) {
-            $page = $query['_page'];
-            unset($query['_page']);
-        }
-
-        if (count($query) !== 1) {
-            $this->logger->error('There are more than one or zero query parameters given. Not counting ?_page= query', ['plugin' => 'common-gateway/woo-bundle']);
+        if (isset($query['oin']) === false) {
+            $this->logger->error('The oin query parameter is missing.', ['plugin' => 'common-gateway/woo-bundle']);
+            // Return the error message response.
+            $this->data['response'] = $this->createResponse(['Message' => 'The oin query parameter is missing.'], 400, 'urlset');
             return $this->data;
         }
-
-        // Get the key of the given query.
-        $queryKey = key($query);
+        
         switch ($this->configuration['type']) {
         case 'sitemap':
-            $query['_page'] = ($page ?? 1);
-            return $this->getSitemap($queryKey, $query);
+            return $this->getSitemap($query);
         case 'sitemapindex':
-            return $this->getSitemapindex($queryKey, $query);
+            return $this->getSitemapindex($query);
         case 'robot.txt':
-            return $this->getRobot($queryKey, $query);
+            return $this->getRobot($query);
         default:
             $this->logger->error('There are more than one or zero query items given.', ['plugin' => 'common-gateway/woo-bundle']);
         }
@@ -165,34 +158,29 @@ class SitemapService
     /**
      * Generates a sitemap for the given organization
      *
-     * @param string $queryKey The key of the query from the request.
      * @param array  $query    The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getSitemap(string $queryKey, array $query): array
+    private function getSitemap(array $query): array
     {
         // TODO: Generate the sitemaps with the type.
         // Get the publication schema and the sitemap mapping.
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
-        if ($publicatieSchema instanceof Schema === false
-            || $mapping instanceof Mapping === false
-        ) {
+        if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false) {
             $this->logger->error('The publication schema or the sitemap mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
+        
+        $filter = array_merge($query, [
+            'organisatie.oin' => $query['oin'],
+            '_limit'          => 50000,
+        ]);
+        unset($filter['oin']);
 
         // Get all the publication objects with the given query.
-        $objects = $this->cacheService->searchObjects(
-            null,
-            [
-                'organisatie.'.$queryKey => $query[$queryKey],
-                '_limit'                 => 50000,
-                '_page'                  => $query['_page'],
-            ],
-            [$publicatieSchema->getId()->toString()]
-        )['results'];
+        $objects = $this->cacheService->searchObjects(null, $filter, [$publicatieSchema->getId()->toString()])['results'];
 
         $sitemap = [];
         foreach ($objects as $object) {
@@ -211,37 +199,42 @@ class SitemapService
     /**
      * Generates a sitemapindex for the given organization
      *
-     * @param string $queryKey The key of the query from the request.
      * @param array  $query    The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getSitemapindex(string $queryKey, array $query): array
+    private function getSitemapindex(array $query): array
     {
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
-        if ($publicatieSchema instanceof Schema === false
-            || $mapping instanceof Mapping === false
-        ) {
-            $this->logger->error('The publication schema or the sitemap index mapping cannot be found.');
+        $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json', 'common-gateway/woo-bundle');
+        
+        if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false || $categorieMapping instanceof Mapping === false) {
+            $this->logger->error('The publication schema, the sitemap index mapping or categorie mapping cannot be found.');
             return $this->data;
         }
-
+        
+        $filter = array_merge($query, ['organisatie.oin' => $query['oin']]);
+        unset($filter['oin']);
+        
+        if (isset($query['informatiecategorie']) === true) {
+            $categorie = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
+            $filter['categorie'] = $categorie[$query['informatiecategorie']];
+            unset($filter['informatiecategorie']);
+        }
+        
+        // Count all the publication objects with the given query.
+        $count = $this->cacheService->countObjects(null, $filter, [$publicatieSchema->getId()->toString()]);
+        $pages = ((int) (($count - 1) / 50000) + 1);
+        
         // Get the domain of the request.
         $domain = $this->applicationService->getApplication()->getDomains()[0];
-
-        // Count all the publication objects with the given query.
-        $count = $this->cacheService->countObjects(
-            null,
-            ['organisatie.'.$queryKey => $query[$queryKey]],
-            [$publicatieSchema->getId()->toString()]
-        );
-        $pages = ((int) (($count - 1) / 50000) + 1);
-
+        
+        $sitemapindex = [];
         for ($i = 1; $i <= $pages; $i++) {
             // TODO: Get the type of the sitemapindex.
             // The location of the sitemap file is the endpoint of the sitemap.
-            $location['location']      = 'https://'.$domain.'/api/sitemaps?'.$queryKey.'='.$query[$queryKey].'&_page='.$i;
+            $location['location']      = 'https://'.$domain.'/api/sitemaps?oin='.$query['oin'].'&_page='.$i;
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
         }
 
@@ -255,12 +248,11 @@ class SitemapService
     /**
      * Generates a robot.txt for the given organization
      *
-     * @param string $queryKey The key of the query from the request.
      * @param array  $query    The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getRobot(string $queryKey, array $query): array
+    private function getRobot(array $query): array
     {
         $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         if ($sitemapSchema instanceof Schema === false) {
@@ -273,7 +265,7 @@ class SitemapService
 
         // The location of the robot.txt file is the endpoint of the sitemapindex.
         // TODO: Get the type of the sitemapindex.
-        $robotArray['location'] = $domain.'/api/sitemapindex-diwoo-infocat?'.$queryKey.'='.$query[$queryKey];
+        $robotArray['location'] = $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'];
         // Set the id of the schema to the array so that the downloadService can work with that.
         $robotArray['_self']['schema']['id'] = $sitemapSchema->getId()->toString();
         $robot                               = $this->downloadService->render($robotArray);
