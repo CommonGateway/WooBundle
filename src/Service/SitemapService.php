@@ -126,7 +126,8 @@ class SitemapService
 
         // Get the type from the action so that we know what to generate.
         if (key_exists('type', $this->configuration) === false) {
-            $this->logger->error('The type in the configuration of the action is not given.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->logger->error('The type in the configuration of the action is not set.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'The type in the configuration of the action is not set.'], 409, 'error');
             return $this->data;
         }
 
@@ -135,7 +136,7 @@ class SitemapService
         if (isset($query['oin']) === false) {
             $this->logger->error('The oin query parameter is missing.', ['plugin' => 'common-gateway/woo-bundle']);
             // Return the error message response.
-            $this->data['response'] = $this->createResponse(['Message' => 'The oin query parameter is missing.'], 400, 'urlset');
+            $this->data['response'] = $this->createResponse(['Message' => 'The oin query parameter is missing.'], 400, 'error');
             return $this->data;
         }
 
@@ -147,9 +148,10 @@ class SitemapService
         case 'robot.txt':
             return $this->getRobot($query);
         default:
-            $this->logger->error('There are more than one or zero query items given.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
-
+        
+        $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
         return $this->data;
 
     }//end sitemapHandler()
@@ -170,6 +172,7 @@ class SitemapService
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
         if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false) {
             $this->logger->error('The publication schema or the sitemap mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'The publication schema or the sitemap mapping cannot be found.'], 409, 'error');
             return $this->data;
         }
 
@@ -214,6 +217,7 @@ class SitemapService
 
         if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false || $categorieMapping instanceof Mapping === false) {
             $this->logger->error('The publication schema, the sitemap index mapping or categorie mapping cannot be found.');
+            $this->data['response'] = $this->createResponse(['Message' => 'The publication schema, the sitemap index mapping or categorie mapping cannot be found.'], 409, 'error');
             return $this->data;
         }
 
@@ -262,6 +266,7 @@ class SitemapService
         $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         if ($sitemapSchema instanceof Schema === false) {
             $this->logger->error('The sitemap schema cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'The sitemap schema cannot be found.'], 409, 'error');
             return $this->data;
         }
 
