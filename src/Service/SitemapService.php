@@ -138,7 +138,7 @@ class SitemapService
             $this->data['response'] = $this->createResponse(['Message' => 'The oin query parameter is missing.'], 400, 'urlset');
             return $this->data;
         }
-        
+
         switch ($this->configuration['type']) {
         case 'sitemap':
             return $this->getSitemap($query);
@@ -158,7 +158,7 @@ class SitemapService
     /**
      * Generates a sitemap for the given organization
      *
-     * @param array  $query    The query array from the request.
+     * @param array $query The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
@@ -172,11 +172,14 @@ class SitemapService
             $this->logger->error('The publication schema or the sitemap mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
-        
-        $filter = array_merge($query, [
-            'organisatie.oin' => $query['oin'],
-            '_limit'          => 50000,
-        ]);
+
+        $filter = array_merge(
+            $query,
+            [
+                'organisatie.oin' => $query['oin'],
+                '_limit'          => 50000,
+            ]
+        );
         unset($filter['oin']);
 
         // Get all the publication objects with the given query.
@@ -199,7 +202,7 @@ class SitemapService
     /**
      * Generates a sitemapindex for the given organization
      *
-     * @param array  $query    The query array from the request.
+     * @param array $query The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
@@ -208,28 +211,28 @@ class SitemapService
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
         $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json', 'common-gateway/woo-bundle');
-        
+
         if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false || $categorieMapping instanceof Mapping === false) {
             $this->logger->error('The publication schema, the sitemap index mapping or categorie mapping cannot be found.');
             return $this->data;
         }
-        
+
         $filter = array_merge($query, ['organisatie.oin' => $query['oin']]);
         unset($filter['oin']);
-        
+
         if (isset($query['informatiecategorie']) === true) {
-            $categorie = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
+            $categorie           = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
             $filter['categorie'] = $categorie[$query['informatiecategorie']];
             unset($filter['informatiecategorie']);
         }
-        
+
         // Count all the publication objects with the given query.
         $count = $this->cacheService->countObjects(null, $filter, [$publicatieSchema->getId()->toString()]);
         $pages = ((int) (($count - 1) / 50000) + 1);
-        
+
         // Get the domain of the request.
         $domain = $this->applicationService->getApplication()->getDomains()[0];
-        
+
         $sitemapindex = [];
         for ($i = 1; $i <= $pages; $i++) {
             // TODO: Get the type of the sitemapindex.
@@ -248,7 +251,7 @@ class SitemapService
     /**
      * Generates a robot.txt for the given organization
      *
-     * @param array  $query    The query array from the request.
+     * @param array $query The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
