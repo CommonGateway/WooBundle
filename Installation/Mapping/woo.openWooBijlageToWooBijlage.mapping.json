@@ -2,7 +2,7 @@
   "title": "OpenWooBijlageToWooBijlage",
   "$id": "https://commongateway.nl/mapping/woo.openWooBijlageToWooBijlage.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "passTrough": false,
   "mapping": {
     "_sourceId": "URL_Bijlage",
@@ -11,8 +11,8 @@
     "status": "Status_Bijlage"
   },
   "unset": {
-    "titel": "unsetIfValue==",
-    "url": "unsetIfValue==",
-    "status": "unsetIfValue=="
+    "titel": "unsetIfValue==Titel_Bijlage",
+    "url": "unsetIfValue==URL_Bijlage",
+    "status": "unsetIfValue==Status_Bijlage"
   }
 }

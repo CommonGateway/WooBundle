@@ -2,22 +2,24 @@
   "title": "Metadata",
   "$id": "https://commongateway.nl/woo.metadata.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "object",
   "description": "Metadata object for Woo object",
   "required": [],
   "properties": {
     "volgnummer": {
-        "type": "string"
+        "type": "string",
+        "description": "Extra identificatienummer van de publicatie."
     },
     "besluitdatum": {
         "type": "string",
-        "description": "format: Y-m-d"
+        "description": "Datum waarop het besluit genomen is op deze publicatie."
     },
     "verzoek": {
         "type": "object",
         "$ref": "https://commongateway.nl/woo.verzoek.schema.json",
-        "format": "json"
+        "format": "json",
+        "description": "Datum waarop het besluit genomen is op deze publicatie."
     }
   }
 }

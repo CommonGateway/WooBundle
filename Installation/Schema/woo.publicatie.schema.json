@@ -2,32 +2,39 @@
     "title": "Publicatie",
     "$id": "https://commongateway.nl/woo.publicatie.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "object",
     "description": "",
     "properties": {
         "id": {
-            "type": "string"
+            "type": "string",
+            "description": "identificatienummer"
         },
         "titel": {
-            "type": "string"
+            "type": "string",
+            "description": "Titel van de publicatie, dit veld moet ingevuld zijn.",
+            "required": true
         },
         "beschrijving": {
-            "type": "string"
+            "type": "string",
+            "description": "In de beschrijving kan een langere tekst over de publicatie neergezet worden."
         },
         "samenvatting": {
-            "type": "string"
+            "type": "string",
+            "description": "In de samenvatting kan een wat kortere tekst over de publicatie neergezet worden."
         },
         "categorie": {
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "De categorie is bijvoorbeeld dat de publicatie een \"Woo publicatie\" is of bijvoorbeeld een \"Convenant\". Er kunnen meerdere categorieen zijn dan deze 2 voorbeelden. Dit veld moet ingevuld zijn."
         },
         "portalUrl": {
             "type": "string",
-            "format": "url"
+            "format": "url",
+            "description": "De portalUrl is een url naar de frontend detail pagina van deze publicatie en moet dus een url zijn."
         },
         "publicatiedatum": {
-            "description": "Publicatiedatum van een Woo object is nooit in de toekomst.",
+            "description": "De publicatiedatum is wanneer het de publicatie gepubliceerd is. Dat mag nooit in de toekomst zijn. Dit veld moet ingevuld zijn.",
             "type": "string",
             "maxDate": "now",
             "required": true
@@ -35,30 +42,35 @@
         "organisatie": {
             "type": "object",
             "$ref": "https://commongateway.nl/woo.organisatie.schema.json",
-            "format": "json"
+            "format": "json",
+            "description": "De organisatie waarvan deze publicatie is. Een organisatie met een OIN-nummer is nodig als je daarop later wilt filteren."
         },
         "bijlagen": {
             "type": "array",
             "items": {
                 "$ref": "https://commongateway.nl/woo.bijlage.schema.json"
             },
-            "format": "json"
+            "format": "json",
+            "description": "De bijlagen oftewel documenten van deze publicatie."
         },
         "metadata": {
             "type": "object",
             "$ref": "https://commongateway.nl/woo.metadata.schema.json",
-            "format": "json"
+            "format": "json",
+            "description": "In de metadata zijn velden aanwezig die data bevatten welke niet standaard ingevuld zijn voor alle typen publicaties."
         },
         "themas": {
             "type": "array",
             "items": {
                 "$ref": "https://commongateway.nl/woo.thema.schema.json"
             },
-            "format": "json"
+            "format": "json",
+            "description": "De themas waar deze publicatie onder valt."
         }
     },
     "required": [
         "categorie",
-        "publicatiedatum"
+        "publicatiedatum",
+        "titel"
     ]
 }
