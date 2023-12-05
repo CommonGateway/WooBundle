@@ -219,10 +219,12 @@ class SitemapService
 
         $filter = array_merge($query, ['organisatie.oin' => $query['oin']]);
         unset($filter['oin']);
-
+        
+        $categorieStr = '';
         if (isset($query['informatiecategorie']) === true) {
             $categorie           = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
             $filter['categorie'] = $categorie[$query['informatiecategorie']];
+            $categorieStr = '&categorie='.$categorie[$query['informatiecategorie']];
             unset($filter['informatiecategorie']);
         }
 
@@ -237,7 +239,7 @@ class SitemapService
         for ($i = 1; $i <= $pages; $i++) {
             // TODO: Get the type of the sitemapindex.
             // The location of the sitemap file is the endpoint of the sitemap.
-            $location['location']      = 'https://'.$domain.'/api/sitemaps?oin='.$query['oin'].'&_page='.$i;
+            $location['location']      = 'https://'.$domain.'/api/sitemaps?oin='.$query['oin'].$categorieStr.'&_page='.$i;
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
         }
 
