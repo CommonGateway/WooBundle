@@ -23,7 +23,7 @@ use App\Entity\Gateway as Source;
 /**
  * Service responsible for synchronizing OpenWoo objects to woo objects.
  *
- * @author  Conduction BV (info@conduction.nl), Barry Brands (barry@conduction.nl).
+ * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>.
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
  * @package  CommonGateway\WOOBundle

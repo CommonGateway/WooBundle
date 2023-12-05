@@ -12,7 +12,7 @@ use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 /**
  * ActionHandler that generates a sitemap, sitemapindex and robot.txt.
  *
- * @author  Conduction BV (info@conduction.nl), Sarai Misidjan (sarai@conduction.nl)
+ * @author  Conduction BV <info@conduction.nl>, Sarai Misidjan <sarai@conduction.nl>
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
  * @package  CommonGateway\WOOBundle
