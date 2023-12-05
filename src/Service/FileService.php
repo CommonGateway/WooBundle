@@ -16,7 +16,7 @@ use App\Entity\Gateway as Source;
 /**
  * Service responsible for woo files.
  *
- * @author  Conduction BV (info@conduction.nl), Barry Brands (barry@conduction.nl).
+ * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>.
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
  * @package  CommonGateway\WOOBundle
@@ -114,12 +114,12 @@ class FileService
     {
         try {
             isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case $caseId");
-            $this->logger->info("Fetching inhoud document: $documentId for case $caseId");
+            $this->logger->info("Fetching inhoud document: $documentId for case $caseId", ['plugin' => 'common-gateway/woo-bundle']);
             $response = $this->callService->call($zaaksysteem, "/v1/case/$caseId/document/$documentId/download", 'GET', [], false);
             return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType);
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
-            $this->logger->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
+            $this->logger->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
             return null;
         }
 
