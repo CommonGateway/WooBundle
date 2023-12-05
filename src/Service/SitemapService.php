@@ -150,7 +150,7 @@ class SitemapService
         default:
             $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
-        
+
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
         return $this->data;
 
