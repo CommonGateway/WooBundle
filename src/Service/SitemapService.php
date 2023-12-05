@@ -109,8 +109,8 @@ class SitemapService
         $this->applicationService = $applicationService;
 
     }//end __construct()
-    
-    
+
+
     /**
      * Generates a sitemap, sitemapindex or robot.txt for the given organization
      *
@@ -123,42 +123,42 @@ class SitemapService
     {
         $this->data          = $data;
         $this->configuration = $configuration;
-        
+
         // Get the type from the action so that we know what to generate.
         if (key_exists('type', $this->configuration) === false) {
             $this->logger->error('The type in the configuration of the action is not given.', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
-        
+
         // Get the query from the call. This has to be any identification for an organization.
         $query = $this->data['query'];
-        
+
         if ($this->configuration['type'] === 'sitemap' && isset($query['_page']) === true) {
             $page = $query['_page'];
             unset($query['_page']);
         }
-        
+
         if (count($query) !== 1) {
             $this->logger->error('There are more than one or zero query parameters given. Not counting ?_page= query', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
-        
+
         // Get the key of the given query.
         $queryKey = key($query);
         switch ($this->configuration['type']) {
-            case 'sitemap':
-                $query['_page'] = $page ?? 1;
-                return $this->getSitemap($queryKey, $query);
-            case 'sitemapindex':
-                return $this->getSitemapindex($queryKey, $query);
-            case 'robot.txt':
-                return $this->getRobot($queryKey, $query);
-            default:
-                $this->logger->error('There are more than one or zero query items given.', ['plugin' => 'common-gateway/woo-bundle']);
+        case 'sitemap':
+            $query['_page'] = ($page ?? 1);
+            return $this->getSitemap($queryKey, $query);
+        case 'sitemapindex':
+            return $this->getSitemapindex($queryKey, $query);
+        case 'robot.txt':
+            return $this->getRobot($queryKey, $query);
+        default:
+            $this->logger->error('There are more than one or zero query items given.', ['plugin' => 'common-gateway/woo-bundle']);
         }
-        
+
         return $this->data;
-        
+
     }//end sitemapHandler()
 
 
@@ -186,7 +186,11 @@ class SitemapService
         // Get all the publication objects with the given query.
         $objects = $this->cacheService->searchObjects(
             null,
-            ['organisatie.'.$queryKey => $query[$queryKey], '_limit' => 50000, '_page' => $query['_page']],
+            [
+                'organisatie.'.$queryKey => $query[$queryKey],
+                '_limit'                 => 50000,
+                '_page'                  => $query['_page'],
+            ],
             [$publicatieSchema->getId()->toString()]
         )['results'];
 
@@ -225,15 +229,15 @@ class SitemapService
 
         // Get the domain of the request.
         $domain = $this->applicationService->getApplication()->getDomains()[0];
-        
+
         // Count all the publication objects with the given query.
         $count = $this->cacheService->countObjects(
             null,
             ['organisatie.'.$queryKey => $query[$queryKey]],
             [$publicatieSchema->getId()->toString()]
         );
-        $pages = (int) (($count - 1) / 50000) + 1;
-        
+        $pages = ((int) (($count - 1) / 50000) + 1);
+
         for ($i = 1; $i <= $pages; $i++) {
             // TODO: Get the type of the sitemapindex.
             // The location of the sitemap file is the endpoint of the sitemap.
@@ -280,8 +284,8 @@ class SitemapService
         return $this->data;
 
     }//end getRobot()
-    
-    
+
+
     /**
      * Creates a response based on content.
      *
@@ -297,14 +301,15 @@ class SitemapService
         $xmlEncoder = new XmlEncoder(['xml_root_node_name' => $rootName]);
         $xml        = ['@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9'];
         $content    = array_merge($xml, $content);
-        
+
         $contentString = $xmlEncoder->encode($content, 'xml', ['xml_encoding' => 'utf-8', 'remove_empty_tags' => true]);
-        $contentString    = $this->replaceCdata($contentString);
-        
+        $contentString = $this->replaceCdata($contentString);
+
         return new Response($contentString, $status);
-        
+
     }//end createResponse()
-    
+
+
     /**
      * Removes CDATA from xml array content
      *
@@ -315,7 +320,7 @@ class SitemapService
     private function replaceCdata(string $contentString): string
     {
         $contentString = str_replace(["<![CDATA[", "]]>"], "", $contentString);
-        
+
         $contentString = preg_replace_callback(
             '/&amp;amp;amp;#([0-9]{3});/',
             function ($matches) {
@@ -323,9 +328,9 @@ class SitemapService
             },
             $contentString
         );
-        
+
         return $contentString;
-        
+
     }//end replaceCdata()
 
 
