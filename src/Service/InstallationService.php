@@ -56,7 +56,7 @@ class InstallationService implements InstallerInterface
      */
     public function install()
     {
-        $this->logger->debug("WOOBundle -> Install()");
+        $this->logger->debug("WOOBundle -> Install()", ['plugin' => 'common-gateway/woo-bundle']);
 
         $this->checkDataConsistency();
 
@@ -70,7 +70,7 @@ class InstallationService implements InstallerInterface
      */
     public function update()
     {
-        $this->logger->debug("WOOBundle -> Update()");
+        $this->logger->debug("WOOBundle -> Update()", ['plugin' => 'common-gateway/woo-bundle']);
 
         $this->checkDataConsistency();
 
@@ -84,7 +84,7 @@ class InstallationService implements InstallerInterface
      */
     public function uninstall()
     {
-        $this->logger->debug("WOOBundle -> Uninstall()");
+        $this->logger->debug("WOOBundle -> Uninstall()", ['plugin' => 'common-gateway/woo-bundle']);
 
         // Do some cleanup to uninstall correctly...
 

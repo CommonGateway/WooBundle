@@ -128,7 +128,7 @@ class SitemapService
         if ($publicatieSchema instanceof Schema === false
             || $mapping instanceof Mapping === false
         ) {
-            $this->logger->error('The publication schema or the sitemap mapping cannot be found.');
+            $this->logger->error('The publication schema or the sitemap mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
 
@@ -195,7 +195,7 @@ class SitemapService
     {
         $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         if ($sitemapSchema instanceof Schema === false) {
-            $this->logger->error('The sitemap schema cannot be found.');
+            $this->logger->error('The sitemap schema cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
 
@@ -232,14 +232,14 @@ class SitemapService
 
         // Get the type from the action so that we know what to generate.
         if (key_exists('type', $this->configuration) === false) {
-            $this->logger->error('The type in the configuration of the action is not given.');
+            $this->logger->error('The type in the configuration of the action is not given.', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
 
-        // Get the query from the call. This has to be any identification for a organization.
+        // Get the query from the call. This has to be any identification for an organization.
         $query = $this->data['query'];
         if (count($query) !== 1) {
-            $this->logger->error('There are more or null query items given.');
+            $this->logger->error('There are more than one or zero query items given.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         // Get the key of the given query.
@@ -247,15 +247,12 @@ class SitemapService
         switch ($this->configuration['type']) {
         case 'sitemap':
             return $this->getSitemap($queryKey, $query);
-                break;
         case 'sitemapindex':
             return $this->getSitemapindex($queryKey, $query);
-                break;
         case 'robot.txt':
             return $this->getRobot($queryKey, $query);
-                break;
         default:
-            // Throw an error.
+            $this->logger->error('There are more than one or zero query items given.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         return $this->data;
@@ -274,7 +271,7 @@ class SitemapService
      */
     public function createResponse(array $content, int $status, string $rootName): Response
     {
-        $this->logger->debug('Creating XML response');
+        $this->logger->debug('Creating XML response', ['plugin' => 'common-gateway/woo-bundle']);
         $xmlEncoder = new XmlEncoder(['xml_root_node_name' => $rootName]);
         $xml        = ['@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9'];
         $content    = array_merge($xml, $content);

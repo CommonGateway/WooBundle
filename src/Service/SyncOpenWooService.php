@@ -168,7 +168,7 @@ class SyncOpenWooService
         // If not it means the object does not exist in the source anymore and should be deleted here.
         $deletedObjectsCount = 0;
         foreach ($objectIdsToDelete as $key => $id) {
-            $this->logger->info("Object $id does not exist at the source, deleting.");
+            $this->logger->info("Object $id does not exist at the source, deleting.", ['plugin' => 'common-gateway/woo-bundle']);
             $this->entityManager->remove($existingObjects[$key]);
             $deletedObjectsCount++;
         }
@@ -231,7 +231,7 @@ class SyncOpenWooService
         $this->configuration = $configuration;
 
         isset($this->style) === true && $this->style->success('SyncOpenWooService triggered');
-        $this->logger->info('SyncOpenWooService triggered');
+        $this->logger->info('SyncOpenWooService triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
         if (isset($this->configuration['source']) === false
             || isset($this->configuration['oin']) === false
@@ -242,7 +242,7 @@ class SyncOpenWooService
             || isset($this->configuration['sourceEndpoint']) === false
         ) {
             isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler');
-            $this->logger->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler');
+            $this->logger->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler', ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }//end if
@@ -270,11 +270,11 @@ class SyncOpenWooService
         }
 
         isset($this->style) === true && $this->style->info("Fetching objects from {$source->getLocation()}");
-        $this->logger->info("Fetching objects from {$source->getLocation()}");
+        $this->logger->info("Fetching objects from {$source->getLocation()}", ['plugin' => 'common-gateway/woo-bundle']);
 
         $results = $this->fetchObjects($source, 1, [], $categorie);
         if (empty($results) === true) {
-            $this->logger->info('No results found, ending SyncOpenWooService');
+            $this->logger->info('No results found, ending SyncOpenWooService', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
 
@@ -298,7 +298,7 @@ class SyncOpenWooService
             $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
             if ($validationErrors !== null) {
                 $validationErrors = implode(', ', $validationErrors);
-                $this->logger->warning("SyncOpenWoo validation errors: $validationErrors");
+                $this->logger->warning("SyncOpenWoo validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
                 isset($this->style) === true && $this->style->warning("SyncOpenWoo validation errors: $validationErrors");
                 continue;
             }
@@ -334,7 +334,7 @@ class SyncOpenWooService
         $countItems = count($responseItems);
         $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
         isset($this->style) === true && $this->style->success($logMessage);
-        $this->logger->info($logMessage);
+        $this->logger->info($logMessage, ['plugin' => 'common-gateway/woo-bundle']);
 
         return $this->data;
 

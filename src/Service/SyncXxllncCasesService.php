@@ -176,7 +176,7 @@ class SyncXxllncCasesService
         // If not it means the object does not exist in the source anymore and should be deleted here.
         $deletedObjectsCount = 0;
         foreach ($objectIdsToDelete as $key => $id) {
-            $this->logger->info("Object $id does not exist at the source, deleting.");
+            $this->logger->info("Object $id does not exist at the source, deleting.", ['plugin' => 'common-gateway/woo-bundle']);
             $this->entityManager->remove($existingObjects[$key]);
             $deletedObjectsCount++;
         }
@@ -330,7 +330,7 @@ class SyncXxllncCasesService
         $this->configuration = $configuration;
 
         isset($this->style) === true && $this->style->success('SyncXxllncCasesService triggered');
-        $this->logger->info('SyncXxllncCasesService triggered');
+        $this->logger->info('SyncXxllncCasesService triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
         if (isset($this->configuration['source']) === false
             || isset($this->configuration['oin']) === false
@@ -342,7 +342,7 @@ class SyncXxllncCasesService
             || isset($this->configuration['zaaksysteemSearchEndpoint']) === false
         ) {
             isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
-            $this->logger->error('No source, schema, mapping, oin, organisatie, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
+            $this->logger->error('No source, schema, mapping, oin, organisatie, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler', ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }//end if
@@ -361,7 +361,7 @@ class SyncXxllncCasesService
         }//end if
 
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
-        $this->logger->info("Fetching cases from {$source->getLocation()}");
+        $this->logger->info("Fetching cases from {$source->getLocation()}", ['plugin' => 'common-gateway/woo-bundle']);
 
         $results = $this->fetchObjects($source);
         $this->entityManager->flush();
@@ -376,7 +376,7 @@ class SyncXxllncCasesService
             $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
             if ($validationErrors !== null) {
                 $validationErrors = implode(', ', $validationErrors);
-                $this->logger->warning("SyncXxllncCases validation errors: $validationErrors");
+                $this->logger->warning("SyncXxllncCases validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
                 isset($this->style) === true && $this->style->warning("SyncXxllncCases validation errors: $validationErrors");
                 continue;
             }
@@ -422,7 +422,7 @@ class SyncXxllncCasesService
         $countItems = count($responseItems);
         $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
         isset($this->style) === true && $this->style->success($logMessage);
-        $this->logger->info($logMessage);
+        $this->logger->info($logMessage, ['plugin' => 'common-gateway/woo-bundle']);
 
         return $this->data;
 
