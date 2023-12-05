@@ -219,12 +219,12 @@ class SitemapService
 
         $filter = array_merge($query, ['organisatie.oin' => $query['oin']]);
         unset($filter['oin']);
-        
+
         $categorieStr = '';
         if (isset($query['informatiecategorie']) === true) {
             $categorie           = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
             $filter['categorie'] = $categorie[$query['informatiecategorie']];
-            $categorieStr = '&categorie='.$categorie[$query['informatiecategorie']];
+            $categorieStr        = '&categorie='.$categorie[$query['informatiecategorie']];
             unset($filter['informatiecategorie']);
         }
 
