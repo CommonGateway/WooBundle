@@ -311,16 +311,12 @@ class SyncOpenWooService
                 true
             );
 
-            $objectArray = $object->toArray();
-            $portalURL   = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
-            $object->setValue('portalUrl', $portalURL);
-            $this->entityManager->persist($object);
-
             // Get all synced sourceIds.
             if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                 $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
             }
 
+            $this->entityManager->persist($object);
             $this->cacheService->cacheObject($object);
             $responseItems[] = $object;
         }//end foreach

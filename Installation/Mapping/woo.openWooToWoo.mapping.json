@@ -2,11 +2,12 @@
   "title": "OpenWooToWoo",
   "$id": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "passTrough": false,
   "mapping": {
     "_sourceId": "UUID",
     "id": "Object_ID",
+    "portalUrl": "Portal_url",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
     "categorie": "categorie",
