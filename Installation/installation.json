@@ -19,7 +19,7 @@
       "version": "0.0.2",
       "name": "Robot.txt",
       "description": "The template for a robot.txt file",
-      "content": "{% for location in object.locations %} Sitemap: {{ location }} \n {% endfor %}",
+      "content": "{% for location in object.locations %} Sitemap: {{ location }} {% if not loop.last %} \n{%endif%}{% endfor %}",
       "supportedSchemas": ["https://commongateway.nl/woo.sitemap.schema.json"]
     }
   ],
