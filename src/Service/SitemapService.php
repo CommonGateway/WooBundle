@@ -2,6 +2,7 @@
 
 namespace CommonGateway\WOOBundle\Service;
 
+use Adbar\Dot;
 use App\Entity\Entity as Schema;
 use App\Entity\Mapping;
 use App\Entity\ObjectEntity;
@@ -16,6 +17,7 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
@@ -38,6 +40,11 @@ class SitemapService
      * @var EntityManagerInterface $entityManager
      */
     private EntityManagerInterface $entityManager;
+
+    /**
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
 
     /**
      * @var LoggerInterface $logger.
@@ -84,6 +91,7 @@ class SitemapService
      * SitemapService constructor.
      *
      * @param EntityManagerInterface $entityManager      The Entity Manager Interface
+     * @param RequestStack           $requestStack       The Request Stack
      * @param LoggerInterface        $pluginLogger       The Logger Interface
      * @param GatewayResourceService $resourceService    The Gateway Resource Service
      * @param CacheService           $cacheService       The Cache Service
@@ -93,6 +101,7 @@ class SitemapService
      */
     public function __construct(
         EntityManagerInterface $entityManager,
+        RequestStack $requestStack,
         LoggerInterface $pluginLogger,
         GatewayResourceService $resourceService,
         CacheService $cacheService,
@@ -101,6 +110,7 @@ class SitemapService
         ApplicationService $applicationService
     ) {
         $this->entityManager      = $entityManager;
+        $this->requestStack       = $requestStack;
         $this->logger             = $pluginLogger;
         $this->resourceService    = $resourceService;
         $this->cacheService       = $cacheService;
@@ -126,37 +136,32 @@ class SitemapService
 
         // Get the type from the action so that we know what to generate.
         if (key_exists('type', $this->configuration) === false) {
-            $this->logger->error('The type in the configuration of the action is not given.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->logger->error('The type in the configuration of the action is not set.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'The type in the configuration of the action is not set.'], 409, 'error');
             return $this->data;
         }
 
         // Get the query from the call. This has to be any identification for an organization.
         $query = $this->data['query'];
-
-        if ($this->configuration['type'] === 'sitemap' && isset($query['_page']) === true) {
-            $page = $query['_page'];
-            unset($query['_page']);
-        }
-
-        if (count($query) !== 1) {
-            $this->logger->error('There are more than one or zero query parameters given. Not counting ?_page= query', ['plugin' => 'common-gateway/woo-bundle']);
+        if (isset($query['oin']) === false) {
+            $this->logger->error('The oin query parameter is missing.', ['plugin' => 'common-gateway/woo-bundle']);
+            // Return the error message response.
+            $this->data['response'] = $this->createResponse(['Message' => 'The oin query parameter is missing.'], 400, 'error');
             return $this->data;
         }
 
-        // Get the key of the given query.
-        $queryKey = key($query);
         switch ($this->configuration['type']) {
         case 'sitemap':
-            $query['_page'] = ($page ?? 1);
-            return $this->getSitemap($queryKey, $query);
+            return $this->getSitemap($query);
         case 'sitemapindex':
-            return $this->getSitemapindex($queryKey, $query);
+            return $this->getSitemapindex($query);
         case 'robot.txt':
-            return $this->getRobot($queryKey, $query);
+            return $this->getRobot($query);
         default:
-            $this->logger->error('There are more than one or zero query items given.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
+        $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
         return $this->data;
 
     }//end sitemapHandler()
@@ -165,40 +170,41 @@ class SitemapService
     /**
      * Generates a sitemap for the given organization
      *
-     * @param string $queryKey The key of the query from the request.
-     * @param array  $query    The query array from the request.
+     * @param array $query The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getSitemap(string $queryKey, array $query): array
+    private function getSitemap(array $query): array
     {
-        // TODO: Generate the sitemaps with the type.
         // Get the publication schema and the sitemap mapping.
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
-        if ($publicatieSchema instanceof Schema === false
-            || $mapping instanceof Mapping === false
-        ) {
+        if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false) {
             $this->logger->error('The publication schema or the sitemap mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'The publication schema or the sitemap mapping cannot be found.'], 409, 'error');
             return $this->data;
         }
 
-        // Get all the publication objects with the given query.
-        $objects = $this->cacheService->searchObjects(
-            null,
+        $filter = array_merge(
+            $query,
             [
-                'organisatie.'.$queryKey => $query[$queryKey],
-                '_limit'                 => 50000,
-                '_page'                  => $query['_page'],
-            ],
-            [$publicatieSchema->getId()->toString()]
-        )['results'];
+                'organisatie.oin' => $query['oin'],
+                '_limit'          => 50000,
+            ]
+        );
+        unset($filter['oin']);
+
+        // Get all the publication objects with the given query.
+        $objects = $this->cacheService->searchObjects(null, $filter, [$publicatieSchema->getId()->toString()])['results'];
 
         $sitemap = [];
         foreach ($objects as $object) {
-            // TODO: Verschillede sitemaps voor de categorieen
             $publicatie['object'] = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
-            $sitemap['url'][]     = $this->mappingService->mapping($mapping, $publicatie);
+
+            $mappedObject        = $this->mappingService->mapping($mapping, $publicatie);
+            $mappedObject['loc'] = $this->nonAsciiUrlEncode($mappedObject['loc']);
+
+            $sitemap['url'][] = $mappedObject;
         }
 
         // Return the sitemap response.
@@ -211,37 +217,54 @@ class SitemapService
     /**
      * Generates a sitemapindex for the given organization
      *
-     * @param string $queryKey The key of the query from the request.
-     * @param array  $query    The query array from the request.
+     * @param array $query The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getSitemapindex(string $queryKey, array $query): array
+    private function getSitemapindex(array $query): array
     {
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
-        if ($publicatieSchema instanceof Schema === false
-            || $mapping instanceof Mapping === false
-        ) {
-            $this->logger->error('The publication schema or the sitemap index mapping cannot be found.');
+        $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json', 'common-gateway/woo-bundle');
+
+        if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false || $categorieMapping instanceof Mapping === false) {
+            $this->logger->error('The publication schema, the sitemap index mapping or categorie mapping cannot be found.');
+            $this->data['response'] = $this->createResponse(['Message' => 'The publication schema, the sitemap index mapping or categorie mapping cannot be found.'], 409, 'error');
             return $this->data;
         }
 
-        // Get the domain of the request.
-        $domain = $this->applicationService->getApplication()->getDomains()[0];
+        $filter = array_merge($query, ['organisatie.oin' => $query['oin']]);
+        unset($filter['oin']);
+
+        $categorieStr = '';
+        if (isset($query['informatiecategorie']) === true) {
+            $categorie    = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
+            $categorieDot = new Dot($categorie);
+
+            if ($categorieDot->has($query['informatiecategorie']) === false) {
+                $this->logger->error('Invalid informatiecategorie query parameter.');
+                $this->data['response'] = $this->createResponse(['Message' => 'Invalid informatiecategorie query parameter.'], 400, 'error');
+                return $this->data;
+            }
+
+            $filter['categorie'] = $categorieDot->get($query['informatiecategorie']);
+            $categorieStr        = '&categorie='.$categorieDot->get($query['informatiecategorie']);
+            unset($filter['informatiecategorie']);
+        }
 
         // Count all the publication objects with the given query.
-        $count = $this->cacheService->countObjects(
-            null,
-            ['organisatie.'.$queryKey => $query[$queryKey]],
-            [$publicatieSchema->getId()->toString()]
-        );
+        $count = $this->cacheService->countObjects(null, $filter, [$publicatieSchema->getId()->toString()]);
         $pages = ((int) (($count - 1) / 50000) + 1);
 
+        // Get the domain of the request.
+        $domain = $this->requestStack->getMainRequest()->getSchemeAndHttpHost();
+
+        $sitemapindex = [];
         for ($i = 1; $i <= $pages; $i++) {
-            // TODO: Get the type of the sitemapindex.
             // The location of the sitemap file is the endpoint of the sitemap.
-            $location['location']      = 'https://'.$domain.'/api/sitemaps?'.$queryKey.'='.$query[$queryKey].'&_page='.$i;
+            $location['location']      = $this->nonAsciiUrlEncode(
+                $domain.'/api/sitemaps?oin='.$query['oin'].$categorieStr.'&_page='.$i
+            );
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
         }
 
@@ -255,25 +278,38 @@ class SitemapService
     /**
      * Generates a robot.txt for the given organization
      *
-     * @param string $queryKey The key of the query from the request.
-     * @param array  $query    The query array from the request.
+     * @param array $query The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getRobot(string $queryKey, array $query): array
+    private function getRobot(array $query): array
     {
-        $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
-        if ($sitemapSchema instanceof Schema === false) {
-            $this->logger->error('The sitemap schema cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
+        $sitemapSchema    = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
+        $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json', 'common-gateway/woo-bundle');
+        if ($sitemapSchema instanceof Schema === false || $categorieMapping instanceof Mapping === false) {
+            $this->logger->error('The sitemap schema or categorie mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'The sitemap schema or categorie mapping cannot be found.'], 409, 'error');
             return $this->data;
         }
 
-        // Get the domain of the request.
-        $domain = $this->applicationService->getApplication()->getDomains()[0];
+        $categories = array_keys($categorieMapping->getMapping());
 
-        // The location of the robot.txt file is the endpoint of the sitemapindex.
-        // TODO: Get the type of the sitemapindex.
-        $robotArray['location'] = $domain.'/api/sitemapindex-diwoo-infocat?'.$queryKey.'='.$query[$queryKey];
+        // Get the domain of the request.
+        $domain = $this->requestStack->getMainRequest()->getSchemeAndHttpHost();
+
+        // todo: Don't think we need this here
+        // $robotArray['locations'][] = $this->nonAsciiUrlEncode(
+        // $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'],
+        // false
+        // );
+        foreach ($categories as $category) {
+            // The location of the robot.txt file is the endpoint of the sitemapindex.
+            $robotArray['locations'][] = $this->nonAsciiUrlEncode(
+                $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'].'&informatiecategorie='.$category,
+                false
+            );
+        }
+
         // Set the id of the schema to the array so that the downloadService can work with that.
         $robotArray['_self']['schema']['id'] = $sitemapSchema->getId()->toString();
         $robot                               = $this->downloadService->render($robotArray);
@@ -284,6 +320,34 @@ class SitemapService
         return $this->data;
 
     }//end getRobot()
+
+
+    /**
+     * URL encodes all characters in a string that are non ASCII characters.
+     * And does a htmlspecialchars() on $str after that unless $htmlspecialchars is set to false.
+     *
+     * @param string $str              The input string.
+     * @param bool   $htmlspecialchars True by default, if set to false htmlspecialchars() will not be used on $str.
+     *
+     * @return string The updated string.
+     */
+    private function nonAsciiUrlEncode(string $str, bool $htmlspecialchars=true): string
+    {
+        $str = preg_replace_callback(
+            '/[^\x20-\x7e]/',
+            function ($matches) {
+                return urlencode($matches[0]);
+            },
+            $str
+        );
+
+        if ($htmlspecialchars === false) {
+            return $str;
+        }
+
+        return htmlspecialchars($str);
+
+    }//end nonAsciiUrlEncode()
 
 
     /**
@@ -303,35 +367,13 @@ class SitemapService
         $content    = array_merge($xml, $content);
 
         $contentString = $xmlEncoder->encode($content, 'xml', ['xml_encoding' => 'utf-8', 'remove_empty_tags' => true]);
-        $contentString = $this->replaceCdata($contentString);
+
+        // Remove CDATA
+        $contentString = str_replace(["<![CDATA[", "]]>"], "", $contentString);
 
         return new Response($contentString, $status);
 
     }//end createResponse()
-
-
-    /**
-     * Removes CDATA from xml array content
-     *
-     * @param string $contentString The content to incorporate in the response
-     *
-     * @return string The updated array.
-     */
-    private function replaceCdata(string $contentString): string
-    {
-        $contentString = str_replace(["<![CDATA[", "]]>"], "", $contentString);
-
-        $contentString = preg_replace_callback(
-            '/&amp;amp;amp;#([0-9]{3});/',
-            function ($matches) {
-                return chr((int) $matches[1]);
-            },
-            $contentString
-        );
-
-        return $contentString;
-
-    }//end replaceCdata()
 
 
 }//end class

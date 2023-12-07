@@ -8,6 +8,7 @@
       "version": "0.0.1",
       "description": "The woo application. (Domain is used in the robot.txt file).",
       "domains": [
+        "localhost",
         "https://api.gateway.commonground.nu"
       ]
     }
@@ -18,7 +19,7 @@
       "version": "0.0.2",
       "name": "Robot.txt",
       "description": "The template for a robot.txt file",
-      "content": "Sitemap: {{ object.location }}",
+      "content": "{% for location in object.locations %} Sitemap: {{ location }} {% if not loop.last %} \n\n{%endif%}{% endfor %}",
       "supportedSchemas": ["https://commongateway.nl/woo.sitemap.schema.json"]
     }
   ],
