@@ -17,6 +17,7 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
@@ -39,6 +40,11 @@ class SitemapService
      * @var EntityManagerInterface $entityManager
      */
     private EntityManagerInterface $entityManager;
+    
+    /**
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
 
     /**
      * @var LoggerInterface $logger.
@@ -85,6 +91,7 @@ class SitemapService
      * SitemapService constructor.
      *
      * @param EntityManagerInterface $entityManager      The Entity Manager Interface
+     * @param RequestStack           $requestStack       The Request Stack
      * @param LoggerInterface        $pluginLogger       The Logger Interface
      * @param GatewayResourceService $resourceService    The Gateway Resource Service
      * @param CacheService           $cacheService       The Cache Service
@@ -94,6 +101,7 @@ class SitemapService
      */
     public function __construct(
         EntityManagerInterface $entityManager,
+        RequestStack $requestStack,
         LoggerInterface $pluginLogger,
         GatewayResourceService $resourceService,
         CacheService $cacheService,
@@ -102,6 +110,7 @@ class SitemapService
         ApplicationService $applicationService
     ) {
         $this->entityManager      = $entityManager;
+        $this->requestStack       = $requestStack;
         $this->logger             = $pluginLogger;
         $this->resourceService    = $resourceService;
         $this->cacheService       = $cacheService;
@@ -191,7 +200,11 @@ class SitemapService
         $sitemap = [];
         foreach ($objects as $object) {
             $publicatie['object'] = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
-            $sitemap['url'][]     = $this->mappingService->mapping($mapping, $publicatie);
+            
+            $mappedObject = $this->mappingService->mapping($mapping, $publicatie);
+            $mappedObject['loc']  = $this->nonAsciiUrlEncode($mappedObject['loc']);
+            
+            $sitemap['url'][]     = $mappedObject;
         }
 
         // Return the sitemap response.
@@ -237,12 +250,14 @@ class SitemapService
         $pages = ((int) (($count - 1) / 50000) + 1);
 
         // Get the domain of the request.
-        $domain = $this->applicationService->getApplication()->getDomains()[0];
+        $domain = $this->requestStack->getMainRequest()->getSchemeAndHttpHost();
 
         $sitemapindex = [];
         for ($i = 1; $i <= $pages; $i++) {
             // The location of the sitemap file is the endpoint of the sitemap.
-            $location['location']      = 'https://'.$domain.'/api/sitemaps?oin='.$query['oin'].$categorieStr.'&_page='.$i;
+            $location['location']      = $this->nonAsciiUrlEncode(
+                $domain.'/api/sitemaps?oin='.$query['oin'].$categorieStr.'&_page='.$i
+            );
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
         }
 
@@ -273,23 +288,44 @@ class SitemapService
         $categories = array_keys($categorieMapping->getMapping());
 
         // Get the domain of the request.
-        $domain = $this->applicationService->getApplication()->getDomains()[0];
-
+        $domain = $this->requestStack->getMainRequest()->getSchemeAndHttpHost();
+        
         foreach ($categories as $category) {
             // The location of the robot.txt file is the endpoint of the sitemapindex.
-            $robotArray['locations'][] = $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'].'&informatiecategorie='.$category;
+            $robotArray['locations'][] = $this->nonAsciiUrlEncode(
+                $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'].'&informatiecategorie='.$category
+            );
         }
 
         // Set the id of the schema to the array so that the downloadService can work with that.
         $robotArray['_self']['schema']['id'] = $sitemapSchema->getId()->toString();
         $robot                               = $this->downloadService->render($robotArray);
-
+        
         $this->data['response'] = new Response($robot, 200, ['Content-Type' => 'text/plain']);
         $this->data['response']->headers->set('Content-Disposition', 'attachment; filename="Robot.txt"');
 
         return $this->data;
 
     }//end getRobot()
+    
+    
+    /**
+     * URL encodes all characters in a string that are non ASCII characters.
+     *
+     * @param string $str The input string.
+     *
+     * @return string The updated string.
+     */
+    private function nonAsciiUrlEncode(string $str): string
+    {
+        return preg_replace_callback(
+            '/[^\x20-\x7e]/',
+            function ($matches) {
+                return urlencode($matches[0]);
+            },
+            $str
+        );
+    }
 
 
     /**
@@ -309,35 +345,13 @@ class SitemapService
         $content    = array_merge($xml, $content);
 
         $contentString = $xmlEncoder->encode($content, 'xml', ['xml_encoding' => 'utf-8', 'remove_empty_tags' => true]);
-        $contentString = $this->replaceCdata($contentString);
+        
+        // Remove CDATA
+        $contentString = str_replace(["<![CDATA[", "]]>"], "", $contentString);
 
         return new Response($contentString, $status);
 
     }//end createResponse()
-
-
-    /**
-     * Removes CDATA from xml array content
-     *
-     * @param string $contentString The content to incorporate in the response
-     *
-     * @return string The updated array.
-     */
-    private function replaceCdata(string $contentString): string
-    {
-        $contentString = str_replace(["<![CDATA[", "]]>"], "", $contentString);
-
-        $contentString = preg_replace_callback(
-            '/&amp;amp;amp;#([0-9]{3});/',
-            function ($matches) {
-                return chr((int) $matches[1]);
-            },
-            $contentString
-        );
-
-        return $contentString;
-
-    }//end replaceCdata()
 
 
 }//end class
