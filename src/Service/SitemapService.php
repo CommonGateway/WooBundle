@@ -42,7 +42,7 @@ class SitemapService
     private EntityManagerInterface $entityManager;
 
     /**
-     * @var RequestStack
+     * @var RequestStack $requestStack
      */
     private RequestStack $requestStack;
 
