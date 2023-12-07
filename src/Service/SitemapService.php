@@ -314,12 +314,12 @@ class SitemapService
      * URL encodes all characters in a string that are non ASCII characters.
      * And does a htmlspecialchars() on $str after that unless $htmlspecialchars is set to false.
      *
-     * @param string $str The input string.
-     * @param bool $htmlspecialchars True by default, if set to false htmlspecialchars() will not be used on $str.
+     * @param string $str              The input string.
+     * @param bool   $htmlspecialchars True by default, if set to false htmlspecialchars() will not be used on $str.
      *
      * @return string The updated string.
      */
-    private function nonAsciiUrlEncode(string $str, bool $htmlspecialchars = true): string
+    private function nonAsciiUrlEncode(string $str, bool $htmlspecialchars=true): string
     {
         $str = preg_replace_callback(
             '/[^\x20-\x7e]/',
@@ -328,11 +328,11 @@ class SitemapService
             },
             $str
         );
-        
+
         if ($htmlspecialchars === false) {
             return $str;
         }
-        
+
         return htmlspecialchars($str);
 
     }//end nonAsciiUrlEncode()
