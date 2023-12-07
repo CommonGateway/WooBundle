@@ -238,15 +238,15 @@ class SitemapService
 
         $categorieStr = '';
         if (isset($query['informatiecategorie']) === true) {
-            $categorie           = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
-            $categorieDot        = new Dot($categorie);
-            
+            $categorie    = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
+            $categorieDot = new Dot($categorie);
+
             if ($categorieDot->has($query['informatiecategorie']) === false) {
                 $this->logger->error('Invalid informatiecategorie query parameter.');
                 $this->data['response'] = $this->createResponse(['Message' => 'Invalid informatiecategorie query parameter.'], 400, 'error');
                 return $this->data;
             }
-            
+
             $filter['categorie'] = $categorieDot->get($query['informatiecategorie']);
             $categorieStr        = '&categorie='.$categorieDot->get($query['informatiecategorie']);
             unset($filter['informatiecategorie']);
@@ -296,12 +296,12 @@ class SitemapService
 
         // Get the domain of the request.
         $domain = $this->requestStack->getMainRequest()->getSchemeAndHttpHost();
-        
+
         // todo: Don't think we need this here
-//        $robotArray['locations'][] = $this->nonAsciiUrlEncode(
-//            $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'],
-//            false
-//        );
+        // $robotArray['locations'][] = $this->nonAsciiUrlEncode(
+        // $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'],
+        // false
+        // );
         foreach ($categories as $category) {
             // The location of the robot.txt file is the endpoint of the sitemapindex.
             $robotArray['locations'][] = $this->nonAsciiUrlEncode(
