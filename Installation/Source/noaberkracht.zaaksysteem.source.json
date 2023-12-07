@@ -12,8 +12,5 @@
         "API-KEY": "!ChangeMe!",
         "Content-Type": "application/json"
     },
-    "isEnabled": false,
-    "configuration": {
-        "verify": false
-    }
+    "isEnabled": false
 }

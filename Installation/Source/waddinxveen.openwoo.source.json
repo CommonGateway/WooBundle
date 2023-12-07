@@ -9,8 +9,5 @@
         "Accept": "*/*",
         "Content-Type": "application/json"
     },
-    "isEnabled": false,
-    "configuration": {
-        "verify": false
-    }
+    "isEnabled": false
 }
