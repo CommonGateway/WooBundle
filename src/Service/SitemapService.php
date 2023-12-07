@@ -2,6 +2,7 @@
 
 namespace CommonGateway\WOOBundle\Service;
 
+use Adbar\Dot;
 use App\Entity\Entity as Schema;
 use App\Entity\Mapping;
 use App\Entity\ObjectEntity;
@@ -166,7 +167,6 @@ class SitemapService
      */
     private function getSitemap(array $query): array
     {
-        // TODO: Generate the sitemaps with the type.
         // Get the publication schema and the sitemap mapping.
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
@@ -190,7 +190,6 @@ class SitemapService
 
         $sitemap = [];
         foreach ($objects as $object) {
-            // TODO: Verschillede sitemaps voor de categorieen
             $publicatie['object'] = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
             $sitemap['url'][]     = $this->mappingService->mapping($mapping, $publicatie);
         }
@@ -226,9 +225,10 @@ class SitemapService
 
         $categorieStr = '';
         if (isset($query['informatiecategorie']) === true) {
-            $categorie           = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
-            $filter['categorie'] = $categorie[$query['informatiecategorie']];
-            $categorieStr        = '&categorie='.$categorie[$query['informatiecategorie']];
+            $categorie = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
+            $categorieDot = new Dot($categorie);
+            $filter['categorie'] = $categorieDot->get($query['informatiecategorie']);
+            $categorieStr        = '&categorie='.$categorieDot->get($query['informatiecategorie']);
             unset($filter['informatiecategorie']);
         }
 
@@ -241,7 +241,6 @@ class SitemapService
 
         $sitemapindex = [];
         for ($i = 1; $i <= $pages; $i++) {
-            // TODO: Get the type of the sitemapindex.
             // The location of the sitemap file is the endpoint of the sitemap.
             $location['location']      = 'https://'.$domain.'/api/sitemaps?oin='.$query['oin'].$categorieStr.'&_page='.$i;
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
@@ -264,18 +263,22 @@ class SitemapService
     private function getRobot(array $query): array
     {
         $sitemapSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
-        if ($sitemapSchema instanceof Schema === false) {
-            $this->logger->error('The sitemap schema cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
-            $this->data['response'] = $this->createResponse(['Message' => 'The sitemap schema cannot be found.'], 409, 'error');
+        $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json', 'common-gateway/woo-bundle');
+        if ($sitemapSchema instanceof Schema === false || $categorieMapping instanceof Mapping === false) {
+            $this->logger->error('The sitemap schema or categorie mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'The sitemap schema or categorie mapping cannot be found.'], 409, 'error');
             return $this->data;
         }
+        
+        $categories = array_keys($categorieMapping->getMapping());
 
         // Get the domain of the request.
         $domain = $this->applicationService->getApplication()->getDomains()[0];
 
-        // The location of the robot.txt file is the endpoint of the sitemapindex.
-        // TODO: Get the type of the sitemapindex.
-        $robotArray['location'] = $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'];
+        foreach ($categories as $category) {
+            // The location of the robot.txt file is the endpoint of the sitemapindex.
+            $robotArray['locations'][] = $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'].'&informatiecategorie='.$category;
+        }
         // Set the id of the schema to the array so that the downloadService can work with that.
         $robotArray['_self']['schema']['id'] = $sitemapSchema->getId()->toString();
         $robot                               = $this->downloadService->render($robotArray);
