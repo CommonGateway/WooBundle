@@ -40,7 +40,7 @@ class SitemapService
      * @var EntityManagerInterface $entityManager
      */
     private EntityManagerInterface $entityManager;
-    
+
     /**
      * @var RequestStack
      */
@@ -200,11 +200,11 @@ class SitemapService
         $sitemap = [];
         foreach ($objects as $object) {
             $publicatie['object'] = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
-            
-            $mappedObject = $this->mappingService->mapping($mapping, $publicatie);
-            $mappedObject['loc']  = $this->nonAsciiUrlEncode($mappedObject['loc']);
-            
-            $sitemap['url'][]     = $mappedObject;
+
+            $mappedObject        = $this->mappingService->mapping($mapping, $publicatie);
+            $mappedObject['loc'] = $this->nonAsciiUrlEncode($mappedObject['loc']);
+
+            $sitemap['url'][] = $mappedObject;
         }
 
         // Return the sitemap response.
@@ -289,7 +289,7 @@ class SitemapService
 
         // Get the domain of the request.
         $domain = $this->requestStack->getMainRequest()->getSchemeAndHttpHost();
-        
+
         foreach ($categories as $category) {
             // The location of the robot.txt file is the endpoint of the sitemapindex.
             $robotArray['locations'][] = $this->nonAsciiUrlEncode(
@@ -300,15 +300,15 @@ class SitemapService
         // Set the id of the schema to the array so that the downloadService can work with that.
         $robotArray['_self']['schema']['id'] = $sitemapSchema->getId()->toString();
         $robot                               = $this->downloadService->render($robotArray);
-        
+
         $this->data['response'] = new Response($robot, 200, ['Content-Type' => 'text/plain']);
         $this->data['response']->headers->set('Content-Disposition', 'attachment; filename="Robot.txt"');
 
         return $this->data;
 
     }//end getRobot()
-    
-    
+
+
     /**
      * URL encodes all characters in a string that are non ASCII characters.
      *
@@ -325,7 +325,8 @@ class SitemapService
             },
             $str
         );
-    }
+
+    }//end nonAsciiUrlEncode()
 
 
     /**
@@ -345,7 +346,7 @@ class SitemapService
         $content    = array_merge($xml, $content);
 
         $contentString = $xmlEncoder->encode($content, 'xml', ['xml_encoding' => 'utf-8', 'remove_empty_tags' => true]);
-        
+
         // Remove CDATA
         $contentString = str_replace(["<![CDATA[", "]]>"], "", $contentString);
 
