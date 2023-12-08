@@ -142,7 +142,7 @@ class SitemapService
         }
 
         // Get the query from the call. This has to be any identification for an organization.
-        $query = $this->data['query'];
+        $query = array_merge($this->data['path'], $this->data['query']);
         if (isset($query['oin']) === false) {
             $this->logger->error('The oin query parameter is missing.', ['plugin' => 'common-gateway/woo-bundle']);
             // Return the error message response.
@@ -151,14 +151,14 @@ class SitemapService
         }
 
         switch ($this->configuration['type']) {
-        case 'sitemap':
-            return $this->getSitemap($query);
-        case 'sitemapindex':
-            return $this->getSitemapindex($query);
-        case 'robot.txt':
-            return $this->getRobot($query);
-        default:
-            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
+            case 'sitemap':
+                return $this->getSitemap($query);
+            case 'sitemapindex':
+                return $this->getSitemapindex($query);
+            case 'robot.txt':
+                return $this->getRobot($query);
+            default:
+                $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
@@ -192,7 +192,9 @@ class SitemapService
                 '_limit'          => 50000,
             ]
         );
-        unset($filter['oin']);
+
+
+        unset($filter['oin'], $filter['sitemaps'], $filter['sitemap']);
 
         // Get all the publication objects with the given query.
         $objects = $this->cacheService->searchObjects(null, $filter, [$publicatieSchema->getId()->toString()])['results'];
@@ -217,11 +219,11 @@ class SitemapService
     /**
      * Generates a sitemapindex for the given organization
      *
-     * @param array $query The query array from the request.
+     * @param array $path The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getSitemapindex(array $query): array
+    private function getSitemapindex(array $path): array
     {
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
@@ -233,23 +235,26 @@ class SitemapService
             return $this->data;
         }
 
-        $filter = array_merge($query, ['organisatie.oin' => $query['oin']]);
+        $filter = $path;
+        if ($path['oin'] === '00000000000000000000') {
+            $filter = array_merge($filter, ['organisatie.oin' => $path['oin']]);
+        }
         unset($filter['oin']);
 
         $categorieStr = '';
-        if (isset($query['informatiecategorie']) === true) {
-            $categorie    = $this->mappingService->mapping($categorieMapping, [$query['informatiecategorie'] => '']);
+        if (isset($path['sitemapindex']) === true) {
+            $categorie    = $this->mappingService->mapping($categorieMapping, [$path['sitemapindex'] => '']);
             $categorieDot = new Dot($categorie);
 
-            if ($categorieDot->has($query['informatiecategorie']) === false) {
+            if ($categorieDot->has($path['sitemapindex']) === false) {
                 $this->logger->error('Invalid informatiecategorie query parameter.');
                 $this->data['response'] = $this->createResponse(['Message' => 'Invalid informatiecategorie query parameter.'], 400, 'error');
                 return $this->data;
             }
 
-            $filter['categorie'] = $categorieDot->get($query['informatiecategorie']);
-            $categorieStr        = '&categorie='.$categorieDot->get($query['informatiecategorie']);
-            unset($filter['informatiecategorie']);
+            $filter['categorie'] = $categorieDot->get($path['sitemapindex']);
+            $categorieStr        = 'categorie='.$categorieDot->get($path['sitemapindex']);
+            unset($filter['sitemapindex']);
         }
 
         // Count all the publication objects with the given query.
@@ -263,7 +268,7 @@ class SitemapService
         for ($i = 1; $i <= $pages; $i++) {
             // The location of the sitemap file is the endpoint of the sitemap.
             $location['location']      = $this->nonAsciiUrlEncode(
-                $domain.'/api/sitemaps?oin='.$query['oin'].$categorieStr.'&_page='.$i
+                $domain.'/api/sitemaps/'.$path['oin'].'/sitemap?'.$categorieStr.'&_page='.$i
             );
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
         }
@@ -305,7 +310,7 @@ class SitemapService
         foreach ($categories as $category) {
             // The location of the robot.txt file is the endpoint of the sitemapindex.
             $robotArray['locations'][] = $this->nonAsciiUrlEncode(
-                $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'].'&informatiecategorie='.$category,
+                $domain.'/api/sitemaps/'.$query['oin'].'/'.$category,
                 false
             );
         }

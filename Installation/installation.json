@@ -67,9 +67,9 @@
       },
       {
         "$id": "https://commongateway.nl/woo.sitemap.endpoint.json",
-        "version": "0.0.1",
-        "reference": "https://commongateway.nl/woo.sitemap.schema.json",
-        "path": "sitemaps",
+        "version": "0.0.2",
+        "path": "sitemaps/oin/sitemap/id",
+        "pathRegex": "^sitemaps/?[0-9]{20}/sitemap/?([a-z0-9-]+)?$",
         "methods": ["GET"],
         "throws": [
           "woo.get.sitemap"
@@ -77,9 +77,9 @@
       },
       {
         "$id": "https://commongateway.nl/woo.sitemapindex.endpoint.json",
-        "version": "0.0.1",
-        "reference": "https://commongateway.nl/woo.sitemap.schema.json",
-        "path": "sitemapindex-diwoo-infocat",
+        "version": "0.0.2",
+        "path": "sitemapsitemaps/oin/sitemapindex",
+        "pathRegex": "^sitemaps/?([0-9]){20}?/sitemapindex-diwoo-infocat-?([0-9]{3})?.xml$",
         "methods": ["GET"],
         "throws": [
           "woo.sitemapindex"
