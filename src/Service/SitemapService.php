@@ -151,14 +151,14 @@ class SitemapService
         }
 
         switch ($this->configuration['type']) {
-            case 'sitemap':
-                return $this->getSitemap($query);
-            case 'sitemapindex':
-                return $this->getSitemapindex($query);
-            case 'robot.txt':
-                return $this->getRobot($query);
-            default:
-                $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
+        case 'sitemap':
+            return $this->getSitemap($query);
+        case 'sitemapindex':
+            return $this->getSitemapindex($query);
+        case 'robot.txt':
+            return $this->getRobot($query);
+        default:
+            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
@@ -192,7 +192,6 @@ class SitemapService
                 '_limit'          => 50000,
             ]
         );
-
 
         unset($filter['oin'], $filter['sitemaps'], $filter['sitemap']);
 
@@ -239,6 +238,7 @@ class SitemapService
         if ($path['oin'] === '00000000000000000000') {
             $filter = array_merge($filter, ['organisatie.oin' => $path['oin']]);
         }
+
         unset($filter['oin']);
 
         $categorieStr = '';
