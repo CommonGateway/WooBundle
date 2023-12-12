@@ -145,14 +145,14 @@ class SitemapService
         $parameters = array_merge($this->data['path'], $this->data['parameters']);
 
         switch ($this->configuration['type']) {
-            case 'sitemap':
-                return $this->getSitemap($parameters);
-            case 'sitemapindex':
-                return $this->getSitemapindex($parameters);
-            case 'robot.txt':
-                return $this->getRobot($parameters);
-            default:
-                $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
+        case 'sitemap':
+            return $this->getSitemap($parameters);
+        case 'sitemapindex':
+            return $this->getSitemapindex($parameters);
+        case 'robot.txt':
+            return $this->getRobot($parameters);
+        default:
+            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
@@ -284,7 +284,6 @@ class SitemapService
     private function getRobot(array $parameters): array
     {
 
-
         $sitemapSchema    = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json', 'common-gateway/woo-bundle');
         if ($sitemapSchema instanceof Schema === false || $categorieMapping instanceof Mapping === false) {
@@ -297,7 +296,7 @@ class SitemapService
 
         $sitemaps = $this->cacheService->searchObjects(null, ['domains' => $host], [$sitemapSchema->getId()->toString()]);
 
-        if(count($sitemaps['results']) === 1) {
+        if (count($sitemaps['results']) === 1) {
             $oin = $sitemaps['results'][0]['oin'];
         } else if (count($sitemaps['results']) > 1) {
             $oin = '00000000000000000000';
