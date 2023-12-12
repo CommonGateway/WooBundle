@@ -91,7 +91,7 @@
         "$id": "https://commongateway.nl/woo.robot.txt.endpoint.json",
         "version": "0.0.2",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
-        "path": "robots",
+        "path": "sitemaps/robots",
         "pathRegex": "^sitemaps/robots.txt$",
         "methods": ["GET"],
         "throws": [
