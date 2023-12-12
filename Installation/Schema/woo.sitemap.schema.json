@@ -2,21 +2,27 @@
   "title": "Sitemap",
   "$id": "https://commongateway.nl/woo.sitemap.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "object",
   "required": [],
   "properties": {
     "loc": {
-        "type": "string"
+      "type": "string"
     },
     "lastmod": {
-        "type": "string"
+      "type": "string"
     },
     "changefreq": {
       "type": "string"
     },
     "priority": {
       "type": "string"
+    },
+    "oin": {
+      "type": "string"
+    },
+    "domains": {
+      "type": "array"
     }
   }
 }
