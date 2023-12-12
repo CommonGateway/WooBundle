@@ -68,7 +68,7 @@
       {
         "$id": "https://commongateway.nl/woo.sitemap.endpoint.json",
         "version": "0.0.2",
-        "path": "sitemaps/oin/sitemap/id",
+        "path": "sitemaps/oin/sitemap",
         "pathRegex": "^sitemaps/?[0-9]{20}/sitemap/?([a-z0-9-]+)?$",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
         "methods": ["GET"],
