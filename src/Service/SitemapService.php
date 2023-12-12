@@ -142,7 +142,7 @@ class SitemapService
         }
 
         // Get the parameters from the call. This has to be any identification for an organization.
-        $parameters = array_merge($this->data['path'], $this->data['parameters']);
+        $parameters = array_merge($this->data['path'], $this->data['query']);
 
         switch ($this->configuration['type']) {
         case 'sitemap':
