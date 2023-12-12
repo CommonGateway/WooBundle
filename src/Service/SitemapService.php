@@ -242,7 +242,7 @@ class SitemapService
 
             if ($categorieDot->has($parameters['sitemapindex']) === false) {
                 $this->logger->error('Invalid informatiecategorie.');
-                $this->data['response'] = $this->createResponse(['Message' => 'Invalid informatiecategorie query parameter.'], 400, 'error');
+                $this->data['response'] = $this->createResponse(['Message' => 'Invalid informatiecategorie.'], 400, 'error');
                 return $this->data;
             }
 

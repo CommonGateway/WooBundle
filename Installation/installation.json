@@ -67,7 +67,7 @@
       },
       {
         "$id": "https://commongateway.nl/woo.sitemap.endpoint.json",
-        "version": "0.0.3",
+        "version": "0.0.2",
         "path": "sitemaps/oin/sitemap/id",
         "pathRegex": "^sitemaps/?[0-9]{20}/sitemap/?([a-z0-9-]+)?$",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
@@ -78,7 +78,7 @@
       },
       {
         "$id": "https://commongateway.nl/woo.sitemapindex.endpoint.json",
-        "version": "0.0.3",
+        "version": "0.0.2",
         "path": "sitemapsitemaps/oin/sitemapindex",
         "pathRegex": "^sitemaps/?([0-9]){20}?/sitemapindex-diwoo-infocat-?([0-9]{3})?.xml$",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
@@ -89,7 +89,7 @@
       },
       {
         "$id": "https://commongateway.nl/woo.robot.txt.endpoint.json",
-        "version": "0.0.3",
+        "version": "0.0.2",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
         "path": "robots",
         "pathRegex": "^sitemaps/robots.txt$",
