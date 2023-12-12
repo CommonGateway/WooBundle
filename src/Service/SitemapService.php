@@ -141,24 +141,18 @@ class SitemapService
             return $this->data;
         }
 
-        // Get the query from the call. This has to be any identification for an organization.
-        $query = array_merge($this->data['path'], $this->data['query']);
-        if (isset($query['oin']) === false) {
-            $this->logger->error('The oin query parameter is missing.', ['plugin' => 'common-gateway/woo-bundle']);
-            // Return the error message response.
-            $this->data['response'] = $this->createResponse(['Message' => 'The oin query parameter is missing.'], 400, 'error');
-            return $this->data;
-        }
+        // Get the parameters from the call. This has to be any identification for an organization.
+        $parameters = array_merge($this->data['path'], $this->data['parameters']);
 
         switch ($this->configuration['type']) {
-        case 'sitemap':
-            return $this->getSitemap($query);
-        case 'sitemapindex':
-            return $this->getSitemapindex($query);
-        case 'robot.txt':
-            return $this->getRobot($query);
-        default:
-            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
+            case 'sitemap':
+                return $this->getSitemap($parameters);
+            case 'sitemapindex':
+                return $this->getSitemapindex($parameters);
+            case 'robot.txt':
+                return $this->getRobot($parameters);
+            default:
+                $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
@@ -170,11 +164,11 @@ class SitemapService
     /**
      * Generates a sitemap for the given organization
      *
-     * @param array $query The query array from the request.
+     * @param array $parameters The parameter array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getSitemap(array $query): array
+    private function getSitemap(array $parameters): array
     {
         // Get the publication schema and the sitemap mapping.
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
@@ -186,9 +180,9 @@ class SitemapService
         }
 
         $filter = array_merge(
-            $query,
+            $parameters,
             [
-                'organisatie.oin' => $query['oin'],
+                'organisatie.oin' => $parameters['oin'],
                 '_limit'          => 50000,
             ]
         );
@@ -218,11 +212,11 @@ class SitemapService
     /**
      * Generates a sitemapindex for the given organization
      *
-     * @param array $path The query array from the request.
+     * @param array $parameters The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getSitemapindex(array $path): array
+    private function getSitemapindex(array $parameters): array
     {
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.mapping.json', 'common-gateway/woo-bundle');
         $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
@@ -234,26 +228,26 @@ class SitemapService
             return $this->data;
         }
 
-        $filter = $path;
-        if ($path['oin'] === '00000000000000000000') {
-            $filter = array_merge($filter, ['organisatie.oin' => $path['oin']]);
+        $filter = $parameters;
+        if ($parameters['oin'] === '00000000000000000000') {
+            $filter = array_merge($filter, ['organisatie.oin' => $parameters['oin']]);
         }
 
         unset($filter['oin']);
 
         $categorieStr = '';
-        if (isset($path['sitemapindex']) === true) {
-            $categorie    = $this->mappingService->mapping($categorieMapping, [$path['sitemapindex'] => '']);
+        if (isset($parameters['sitemapindex']) === true) {
+            $categorie    = $this->mappingService->mapping($categorieMapping, [$parameters['sitemapindex'] => '']);
             $categorieDot = new Dot($categorie);
 
-            if ($categorieDot->has($path['sitemapindex']) === false) {
-                $this->logger->error('Invalid informatiecategorie query parameter.');
+            if ($categorieDot->has($parameters['sitemapindex']) === false) {
+                $this->logger->error('Invalid informatiecategorie.');
                 $this->data['response'] = $this->createResponse(['Message' => 'Invalid informatiecategorie query parameter.'], 400, 'error');
                 return $this->data;
             }
 
-            $filter['categorie'] = $categorieDot->get($path['sitemapindex']);
-            $categorieStr        = 'categorie='.$categorieDot->get($path['sitemapindex']);
+            $filter['categorie'] = $categorieDot->get($parameters['sitemapindex']);
+            $categorieStr        = 'categorie='.$categorieDot->get($parameters['sitemapindex']);
             unset($filter['sitemapindex']);
         }
 
@@ -268,7 +262,7 @@ class SitemapService
         for ($i = 1; $i <= $pages; $i++) {
             // The location of the sitemap file is the endpoint of the sitemap.
             $location['location']      = $this->nonAsciiUrlEncode(
-                $domain.'/api/sitemaps/'.$path['oin'].'/sitemap?'.$categorieStr.'&_page='.$i
+                $domain.'/api/sitemaps/'.$parameters['oin'].'/sitemap?'.$categorieStr.'&_page='.$i
             );
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
         }
@@ -283,12 +277,14 @@ class SitemapService
     /**
      * Generates a robot.txt for the given organization
      *
-     * @param array $query The query array from the request.
+     * @param array $parameters The query array from the request.
      *
      * @return array Handler data with added 'response'.
      */
-    private function getRobot(array $query): array
+    private function getRobot(array $parameters): array
     {
+
+
         $sitemapSchema    = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json', 'common-gateway/woo-bundle');
         if ($sitemapSchema instanceof Schema === false || $categorieMapping instanceof Mapping === false) {
@@ -297,20 +293,31 @@ class SitemapService
             return $this->data;
         }
 
+        $host = $this->requestStack->getMainRequest()->getHost();
+
+        $sitemaps = $this->cacheService->searchObjects(null, ['domains' => $host], [$sitemapSchema->getId()->toString()]);
+
+        if(count($sitemaps['results']) === 1) {
+            $oin = $sitemaps['results'][0]['oin'];
+        } else if (count($sitemaps['results']) > 1) {
+            $oin = '00000000000000000000';
+            if (isset($parameters['oin']) === true) {
+                $oin = $parameters['oin'];
+            }
+        } else {
+            $this->logger->warning('No oin found for this domain, returning no sitemaps');
+            return $this->data;
+        }
+
         $categories = array_keys($categorieMapping->getMapping());
 
         // Get the domain of the request.
         $domain = $this->requestStack->getMainRequest()->getSchemeAndHttpHost();
 
-        // todo: Don't think we need this here
-        // $robotArray['locations'][] = $this->nonAsciiUrlEncode(
-        // $domain.'/api/sitemapindex-diwoo-infocat?oin='.$query['oin'],
-        // false
-        // );
         foreach ($categories as $category) {
             // The location of the robot.txt file is the endpoint of the sitemapindex.
             $robotArray['locations'][] = $this->nonAsciiUrlEncode(
-                $domain.'/api/sitemaps/'.$query['oin'].'/'.$category,
+                $domain.'/api/sitemaps/'.$oin.'/'.$category,
                 false
             );
         }
