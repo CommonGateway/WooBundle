@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
+use Exception;
 
 /**
  * Service responsible for synchronizing xxllnc cases to woo objects.
@@ -351,6 +352,7 @@ class SyncXxllncCasesService
         $source       = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
         $schema       = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
         $mapping      = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.categorie.mapping.json', 'common-gateway/woo-bundle');
         if ($source instanceof Source === false
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
@@ -370,47 +372,54 @@ class SyncXxllncCasesService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
-            $result       = array_merge($result, ['organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
-            $mappedResult = $this->mappingService->mapping($mapping, $result);
+            try {
+                $result       = array_merge($result, ['organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
+                $mappedResult = $this->mappingService->mapping($mapping, $result);
+                // Map categories to prevent multiple variants of the same categorie.
+                $mappedResult = $this->mappingService->mapping($categorieMapping, $mappedResult);
 
-            $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
-            if ($validationErrors !== null) {
-                $validationErrors = implode(', ', $validationErrors);
-                $this->logger->warning("SyncXxllncCases validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
-                isset($this->style) === true && $this->style->warning("SyncXxllncCases validation errors: $validationErrors");
+                $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
+                if ($validationErrors !== null) {
+                    $validationErrors = implode(', ', $validationErrors);
+                    $this->logger->warning("SyncXxllncCases validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
+                    isset($this->style) === true && $this->style->warning("SyncXxllncCases validation errors: $validationErrors");
+                    continue;
+                }
+
+                $object = $hydrationService->searchAndReplaceSynchronizations(
+                    $mappedResult,
+                    $source,
+                    $schema,
+                    true,
+                    true
+                );
+
+                // Some custom logic.
+                $hydrateArray = $this->handleCustomLogic($object->toArray(), $result, $fileEndpoint, $source);
+
+                // Second time to update Bijlagen.
+                $object = $hydrationService->searchAndReplaceSynchronizations(
+                    $hydrateArray,
+                    $source,
+                    $schema,
+                    true,
+                    false
+                );
+
+                $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['id']);
+
+                // Get all synced sourceIds.
+                if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
+                    $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
+                }
+
+                $this->entityManager->persist($object);
+                $this->cacheService->cacheObject($object);
+                $responseItems[] = $object;
+            } catch (Exception $exception) {
+                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
             }
-
-            $object = $hydrationService->searchAndReplaceSynchronizations(
-                $mappedResult,
-                $source,
-                $schema,
-                true,
-                true
-            );
-
-            // Some custom logic.
-            $hydrateArray = $this->handleCustomLogic($object->toArray(), $result, $fileEndpoint, $source);
-
-            // Second time to update Bijlagen.
-            $object = $hydrationService->searchAndReplaceSynchronizations(
-                $hydrateArray,
-                $source,
-                $schema,
-                true,
-                false
-            );
-
-            $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['id']);
-
-            // Get all synced sourceIds.
-            if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
-                $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
-            }
-
-            $this->entityManager->persist($object);
-            $this->cacheService->cacheObject($object);
-            $responseItems[] = $object;
         }//end foreach
 
         $this->entityManager->flush();
