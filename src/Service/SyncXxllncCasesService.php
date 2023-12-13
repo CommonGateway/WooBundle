@@ -348,10 +348,10 @@ class SyncXxllncCasesService
             return [];
         }//end if
 
-        $fileEndpoint = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
-        $source       = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        $schema       = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
-        $mapping      = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $fileEndpoint     = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
+        $source           = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+        $schema           = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping          = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
         $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.categorie.mapping.json', 'common-gateway/woo-bundle');
         if ($source instanceof Source === false
             || $schema instanceof Schema === false
@@ -419,7 +419,7 @@ class SyncXxllncCasesService
             } catch (Exception $exception) {
                 $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
-            }
+            }//end try
         }//end foreach
 
         $this->entityManager->flush();
