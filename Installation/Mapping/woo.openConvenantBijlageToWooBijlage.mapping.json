@@ -2,12 +2,12 @@
   "title": "OpenConvenantBijlageToWooBijlage",
   "$id": "https://commongateway.nl/mapping/woo.openConvenantBijlageToWooBijlage.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "passTrough": false,
   "mapping": {
-    "_sourceId": "URL_Bijlage",
-    "titel": "Naam_Bijlage",
-    "url": "URL_Bijlage"
+    "_sourceId": "{% if URL_Bijlage|default %}{% set parts = URL_Bijlage|split('/') %}{% set filename = parts|last %}{{ oin~filename }}{% endif %}",
+    "titel": "{% if Naam_Bijlage|default %}{{ Naam_Bijlage }}{% endif %}",
+    "url": "{% if URL_Bijlage|default %}{{ URL_Bijlage }}{% endif %}"
   },
   "unset": {
     "titel": "unsetIfValue==",

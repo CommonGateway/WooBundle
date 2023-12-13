@@ -1,0 +1,16 @@
+{
+    "title": "Xxllnc Woo zaaksysteem",
+    "$id": "https://commongateway.woo.nl/source/xxllnc.zaaksysteem.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "description": "Xxllnc zaaksysteem api for xxllnc themselves",
+    "location": "!ChangeMe!",
+    "authorizationHeader": "API-KEY",
+    "headers": {
+        "Accept": "*/*",
+        "API-Interface-ID": "!ChangeMe!",
+        "API-KEY": "!ChangeMe!",
+        "Content-Type": "application/json"
+    },
+    "isEnabled": false
+}

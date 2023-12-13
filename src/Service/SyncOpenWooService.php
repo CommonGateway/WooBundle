@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
+use Exception;
 
 /**
  * Service responsible for synchronizing OpenWoo objects to woo objects.
@@ -247,9 +248,10 @@ class SyncOpenWooService
             return [];
         }//end if
 
-        $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
-        $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $source           = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+        $schema           = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping          = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+        $categorieMapping = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.categorie.mapping.json', 'common-gateway/woo-bundle');
         if ($source instanceof Source === false
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
@@ -292,33 +294,40 @@ class SyncOpenWooService
         $responseItems    = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
-            $result       = array_merge($result, $customFields);
-            $mappedResult = $this->mappingService->mapping($mapping, $result);
+            try {
+                $result       = array_merge($result, $customFields);
+                $mappedResult = $this->mappingService->mapping($mapping, $result);
+                // Map categories to prevent multiple variants of the same categorie.
+                $mappedResult = $this->mappingService->mapping($categorieMapping, $mappedResult);
 
-            $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
-            if ($validationErrors !== null) {
-                $validationErrors = implode(', ', $validationErrors);
-                $this->logger->warning("SyncOpenWoo validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
-                isset($this->style) === true && $this->style->warning("SyncOpenWoo validation errors: $validationErrors");
+                $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
+                if ($validationErrors !== null) {
+                    $validationErrors = implode(', ', $validationErrors);
+                    $this->logger->warning("SyncOpenWoo validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
+                    isset($this->style) === true && $this->style->warning("SyncOpenWoo validation errors: $validationErrors");
+                    continue;
+                }
+
+                $object = $hydrationService->searchAndReplaceSynchronizations(
+                    $mappedResult,
+                    $source,
+                    $schema,
+                    true,
+                    true
+                );
+
+                // Get all synced sourceIds.
+                if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
+                    $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
+                }
+
+                $this->entityManager->persist($object);
+                $this->cacheService->cacheObject($object);
+                $responseItems[] = $object;
+            } catch (Exception $exception) {
+                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
-            }
-
-            $object = $hydrationService->searchAndReplaceSynchronizations(
-                $mappedResult,
-                $source,
-                $schema,
-                true,
-                true
-            );
-
-            // Get all synced sourceIds.
-            if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
-                $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
-            }
-
-            $this->entityManager->persist($object);
-            $this->cacheService->cacheObject($object);
-            $responseItems[] = $object;
+            }//end try
         }//end foreach
 
         $this->entityManager->flush();
