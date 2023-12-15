@@ -2,7 +2,7 @@
   "title": "Sitemap index informatie categorie",
   "$id": "https://commongateway.nl/mapping/woo.sitemapindex.informatiecategorie.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "passTrough": false,
   "description": "maps informatiecategorie from https://standaarden.overheid.nl/diwoo/metadata/diwoo-handleiding-sitemapindex-en-sitemaps",
   "mapping": {
@@ -19,7 +19,7 @@
     "sitemapindex-diwoo-infocat-011.xml": "Convenanten",
     "sitemapindex-diwoo-infocat-012.xml": "Jaarplannen en jaarverslagen",
     "sitemapindex-diwoo-infocat-013.xml": "Subsidieverplichtingen anders dan met beschikking",
-    "sitemapindex-diwoo-infocat-014.xml": "Woo verzoek",
+    "sitemapindex-diwoo-infocat-014.xml": "Woo-verzoeken en -besluiten",
     "sitemapindex-diwoo-infocat-015.xml": "Onderzoeksrapporten",
     "sitemapindex-diwoo-infocat-016.xml": "Beschikkingen",
     "sitemapindex-diwoo-infocat-017.xml": "Klachtoordelen"
