@@ -27,9 +27,12 @@ In short: when synchronization is triggered all cases are fetched from a xxllnc 
 The mapping schema can be found here: https://github.com/CommonGateway/WooBundle/blob/main/Installation/Mapping/woo.xxllncCaseToWoo.mapping.json \\
 
 Besides just mapping through a [Gateway mapping](https://commongateway.github.io/CoreBundle/pages/Features/Mappings) there is some custom logic for the portalUrl and the bijlagen (documents) properties.
-This can be found in the SyncXxllncCasesService. \
+
+This can be found for xxllnc synchronizations in the SyncXxllncCasesService.
 For bijlagen, an extra call to the xxllnc zaaksysteem is needed to get the document data.
 And the portalUrl property is configured through the Action->configuration.
+
+And for OpenWoo synchronizations in the SyncOpenWooService.
 
 ### How to synchronize
 
@@ -51,5 +54,5 @@ For this, the Cronjob itself has to be enabled as well.
 
 ### Getting the synchronized objects
 
-After synchronizing objects, you can fetch the objects by just requesting `GET /api/openWOO` to fetch all publications or `GET /api/openWOO?oin={your municipality oin}` to fetch the publications belonging to a single municipality.
+After synchronizing objects, you can fetch the objects by just requesting `GET /api/publications` to fetch all publications or `GET /api/publications?organisation.oin={oin}` to fetch the publications belonging to organisation.
 Make sure here the oin parameter value is the same that is set as configuration on the Action of that municipality.
