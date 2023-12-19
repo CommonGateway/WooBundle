@@ -10,7 +10,7 @@
         "source": "https://commongateway.woo.nl/source/gouda.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json",
-        "organisatie": "Gemeente Ggouda",
+        "organisatie": "Gemeente Gouda",
         "zaaksysteemSearchEndpoint": "/public_search/000/search",
         "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json"
     },
