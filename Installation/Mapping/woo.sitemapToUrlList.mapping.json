@@ -5,7 +5,7 @@
   "title": "SitemapToUrlList",
   "description": "mapping for sitemaps to url lists",
   "mapping": {
-    "pages": "[{%for url in urlset.url %}\"{{ url.loc }}\"{% if loop.last == false %},{%endif%}{% endfor %}]"
+    "pages": "[{%for singleUrl in url %}\"{{ singleUrl.loc }}\"{% if loop.last == false %},{%endif%}{% endfor %}]"
   },
   "cast": {
     "pages": "jsonToArray"

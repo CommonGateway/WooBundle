@@ -2,6 +2,7 @@
 
 namespace CommonGateway\WOOBundle\ActionHandler;
 
+use CommonGateway\WOOBundle\Service\SimCrawlerService;
 use CommonGateway\WOOBundle\Service\SyncOpenWooService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
@@ -22,17 +23,17 @@ class SimSiteHandler implements ActionHandlerInterface
 {
 
     /**
-     * @var SyncOpenWooService
+     * @var SimCrawlerService
      */
-    private SyncOpenWooService $service;
+    private SimCrawlerService $service;
 
 
     /**
      * SyncOpenWooHandler constructor.
      *
-     * @param SyncOpenWooService $service
+     * @param SimCrawlerService $service
      */
-    public function __construct(SyncOpenWooService $service)
+    public function __construct(SimCrawlerService $service)
     {
         $this->service = $service;
 
@@ -57,7 +58,7 @@ class SimSiteHandler implements ActionHandlerInterface
                 'schema',
                 'sitemapMapping',
                 'pageMapping',
-                'organisatie'
+                'organisatie',
             ],
             'properties'  => [
                 'oin'            => [
@@ -79,14 +80,14 @@ class SimSiteHandler implements ActionHandlerInterface
                     'reference'   => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'required'    => true,
                 ],
-                'sitemapMapping'        => [
+                'sitemapMapping' => [
                     'type'        => 'string',
                     'description' => 'The mapping for open woo to publication.',
                     'example'     => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
                     'reference'   => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
                     'required'    => true,
                 ],
-                'pageMapping'        => [
+                'pageMapping'    => [
                     'type'        => 'string',
                     'description' => 'The mapping for open woo to publication.',
                     'example'     => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
@@ -97,6 +98,12 @@ class SimSiteHandler implements ActionHandlerInterface
                     'type'        => 'string',
                     'description' => 'The organisatie.',
                     'example'     => 'Gemeente Buren',
+                    'required'    => true,
+                ],
+                'sourceLocation' => [
+                    'type'        => 'string',
+                    'description' => 'The endpoint of the source.',
+                    'example'     => '/owc/openwoo/v1/items',
                     'required'    => true,
                 ],
             ],
@@ -117,7 +124,7 @@ class SimSiteHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->service->syncOpenWooHandler($data, $configuration);
+        return $this->service->SimSiteHandler($data, $configuration);
 
     }//end run()
 
