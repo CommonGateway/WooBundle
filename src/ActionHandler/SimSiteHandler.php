@@ -57,7 +57,7 @@ class SimSiteHandler implements ActionHandlerInterface
                 'schema',
                 'sitemapMapping',
                 'pageMapping',
-                'organisatie'
+                'organisatie',
             ],
             'properties'  => [
                 'oin'            => [
@@ -79,14 +79,14 @@ class SimSiteHandler implements ActionHandlerInterface
                     'reference'   => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'required'    => true,
                 ],
-                'sitemapMapping'        => [
+                'sitemapMapping' => [
                     'type'        => 'string',
                     'description' => 'The mapping for open woo to publication.',
                     'example'     => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
                     'reference'   => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
                     'required'    => true,
                 ],
-                'pageMapping'        => [
+                'pageMapping'    => [
                     'type'        => 'string',
                     'description' => 'The mapping for open woo to publication.',
                     'example'     => 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json',
