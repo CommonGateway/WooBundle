@@ -1,0 +1,14 @@
+{
+  "$id": "https://commongateway.nl/mapping/woo.simMetadataToWoo.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "title": "SimMetadataToWoo",
+  "description": "mapping for sitemaps to url lists",
+  "mapping": {
+    "titel": "data.route.nodeContext.title",
+    "beschrijving": "{% for paragraph in data.route.nodeContext.fieldParagraphs  %}{% if paragraph.entity.fieldText|default %}{{ paragraph.entity.fieldText.processed }} {% endif %}{% endfor %}",
+    "publicatiedatum": "data.route.nodeContext.publishedAt.value",
+    "portalUrl": "{{ site|trim('\/', 'right') }}{{ data.route.nodeContext.entityUrl.path }}"
+  },
+  "passTrough": false
+}

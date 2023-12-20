@@ -1,0 +1,21 @@
+{
+    "title": "SyncSloterburgAction",
+    "$id": "https://commongateway.nl/woo.SyncSloterburg.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.3",
+    "listens": ["woo.default.listens"],
+    "configuration": {
+        "oin": "sloterburg",
+        "organisatie": "Gemeente Sloterburg",
+        "source": "https://commongateway.woo.nl/source/sloterburt.simsite.source.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",,,
+        "sitemapMapping": "https://commongateway.nl/mapping/woo.sitemapToUrlList.mapping.json",
+        "pageMapping": "https://commongateway.nl/mapping/woo.simMetadataToWoo.mapping.json",
+        "sourceLocation": "api/gql/contentdetails"
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SimSiteHandler"
+}
