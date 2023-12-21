@@ -51,7 +51,6 @@ class SimCrawlerService
 
             $metaDataResponse = $this->callService->call($source, $configuration['sourceLocation'], 'GET', ['query' => ['path' => $parsedUrl['path']]]);
             $metadata         = $this->callService->decodeResponse($source, $metaDataResponse);
-
             $metadata['site'] = $source->getLocation();
 
             $wooArray = $this->mappingService->mapping($pageMapping, $metadata);
@@ -61,13 +60,20 @@ class SimCrawlerService
                 'naam' => $configuration['organisatie'],
             ];
 
-            $wooObject = new ObjectEntity($schema);
-            $wooObject->hydrate($wooArray);
+            $synchronization = $this->synchronizationService->findSyncBySource($source, $schema, $page);
 
-            $this->entityManager->persist($wooObject);
+            if($synchronization->getObject() === null) {
+                $synchronization->setObject(new ObjectEntity($schema));
+            }
+
+            $synchronization->getObject()->hydrate($wooArray);
+            $this->entityManager->persist($synchronization->getObject());
+
+            $synchronization->setLastSynced(new \DateTime('now'));
+            $this->entityManager->persist($synchronization);
+
+            $this->entityManager->flush();
         }
-
-        $this->entityManager->flush();
 
         return $data;
 
