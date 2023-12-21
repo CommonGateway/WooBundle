@@ -3,6 +3,7 @@
 namespace CommonGateway\WOOBundle\Service;
 
 use App\Entity\ObjectEntity;
+use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
