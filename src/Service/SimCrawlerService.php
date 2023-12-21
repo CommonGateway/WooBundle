@@ -61,10 +61,10 @@ class SimCrawlerService
     /**
      * Service constructor.
      *
-     * @param CallService $callService The call service.
-     * @param EntityManagerInterface $entityManager The entity manager.
-     * @param GatewayResourceService $resourceService The resource service.
-     * @param MappingService $mappingService The mapping service.
+     * @param CallService            $callService            The call service.
+     * @param EntityManagerInterface $entityManager          The entity manager.
+     * @param GatewayResourceService $resourceService        The resource service.
+     * @param MappingService         $mappingService         The mapping service.
      * @param SynchronizationService $synchronizationService The synchronization service.
      */
     public function __construct(
@@ -74,12 +74,11 @@ class SimCrawlerService
         MappingService $mappingService,
         SynchronizationService $synchronizationService
     ) {
-        $this->callService     = $callService;
-        $this->entityManager   = $entityManager;
-        $this->resourceService = $resourceService;
-        $this->mappingService  = $mappingService;
+        $this->callService            = $callService;
+        $this->entityManager          = $entityManager;
+        $this->resourceService        = $resourceService;
+        $this->mappingService         = $mappingService;
         $this->synchronizationService = $synchronizationService;
-
 
     }//end __construct()
 
@@ -87,7 +86,7 @@ class SimCrawlerService
     /**
      * Retrieve a sitemap.xml from a source, parse it into a list of paths, fetch metadata and map it into publications.
      *
-     * @param array $data The data retrieved by the action.
+     * @param array $data          The data retrieved by the action.
      * @param array $configuration The configuration of the action.
      *
      * @return array The resulting data array.
@@ -120,7 +119,7 @@ class SimCrawlerService
 
             $synchronization = $this->synchronizationService->findSyncBySource($source, $schema, $page);
 
-            if($synchronization->getObject() === null) {
+            if ($synchronization->getObject() === null) {
                 $synchronization->setObject(new ObjectEntity($schema));
             }
 
@@ -131,7 +130,7 @@ class SimCrawlerService
             $this->entityManager->persist($synchronization);
 
             $this->entityManager->flush();
-        }
+        }//end foreach
 
         return $data;
 
