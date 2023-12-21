@@ -106,7 +106,7 @@ class SimCrawlerService
         foreach ($pages as $page) {
             $parsedUrl = parse_url($page);
 
-            $metaDataResponse = $this->callService->call($source, $configuration['sourceLocation'], 'GET', ['query' => ['path' => $parsedUrl['path']]]);
+            $metaDataResponse = $this->callService->call($source, $configuration['sourceEndpoint'], 'GET', ['query' => ['path' => $parsedUrl['path']]]);
             $metadata         = $this->callService->decodeResponse($source, $metaDataResponse);
             $metadata['site'] = $source->getLocation();
 

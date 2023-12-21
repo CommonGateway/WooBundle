@@ -100,7 +100,7 @@ class SimSiteHandler implements ActionHandlerInterface
                     'example'     => 'Gemeente Buren',
                     'required'    => true,
                 ],
-                'sourceLocation' => [
+                'sourceEndpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint of the source.',
                     'example'     => '/owc/openwoo/v1/items',
