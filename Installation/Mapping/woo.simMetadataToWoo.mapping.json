@@ -6,9 +6,10 @@
   "description": "mapping for sitemaps to url lists",
   "mapping": {
     "titel": "data.route.nodeContext.title",
-    "beschrijving": "{% for paragraph in data.route.nodeContext.fieldParagraphs  %}{% if paragraph.entity.fieldText|default %}{{ paragraph.entity.fieldText.processed }} {% endif %}{% endfor %}",
-    "publicatiedatum": "data.route.nodeContext.publishedAt.value",
-    "portalUrl": "{{ site|trim('\/', 'right') }}{{ data.route.nodeContext.entityUrl.path }}"
+    "beschrijving": "{% for paragraph in data.route.nodeContext.fieldParagraphs %}{% if paragraph.entity.fieldText|default %}{{ paragraph.entity.fieldText.processed }} {% endif %}{% endfor %}",
+    "publicatiedatum": "{{ data.route.nodeContext.publishedAt.value|date('c') }}",
+    "portalUrl": "{{ site|trim('\/', 'right') }}{{ data.route.nodeContext.entityUrl.path }}",
+    "categorie": "{{ data.route.nodeContext.entityBundle|trans({'weblog': 'Nieuwsberichten','news': 'Nieuwsberichten','landing_page': \"Webpagina's\",'page': \"Webpagina's\",'overview_page': \"Webpagina's\",'event': \"Webpagina's\",'pdc_item': 'Producten','profile': 'Organisatie en werkwijze','vacancy': 'Organisatie en werkwijze','opening_hours': 'Bereikbaarheidsgegevens','archive': 'Archief'}, '', 'nl')|raw}}"
   },
   "passTrough": false
 }
