@@ -7,8 +7,8 @@
     "configuration": {
         "oin": "sloterburg",
         "organisatie": "Gemeente Sloterburg",
-        "source": "https://commongateway.woo.nl/source/sloterburt.simsite.source.json",
-        "schema": "https://commongateway.nl/woo.publicatie.schema.json",,,
+        "source": "https://commongateway.woo.nl/source/sloterburg.simsite.source.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "sitemapMapping": "https://commongateway.nl/mapping/woo.sitemapToUrlList.mapping.json",
         "pageMapping": "https://commongateway.nl/mapping/woo.simMetadataToWoo.mapping.json",
         "sourceEndpoint": "/api/gql/contentdetails"
