@@ -1,0 +1,12 @@
+{
+    "title": "Sloterburg Simsite",
+    "$id": "https://commongateway.woo.nl/source/sloterburg.simsite.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "description": "Sloterburg website",
+    "location": "!ChangeMe!",
+    "headers": {
+        "Accept": "*/*"
+    },
+    "isEnabled": false
+}
