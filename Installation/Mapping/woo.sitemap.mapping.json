@@ -2,10 +2,10 @@
   "title": "Sitemap",
   "$id": "https://commongateway.nl/mapping/woo.sitemap.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "passTrough": false,
   "mapping": {
-    "loc": "{{ selfUrl(object) }}",
+    "loc": "{{ app.request.getSchemeAndHttpHost()|trim('/', 'right') }}/{{ object.id }}",
     "lastmod": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}"
   }
 }
