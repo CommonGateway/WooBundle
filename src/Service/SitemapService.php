@@ -247,7 +247,7 @@ class SitemapService
             }
 
             $filter['categorie'] = $categorieDot->get($parameters['sitemapindex']);
-            $categorieStr        = 'categorie='.$categorieDot->get($parameters['sitemapindex']);
+            $categorieStr        = 'categorie='.urlencode($categorieDot->get($parameters['sitemapindex']));
             unset($filter['sitemapindex']);
         }
 
