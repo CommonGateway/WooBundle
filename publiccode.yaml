@@ -18,23 +18,25 @@ softwareType: softwareAddon
 description:
   en:
     localisedName: null
-    genericName: Symfony bundle for WOO functionality.
-    shortDescription: WooBundle
-    longDescription: Symfony bundle for WOO functionality.
+    genericName: null
+    shortDescription: "Symfony bundle for WOO functionality."
+    longDescription: "Symfony bundle for WOO functionality."
     documentation: null
     apiDocumentation: null
-    features: []
+    features:
+      - Common Ground Gateway Plugin
     screenshots: []
     videos: []
     awards: []
   nl:
     localisedName: null
-    genericName: Symfony bundle voor WOO functionaliteit.
-    shortDescription: WooBundle
-    longDescription: Symfony bundle voor WOO functionaliteit.
+    genericName: null
+    shortDescription: "Symfony bundle voor WOO functionaliteit."
+    longDescription: "Symfony bundle voor WOO functionaliteit."
     documentation: null
     apiDocumentation: null
-    features: []
+    features:
+      - Common Ground Gateway Plugin
     screenshots: []
     videos: []
     awards: []
