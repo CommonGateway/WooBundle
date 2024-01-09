@@ -262,7 +262,7 @@ class SitemapService
         for ($i = 1; $i <= $pages; $i++) {
             // The location of the sitemap file is the endpoint of the sitemap.
             $location['location']      = $this->nonAsciiUrlEncode(
-                $domain.'/api/sitemaps/'.$parameters['oin'].'/sitemap?'.$categorieStr.'&_page='.$i
+                $domain.'/api/sitemaps/'.$parameters['oin'].'/sitemap?'.urlencode($categorieStr.'&_page='.$i)
             );
             $sitemapindex['sitemap'][] = $this->mappingService->mapping($mapping, $location);
         }
