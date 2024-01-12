@@ -43,10 +43,10 @@ Then find the Action for that municipality, check if the oin is set properly, an
 After this, copy the Action reference.
 
 Then in the PHP container you can execute the following command:
-`bin/console woo:objects:sync null {action reference}`
+`bin/console woo:objects:sync {action reference}`
 to start synchronizing zaaksysteem cases to woo publications.
 For example: \
-`bin/console woo:objects:sync null https://commongateway.nl/pdd.SyncNoordwijkAction.action.json`
+`bin/console woo:objects:sync https://commongateway.nl/pdd.SyncNoordwijkAction.action.json`
 
 Besides being able to start synchronizing these publications manually through a command,
 the "WOO default cronjob" Cronjob also synchronizes publications every 10 minutes if the Source and Action are configured properly.
