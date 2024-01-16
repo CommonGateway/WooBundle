@@ -1,0 +1,16 @@
+{
+    "title": "Conduction Woo zaaksysteem",
+    "$id": "https://commongateway.woo.nl/source/conduction.zaaksysteem.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "description": "Conduction zaaksysteem api",
+    "location": "!ChangeMe!",
+    "authorizationHeader": "API-KEY",
+    "headers": {
+        "Accept": "*/*",
+        "API-Interface-ID": "!ChangeMe!",
+        "API-KEY": "!ChangeMe!",
+        "Content-Type": "application/json"
+    },
+    "isEnabled": false
+}
