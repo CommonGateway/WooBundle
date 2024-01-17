@@ -62,7 +62,7 @@ class SyncOpenWooDocumentHandler implements ActionHandlerInterface
                 'sourceEndpoint',
             ],
             'properties'  => [
-                'endpoint'            => [
+                'endpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint reference for documents.',
                     'example'     => 'buren',
