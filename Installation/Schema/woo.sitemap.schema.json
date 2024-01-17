@@ -23,6 +23,10 @@
     },
     "domains": {
       "type": "array"
+    },
+    "organisatiecode": {
+      "type": "string",
+      "description": "organisatiecode bij KOOP"
     }
   }
 }

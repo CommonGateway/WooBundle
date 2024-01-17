@@ -172,7 +172,7 @@ class FileService
      *
      * @return string The endpoint to download the document from.
      */
-    private function generateDownloadEndpoint(string $id, Endpoint $downloadEndpoint): string
+    public function generateDownloadEndpoint(string $id, Endpoint $downloadEndpoint): string
     {
         // Unset the last / from the app_url.
         $baseUrl = rtrim($this->parameterBag->get('app_url'), '/');

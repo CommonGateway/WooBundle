@@ -145,14 +145,14 @@ class SitemapService
         $parameters = array_merge($this->data['path'], $this->data['query']);
 
         switch ($this->configuration['type']) {
-        case 'sitemap':
-            return $this->getSitemap($parameters);
-        case 'sitemapindex':
-            return $this->getSitemapindex($parameters);
-        case 'robot.txt':
-            return $this->getRobot($parameters);
-        default:
-            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
+            case 'sitemap':
+                return $this->getSitemap($parameters);
+            case 'sitemapindex':
+                return $this->getSitemapindex($parameters);
+            case 'robot.txt':
+                return $this->getRobot($parameters);
+            default:
+                $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
@@ -172,7 +172,7 @@ class SitemapService
     {
         // Get the publication schema and the sitemap mapping.
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
-        $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
+        $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.bijlage.schema.json', 'common-gateway/woo-bundle');
         if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false) {
             $this->logger->error('The publication schema or the sitemap mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
             $this->data['response'] = $this->createResponse(['Message' => 'The publication schema or the sitemap mapping cannot be found.'], 409, 'error');
@@ -189,15 +189,17 @@ class SitemapService
 
         unset($filter['oin'], $filter['sitemaps'], $filter['sitemap']);
 
+        $filter = [
+            '_limit'          => 50000,];
+
         // Get all the publication objects with the given query.
         $objects = $this->cacheService->searchObjects(null, $filter, [$publicatieSchema->getId()->toString()])['results'];
 
         $sitemap = [];
         foreach ($objects as $object) {
-            $publicatie['object'] = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
-
-            $mappedObject        = $this->mappingService->mapping($mapping, $publicatie);
-            $mappedObject['loc'] = $this->nonAsciiUrlEncode($mappedObject['loc']);
+            $document = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
+            $file = $document->getValueObject('url')->getFiles()->first();
+            $mappedObject        = $this->mappingService->mapping($mapping, ['object' => json_decode(json_encode($object), true), 'file' => $file]);
 
             $sitemap['url'][] = $mappedObject;
         }

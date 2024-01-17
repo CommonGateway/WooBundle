@@ -5,7 +5,7 @@
   "version": "0.0.2",
   "passTrough": false,
   "mapping": {
-    "loc": "{{ app.request.getSchemeAndHttpHost()|trim('/', 'right') }}/{{ object.id }}",
+    "loc": "object.url",
     "lastmod": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}"
   }
 }
