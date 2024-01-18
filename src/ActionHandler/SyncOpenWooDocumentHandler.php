@@ -52,14 +52,7 @@ class SyncOpenWooDocumentHandler implements ActionHandlerInterface
             'title'       => 'SyncOpenWooHandler',
             'description' => 'Handles the sync for open woo requests.',
             'required'    => [
-                'oin',
-                'portalUrl',
-                'source',
-                'schema',
-                'mapping',
-                'sourceType',
-                'organisatie',
-                'sourceEndpoint',
+                'endpoint'
             ],
             'properties'  => [
                 'endpoint' => [
