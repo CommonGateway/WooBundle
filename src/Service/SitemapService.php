@@ -145,14 +145,14 @@ class SitemapService
         $parameters = array_merge($this->data['path'], $this->data['query']);
 
         switch ($this->configuration['type']) {
-            case 'sitemap':
-                return $this->getSitemap($parameters);
-            case 'sitemapindex':
-                return $this->getSitemapindex($parameters);
-            case 'robot.txt':
-                return $this->getRobot($parameters);
-            default:
-                $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
+        case 'sitemap':
+            return $this->getSitemap($parameters);
+        case 'sitemapindex':
+            return $this->getSitemapindex($parameters);
+        case 'robot.txt':
+            return $this->getRobot($parameters);
+        default:
+            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
@@ -226,7 +226,7 @@ class SitemapService
             $documents   = $this->getAllDocumentsForObject($objectArray);
 
             $publisher             = [];
-            $publisher['name']     = $objectArray['organisatie']['naam'] ?? '';
+            $publisher['name']     = ($objectArray['organisatie']['naam'] ?? '');
             $publisher['resource'] = $publishers[0]['organisatiecode'];
 
             $mappedObject = $this->mappingService->mapping($mapping, ['object' => $objectArray, 'documents' => $documents, 'publisher' => $publisher]);
