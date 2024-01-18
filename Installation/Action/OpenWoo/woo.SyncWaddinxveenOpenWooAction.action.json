@@ -2,7 +2,7 @@
     "title": "SyncWaddinxveenOpenWooAction",
     "$id": "https://commongateway.nl/woo.SyncWaddinxveenOpenWooAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "00000001001998389000",
