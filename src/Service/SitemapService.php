@@ -160,21 +160,22 @@ class SitemapService
 
     }//end sitemapHandler()
 
+
     private function getAllDocumentsForObject(array $object): array
     {
         $documents = $object['bijlagen'];
 
-        if(isset($object['metadata']['informatieverzoek']['verzoek']) === true) {
+        if (isset($object['metadata']['informatieverzoek']['verzoek']) === true) {
             $documents[] = $object['metadata']['informatieverzoek']['verzoek'];
         }
 
-        if(isset($object['metadata']['informatieverzoek']['besluit']) === true) {
+        if (isset($object['metadata']['informatieverzoek']['besluit']) === true) {
             $documents[] = $object['metadata']['informatieverzoek']['besluit'];
         }
 
-
         return $documents;
-    }
+
+    }//end getAllDocumentsForObject()
 
 
     /**
@@ -205,8 +206,7 @@ class SitemapService
 
         unset($filter['oin'], $filter['sitemaps'], $filter['sitemap']);
 
-//        $filter = ['_limit' => 50000];
-
+        // $filter = ['_limit' => 50000];
         // Get all the publication objects with the given query.
         $objects = $this->cacheService->searchObjects(null, $filter, [$publicatieSchema->getId()->toString()])['results'];
 
