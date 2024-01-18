@@ -1,18 +1,18 @@
 {
-    "title": "SyncRidderkerkOpenConvenantAction",
-    "$id": "https://commongateway.nl/woo.SyncRidderkerkOpenConvenantAction.action.json",
+    "title": "SyncStedebroecOpenConvenantAction",
+    "$id": "https://commongateway.nl/woo.SyncStedebroecOpenConvenantAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
     "version": "0.0.3",
     "listens": ["woo.default.listens"],
     "configuration": {
-        "oin": "00000001001877410000",
-        "portalUrl": "https://conductionnl.github.io/woo-website-ridderkerk",
-        "source": "https://commongateway.woo.nl/source/ridderkerk.openwoo.source.json",
+        "oin": "00000001004620732000",
+        "portalUrl": "https://conductionnl.github.io/woo-website-stedebroec",
+        "source": "https://commongateway.woo.nl/source/stedebroec.openwoo.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
         "sourceType": "openWoo",
-        "organisatie": "Gemeente Ridderkerk",
-        "sourceEndpoint": "/owc/openconvenanten/v1/items"
+        "organisatie": "Gemeente Stedebroec",
+        "sourceEndpoint": "/wp-json/owc/openconvenanten/v1/items"
     },
     "conditions":
     {

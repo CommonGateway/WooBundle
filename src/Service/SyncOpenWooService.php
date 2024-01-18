@@ -3,7 +3,10 @@
 namespace CommonGateway\WOOBundle\Service;
 
 use App\Entity\Entity as Schema;
+use App\Entity\File;
 use App\Entity\Mapping;
+use App\Entity\ObjectEntity;
+use App\Service\ObjectEntityService;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
@@ -78,6 +81,10 @@ class SyncOpenWooService
      */
     private CacheService $cacheService;
 
+    private FileService $fileService;
+
+    private ObjectEntityService $gatewayOEService;
+
     /**
      * @var array
      */
@@ -108,7 +115,9 @@ class SyncOpenWooService
         MappingService $mappingService,
         LoggerInterface $pluginLogger,
         ValidationService $validationService,
-        CacheService $cacheService
+        CacheService $cacheService,
+        FileService $fileService,
+        ObjectEntityService $gatewayOEService
     ) {
         $this->resourceService   = $resourceService;
         $this->callService       = $callService;
@@ -118,6 +127,8 @@ class SyncOpenWooService
         $this->logger            = $pluginLogger;
         $this->validationService = $validationService;
         $this->cacheService      = $cacheService;
+        $this->fileService       = $fileService;
+        $this->gatewayOEService  = $gatewayOEService;
 
     }//end __construct()
 
@@ -292,6 +303,7 @@ class SyncOpenWooService
 
         $idsSynced        = [];
         $responseItems    = [];
+        $documents        = [];
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
             try {
@@ -324,6 +336,16 @@ class SyncOpenWooService
                 $this->entityManager->persist($object);
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
+
+                $renderedObject = $object->toArray();
+                $documents      = array_merge($documents, $renderedObject['bijlagen']);
+                if (isset($renderedObject['metadata']['verzoek']['informatieverzoek']) === true) {
+                    $documents[] = $renderedObject['metadata']['verzoek']['informatieverzoek'];
+                }
+
+                if (isset($renderedObject['verzoek']['besluit']) === true) {
+                    $documents[] = $renderedObject['metadata']['verzoek']['besluit'];
+                }
             } catch (Exception $exception) {
                 $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
@@ -331,6 +353,12 @@ class SyncOpenWooService
         }//end foreach
 
         $this->entityManager->flush();
+
+        foreach ($documents as $document) {
+            $documentData['document'] = $document;
+            $documentData['source']   = $source->getReference();
+            $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
+        }
 
         $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
 
@@ -344,6 +372,59 @@ class SyncOpenWooService
         return $this->data;
 
     }//end syncOpenWooHandler()
+
+
+    public function syncOpenWooDocumentHandler(array $data, array $config): array
+    {
+        $source   = $this->resourceService->getSource($data['source'], 'common-gateway/woo-bundle');
+        $document = $data['document'];
+        $endpoint = $this->resourceService->getEndpoint($config['endpoint'], 'common-gateway/woo-bundle');
+
+        if (substr($document['url'], 0, strlen($source->getLocation())) === $source->getLocation()) {
+            $path = substr($document['url'], strlen($source->getLocation()));
+        } else {
+            $this->logger->error('Url of document does not correspond with source');
+
+            return $data;
+        }
+
+        $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->find($document['_self']['id']);
+        if ($bijlageObject instanceof ObjectEntity === false) {
+            return $data;
+        }
+
+        $value = $bijlageObject->getValueObject('url');
+
+        if ($value->getFiles()->count() > 0) {
+            $file = $value->getFiles()->first();
+        } else {
+            $file = new File();
+        }
+
+        $response = $this->callService->call($source, $path);
+
+        $file->setBase64(base64_encode($response->getBody()));
+        $file->setMimeType($response->getHeader('content-type')[0]);
+        $file->setSize($response->getHeader('content-length')[0]);
+        $file->setName(($document['titel'] ?? $document['url']));
+
+        $explodedFilename = explode('.', ($document['titel'] ?? $document['url']));
+        $file->setExtension(end($explodedFilename));
+        $file->setValue($value);
+
+        $this->entityManager->persist($file);
+
+        $bijlageObject->hydrate(['url' => $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint), 'extension' => end($explodedFilename)]);
+
+        $this->entityManager->persist($bijlageObject);
+
+        $this->entityManager->flush();
+
+        $data['document'] = $bijlageObject->toArray();
+
+        return $data;
+
+    }//end syncOpenWooDocumentHandler()
 
 
 }//end class

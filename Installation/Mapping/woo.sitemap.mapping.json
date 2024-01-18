@@ -2,10 +2,9 @@
   "title": "Sitemap",
   "$id": "https://commongateway.nl/mapping/woo.sitemap.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "passTrough": false,
   "mapping": {
-    "loc": "{{ app.request.getSchemeAndHttpHost()|trim('/', 'right') }}/{{ object.id }}",
-    "lastmod": "{{ \"now\"|date(\"Y-m-d H:i:s\") }}"
+    "url": "[{% for document in documents %}{% if not loop.first %},{% endif %}{{ map('https://commongateway.nl/mapping/woo.documentToSitemap.mapping.json', {'object': object, 'document': document, 'publisher': publisher}) }}{%endfor%}"
   }
 }

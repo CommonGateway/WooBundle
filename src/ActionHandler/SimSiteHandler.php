@@ -103,7 +103,7 @@ class SimSiteHandler implements ActionHandlerInterface
                 'sourceEndpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint of the source.',
-                    'example'     => '/owc/openwoo/v1/items',
+                    'example'     => '/wp-json/owc/openwoo/v1/items',
                     'required'    => true,
                 ],
             ],

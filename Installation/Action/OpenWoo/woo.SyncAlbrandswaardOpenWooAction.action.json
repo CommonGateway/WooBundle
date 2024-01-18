@@ -2,7 +2,7 @@
     "title": "SyncAlbrandswaardOpenWooAction",
     "$id": "https://commongateway.nl/woo.SyncAlbrandswaardOpenWooAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "00000001006825515000",
@@ -12,7 +12,7 @@
         "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
         "sourceType": "openWoo",
         "organisatie": "Gemeente Albrandswaard",
-        "sourceEndpoint": "/owc/openwoo/v1/items"
+        "sourceEndpoint": "/wp-json/owc/openwoo/v1/items"
     },
     "conditions":
     {

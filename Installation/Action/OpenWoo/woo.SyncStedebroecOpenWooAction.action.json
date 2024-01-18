@@ -1,18 +1,18 @@
 {
-    "title": "SyncTexelOpenWooAction",
-    "$id": "https://commongateway.nl/woo.SyncTexelOpenWooAction.action.json",
+    "title": "SyncStedebroecOpenWooAction",
+    "$id": "https://commongateway.nl/woo.SyncStedebroecOpenWooAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "listens": ["woo.default.listens"],
     "configuration": {
-        "oin": "00000001002000155000",
-        "portalUrl": "https://conductionnl.github.io/woo-website-texel",
-        "source": "https://commongateway.woo.nl/source/texel.openwoo.source.json",
+        "oin": "00000001004620732000",
+        "portalUrl": "https://conductionnl.github.io/woo-website-stedebroec",
+        "source": "https://commongateway.woo.nl/source/stedebroec.openwoo.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
         "sourceType": "openWoo",
-        "organisatie": "Gemeente Texel",
-        "sourceEndpoint": "/owc/openwoo/v1/items"
+        "organisatie": "Gemeente Stedebroec",
+        "sourceEndpoint": "/wp-json/owc/openwoo/v1/items"
     },
     "conditions":
     {

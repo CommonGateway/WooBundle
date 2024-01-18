@@ -2,7 +2,7 @@
   "title": "Sitemap",
   "$id": "https://commongateway.nl/woo.sitemap.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "object",
   "required": [],
   "properties": {
@@ -23,6 +23,10 @@
     },
     "domains": {
       "type": "array"
+    },
+    "organisatiecode": {
+      "type": "string",
+      "description": "organisatiecode bij KOOP"
     }
   }
 }
