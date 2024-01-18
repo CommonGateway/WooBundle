@@ -27,6 +27,9 @@
     },
     "categorie": {
       "type": "string"
+    },
+    "extension":  {
+      "type": "string"
     }
   }
 }

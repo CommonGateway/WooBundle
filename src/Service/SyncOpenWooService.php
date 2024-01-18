@@ -414,7 +414,7 @@ class SyncOpenWooService
 
         $this->entityManager->persist($file);
 
-        $bijlageObject->hydrate(['url' => $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint)]);
+        $bijlageObject->hydrate(['url' => $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint), 'extension' => end($explodedFilename)]);
 
         $this->entityManager->persist($bijlageObject);
 

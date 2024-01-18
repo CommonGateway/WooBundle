@@ -1,0 +1,21 @@
+{
+  "title": "DocumentToSitemap",
+  "$id": "https://commongateway.nl/mapping/woo.documentToSitemap.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "loc": "document.url",
+    "lastmod": "{{ document._self.dateModified|date(\"Y-m-d H:i:s\") }}",
+    "diwoo:Document.diwoo:DiWoo.diwoo:creatiedatum": "{{ document._self.dateCreated|date('Y-m-d') }}",
+    "diwoo.Document.diwoo:DiWoo.diwoo:publisher.@resource": "publisher.resource",
+    "diwoo.Document.diwoo:DiWoo.diwoo:publisher.#": "publisher.name",
+    "diwoo.Document.diwoo:DiWoo.diwoo:format.@resource": "http://publications.europa.eu/resource/authority/file-type/{{ document.extension|upper }}",
+    "diwoo.Document.diwoo:DiWoo.diwoo:format.#": "{{ document.extension|lower }}",
+    "diwoo.Document.diwoo:DiWoo.diwoo:classificatiecollectie.diwoo:informatiecategorieen.diwoo:informatiecategorie.#": "",
+    "diwoo.Document.diwoo:DiWoo.diwoo:classificatiecollectie.diwoo:informatiecategorieen.diwoo:informatiecategorie.@resource": "",
+    "diwoo.Document.diwoo:DiWoo.diwoo:documenthandelingen.diwoo:documenthandeling.diwoo:soortHandeling.#": "publicatie",
+    "diwoo.Document.diwoo:DiWoo.diwoo:documenthandelingen.diwoo:documenthandeling.diwoo:soortHandeling.@resource": "https://identifier.overheid.nl/tooi/def/thes/kern/c_932b7730",
+    "diwoo.Document.diwoo:DiWoo.diwoo:documenthandelingen.diwoo:documenthandeling.diwoo:atTime": "{{ object.publicatiedatum }}"
+  }
+}

@@ -160,6 +160,22 @@ class SitemapService
 
     }//end sitemapHandler()
 
+    private function getAllDocumentsForObject(array $object): array
+    {
+        $documents = $object['bijlagen'];
+
+        if(isset($object['metadata']['informatieverzoek']['verzoek']) === true) {
+            $documents[] = $object['metadata']['informatieverzoek']['verzoek'];
+        }
+
+        if(isset($object['metadata']['informatieverzoek']['besluit']) === true) {
+            $documents[] = $object['metadata']['informatieverzoek']['besluit'];
+        }
+
+
+        return $documents;
+    }
+
 
     /**
      * Generates a sitemap for the given organization
@@ -172,7 +188,7 @@ class SitemapService
     {
         // Get the publication schema and the sitemap mapping.
         $mapping          = $this->resourceService->getMapping('https://commongateway.nl/mapping/woo.sitemap.mapping.json', 'common-gateway/woo-bundle');
-        $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.bijlage.schema.json', 'common-gateway/woo-bundle');
+        $publicatieSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.publicatie.schema.json', 'common-gateway/woo-bundle');
         if ($publicatieSchema instanceof Schema === false || $mapping instanceof Mapping === false) {
             $this->logger->error('The publication schema or the sitemap mapping cannot be found.', ['plugin' => 'common-gateway/woo-bundle']);
             $this->data['response'] = $this->createResponse(['Message' => 'The publication schema or the sitemap mapping cannot be found.'], 409, 'error');
@@ -189,16 +205,15 @@ class SitemapService
 
         unset($filter['oin'], $filter['sitemaps'], $filter['sitemap']);
 
-        $filter = ['_limit' => 50000];
+//        $filter = ['_limit' => 50000];
 
         // Get all the publication objects with the given query.
         $objects = $this->cacheService->searchObjects(null, $filter, [$publicatieSchema->getId()->toString()])['results'];
 
         $sitemap = [];
         foreach ($objects as $object) {
-            $document     = $this->entityManager->getRepository('App:ObjectEntity')->find($object['_id']);
-            $file         = $document->getValueObject('url')->getFiles()->first();
-            $mappedObject = $this->mappingService->mapping($mapping, ['object' => json_decode(json_encode($object), true), 'file' => $file]);
+            $documents    = $this->getAllDocumentsForObject($object);
+            $mappedObject = $this->mappingService->mapping($mapping, ['object' => json_decode(json_encode($object), true), 'documents' => $documents]);
 
             $sitemap['url'][] = $mappedObject;
         }
