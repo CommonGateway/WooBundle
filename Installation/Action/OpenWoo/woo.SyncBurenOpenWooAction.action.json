@@ -12,7 +12,7 @@
         "mapping": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
         "sourceType": "openWoo",
         "organisatie": "Gemeente Buren",
-        "sourceEndpoint": "/owc/openwoo/v1/items"
+        "sourceEndpoint": "/wp-json/owc/openwoo/v1/items"
     },
     "conditions":
     {

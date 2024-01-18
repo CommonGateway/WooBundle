@@ -145,14 +145,14 @@ class SitemapService
         $parameters = array_merge($this->data['path'], $this->data['query']);
 
         switch ($this->configuration['type']) {
-        case 'sitemap':
-            return $this->getSitemap($parameters);
-        case 'sitemapindex':
-            return $this->getSitemapindex($parameters);
-        case 'robot.txt':
-            return $this->getRobot($parameters);
-        default:
-            $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
+            case 'sitemap':
+                return $this->getSitemap($parameters);
+            case 'sitemapindex':
+                return $this->getSitemapindex($parameters);
+            case 'robot.txt':
+                return $this->getRobot($parameters);
+            default:
+                $this->logger->error('Invalid action configuration type.', ['plugin' => 'common-gateway/woo-bundle']);
         }
 
         $this->data['response'] = $this->createResponse(['Message' => 'Invalid action configuration type.'], 409, 'error');
@@ -161,6 +161,13 @@ class SitemapService
     }//end sitemapHandler()
 
 
+    /**
+     * Finds all subobjects of the type 'bijlage' for a specified object of type 'publicatie'.
+     *
+     * @param array $object The 'publicatie' object to find documents for.
+     *
+     * @return array The resulting 'bijlage' subobjects.
+     */
     private function getAllDocumentsForObject(array $object): array
     {
         $documents = $object['bijlagen'];
@@ -204,6 +211,9 @@ class SitemapService
             ]
         );
 
+        $publisherSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
+        $publishers      = $this->cacheService->searchObjects(null, ['oin' => $parameters['oin']], [$publisherSchema->getId()->toString()])['results'];
+
         unset($filter['oin'], $filter['sitemaps'], $filter['sitemap']);
 
         // $filter = ['_limit' => 50000];
@@ -212,10 +222,16 @@ class SitemapService
 
         $sitemap = [];
         foreach ($objects as $object) {
-            $documents    = $this->getAllDocumentsForObject($object);
-            $mappedObject = $this->mappingService->mapping($mapping, ['object' => json_decode(json_encode($object), true), 'documents' => $documents]);
+            $objectArray = json_decode(json_encode($object), true);
+            $documents   = $this->getAllDocumentsForObject($objectArray);
 
-            $sitemap['url'][] = $mappedObject;
+            $publisher             = [];
+            $publisher['name']     = $objectArray['organisatie']['naam'] ?? '';
+            $publisher['resource'] = $publishers[0]['organisatiecode'];
+
+            $mappedObject = $this->mappingService->mapping($mapping, ['object' => $objectArray, 'documents' => $documents, 'publisher' => $publisher]);
+
+            $sitemap = array_merge_recursive($sitemap, $mappedObject);
         }
 
         // Return the sitemap response.

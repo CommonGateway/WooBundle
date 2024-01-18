@@ -12,7 +12,7 @@
         "mapping": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
         "sourceType": "openWoo",
         "organisatie": "Gemeente Rijssen-Holten",
-        "sourceEndpoint": "/owc/openconvenanten/v1/items"
+        "sourceEndpoint": "/wp-json/owc/openconvenanten/v1/items"
     },
     "conditions":
     {
