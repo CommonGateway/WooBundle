@@ -1,0 +1,24 @@
+{
+    "title": "SyncExampleZGWAction",
+    "$id": "https://commongateway.nl/woo.SyncExampleZGWAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.default.listens"],
+    "configuration": {
+        "oin": "example",
+        "portalUrl": "https://conductionnl.github.io/woo-website-conduction",
+        "zrcSource": "https://commongateway.woo.nl/source/epe.zaaksysteem.source.json",
+        "drcSource": "https://commongateway.woo.nl/source/epe.zaaksysteem.source.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.zaakToWoo.mapping.json",
+        "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json",
+        "zakenEndpoint": "/zrc/v1/zaken",
+        "zaakType": "https://api.gateway.commonground.nu",
+        "organisatie": "Example"
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncZGWToWooHandler"
+}

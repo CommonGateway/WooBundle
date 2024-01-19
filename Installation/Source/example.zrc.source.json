@@ -1,0 +1,12 @@
+{
+    "title": "ZRC example",
+    "$id": "https://commongateway.woo.nl/source/example.zrc.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "location": "!ChangeMe!",
+    "headers": {
+        "Accept": "*/*",
+        "Content-Type": "application/json"
+    },
+    "isEnabled": false
+}

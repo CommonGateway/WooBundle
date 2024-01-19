@@ -1,0 +1,15 @@
+{
+    "title": "DRC example",
+    "$id": "https://commongateway.woo.nl/source/example.drc.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "location": "!ChangeMe!",
+    "authorizationHeader": "API-KEY",
+    "headers": {
+        "Accept": "*/*",
+        "API-Interface-ID": "!ChangeMe!",
+        "API-KEY": "!ChangeMe!",
+        "Content-Type": "application/json"
+    },
+    "isEnabled": false
+}

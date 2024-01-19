@@ -127,6 +127,31 @@ class FileService
 
 
     /**
+     * Gets the inhoud of the document from a different endpoint that has the metadata.
+     *
+     * @param string $caseId      Case id.
+     * @param string $documentId  Document id.
+     * @param Source $zaaksysteem Xxllnc zaaksysteem api v1.
+     *
+     * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
+     */
+    public function getEnkelvoudigInformatieObject(string $caseId, string $documentId, string $mimeType, Source $zaaksysteem): ?string
+    {
+        try {
+            isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case $caseId");
+            $this->logger->info("Fetching inhoud document: $documentId for case $caseId", ['plugin' => 'common-gateway/woo-bundle']);
+            $response = $this->callService->call($zaaksysteem, "/v1/case/$caseId/document/$documentId/download", 'GET', [], false);
+            return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType);
+        } catch (Exception $e) {
+            isset($this->style) === true && $this->style->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
+            $this->logger->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+            return null;
+        }
+
+    }//end getInhoudDocument()
+
+
+    /**
      * Creates or updates a file associated with a given Value instance.
      *
      * This method handles the logic for creating or updating a file based on
