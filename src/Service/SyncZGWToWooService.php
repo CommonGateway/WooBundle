@@ -217,15 +217,15 @@ class SyncZGWToWooService
 
         return $this->mappingService->mapping($config['mapping'], array_merge($enkelvoudigInformatieObject, ['url' => $url]));
 
-    }//end retrieveFile()
+    }//end retrieveInhoud()
 
 
     /**
      * Generates file view urls for woo bijlagen documents.
      *
-     * @param array $enkelvoudigInformatieObjecten   The result data that contains the information of file fields.
-     * @param array $config   Gateway config objects.
-     * @param array $fileURLS File urls we also return.
+     * @param array $enkelvoudigInformatieObjecten The result data that contains the information of file fields.
+     * @param array $config                        Gateway config objects.
+     * @param array $fileURLS                      File urls we also return.
      *
      * @return array $fileURLS The view urls for files.
      */
@@ -275,7 +275,7 @@ class SyncZGWToWooService
      */
     private function updateBijlagen(array $objectArray, array $enkelvoudigInformatieObjecten, Endpoint $fileEndpoint, Source $source, string $sourceId): array
     {
-        $documentMapping     = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.zgwEnkelvoudigInformatieToBijlage.mapping.json", "common-gateway/woo-bundle");
+        $documentMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.zgwEnkelvoudigInformatieToBijlage.mapping.json", "common-gateway/woo-bundle");
         // Yes we can use the same mapping here as used for xxllnc.
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
 
@@ -286,7 +286,7 @@ class SyncZGWToWooService
 
         return $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $sourceId]));
 
-    }//end handleCustomLogic()
+    }//end updateBijlagen()
 
 
     /**
@@ -316,6 +316,7 @@ class SyncZGWToWooService
 
     }//end fetchObjects()
 
+
     /**
      * Fetches informatieobjecten from drc.
      *
@@ -328,37 +329,39 @@ class SyncZGWToWooService
     private function getInformatieObjecten(Source $source, array $zaakInformatieObjecten, array $informatieObjectTypenUrls): array
     {
         $informatieObjecten = [
-            'besluit' => [],
-            'informatieverzoek' => [],
+            'besluit'             => [],
+            'informatieverzoek'   => [],
             'inventarisatielijst' => [],
-            'bijlagen' => []
+            'bijlagen'            => [],
         ];
 
         foreach ($zaakInformatieObjecten as $key => $zaakInformatieObject) {
             if (isset($zaakInformatieObjecten[$key]['informatieobject']) === true) {
                 $enkelvoudigInformatieObject = $this->fileService->getEnkelvoudigInformatieObject($zaakInformatieObjecten[$key]['informatieobject'], $source);
                 if ($enkelvoudigInformatieObject !== null && isset($enkelvoudigInformatieObject['informatieobjecttype']) !== null) {
-                    $zaakInformatieObjecten[$key]['informatieobject'] =  $enkelvoudigInformatieObject;
+                    $zaakInformatieObjecten[$key]['informatieobject'] = $enkelvoudigInformatieObject;
                     switch ($enkelvoudigInformatieObject['informatieobjecttype']) {
-                        case $informatieObjectTypenUrls['informatieverzoek']:
-                            $informatieObjecten['informatieverzoek'][] = $zaakInformatieObjecten[$key];
-                            break;
-                        case $informatieObjectTypenUrls['inventarisatielijst']:
-                            $informatieObjecten['inventarisatielijst'][] = $zaakInformatieObjecten[$key];
-                            break;
-                        case $informatieObjectTypenUrls['besluit']:
-                            $informatieObjecten['besluit'][] = $zaakInformatieObjecten[$key];
-                            break;
-                        case $informatieObjectTypenUrls['bijlagen']:
-                            $informatieObjecten['bijlagen'][] = $zaakInformatieObjecten[$key];
-                            break;
+                    case $informatieObjectTypenUrls['informatieverzoek']:
+                        $informatieObjecten['informatieverzoek'][] = $zaakInformatieObjecten[$key];
+                        break;
+                    case $informatieObjectTypenUrls['inventarisatielijst']:
+                        $informatieObjecten['inventarisatielijst'][] = $zaakInformatieObjecten[$key];
+                        break;
+                    case $informatieObjectTypenUrls['besluit']:
+                        $informatieObjecten['besluit'][] = $zaakInformatieObjecten[$key];
+                        break;
+                    case $informatieObjectTypenUrls['bijlagen']:
+                        $informatieObjecten['bijlagen'][] = $zaakInformatieObjecten[$key];
+                        break;
                     }
                 }
             }
-        }
-        
+        }//end foreach
+
         return $informatieObjecten;
-    }
+
+    }//end getInformatieObjecten()
+
 
     /**
      * This function sets the eigenschappen to a usable array.
@@ -375,7 +378,9 @@ class SyncZGWToWooService
         }
 
         return $arrayZaakEigenschappen;
+
     }//end getZaakEigenschappen()
+
 
     /**
      * Handles the synchronization of xxllnc cases.
@@ -441,7 +446,7 @@ class SyncZGWToWooService
         }//end if
 
         $endpoint = "$zaakEndpoint?zaaktype=$zaakType";
-        $url = "{$zrcSource->getLocation()}$endpoint";
+        $url      = "{$zrcSource->getLocation()}$endpoint";
 
         isset($this->style) === true && $this->style->info("Fetching zaken from $url");
         $this->logger->info("Fetching zaken from $url", ['plugin' => 'common-gateway/woo-bundle']);
@@ -463,7 +468,7 @@ class SyncZGWToWooService
 
                 // Get eigenschappen.
                 $eigenschappenEndpoint = "/$zaakEndpoint/{$result['uuid']}/zaakeigenschappen";
-                $zaakEigenschappen     = $this->fetchObjects($zrcSource, $eigenschappenEndpoint); 
+                $zaakEigenschappen     = $this->fetchObjects($zrcSource, $eigenschappenEndpoint);
                 $zaakEigenschappen     = $this->getZaakEigenschappen($zaakEigenschappen);
 
                 $informatieObjectTypenUrls = [
@@ -475,13 +480,18 @@ class SyncZGWToWooService
 
                 // Get informatieobjecten
                 $zaakInformatieEndpoint        = "/$zaakInformatieEndpoint?zaak={$result['url']}";
-                $zaakInformatieObjecten        = $this->fetchObjects($zrcSource, $zaakInformatieEndpoint); 
+                $zaakInformatieObjecten        = $this->fetchObjects($zrcSource, $zaakInformatieEndpoint);
                 $enkelvoudigInformatieObjecten = $this->getInformatieObjecten($drcSource, $zaakInformatieObjecten, $informatieObjectTypenUrls);
 
                 $dataToMap = [
-                    'eigenschappen' => $zaakEigenschappen,
+                    'eigenschappen'                 => $zaakEigenschappen,
                     'enkelvoudigInformatieObjecten' => $enkelvoudigInformatieObjecten,
-                    ['organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]
+                    [
+                        'organisatie' => [
+                            'oin'  => $this->configuration['oin'],
+                            'naam' => $this->configuration['organisatie'],
+                        ],
+                    ]
                 ];
 
                 $result       = array_merge($result, $dataToMap);
@@ -547,7 +557,7 @@ class SyncZGWToWooService
 
         return $this->data;
 
-    }//end syncXxllncCasesHandler()
+    }//end syncZGWToWooHandler()
 
 
 }//end class

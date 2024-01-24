@@ -64,64 +64,64 @@ class SyncZGWToWooHandler implements ActionHandlerInterface
                 'organisatie',
             ],
             'properties'  => [
-                'oin'                       => [
+                'oin'                                    => [
                     'type'        => 'string',
                     'description' => 'The oin of the organisation.',
                     'example'     => 'buren',
                     'required'    => true,
                 ],
-                'portalUrl'                 => [
+                'portalUrl'                              => [
                     'type'        => 'string',
                     'description' => 'The portal url of the publication.',
                     'example'     => 'https://conductionnl.github.io/woo-website-buren',
                     'required'    => true,
                 ],
-                'zrcSource'                    => [
+                'zrcSource'                              => [
                     'type'        => 'string',
                     'description' => 'The source where the zaken come from.',
                     'example'     => 'https://commongateway.woo.nl/source/example.zrc.source.json',
                     'required'    => true,
                 ],
-                'drcSource'                    => [
+                'drcSource'                              => [
                     'type'        => 'string',
                     'description' => 'The source where the documenten come from.',
                     'example'     => 'https://commongateway.woo.nl/source/example.drc.source.json',
                     'required'    => true,
                 ],
-                'schema'                    => [
+                'schema'                                 => [
                     'type'        => 'string',
                     'description' => 'The publication schema.',
                     'example'     => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'reference'   => 'https://commongateway.nl/woo.publicatie.schema.json',
                     'required'    => true,
                 ],
-                'mapping'                   => [
+                'mapping'                                => [
                     'type'        => 'string',
                     'description' => 'The mapping for zaak to publication.',
                     'example'     => 'https://commongateway.nl/mapping/woo.zaakToWoo.mapping.json',
                     'reference'   => 'https://commongateway.nl/mapping/woo.zaakToWoo.mapping.json',
                     'required'    => true,
                 ],
-                'fileEndpointReference'     => [
+                'fileEndpointReference'                  => [
                     'type'        => 'string',
                     'description' => 'The file endpoint reference.',
                     'example'     => 'https://commongateway.nl/woo.ViewFile.endpoint.json',
                     'reference'   => 'https://commongateway.nl/woo.ViewFile.endpoint.json',
                     'required'    => true,
                 ],
-                'zaakType' => [
+                'zaakType'                               => [
                     'type'        => 'string',
                     'description' => 'The endpoint of the source.',
                     'example'     => 'http://localhost/api/catalogi/v1/zaaktypen/id',
                     'required'    => true,
                 ],
-                'bijlageInformatieObjectUrl' => [
+                'bijlageInformatieObjectUrl'             => [
                     'type'        => 'string',
                     'description' => 'The url of the bijlage.',
                     'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
                     'required'    => true,
                 ],
-                'informatieverzoekInformatieObjectUrl' => [
+                'informatieverzoekInformatieObjectUrl'   => [
                     'type'        => 'string',
                     'description' => 'The url of the informatieverzoek.',
                     'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
@@ -133,25 +133,25 @@ class SyncZGWToWooHandler implements ActionHandlerInterface
                     'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
                     'required'    => true,
                 ],
-                'besluitInformatieObjectUrl' => [
+                'besluitInformatieObjectUrl'             => [
                     'type'        => 'string',
                     'description' => 'The url of the besluit.',
                     'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
                     'required'    => true,
                 ],
-                'zakenEndpoint'     => [
+                'zakenEndpoint'                          => [
                     'type'        => 'string',
                     'description' => 'The zaken endpoint.',
                     'example'     => '/zrc/v1/zaken',
                     'required'    => true,
                 ],
-                'organisatie'               => [
+                'organisatie'                            => [
                     'type'        => 'string',
                     'description' => 'The organisatie.',
                     'example'     => 'Example',
                     'required'    => true,
                 ],
-                'sourceType'               => [
+                'sourceType'                             => [
                     'type'        => 'string',
                     'description' => 'What type of source this is (zgw).',
                     'example'     => 'zgw',

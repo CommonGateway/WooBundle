@@ -148,14 +148,14 @@ class FileService
             return null;
         }
 
-    }//end getInhoudDocument()
+    }//end getInhoudInformatieObject()
 
 
     /**
      * Gets the enkelvoudiginformatieobject from a drc source.
      *
-     * @param string $url        Url of the enkelvoudiginformatieobject.
-     * @param string $drcSource  Document id.
+     * @param string $url       Url of the enkelvoudiginformatieobject.
+     * @param string $drcSource Document id.
      *
      * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
      */
@@ -163,7 +163,7 @@ class FileService
     {
         try {
             $lastSlashPosition = strrpos($url, '/');
-            $endpoint = '/enkelvoudiginformatieobjecten/' . substr($url, $lastSlashPosition + 1);
+            $endpoint          = '/enkelvoudiginformatieobjecten/'.substr($url, ($lastSlashPosition + 1));
             isset($this->style) === true && $this->style->info("Fetching enkelvoudiginformatieobject: $endpoint");
             $this->logger->info("Fetching enkelvoudiginformatieobject: $endpoint", ['plugin' => 'common-gateway/woo-bundle']);
             $response = $this->callService->call($drcSource, $url, 'GET', [], false);
@@ -174,7 +174,7 @@ class FileService
             return null;
         }
 
-    }//end getInhoudDocument()
+    }//end getEnkelvoudigInformatieObject()
 
 
     /**

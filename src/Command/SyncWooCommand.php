@@ -137,25 +137,25 @@ class SyncWooCommand extends Command
         // Check what type of source this is.
         if (isset($config['sourceType']) === true) {
             switch ($config['sourceType']) {
-                case 'openWoo':
-                    $this->syncOpenWooService->setStyle($style);
-                    if ($this->syncOpenWooService->syncOpenWooHandler([], $config) === null) {
-                        return Command::FAILURE;
-                    }
-                    break;
-                case 'zgw':
-                    $this->syncZGWService->setStyle($style);
-                    if ($this->syncZGWService->syncZGWHandler([], $config) === null) {
-                        return Command::FAILURE;
-                    }
-                    break;
+            case 'openWoo':
+                $this->syncOpenWooService->setStyle($style);
+                if ($this->syncOpenWooService->syncOpenWooHandler([], $config) === null) {
+                    return Command::FAILURE;
+                }
+                break;
+            case 'zgw':
+                $this->syncZGWService->setStyle($style);
+                if ($this->syncZGWService->syncZGWHandler([], $config) === null) {
+                    return Command::FAILURE;
+                }
+                break;
             }
         } else {
             // Default to zaaksysteem sync.
             if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $config) === null) {
                 return Command::FAILURE;
             }
-        }
+        }//end if
 
         return Command::SUCCESS;
 
