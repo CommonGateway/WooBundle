@@ -1,0 +1,12 @@
+{
+  "title": "ZGWEnkelvoudigInformatieToBijlage",
+  "$id": "https://commongateway.nl/mapping/woo.zgwEnkelvoudigInformatieToBijlage.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "_sourceId": "informatieobject.url",
+    "titel": "informatieobject.titel",
+    "url": "viewUrl"
+  }
+}

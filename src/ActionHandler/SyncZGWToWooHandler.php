@@ -115,6 +115,30 @@ class SyncZGWToWooHandler implements ActionHandlerInterface
                     'example'     => 'http://localhost/api/catalogi/v1/zaaktypen/id',
                     'required'    => true,
                 ],
+                'bijlageInformatieObjectUrl' => [
+                    'type'        => 'string',
+                    'description' => 'The url of the bijlage.',
+                    'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
+                    'required'    => true,
+                ],
+                'informatieverzoekInformatieObjectUrl' => [
+                    'type'        => 'string',
+                    'description' => 'The url of the informatieverzoek.',
+                    'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
+                    'required'    => true,
+                ],
+                'inventarisatielijstInformatieObjectUrl' => [
+                    'type'        => 'string',
+                    'description' => 'The url of the inventarisatielijst.',
+                    'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
+                    'required'    => true,
+                ],
+                'besluitInformatieObjectUrl' => [
+                    'type'        => 'string',
+                    'description' => 'The url of the besluit.',
+                    'example'     => 'http://localhost/api/catalogi/v1/informatieobjecttypen/id',
+                    'required'    => true,
+                ],
                 'zakenEndpoint'     => [
                     'type'        => 'string',
                     'description' => 'The zaken endpoint.',
@@ -125,6 +149,12 @@ class SyncZGWToWooHandler implements ActionHandlerInterface
                     'type'        => 'string',
                     'description' => 'The organisatie.',
                     'example'     => 'Example',
+                    'required'    => true,
+                ],
+                'sourceType'               => [
+                    'type'        => 'string',
+                    'description' => 'What type of source this is (zgw).',
+                    'example'     => 'zgw',
                     'required'    => true,
                 ],
             ],

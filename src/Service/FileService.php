@@ -110,12 +110,12 @@ class FileService
      *
      * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
      */
-    public function getInhoudDocument(string $caseId, string $documentId, string $mimeType, Source $zaaksysteem): ?string
+    public function getInhoudDocument(string $documentId, string $mimeType, Source $zaaksysteem): ?string
     {
         try {
-            isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case $caseId");
-            $this->logger->info("Fetching inhoud document: $documentId for case $caseId", ['plugin' => 'common-gateway/woo-bundle']);
-            $response = $this->callService->call($zaaksysteem, "/v1/case/$caseId/document/$documentId/download", 'GET', [], false);
+            isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case ");
+            $this->logger->info("Fetching inhoud document: $documentId for case", ['plugin' => 'common-gateway/woo-bundle']);
+            $response = $this->callService->call($zaaksysteem, "/v1/case//document/$documentId/download", 'GET', [], false);
             return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType);
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
@@ -135,16 +135,42 @@ class FileService
      *
      * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
      */
-    public function getEnkelvoudigInformatieObject(string $caseId, string $documentId, string $mimeType, Source $zaaksysteem): ?string
+    public function getInhoudInformatieObject(string $caseId, string $documentId, string $mimeType, Source $drcSource): ?string
     {
         try {
             isset($this->style) === true && $this->style->info("Fetching inhoud document: $documentId for case $caseId");
             $this->logger->info("Fetching inhoud document: $documentId for case $caseId", ['plugin' => 'common-gateway/woo-bundle']);
-            $response = $this->callService->call($zaaksysteem, "/v1/case/$caseId/document/$documentId/download", 'GET', [], false);
-            return $this->callService->decodeResponse($zaaksysteem, $response, $mimeType);
+            $response = $this->callService->call($drcSource, "/v1/case/$caseId/document/$documentId/download", 'GET', [], false);
+            return $this->callService->decodeResponse($drcSource, $response, $mimeType);
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}");
             $this->logger->error("Failed to fetch inhoud of document: $documentId, message:  {$e->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+            return null;
+        }
+
+    }//end getInhoudDocument()
+
+
+    /**
+     * Gets the enkelvoudiginformatieobject from a drc source.
+     *
+     * @param string $url        Url of the enkelvoudiginformatieobject.
+     * @param string $drcSource  Document id.
+     *
+     * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
+     */
+    public function getEnkelvoudigInformatieObject(string $url, Source $drcSource): ?string
+    {
+        try {
+            $lastSlashPosition = strrpos($url, '/');
+            $endpoint = '/enkelvoudiginformatieobjecten/' . substr($url, $lastSlashPosition + 1);
+            isset($this->style) === true && $this->style->info("Fetching enkelvoudiginformatieobject: $endpoint");
+            $this->logger->info("Fetching enkelvoudiginformatieobject: $endpoint", ['plugin' => 'common-gateway/woo-bundle']);
+            $response = $this->callService->call($drcSource, $url, 'GET', [], false);
+            return $this->callService->decodeResponse($drcSource, $response);
+        } catch (Exception $e) {
+            isset($this->style) === true && $this->style->error("Failed to fetch enkelvoudiginformatieobject: $endpoint, message:  {$e->getMessage()}");
+            $this->logger->error("Failed to fetch enkelvoudiginformatieobject: $endpoint, message:  {$e->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
             return null;
         }
 

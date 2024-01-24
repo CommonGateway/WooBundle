@@ -14,7 +14,12 @@
         "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json",
         "zakenEndpoint": "/zrc/v1/zaken",
         "zaakType": "https://api.gateway.commonground.nu",
-        "organisatie": "Example"
+        "besluitInformatieObjectUrl": "https://api.gateway.commonground.nu",
+        "inventarisatielijstInformatieObjectUrl": "https://api.gateway.commonground.nu",
+        "informatieverzoekInformatieObjectUrl": "https://api.gateway.commonground.nu",
+        "bijlageInformatieObjectUrl": "https://api.gateway.commonground.nu",
+        "organisatie": "Example",
+        "sourceType": "zgw"
     },
     "conditions":
     {
