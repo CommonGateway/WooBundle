@@ -2,7 +2,7 @@
   "title": "OpenConvenantToWoo",
   "$id": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "passTrough": false,
   "mapping": {
     "_sourceId": "ID",
@@ -15,10 +15,12 @@
     "publicatiedatum": "{{ \"now\"|date('c') }}",
     "metadata.besluitdatum": "{% if Datum_ondertekening|default %}{{ Datum_ondertekening|date('c') }}{% endif %}",
     "bijlagen": "[{% set index=0 %}{% if Bijlagen|default %}{% for bijlage in Bijlagen %}{% if index != 0 %},{% endif %}{% set bijlageMerged = bijlage|merge({'oin': organisatie.oin}) %}{{ map('https://commongateway.nl/mapping/woo.openConvenantBijlageToWooBijlage.mapping.json', bijlageMerged)|json_encode }}{% set index=index+1 %}{% endfor %}{% endif %}]",
+    "themas.0._sourceid": "{% if Beleidsterrein|default %}{{ ID~Beleidsterrein }}{% endif %}",
     "themas.0.hoofdthema": "{% if Beleidsterrein|default %}{{ Beleidsterrein }}{% endif %}"
   },
   "cast": {
     "id": "string",
+    "themas.0._sourceId": "unsetIfValue==",
     "themas.0.hoofdthema": "unsetIfValue==",
     "themas.0": "unsetIfValue==",
     "bijlagen": "jsonToArray",
