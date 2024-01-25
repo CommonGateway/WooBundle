@@ -410,15 +410,14 @@ class SyncZGWToWooService
             || isset($this->configuration['drcSource']) === false
             || isset($this->configuration['zaakType']) === false
             || isset($this->configuration['zaakEndpoint']) === false
-            || isset($this->configuration['zaakInformatieEndpoint']) === false
             || isset($this->configuration['fileEndpointReference']) === false
             || isset($this->configuration['bijlageInformatieObjectUrl']) === false
             || isset($this->configuration['informatieverzoekInformatieObjectUrl']) === false
             || isset($this->configuration['inventarisatielijstInformatieObjectUrl']) === false
             || isset($this->configuration['besluitInformatieObjectUrl']) === false
         ) {
-            isset($this->style) === true && $this->style->error('No zrcSource, drcSource schema, mapping, oin, organisatie, zaakType, zakenEndpoint, zaakInformatieEndpoint, fileEndpointReference or portalUrl configured on this action, ending syncZGWToWooHandler');
-            $this->logger->error('No zrcSource, drcSource schema, mapping, oin, organisatie, zaakType, zakenEndpoint, zaakInformatieEndpoint, fileEndpointReference or portalUrl configured on this action, ending syncZGWToWooHandler', ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('No zrcSource, drcSource schema, mapping, oin, organisatie, zaakType, zakenEndpoint, fileEndpointReference or portalUrl configured on this action, ending syncZGWToWooHandler');
+            $this->logger->error('No zrcSource, drcSource schema, mapping, oin, organisatie, zaakType, zakenEndpoint, fileEndpointReference or portalUrl configured on this action, ending syncZGWToWooHandler', ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }//end if
@@ -429,7 +428,6 @@ class SyncZGWToWooService
         $schema                                 = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
         $mapping                                = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
         $zaakEndpoint                           = $this->configuration['zaakEndpoint'];
-        $zaakInformatieEndpoint                 = $this->configuration['zaakInformatieEndpoint'];
         $zaakType                               = $this->configuration['zaakType'];
         $bijlageInformatieObjectUrl             = $this->configuration['bijlageInformatieObjectUrl'];
         $informatieverzoekInformatieObjectUrl   = $this->configuration['informatieverzoekInformatieObjectUrl'];
@@ -479,7 +477,7 @@ class SyncZGWToWooService
                 ];
 
                 // Get informatieobjecten
-                $zaakInformatieEndpoint        = "/$zaakInformatieEndpoint?zaak={$result['url']}";
+                $zaakInformatieEndpoint        = "/zrc/v1/zaakinformatieobjecten?zaak={$result['url']}";
                 $zaakInformatieObjecten        = $this->fetchObjects($zrcSource, $zaakInformatieEndpoint);
                 $enkelvoudigInformatieObjecten = $this->getInformatieObjecten($drcSource, $zaakInformatieObjecten, $informatieObjectTypenUrls);
 
