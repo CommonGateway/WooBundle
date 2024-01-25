@@ -10,7 +10,7 @@
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
     "titel": "{% if omschrijving|default %}{{ omschrijving }}{% endif %}",
-    "beschrijving": "{% if eigenschappen.woo_beschrijving|default %}{{ eigenschappen.woo_beschrijvin }}{% endif %}",
+    "beschrijving": "{% if eigenschappen.woo_beschrijving|default %}{{ eigenschappen.woo_beschrijving }}{% endif %}",
     "samenvatting": "{% if eigenschappen.woo_samenvatting|default %}{{ eigenschappen.woo_samenvatting }}{% endif %}",
     "categorie": "{% if eigenschappen.woo_categorie|default %}{{ eigenschappen.woo_categorie }}{% endif %}",
     "metadata.verzoek.ontvangstdatum": "{% if eigenschappen.date_of_registration|default %}{{ eigenschappen.date_of_registration }}{% endif %}",
@@ -21,6 +21,7 @@
     "metadata.verzoek.inventarisatielijst": "{% if enkelvoudigInformatieObjecten['inventarisatielijst'][0]|default %}{{ map('https://commongateway.nl/mapping/woo.zgwInformatieObjectSetSourceId.schema.json', enkelvoudigInformatieObjecten['inventarisatielijst'][0])|json_encode }}{% endif %}",
     "metadata.verzoek.besluit": "{% if enkelvoudigInformatieObjecten['besluit'][0]|default %}{{ map('https://commongateway.nl/mapping/woo.zgwInformatieObjectSetSourceId.schema.json', enkelvoudigInformatieObjecten['besluit'][0])|json_encode }}{% endif %}",
     "bijlagen": "[{% set index=0 %}{% if enkelvoudigInformatieObjecten['bijlagen']|default %}{% for document in enkelvoudigInformatieObjecten['bijlagen'] %}{% if index != 0 %},{% endif %}{{ map('https://commongateway.nl/mapping/woo.zgwInformatieObjectSetSourceId.schema.json', document)|json_encode }}{% set index=index+1 %}{% endfor %}{% endif %}]",
+    "themas.0.hoofdthema._sourceId": "{% if eigenschappen.woo_thema']|default %}{{ eigenschappen.woo_thema'] }}{% endif %}",
     "themas.0.hoofdthema": "{% if eigenschappen.woo_thema']|default %}{{ eigenschappen.woo_thema'] }}{% endif %}"
   },
   "cast": {
