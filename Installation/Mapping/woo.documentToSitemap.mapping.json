@@ -1,0 +1,21 @@
+{
+  "title": "DocumentToSitemap",
+  "$id": "https://commongateway.nl/mapping/woo.documentToSitemap.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "loc": "document.url",
+    "lastmod": "{{ document._self.dateModified|date(\"Y-m-d H:i:s\") }}",
+    "diwoo:Document.diwoo:DiWoo.diwoo:creatiedatum": "{{ document._self.dateCreated|date('Y-m-d') }}",
+    "diwoo:Document.diwoo:DiWoo.diwoo:publisher.@resource": "publisher.resource",
+    "diwoo:Document.diwoo:DiWoo.diwoo:publisher.#": "publisher.name",
+    "diwoo:Document.diwoo:DiWoo.diwoo:format.@resource": "http://publications.europa.eu/resource/authority/file-type/{{ document.extension|upper }}",
+    "diwoo:Document.diwoo:DiWoo.diwoo:format.#": "{{ document.extension|lower }}",
+    "diwoo:Document.diwoo:DiWoo.diwoo:classificatiecollectie.diwoo:informatiecategorieen.diwoo:informatiecategorie.#": "object.categorie",
+    "diwoo:Document.diwoo:DiWoo.diwoo:classificatiecollectie.diwoo:informatiecategorieen.diwoo:informatiecategorie.@resource": "https:\/\/identifier.overheid.nl\/tooi\/def\/thes\/kern\/{{ object.categorie|trans({'Wetten en algemeen verbindende voorschriften': 'c_139c6280', 'Overige besluiten van algemene strekking': 'c_aab6bfc7', 'Ontwerpen van wet- en regelgeving met adviesaanvraag': 'c_759721e2', 'Organisatie en werkwijze': 'c_40a05794', 'Bereikbaarheidsgegevens': 'c_89ee6784', 'Bij vertegenwoordigende organen ingekomen stukken': 'c_8c840238', 'Vergaderstukken Staten-Generaal': 'c_c76862ab', 'Vergaderstukken decentrale overheden': 'c_db4862c3', 'Agenda\\'s en besluitenlijsten bestuurscolleges': 'c_3a248e3a', 'Adviezen': 'c_99a836c7', 'Convenanten': 'c_8fc2335c', 'Jaarplannen en jaarverslagen': 'c_c6cd1213', 'Subsidieverplichtingen anders dan met beschikking': 'c_cf268088', 'Woo-verzoeken en -besluiten': 'c_3baef532', 'Onderzoeksrapporten': 'c_fdaee95e', 'Beschikkingen': 'c_46a81018', 'Klachtoordelen': 'c_a870c43d'}, '', 'en') }}",
+    "diwoo:Document.diwoo:DiWoo.diwoo:documenthandelingen.diwoo:documenthandeling.diwoo:soortHandeling.#": "publicatie",
+    "diwoo:Document.diwoo:DiWoo.diwoo:documenthandelingen.diwoo:documenthandeling.diwoo:soortHandeling.@resource": "https://identifier.overheid.nl/tooi/def/thes/kern/c_932b7730",
+    "diwoo:Document.diwoo:DiWoo.diwoo:documenthandelingen.diwoo:documenthandeling.diwoo:atTime": "{{ object.publicatiedatum }}"
+  }
+}

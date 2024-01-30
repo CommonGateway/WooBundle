@@ -81,14 +81,14 @@ class SyncWooCommand extends Command
             ->setDescription('This command can trigger multiple types of synchronization')
             ->setHelp('This command can trigger multiple types of synchronization')
             ->addArgument(
+                'action',
+                InputArgument::REQUIRED,
+                'Action reference to find the action and execute for different organizations (municipalities)'
+            )
+            ->addArgument(
                 'id',
                 InputArgument::OPTIONAL,
                 'Case id to fetch'
-            )
-            ->addArgument(
-                'action',
-                InputArgument::OPTIONAL,
-                'Action reference to find the action and execute for different organizations (municipalities)'
             );
 
     }//end configure()
@@ -107,13 +107,14 @@ class SyncWooCommand extends Command
         $style = new SymfonyStyle($input, $output);
         $this->syncXxllncCasesService->setStyle($style);
 
-        if (($caseId = $input->getArgument('id')) === null
-            || ($actionRef = $input->getArgument('action')) === null
+        if (($actionRef = $input->getArgument('action')) === null
         ) {
             $style->error("No id and/or caseId given to the command");
 
             return Command::FAILURE;
         }
+
+        $caseId = $input->getArgument('id');
 
         $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => $actionRef]);
         if ($action instanceof Action === false) {

@@ -2,7 +2,7 @@
   "title": "Bijlage",
   "$id": "https://commongateway.nl/woo.bijlage.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "object",
   "description": "",
   "required": ["titel"],
@@ -26,6 +26,9 @@
       "description": "mime-type"
     },
     "categorie": {
+      "type": "string"
+    },
+    "extension":  {
       "type": "string"
     }
   }

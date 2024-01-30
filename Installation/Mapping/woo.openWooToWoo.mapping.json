@@ -2,7 +2,7 @@
   "title": "OpenWooToWoo",
   "$id": "https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "passTrough": false,
   "mapping": {
     "_sourceId": "UUID",
@@ -14,7 +14,7 @@
     "titel": "{% if Titel|default %}{{ Titel }}{% endif %}",
     "samenvatting": "{% if Samenvatting|default %}{{ Samenvatting }}{% endif %}",
     "metadata.verzoek.ontvangstdatum": "{% if Ontvangstdatum|default %}{{ Ontvangstdatum|date('c') }}{% endif %}",
-    "publicatiedatum": "{% if Ontvangstdatum|default %}{{ Ontvangstdatum|date('c') }}{% endif %}",
+    "publicatiedatum": "{% if Publicatie_datum|default %}{{ Publicatie_datum|date('c') }}{% endif %}",
     "metadata.besluitdatum": "{% if Besluitdatum|default %}{{ Besluitdatum|date('c') }}{% endif %}",
     "metadata.verzoek.termijnoverschrijding": "{% if Termijnoverschrijding|default %}{{ Termijnoverschrijding }}{% endif %}",
     "metadata.verzoek.informatieverzoek.url": "{% if URL_informatieverzoek|default %}{{ URL_informatieverzoek }}{% endif %}",

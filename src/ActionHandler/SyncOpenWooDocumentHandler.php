@@ -51,18 +51,9 @@ class SyncOpenWooDocumentHandler implements ActionHandlerInterface
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'SyncOpenWooHandler',
             'description' => 'Handles the sync for open woo requests.',
-            'required'    => [
-                'oin',
-                'portalUrl',
-                'source',
-                'schema',
-                'mapping',
-                'sourceType',
-                'organisatie',
-                'sourceEndpoint',
-            ],
+            'required'    => ['endpoint'],
             'properties'  => [
-                'endpoint'            => [
+                'endpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint reference for documents.',
                     'example'     => 'buren',

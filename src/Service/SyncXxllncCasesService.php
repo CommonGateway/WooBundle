@@ -241,7 +241,7 @@ class SyncXxllncCasesService
         $fileNames = [];
 
         foreach ($fileFields as $field) {
-            if (isset($result['values']["attribute.woo_$field"][0]) === true && in_array($result['values']["attribute.woo_$field"][0]['filename'], $fileNames) === false) {
+            if (isset($result['values']["attribute.woo_$field"][0]) === true) {
                 $documentMeta     = $result['values']["attribute.woo_$field"][0];
                 $fileURLS[$field] = $this->retrieveFile($result, $documentMeta, $config);
                 $fileNames[]      = $result['values']["attribute.woo_$field"][0]['filename'];
@@ -417,6 +417,7 @@ class SyncXxllncCasesService
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
             } catch (Exception $exception) {
+                isset($this->style) === true && $this->style->error("Something wen't wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}");
                 $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
             }//end try
