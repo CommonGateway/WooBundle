@@ -106,7 +106,6 @@ class SyncOpenWooService
      * @param MappingService         $mappingService
      * @param LoggerInterface        $pluginLogger
      * @param FileService            $fileService
-     *
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -209,12 +208,12 @@ class SyncOpenWooService
         $decodedResponse = $this->callService->decodeResponse($source, $response);
 
         switch ($categorie) {
-            case 'Woo verzoek':
-                $results = array_merge($results, $decodedResponse['WOOverzoeken']);
-                break;
-            case 'Convenant':
-                $results = array_merge($results, $decodedResponse['Convenantenverzoeken']);
-                break;
+        case 'Woo verzoek':
+            $results = array_merge($results, $decodedResponse['WOOverzoeken']);
+            break;
+        case 'Convenant':
+            $results = array_merge($results, $decodedResponse['Convenantenverzoeken']);
+            break;
         }
 
         // Pagination xxllnc.
@@ -275,12 +274,12 @@ class SyncOpenWooService
 
         $categorie = '';
         switch ($mapping->getReference()) {
-            case 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json':
-                $categorie = 'Woo verzoek';
-                break;
-            case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json':
-                $categorie = 'Convenant';
-                break;
+        case 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json':
+            $categorie = 'Woo verzoek';
+            break;
+        case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json':
+            $categorie = 'Convenant';
+            break;
         }
 
         isset($this->style) === true && $this->style->info("Fetching objects from {$source->getLocation()}");
@@ -339,14 +338,14 @@ class SyncOpenWooService
                 $responseItems[] = $object;
 
                 $renderedObject = $object->toArray();
-                $documents = array_merge($documents, $renderedObject['bijlagen']);
-                if(isset($renderedObject['metadata']['verzoek']['informatieverzoek']) === true) {
+                $documents      = array_merge($documents, $renderedObject['bijlagen']);
+                if (isset($renderedObject['metadata']['verzoek']['informatieverzoek']) === true) {
                     $documents[] = $renderedObject['metadata']['verzoek']['informatieverzoek'];
                 }
-                if(isset($renderedObject['verzoek']['besluit']) === true) {
+
+                if (isset($renderedObject['verzoek']['besluit']) === true) {
                     $documents[] = $renderedObject['metadata']['verzoek']['besluit'];
                 }
-
             } catch (Exception $exception) {
                 $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
@@ -355,8 +354,7 @@ class SyncOpenWooService
 
         $this->entityManager->flush();
 
-
-        foreach($documents as $document) {
+        foreach ($documents as $document) {
             $documentData['document'] = $document;
             $documentData['source']   = $source->getReference();
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
@@ -375,13 +373,14 @@ class SyncOpenWooService
 
     }//end syncOpenWooHandler()
 
+
     public function syncOpenWooDocumentHandler(array $data, array $config): array
     {
         $source   = $this->resourceService->getSource($data['source'], 'common-gateway/woo-bundle');
         $document = $data['document'];
         $endpoint = $this->resourceService->getEndpoint($config['endpoint'], 'common-gateway/woo-bundle');
 
-        if(substr($document['url'], 0, strlen($source->getLocation())) === $source->getLocation()) {
+        if (substr($document['url'], 0, strlen($source->getLocation())) === $source->getLocation()) {
             $path = substr($document['url'], strlen($source->getLocation()));
         } else {
             $this->logger->error('Url of document does not correspond with source');
@@ -390,13 +389,13 @@ class SyncOpenWooService
         }
 
         $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->find($document['_self']['id']);
-        if($bijlageObject instanceof ObjectEntity === false) {
+        if ($bijlageObject instanceof ObjectEntity === false) {
             return $data;
         }
 
         $value = $bijlageObject->getValueObject('url');
 
-        if($value->getFiles()->count() > 0) {
+        if ($value->getFiles()->count() > 0) {
             $file = $value->getFiles()->first();
         } else {
             $file = new File();
@@ -407,9 +406,9 @@ class SyncOpenWooService
         $file->setBase64(base64_encode($response->getBody()));
         $file->setMimeType($response->getHeader('content-type')[0]);
         $file->setSize($response->getHeader('content-length')[0]);
-        $file->setName($document['titel'] ?? $document['url']);
+        $file->setName(($document['titel'] ?? $document['url']));
 
-        $explodedFilename = explode('.', $document['titel'] ?? $document['url']);
+        $explodedFilename = explode('.', ($document['titel'] ?? $document['url']));
         $file->setExtension(end($explodedFilename));
         $file->setValue($value);
 
@@ -424,7 +423,8 @@ class SyncOpenWooService
         $data['document'] = $bijlageObject->toArray();
 
         return $data;
-    }
+
+    }//end syncOpenWooDocumentHandler()
 
 
 }//end class
