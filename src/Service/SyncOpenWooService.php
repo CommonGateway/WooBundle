@@ -37,54 +37,9 @@ class SyncOpenWooService
 {
 
     /**
-     * @var GatewayResourceService
-     */
-    private GatewayResourceService $resourceService;
-
-    /**
-     * @var CallService
-     */
-    private CallService $callService;
-
-    /**
-     * @var SynchronizationService
-     */
-    private SynchronizationService $syncService;
-
-    /**
-     * @var MappingService
-     */
-    private MappingService $mappingService;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private EntityManagerInterface $entityManager;
-
-    /**
-     * @var SymfonyStyle|null
-     */
-    private ?SymfonyStyle $style = null;
-
-    /**
-     * @var LoggerInterface $logger.
+     * @var LoggerInterface $logger The plugin logger.
      */
     private LoggerInterface $logger;
-
-    /**
-     * @var ValidationService $validationService.
-     */
-    private ValidationService $validationService;
-
-    /**
-     * @var CacheService $cacheService.
-     */
-    private CacheService $cacheService;
-
-    private FileService $fileService;
-
-    private ObjectEntityService $gatewayOEService;
-
     /**
      * @var array
      */
@@ -94,6 +49,7 @@ class SyncOpenWooService
      * @var array
      */
     private array $configuration;
+
 
 
     /**
@@ -108,28 +64,18 @@ class SyncOpenWooService
      * @param FileService            $fileService
      */
     public function __construct(
-        GatewayResourceService $resourceService,
-        CallService $callService,
-        SynchronizationService $syncService,
-        EntityManagerInterface $entityManager,
-        MappingService $mappingService,
-        LoggerInterface $pluginLogger,
-        ValidationService $validationService,
-        CacheService $cacheService,
-        FileService $fileService,
-        ObjectEntityService $gatewayOEService
+        private readonly GatewayResourceService $resourceService,
+        private readonly CallService            $callService,
+        private readonly SynchronizationService $syncService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly MappingService         $mappingService,
+        LoggerInterface                         $pluginLogger,
+        private readonly ValidationService      $validationService,
+        private readonly CacheService           $cacheService,
+        private readonly FileService            $fileService,
+        private ActionService                   $actionService
     ) {
-        $this->resourceService   = $resourceService;
-        $this->callService       = $callService;
-        $this->syncService       = $syncService;
-        $this->entityManager     = $entityManager;
-        $this->mappingService    = $mappingService;
         $this->logger            = $pluginLogger;
-        $this->validationService = $validationService;
-        $this->cacheService      = $cacheService;
-        $this->fileService       = $fileService;
-        $this->gatewayOEService  = $gatewayOEService;
-
     }//end __construct()
 
 
@@ -357,7 +303,7 @@ class SyncOpenWooService
         foreach ($documents as $document) {
             $documentData['document'] = $document;
             $documentData['source']   = $source->getReference();
-            $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
+            $this->actionService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 
         $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
