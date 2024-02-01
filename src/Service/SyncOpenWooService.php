@@ -8,6 +8,7 @@ use App\Entity\Mapping;
 use App\Entity\ObjectEntity;
 use App\Service\ObjectEntityService;
 use App\Service\SynchronizationService;
+use CommonGateway\CoreBundle\Service\ActionService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
