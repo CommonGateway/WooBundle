@@ -40,6 +40,7 @@ class SyncOpenWooService
      * @var LoggerInterface $logger The plugin logger.
      */
     private LoggerInterface $logger;
+
     /**
      * @var array
      */
@@ -49,7 +50,6 @@ class SyncOpenWooService
      * @var array
      */
     private array $configuration;
-
 
 
     /**
@@ -65,17 +65,18 @@ class SyncOpenWooService
      */
     public function __construct(
         private readonly GatewayResourceService $resourceService,
-        private readonly CallService            $callService,
+        private readonly CallService $callService,
         private readonly SynchronizationService $syncService,
         private readonly EntityManagerInterface $entityManager,
-        private readonly MappingService         $mappingService,
-        LoggerInterface                         $pluginLogger,
-        private readonly ValidationService      $validationService,
-        private readonly CacheService           $cacheService,
-        private readonly FileService            $fileService,
-        private ActionService                   $actionService
+        private readonly MappingService $mappingService,
+        LoggerInterface $pluginLogger,
+        private readonly ValidationService $validationService,
+        private readonly CacheService $cacheService,
+        private readonly FileService $fileService,
+        private ActionService $actionService
     ) {
-        $this->logger            = $pluginLogger;
+        $this->logger = $pluginLogger;
+
     }//end __construct()
 
 
