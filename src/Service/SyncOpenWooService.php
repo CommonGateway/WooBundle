@@ -15,7 +15,6 @@ use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
 use CommonGateway\CoreBundle\Service\CacheService;
-use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
@@ -112,7 +111,7 @@ class SyncOpenWooService
     private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie): int
     {
         // Get all existing sourceIds.
-        $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
+        $source            = $this->entityManager->find(Source::class, $source->getId()->toString());
         $existingSourceIds = [];
         $existingObjects   = [];
         foreach ($source->getSynchronizations() as $synchronization) {
@@ -156,12 +155,12 @@ class SyncOpenWooService
         $decodedResponse = $this->callService->decodeResponse($source, $response);
 
         switch ($categorie) {
-        case 'Woo verzoek':
-            $results = array_merge($results, $decodedResponse['WOOverzoeken']);
-            break;
-        case 'Convenant':
-            $results = array_merge($results, $decodedResponse['Convenantenverzoeken']);
-            break;
+            case 'Woo verzoek':
+                $results = array_merge($results, $decodedResponse['WOOverzoeken']);
+                break;
+            case 'Convenant':
+                $results = array_merge($results, $decodedResponse['Convenantenverzoeken']);
+                break;
         }
 
         // Pagination xxllnc.
@@ -222,12 +221,12 @@ class SyncOpenWooService
 
         $categorie = '';
         switch ($mapping->getReference()) {
-        case 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json':
-            $categorie = 'Woo verzoek';
-            break;
-        case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json':
-            $categorie = 'Convenant';
-            break;
+            case 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json':
+                $categorie = 'Woo verzoek';
+                break;
+            case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json':
+                $categorie = 'Convenant';
+                break;
         }
 
         isset($this->style) === true && $this->style->info("Fetching objects from {$source->getLocation()}");
@@ -295,7 +294,7 @@ class SyncOpenWooService
                     $documents[] = $renderedObject['metadata']['verzoek']['besluit'];
                 }
             } catch (Exception $exception) {
-                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['ID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle', 'trace' => $exception->getTraceAsString()]);
                 continue;
             }//end try
         }//end foreach
@@ -336,7 +335,7 @@ class SyncOpenWooService
             return $data;
         }
 
-        $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->find($document['_self']['id']);
+        $bijlageObject = $this->entityManager->getRepository(ObjectEntity::class)->find($document['_self']['id']);
         if ($bijlageObject instanceof ObjectEntity === false) {
             return $data;
         }
