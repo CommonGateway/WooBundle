@@ -155,12 +155,12 @@ class SyncOpenWooService
         $decodedResponse = $this->callService->decodeResponse($source, $response);
 
         switch ($categorie) {
-            case 'Woo verzoek':
-                $results = array_merge($results, $decodedResponse['WOOverzoeken']);
-                break;
-            case 'Convenant':
-                $results = array_merge($results, $decodedResponse['Convenantenverzoeken']);
-                break;
+        case 'Woo verzoek':
+            $results = array_merge($results, $decodedResponse['WOOverzoeken']);
+            break;
+        case 'Convenant':
+            $results = array_merge($results, $decodedResponse['Convenantenverzoeken']);
+            break;
         }
 
         // Pagination xxllnc.
@@ -221,12 +221,12 @@ class SyncOpenWooService
 
         $categorie = '';
         switch ($mapping->getReference()) {
-            case 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json':
-                $categorie = 'Woo verzoek';
-                break;
-            case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json':
-                $categorie = 'Convenant';
-                break;
+        case 'https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json':
+            $categorie = 'Woo verzoek';
+            break;
+        case 'https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json':
+            $categorie = 'Convenant';
+            break;
         }
 
         isset($this->style) === true && $this->style->info("Fetching objects from {$source->getLocation()}");
