@@ -4,19 +4,19 @@ De OpenWoo Service versterkt de toegankelijkheid van overheidspublicaties volgen
 
 ## Kernfunctionaliteiten
 
-- **Automatische Synchronisatie:** Naadloze integratie met Open Index om overheidspublicaties automatisch bij te werken en te synchroniseren.
-- **Efficiënt Zoeken:** Maakt geavanceerde zoekopdrachten mogelijk binnen Woo-categorieën door de data-uitwisseling met Open Index.
-- **Veelzijdige Ondersteuning:** Geschikt voor zowel lokale als landelijke publicatieplatformen, waaronder een verbinding met het Kennis- en Exploitatiecentrum Officiële Publicaties (KOOP).
-- **Federale Zoekopdrachten:** Ondersteunt federale zoekopdrachten via koophulpje.nl, waardoor een breder bereik en toegankelijkheid van overheidspublicaties wordt gegarandeerd.
-- **OpenServices Framework:** Geïntegreerd met het Common Ground OpenServices framework voor gestandaardiseerde data-uitwisseling en interoperabiliteit.
+* **Automatische Synchronisatie:** Naadloze integratie met Open Index om overheidspublicaties automatisch bij te werken en te synchroniseren.
+* **Efficiënt Zoeken:** Maakt geavanceerde zoekopdrachten mogelijk binnen Woo-categorieën door de data-uitwisseling met Open Index.
+* **Veelzijdige Ondersteuning:** Geschikt voor zowel lokale als landelijke publicatieplatformen, waaronder een verbinding met het Kennis- en Exploitatiecentrum Officiële Publicaties (KOOP).
+* **Federale Zoekopdrachten:** Ondersteunt federale zoekopdrachten via koophulpje.nl, waardoor een breder bereik en toegankelijkheid van overheidspublicaties wordt gegarandeerd.
+* **OpenServices Framework:** Geïntegreerd met het Common Ground OpenServices framework voor gestandaardiseerde data-uitwisseling en interoperabiliteit.
 
 ## Installatie
 
 ### Vereisten
 
-- PHP 7.4 of hoger
-- Symfony 5 of hoger
-- Docker (voor containerisatie en lokale ontwikkeling)
+* PHP 7.4 of hoger
+* Symfony 5 of hoger
+* Docker (voor containerisatie en lokale ontwikkeling)
 
 ### Stap-voor-stap Installatiegids
 
@@ -39,4 +39,4 @@ De OpenWoo Service is uitgegeven onder de EUPL 1.2 licentie. Voor meer details, 
 
 ## Contact
 
-Voor meer informatie over de OpenWoo Service en hoe deze in uw organisatie geïmplementeerd kan worden, kunt u contact met ons opnemen via [info@openwoo.nl](mailto:info@openwoo.nl).
+Voor meer informatie over de OpenWoo Service en hoe deze in uw organisatie geïmplementeerd kan worden, kunt u contact met ons opnemen via <info@openwoo.nl>.
