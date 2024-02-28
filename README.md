@@ -1,58 +1,42 @@
-# WOOBundle [![Codacy Badge](https://app.codacy.com/project/badge/Grade/980ea2efc85a427ea909518f29506ff6)](https://app.codacy.com/gh/CommonGateway/WOOBundle/dashboard?utm_source=gh&)
+# OpenWoo Service
 
-This bundle is used for storing OpenWoo objects and synchronizing these objects from OpenWoo & xxllnc zaaksysteem.
+De OpenWoo Service versterkt de toegankelijkheid van overheidspublicaties volgens de Wet open overheid (Woo) door organisatiebronnen naadloos te synchroniseren met Open Index. Deze kernservice ondersteunt efficiënte zoekacties binnen Woo-categorieën en bevordert data-uitwisseling via het Common Ground OpenServices framework. Het faciliteert integratie met lokale en landelijke publicatieplatformen, inclusief koppelingen met het Kennis- en Exploitatiecentrum Officiële Publicaties (KOOP). OpenWoo.app is ontworpen voor zowel open source als proprietary platforms, waardoor het een centrale oplossing biedt voor het beheer en de zoekbaarheid van overheidsinformatie..
 
-For the api specifications of this bundle see: [redocly](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/CommonGateway/WooBundle/ce02a6928bc469e4965715ed899e5f6608cc3791/docs/openapi.json#tag/openwoo/operation/openwoo-put-item)
+## Kernfunctionaliteiten
 
-## Installation
+- **Automatische Synchronisatie:** Naadloze integratie met Open Index om overheidspublicaties automatisch bij te werken en te synchroniseren.
+- **Efficiënt Zoeken:** Maakt geavanceerde zoekopdrachten mogelijk binnen Woo-categorieën door de data-uitwisseling met Open Index.
+- **Veelzijdige Ondersteuning:** Geschikt voor zowel lokale als landelijke publicatieplatformen, waaronder een verbinding met het Kennis- en Exploitatiecentrum Officiële Publicaties (KOOP).
+- **Federale Zoekopdrachten:** Ondersteunt federale zoekopdrachten via koophulpje.nl, waardoor een breder bereik en toegankelijkheid van overheidspublicaties wordt gegarandeerd.
+- **OpenServices Framework:** Geïntegreerd met het Common Ground OpenServices framework voor gestandaardiseerde data-uitwisseling en interoperabiliteit.
 
-You can install the bundle with a command in php bash `composer require common-gateway/woo-bundle` or through the Gateway UI plugins page.
+## Installatie
 
-Make sure a few things are set up:
+### Vereisten
 
-1. Check the Sources are configured and enabled for all the municipalities.
-2. Check if the "WOO default cronjob" Cronjob is enabled and make sure that it doesn't show any errors after the configured crontab time has passed.
+- PHP 7.4 of hoger
+- Symfony 5 of hoger
+- Docker (voor containerisatie en lokale ontwikkeling)
 
-## Deploying / Updating
+### Stap-voor-stap Installatiegids
 
-Before rolling out a new bundle update, disable the "WOO default cronjob" Cronjob.
-This prevents the Gateway from trying to synchronize objects when the crontab of these Cronjobs passes.
-And while deploying these synchronization might go wrong.
+1. Clone het OpenWoo repository: `git clone https://github.com/OpenWoo/OpenWooService.git`
+2. Installeer afhankelijkheden met Composer: `composer install`
+3. Pas de `.env` bestanden aan met uw specifieke configuraties voor de database en andere diensten.
+4. Start de OpenWoo Service met Docker: `docker-compose up -d`
 
-## Synchronizations
+## Gebruik
 
-### How does synchronization work
+Na de installatie kunt u de OpenWoo Service configureren om te beginnen met de automatische synchronisatie van uw organisatiebronnen naar Open Index. Raadpleeg de gedetailleerde documentatie voor verdere instructies en beste praktijken.
 
-In short: when synchronization is triggered all cases are fetched from a xxllnc zaaksysteem and mapped to an OpenWebConcept WOO publicatie object.\
-The mapping schema can be found here: https://github.com/CommonGateway/WooBundle/blob/main/Installation/Mapping/woo.xxllncCaseToWoo.mapping.json \\
+## Bijdragen
 
-Besides just mapping through a [Gateway mapping](https://commongateway.github.io/CoreBundle/pages/Features/Mappings) there is some custom logic for the portalUrl and the bijlagen (documents) properties.
+Wij verwelkomen bijdragen aan de OpenWoo Service, of het nu gaat om bugrapporten, feature suggesties, of codebijdragen. Zie onze `CONTRIBUTING.md` voor meer informatie over hoe u kunt bijdragen.
 
-This can be found for xxllnc synchronizations in the SyncXxllncCasesService.
-For bijlagen, an extra call to the xxllnc zaaksysteem is needed to get the document data.
-And the portalUrl property is configured through the Action->configuration.
+## Licentie
 
-And for OpenWoo synchronizations in the SyncOpenWooService.
+De OpenWoo Service is uitgegeven onder de EUPL 1.2 licentie. Voor meer details, zie het `LICENSE.md` bestand in onze GitHub repository.
 
-### How to synchronize
+## Contact
 
-To synchronize publications for a specific municipality from the xxllnc zaaksysteem,
-first, check if its Source is configured properly with information about the zaaksysteem for that municipality.
-Does it have the correct location (URL)? And make sure the Source is enabled.
-Then find the Action for that municipality, check if the oin is set properly, and also check if the Action is enabled.
-After this, copy the Action reference.
-
-Then in the PHP container you can execute the following command:
-`bin/console woo:objects:sync {action reference}`
-to start synchronizing zaaksysteem cases to woo publications.
-For example: \
-`bin/console woo:objects:sync https://commongateway.nl/pdd.SyncNoordwijkAction.action.json`
-
-Besides being able to start synchronizing these publications manually through a command,
-the "WOO default cronjob" Cronjob also synchronizes publications every 10 minutes if the Source and Action are configured properly.
-For this, the Cronjob itself has to be enabled as well.
-
-### Getting the synchronized objects
-
-After synchronizing objects, you can fetch the objects by just requesting `GET /api/publications` to fetch all publications or `GET /api/publications?organisation.oin={oin}` to fetch the publications belonging to organisation.
-Make sure here the oin parameter value is the same that is set as configuration on the Action of that municipality.
+Voor meer informatie over de OpenWoo Service en hoe deze in uw organisatie geïmplementeerd kan worden, kunt u contact met ons opnemen via [info@openwoo.nl](mailto:info@openwoo.nl).
