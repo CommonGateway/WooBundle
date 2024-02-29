@@ -23,6 +23,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
 use Exception;
+use Smalot\PdfParser\Parser;
 
 /**
  * Service responsible for synchronizing OpenWoo objects to woo objects.
@@ -86,6 +87,11 @@ class SyncOpenWooService
     private ObjectEntityService $gatewayOEService;
 
     /**
+     * @var Parser $pdfParser.
+     */
+    private Parser $pdfParser;
+
+    /**
      * @var array
      */
     private array $data;
@@ -129,6 +135,7 @@ class SyncOpenWooService
         $this->cacheService      = $cacheService;
         $this->fileService       = $fileService;
         $this->gatewayOEService  = $gatewayOEService;
+        $this->pdfParser  = new Parser();
 
     }//end __construct()
 
@@ -383,9 +390,7 @@ class SyncOpenWooService
         if (substr($document['url'], 0, strlen($source->getLocation())) === $source->getLocation()) {
             $path = substr($document['url'], strlen($source->getLocation()));
         } else {
-            $this->logger->error('Url of document does not correspond with source');
-
-            return $data;
+            $this->logger->warning('Url of document does not correspond with source, so will fetch from a different location than the source');
         }
 
         $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->find($document['_self']['id']);
@@ -401,7 +406,18 @@ class SyncOpenWooService
             $file = new File();
         }
 
-        $response = $this->callService->call($source, $path);
+        if (isset($path) === true) {
+            $response = $this->callService->call($source, $path);
+        } else {
+            try {
+                $response = $this->callService->customCall($document['url']);
+            } catch (\Exception $e) {
+                $this->logger->error('Something went wrong fetching ' . $document['url'] . ' ' . $e->getMessage());
+                $this->style && $this->style->error('Something went wrong fetching ' . $document['url'] . ' ' . $e->getMessage());
+
+                return $data;
+            }
+        }
 
         $file->setBase64(base64_encode($response->getBody()));
         $file->setMimeType($response->getHeader('content-type')[0]);
@@ -414,11 +430,36 @@ class SyncOpenWooService
 
         $this->entityManager->persist($file);
 
-        $bijlageObject->hydrate(['url' => $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint), 'extension' => end($explodedFilename)]);
+        switch ($file->getMimeType()) {
+            case 'pdf':
+            case 'application/pdf':
+                try {
+                    $pdf = $this->pdfParser->parseContent(\Safe\base64_decode($file->getBase64()));
+                    $text = $pdf->getText();
+                } catch (\Exception $e) {
+                    $this->logger->error('Something went wrong extracting text from ' . $document['url'] . ' ' . $e->getMessage());
+                    $this->style && $this->style->error('Something went wrong extracting text from ' . $document['url'] . ' ' . $e->getMessage());
+
+                    $text = null;
+                }
+                break;
+            default:
+                $text = null;
+        }
+
+        $bijlageObject->hydrate(
+            [
+                'url'          => $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint),
+                'extension'    => end($explodedFilename),
+                'documentText' => $text
+            ]
+        );
 
         $this->entityManager->persist($bijlageObject);
 
         $this->entityManager->flush();
+
+        $this->cacheService->cacheObject($bijlageObject);
 
         $data['document'] = $bijlageObject->toArray();
 

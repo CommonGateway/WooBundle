@@ -214,8 +214,15 @@ class FileService
         switch ($file->getMimeType()) {
             case 'pdf':
             case 'application/pdf':
-                $pdf = $this->pdfParser->parseContent(\Safe\base64_decode($file->getBase64()));
-                $text = $pdf->getText();
+                try {
+                    $pdf = $this->pdfParser->parseContent(\Safe\base64_decode($file->getBase64()));
+                    $text = $pdf->getText();
+                } catch (\Exception $e) {
+                    $this->logger->error('Something went wrong extracting text from ' . $file->getName() . ' ' . $e->getMessage());
+                    $this->style && $this->style->error('Something went wrong extracting text from ' .  $file->getName() . ' ' . $e->getMessage());
+
+                    $text = null;
+                }
                 break;
             default:
                 $text = null;
