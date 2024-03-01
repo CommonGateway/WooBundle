@@ -1,0 +1,13 @@
+{
+    "title": "ZaaksysteemNotificationAction",
+    "$id": "https://commongateway.nl/woo.zaaksysteemNotificationAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.zaaksysteem.notification.received"],
+    "configuration": [],
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\ZaaksysteemNotificationHandler"
+}

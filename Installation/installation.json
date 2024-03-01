@@ -97,6 +97,14 @@
         "throws": [
           "woo.get.robot.txt"
         ]
+      },
+      {
+        "$id": "https://commongateway.nl/woo.zaaksysteemNotification.endpoint.json",
+        "version": "0.0.1",
+        "reference": "https://commongateway.nl/woo.zaaksysteemNotification.schema.json",
+        "path": "woo/notifications",
+        "methods": ["POST"],
+        "throws": ["woo.zaaksysteem.notification.received"]
       }
     ]
   }
