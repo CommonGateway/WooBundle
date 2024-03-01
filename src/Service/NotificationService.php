@@ -74,6 +74,7 @@ class NotificationService
         $this->logger                 = $pluginLogger;
         $this->resourceService        = $resourceService;
         $this->syncXxllncCasesService = $syncXxllncCasesService;
+
     }//end __construct()
 
 
@@ -109,7 +110,7 @@ class NotificationService
             return $data;
         }
 
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         $this->logger->debug("WooBundle -> NotificationService -> zaaksysteemNotificationHandler()", ['plugin' => 'common-gateway/woo-bundle']);
@@ -127,9 +128,9 @@ class NotificationService
         }
 
         $notification = $data['body'];
-        $host = $data['headers']['host'][0];
+        $host         = $data['headers']['host'][0];
 
-        $host = 'http://' . $host;
+        $host = 'http://'.$host;
 
         $source = $this->resourceService->findSourceForUrl($host, 'common-gateway/woo-bundle', $endpoint);
         if ($source === null) {
@@ -152,9 +153,9 @@ class NotificationService
         AND configuration LIKE '%fileEndpointReference%'
         AND configuration LIKE '%{$source->getReference()}%';
         ";
-        
+
         $params = ['sourceValue' => $source->getReference()];
-        
+
         // Using executeQuery() for executing the query.
         $stmt = $conn->executeQuery($sql, $params);
 
@@ -168,8 +169,6 @@ class NotificationService
         $action = $stmt->fetchAllAssociative()[0];
 
         $this->syncXxllncCasesService->syncCaseToPublicatie($action, $source);
-
-
 
         return ;
 

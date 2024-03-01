@@ -362,10 +362,10 @@ class SyncXxllncCasesService
 
             return [];
         }//end if
-        
+
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
         $this->logger->info("Fetching cases from {$source->getLocation()}", ['plugin' => 'common-gateway/woo-bundle']);
-        
+
         $results = $this->fetchObjects($source);
         $this->entityManager->flush();
 
@@ -439,6 +439,7 @@ class SyncXxllncCasesService
 
     }//end syncXxllncCasesHandler()
 
+
     public function syncCaseToPublicatie(Action $action, Source $source, string $caseId)
     {
         $this->configuration = $action->getConfiguration();
@@ -458,7 +459,7 @@ class SyncXxllncCasesService
             return [];
         }//end if
 
-        $fileEndpoint     = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
+        $fileEndpoint = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
         // $source           = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
         $schema           = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
         $mapping          = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
@@ -471,7 +472,7 @@ class SyncXxllncCasesService
 
             return [];
         }//end if
-        
+
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
 
         $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint']."/$caseId", 'GET', []);
@@ -510,7 +511,7 @@ class SyncXxllncCasesService
                 true,
                 false
             );
-            
+
             $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['id']);
 
             // Get all synced sourceIds.
@@ -527,7 +528,7 @@ class SyncXxllncCasesService
             continue;
         }//end try
 
-    }
+    }//end syncCaseToPublicatie()
 
 
 }//end class
