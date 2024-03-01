@@ -211,7 +211,7 @@ class SyncZGWToWooService
         } else {
             $base64 = $enkelvoudigInformatieObject['informatieobject']['inhoud'];
         }
-            
+
         // This finds the existing Value or creates a new one.
         $value = $bijlageObject->getValueObject("url");
 
@@ -345,19 +345,19 @@ class SyncZGWToWooService
                 if ($enkelvoudigInformatieObject !== null && isset($enkelvoudigInformatieObject['informatieobjecttype']) !== false) {
                     $zaakInformatieObjecten[$key]['informatieobject'] = $enkelvoudigInformatieObject;
                     switch ($enkelvoudigInformatieObject['informatieobjecttype']) {
-                        case $informatieObjectTypenUrls['informatieverzoek']:
-                            $informatieObjecten['informatieverzoek'][] = $zaakInformatieObjecten[$key];
-                            break;
-                        case $informatieObjectTypenUrls['inventarisatielijst']:
-                            $informatieObjecten['inventarisatielijst'][] = $zaakInformatieObjecten[$key];
-                            break;
-                        case $informatieObjectTypenUrls['besluit']:
-                            $informatieObjecten['besluit'][] = $zaakInformatieObjecten[$key];
-                            break;
-                        case $informatieObjectTypenUrls['bijlagen']:
-                            $informatieObjecten['bijlagen'][] = $zaakInformatieObjecten[$key];
-                            break;
-                        }
+                    case $informatieObjectTypenUrls['informatieverzoek']:
+                        $informatieObjecten['informatieverzoek'][] = $zaakInformatieObjecten[$key];
+                        break;
+                    case $informatieObjectTypenUrls['inventarisatielijst']:
+                        $informatieObjecten['inventarisatielijst'][] = $zaakInformatieObjecten[$key];
+                        break;
+                    case $informatieObjectTypenUrls['besluit']:
+                        $informatieObjecten['besluit'][] = $zaakInformatieObjecten[$key];
+                        break;
+                    case $informatieObjectTypenUrls['bijlagen']:
+                        $informatieObjecten['bijlagen'][] = $zaakInformatieObjecten[$key];
+                        break;
+                    }
                 }
             }
         }//end foreach
@@ -418,15 +418,15 @@ class SyncZGWToWooService
             'bijlageInformatieObjectUrl',
             'informatieverzoekInformatieObjectUrl',
             'inventarisatielijstInformatieObjectUrl',
-            'besluitInformatieObjectUrl'
+            'besluitInformatieObjectUrl',
         ];
 
         $missingConfigField = false;
-        $errorMessage = 'Missing one or more config values:';
+        $errorMessage       = 'Missing one or more config values:';
         foreach ($configFields as $configField) {
             if (isset($this->configuration[$configField]) === false) {
                 $missingConfigField = true;
-                $errorMessage .= ' '.$configField; 
+                $errorMessage      .= ' '.$configField;
             }
         }
 
@@ -499,10 +499,10 @@ class SyncZGWToWooService
                 $dataToMap = [
                     'eigenschappen'                 => $zaakEigenschappen,
                     'enkelvoudigInformatieObjecten' => $enkelvoudigInformatieObjecten,
-                    'organisatie' => [
+                    'organisatie'                   => [
                         'oin'  => $this->configuration['oin'],
                         'naam' => $this->configuration['organisatie'],
-                    ]
+                    ],
                 ];
 
                 $result       = array_merge($result, $dataToMap);
