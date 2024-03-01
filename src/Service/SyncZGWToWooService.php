@@ -202,12 +202,16 @@ class SyncZGWToWooService
     {
         // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
         // ^ Note: this is necessary, so we always have a ObjectEntity and Value to attach the File to, so we don't create duplicated Files when syncing every 10 minutes.
-        $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($enkelvoudigInformatieObject['url']);
+        $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($enkelvoudigInformatieObject['informatieobject']['url']);
 
         $mimeType = $enkelvoudigInformatieObject['informatieobject']['formaat'];
 
-        $base64 = $this->fileService->getInhoudInformatieObject($enkelvoudigInformatieObject['informatieobject']['inhoud'], $enkelvoudigInformatieObject['url'], $mimeType, $config['source']);
-
+        if (filter_var($enkelvoudigInformatieObject['informatieobject']['inhoud'], FILTER_VALIDATE_URL) === true) {
+            $base64 = $this->fileService->getInhoudInformatieObject($enkelvoudigInformatieObject['informatieobject']['inhoud'], $enkelvoudigInformatieObject['url'], $mimeType, $config['source']);
+        } else {
+            $base64 = $enkelvoudigInformatieObject['informatieobject']['inhoud'];
+        }
+            
         // This finds the existing Value or creates a new one.
         $value = $bijlageObject->getValueObject("url");
 
@@ -215,7 +219,7 @@ class SyncZGWToWooService
 
         $url = $this->fileService->createOrUpdateFile($value, $enkelvoudigInformatieObject['informatieobject']['titel'], $base64, $mimeType, $config['endpoint']);
 
-        return $this->mappingService->mapping($config['mapping'], array_merge($enkelvoudigInformatieObject, ['url' => $url]));
+        return $this->mappingService->mapping($config['mapping'], array_merge($enkelvoudigInformatieObject, ['viewUrl' => $url]));
 
     }//end retrieveInhoud()
 
@@ -241,7 +245,7 @@ class SyncZGWToWooService
         $fileNames = [];
 
         foreach ($fileFields as $field) {
-            if (isset($enkelvoudigInformatieObjecten[$field]) === true) {
+            if (isset($enkelvoudigInformatieObjecten[$field][0]) === true) {
                 $fileURLS[$field] = $this->retrieveInhoud($enkelvoudigInformatieObjecten[$field][0], $config);
                 $fileNames[]      = $enkelvoudigInformatieObjecten[$field][0]['informatieobject']['titel'];
             }//end if
@@ -338,22 +342,22 @@ class SyncZGWToWooService
         foreach ($zaakInformatieObjecten as $key => $zaakInformatieObject) {
             if (isset($zaakInformatieObjecten[$key]['informatieobject']) === true) {
                 $enkelvoudigInformatieObject = $this->fileService->getEnkelvoudigInformatieObject($zaakInformatieObjecten[$key]['informatieobject'], $source);
-                if ($enkelvoudigInformatieObject !== null && isset($enkelvoudigInformatieObject['informatieobjecttype']) !== null) {
+                if ($enkelvoudigInformatieObject !== null && isset($enkelvoudigInformatieObject['informatieobjecttype']) !== false) {
                     $zaakInformatieObjecten[$key]['informatieobject'] = $enkelvoudigInformatieObject;
                     switch ($enkelvoudigInformatieObject['informatieobjecttype']) {
-                    case $informatieObjectTypenUrls['informatieverzoek']:
-                        $informatieObjecten['informatieverzoek'][] = $zaakInformatieObjecten[$key];
-                        break;
-                    case $informatieObjectTypenUrls['inventarisatielijst']:
-                        $informatieObjecten['inventarisatielijst'][] = $zaakInformatieObjecten[$key];
-                        break;
-                    case $informatieObjectTypenUrls['besluit']:
-                        $informatieObjecten['besluit'][] = $zaakInformatieObjecten[$key];
-                        break;
-                    case $informatieObjectTypenUrls['bijlagen']:
-                        $informatieObjecten['bijlagen'][] = $zaakInformatieObjecten[$key];
-                        break;
-                    }
+                        case $informatieObjectTypenUrls['informatieverzoek']:
+                            $informatieObjecten['informatieverzoek'][] = $zaakInformatieObjecten[$key];
+                            break;
+                        case $informatieObjectTypenUrls['inventarisatielijst']:
+                            $informatieObjecten['inventarisatielijst'][] = $zaakInformatieObjecten[$key];
+                            break;
+                        case $informatieObjectTypenUrls['besluit']:
+                            $informatieObjecten['besluit'][] = $zaakInformatieObjecten[$key];
+                            break;
+                        case $informatieObjectTypenUrls['bijlagen']:
+                            $informatieObjecten['bijlagen'][] = $zaakInformatieObjecten[$key];
+                            break;
+                        }
                 }
             }
         }//end foreach
@@ -400,34 +404,45 @@ class SyncZGWToWooService
         isset($this->style) === true && $this->style->success('SyncZGWToWooService triggered');
         $this->logger->info('SyncZGWToWooService triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if (isset($this->configuration['source']) === false
-            || isset($this->configuration['oin']) === false
-            || isset($this->configuration['organisatie']) === false
-            || isset($this->configuration['portalUrl']) === false
-            || isset($this->configuration['schema']) === false
-            || isset($this->configuration['mapping']) === false
-            || isset($this->configuration['zrcSource']) === false
-            || isset($this->configuration['drcSource']) === false
-            || isset($this->configuration['zaakType']) === false
-            || isset($this->configuration['zaakEndpoint']) === false
-            || isset($this->configuration['fileEndpointReference']) === false
-            || isset($this->configuration['bijlageInformatieObjectUrl']) === false
-            || isset($this->configuration['informatieverzoekInformatieObjectUrl']) === false
-            || isset($this->configuration['inventarisatielijstInformatieObjectUrl']) === false
-            || isset($this->configuration['besluitInformatieObjectUrl']) === false
-        ) {
-            isset($this->style) === true && $this->style->error('No zrcSource, drcSource schema, mapping, oin, organisatie, zaakType, zakenEndpoint, fileEndpointReference or portalUrl configured on this action, ending syncZGWToWooHandler');
-            $this->logger->error('No zrcSource, drcSource schema, mapping, oin, organisatie, zaakType, zakenEndpoint, fileEndpointReference or portalUrl configured on this action, ending syncZGWToWooHandler', ['plugin' => 'common-gateway/woo-bundle']);
+        $configFields = [
+            'oin',
+            'organisatie',
+            'portalUrl',
+            'schema',
+            'mapping',
+            'zrcSource',
+            'drcSource',
+            'zaakType',
+            'zakenEndpoint',
+            'fileEndpointReference',
+            'bijlageInformatieObjectUrl',
+            'informatieverzoekInformatieObjectUrl',
+            'inventarisatielijstInformatieObjectUrl',
+            'besluitInformatieObjectUrl'
+        ];
+
+        $missingConfigField = false;
+        $errorMessage = 'Missing one or more config values:';
+        foreach ($configFields as $configField) {
+            if (isset($this->configuration[$configField]) === false) {
+                $missingConfigField = true;
+                $errorMessage .= ' '.$configField; 
+            }
+        }
+
+        if ($missingConfigField === true) {
+            isset($this->style) === true && $this->style->error($errorMessage);
+            $this->logger->error($errorMessage, ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
-        }//end if
+        }
 
         $fileEndpoint                           = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
         $zrcSource                              = $this->resourceService->getSource($this->configuration['zrcSource'], 'common-gateway/woo-bundle');
         $drcSource                              = $this->resourceService->getSource($this->configuration['drcSource'], 'common-gateway/woo-bundle');
         $schema                                 = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
         $mapping                                = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
-        $zaakEndpoint                           = $this->configuration['zaakEndpoint'];
+        $zaakEndpoint                           = $this->configuration['zakenEndpoint'];
         $zaakType                               = $this->configuration['zaakType'];
         $bijlageInformatieObjectUrl             = $this->configuration['bijlageInformatieObjectUrl'];
         $informatieverzoekInformatieObjectUrl   = $this->configuration['informatieverzoekInformatieObjectUrl'];
@@ -465,7 +480,7 @@ class SyncZGWToWooService
                 }
 
                 // Get eigenschappen.
-                $eigenschappenEndpoint = "/$zaakEndpoint/{$result['uuid']}/zaakeigenschappen";
+                $eigenschappenEndpoint = "/zaakeigenschappen?zaak={$result['url']}";
                 $zaakEigenschappen     = $this->fetchObjects($zrcSource, $eigenschappenEndpoint);
                 $zaakEigenschappen     = $this->getZaakEigenschappen($zaakEigenschappen);
 
@@ -477,18 +492,16 @@ class SyncZGWToWooService
                 ];
 
                 // Get informatieobjecten
-                $zaakInformatieEndpoint        = "/zrc/v1/zaakinformatieobjecten?zaak={$result['url']}";
+                $zaakInformatieEndpoint        = "/zaakinformatieobjecten?zaak={$result['url']}";
                 $zaakInformatieObjecten        = $this->fetchObjects($zrcSource, $zaakInformatieEndpoint);
                 $enkelvoudigInformatieObjecten = $this->getInformatieObjecten($drcSource, $zaakInformatieObjecten, $informatieObjectTypenUrls);
 
                 $dataToMap = [
                     'eigenschappen'                 => $zaakEigenschappen,
                     'enkelvoudigInformatieObjecten' => $enkelvoudigInformatieObjecten,
-                    [
-                        'organisatie' => [
-                            'oin'  => $this->configuration['oin'],
-                            'naam' => $this->configuration['organisatie'],
-                        ],
+                    'organisatie' => [
+                        'oin'  => $this->configuration['oin'],
+                        'naam' => $this->configuration['organisatie'],
                     ]
                 ];
 
@@ -544,12 +557,12 @@ class SyncZGWToWooService
 
         $this->entityManager->flush();
 
-        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $zrcSource, $this->configuration['schema']);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
         $countItems = count($responseItems);
-        $logMessage = "Synchronized $countItems cases to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
+        $logMessage = "Synchronized $countItems cases to woo objects for ".$zrcSource->getName()." and deleted $deletedObjectsCount objects";
         isset($this->style) === true && $this->style->success($logMessage);
         $this->logger->info($logMessage, ['plugin' => 'common-gateway/woo-bundle']);
 

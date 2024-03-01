@@ -4,9 +4,11 @@
     "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
     "version": "0.0.1",
     "location": "!ChangeMe!",
+    "authorizationHeader": "API-KEY",
     "headers": {
-        "Accept": "*/*",
+        "Accept": "application/json",
+        "API-KEY": "!ChangeMe!",
         "Content-Type": "application/json"
     },
-    "isEnabled": false
+    "isEnabled": true
 }

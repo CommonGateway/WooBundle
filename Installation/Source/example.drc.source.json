@@ -6,10 +6,9 @@
     "location": "!ChangeMe!",
     "authorizationHeader": "API-KEY",
     "headers": {
-        "Accept": "*/*",
-        "API-Interface-ID": "!ChangeMe!",
+        "Accept": "application/json",
         "API-KEY": "!ChangeMe!",
         "Content-Type": "application/json"
     },
-    "isEnabled": false
+    "isEnabled": true
 }

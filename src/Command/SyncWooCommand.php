@@ -5,6 +5,7 @@ namespace CommonGateway\WOOBundle\Command;
 use App\Entity\Action;
 use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
 use CommonGateway\WOOBundle\Service\SyncOpenWooService;
+use CommonGateway\WOOBundle\Service\SyncZGWToWooService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -49,6 +50,13 @@ class SyncWooCommand extends Command
     private SyncOpenWooService $syncOpenWooService;
 
     /**
+     * The zgw service.
+     *
+     * @var SyncZGWToWooService
+     */
+    private SyncZGWToWooService $syncZGWToWooService;
+
+    /**
      * @var EntityManagerInterface
      */
     private EntityManagerInterface $entityManager;
@@ -60,10 +68,11 @@ class SyncWooCommand extends Command
      * @param SyncXxllncCasesService $syncXxllncCasesService The case service
      * @param SyncOpenWooService     $syncOpenWooService     The OpenWoo service
      */
-    public function __construct(SyncXxllncCasesService $syncXxllncCasesService, SyncOpenWooService $syncOpenWooService, EntityManagerInterface $entityManager)
+    public function __construct(SyncXxllncCasesService $syncXxllncCasesService, SyncOpenWooService $syncOpenWooService, SyncZGWToWooService $syncZGWToWooService, EntityManagerInterface $entityManager)
     {
         $this->syncXxllncCasesService = $syncXxllncCasesService;
         $this->syncOpenWooService     = $syncOpenWooService;
+        $this->syncZGWToWooService    = $syncZGWToWooService;
         $this->entityManager          = $entityManager;
         parent::__construct();
 
@@ -144,8 +153,8 @@ class SyncWooCommand extends Command
                 }
                 break;
             case 'zgw':
-                $this->syncZGWService->setStyle($style);
-                if ($this->syncZGWService->syncZGWHandler([], $config) === null) {
+                $this->syncZGWToWooService->setStyle($style);
+                if ($this->syncZGWToWooService->syncZGWToWooHandler([], $config) === null) {
                     return Command::FAILURE;
                 }
                 break;

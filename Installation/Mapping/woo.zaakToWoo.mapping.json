@@ -2,7 +2,7 @@
   "title": "ZaakToWoo",
   "$id": "https://commongateway.nl/mapping/woo.zaakToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
@@ -21,11 +21,12 @@
     "metadata.verzoek.inventarisatielijst": "{% if enkelvoudigInformatieObjecten['inventarisatielijst'][0]|default %}{{ map('https://commongateway.nl/mapping/woo.zgwInformatieObjectSetSourceId.schema.json', enkelvoudigInformatieObjecten['inventarisatielijst'][0])|json_encode }}{% endif %}",
     "metadata.verzoek.besluit": "{% if enkelvoudigInformatieObjecten['besluit'][0]|default %}{{ map('https://commongateway.nl/mapping/woo.zgwInformatieObjectSetSourceId.schema.json', enkelvoudigInformatieObjecten['besluit'][0])|json_encode }}{% endif %}",
     "bijlagen": "[{% set index=0 %}{% if enkelvoudigInformatieObjecten['bijlagen']|default %}{% for document in enkelvoudigInformatieObjecten['bijlagen'] %}{% if index != 0 %},{% endif %}{{ map('https://commongateway.nl/mapping/woo.zgwInformatieObjectSetSourceId.schema.json', document)|json_encode }}{% set index=index+1 %}{% endfor %}{% endif %}]",
-    "themas.0.hoofdthema._sourceId": "{% if eigenschappen.woo_thema']|default %}{{ eigenschappen.woo_thema'] }}{% endif %}",
-    "themas.0.hoofdthema": "{% if eigenschappen.woo_thema']|default %}{{ eigenschappen.woo_thema'] }}{% endif %}"
+    "themas.0.hoofdthema._sourceId": "{% if eigenschappen.woo_thema|default and id|default %}{{ id~eigenschappen.woo_thema }}{% endif %}",
+    "themas.0.hoofdthema": "{% if eigenschappen.woo_thema|default %}{{ eigenschappen.woo_thema }}{% endif %}"
   },
   "cast": {
-    "id": "string",
+    "id": ["unsetIfValue==object_id", "string"],
+    "organisatie.naam": "unsetIfValue==organisatie.naam",
     "themas.0.hoofdthema": "unsetIfValue==",
     "themas.0": "unsetIfValue==",
     "bijlagen": "jsonToArray",

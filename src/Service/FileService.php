@@ -155,18 +155,18 @@ class FileService
      * Gets the enkelvoudiginformatieobject from a drc source.
      *
      * @param string $url       Url of the enkelvoudiginformatieobject.
-     * @param string $drcSource Document id.
+     * @param Source $drcSource Document id.
      *
-     * @return string|null $this->callService->decodeResponse() Decoded requested document as PHP array.
+     * @return array|null $this->callService->decodeResponse() Decoded requested document as PHP array.
      */
-    public function getEnkelvoudigInformatieObject(string $url, Source $drcSource): ?string
+    public function getEnkelvoudigInformatieObject(string $url, Source $drcSource): ?array
     {
         try {
             $lastSlashPosition = strrpos($url, '/');
             $endpoint          = '/enkelvoudiginformatieobjecten/'.substr($url, ($lastSlashPosition + 1));
             isset($this->style) === true && $this->style->info("Fetching enkelvoudiginformatieobject: $endpoint");
             $this->logger->info("Fetching enkelvoudiginformatieobject: $endpoint", ['plugin' => 'common-gateway/woo-bundle']);
-            $response = $this->callService->call($drcSource, $url, 'GET', [], false);
+            $response = $this->callService->call($drcSource, $endpoint, 'GET', [], false);
             return $this->callService->decodeResponse($drcSource, $response);
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error("Failed to fetch enkelvoudiginformatieobject: $endpoint, message:  {$e->getMessage()}");

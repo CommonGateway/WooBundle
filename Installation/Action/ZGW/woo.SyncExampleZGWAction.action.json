@@ -2,7 +2,7 @@
     "title": "SyncExampleZGWAction",
     "$id": "https://commongateway.nl/woo.SyncExampleZGWAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "example",
@@ -12,7 +12,7 @@
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
         "mapping": "https://commongateway.nl/mapping/woo.zaakToWoo.mapping.json",
         "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json",
-        "zakenEndpoint": "/zrc/v1/zaken",
+        "zakenEndpoint": "/zaken",
         "zaakType": "https://api.gateway.commonground.nu/api/ztc/v1/zaaktypen/dd4c0983-b3d1-4047-9611-37d42a053b3a",
         "besluitInformatieObjectUrl": "https://api.gateway.commonground.nu/api/ztc/v1/informatieobjecttypen/ec4a4351-57cd-45f7-bcbf-f9f06356414f",
         "inventarisatielijstInformatieObjectUrl": "https://api.gateway.commonground.nu/api/ztc/v1/informatieobjecttypen/b06f3e31-8d39-4072-b399-5307e9ffa3a3",
