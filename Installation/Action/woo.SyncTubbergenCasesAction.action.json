@@ -6,6 +6,7 @@
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "00000001002172859000",
+        "autoPublish": true,
         "portalUrl": "https://conductionnl.github.io/woo-website-tubbergen",
         "source": "https://commongateway.woo.nl/source/tubbergen.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",

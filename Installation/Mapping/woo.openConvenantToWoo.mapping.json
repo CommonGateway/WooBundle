@@ -2,13 +2,14 @@
   "title": "OpenConvenantToWoo",
   "$id": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "passTrough": false,
   "mapping": {
     "_sourceId": "ID",
     "id": "identifier",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
+    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'false' }}{% endif %}",
     "categorie": "categorie",
     "titel": "{% if Onderwerp|default %}{{ Onderwerp }}{% endif %}",
     "samenvatting": "{% if Samenvatting|default %}{{ Samenvatting }}{% endif %}",
@@ -19,6 +20,7 @@
   },
   "cast": {
     "id": "string",
+    "gepubliceerd": "bool",
     "themas.0.hoofdthema": "unsetIfValue==",
     "themas.0": "unsetIfValue==",
     "bijlagen": "jsonToArray",

@@ -2,13 +2,14 @@
   "title": "XxllncCaseToWoo",
   "$id": "https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
     "id": "object_id",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
+    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'false' }}{% endif %}",
     "titel": "{% if values['case&#46;subject_external']|default %}{{ values['case&#46;subject_external'] }}{% endif %}",
     "beschrijving": "{% if values['attribute&#46;woo_beschrijving']|default %}{{ values['attribute&#46;woo_beschrijving'] }}{% endif %}",
     "samenvatting": "{% if values['attribute&#46;woo_samenvatting']|default %}{{ values['attribute&#46;woo_samenvatting'] }}{% endif %}",
@@ -25,6 +26,7 @@
   },
   "cast": {
     "id": "string",
+    "gepubliceerd": "bool",
     "themas.0.hoofdthema": "unsetIfValue==",
     "themas.0": "unsetIfValue==",
     "bijlagen": "jsonToArray",

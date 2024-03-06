@@ -373,7 +373,7 @@ class SyncXxllncCasesService
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
             try {
-                $result       = array_merge($result, ['organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
+                $result       = array_merge($result, ['autoPublish' => $this->configuration['autoPublish'] ?? null, 'organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
                 $mappedResult = $this->mappingService->mapping($mapping, $result);
                 // Map categories to prevent multiple variants of the same categorie.
                 $mappedResult = $this->mappingService->mapping($categorieMapping, $mappedResult);
