@@ -6,6 +6,7 @@
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "conduction",
+        "allowPDFOnly": false,
         "portalUrl": "https://conductionnl.github.io/woo-website-conduction",
         "source": "https://commongateway.woo.nl/source/conduction.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",

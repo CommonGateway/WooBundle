@@ -6,6 +6,7 @@
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "sloterburg",
+        "allowPDFOnly": false,
         "organisatie": "Gemeente Sloterburg",
         "source": "https://commongateway.woo.nl/source/sloterburg.simsite.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",

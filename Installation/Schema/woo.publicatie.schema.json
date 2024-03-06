@@ -2,7 +2,7 @@
     "title": "Publicatie",
     "$id": "https://commongateway.nl/woo.publicatie.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "object",
     "description": "",
     "properties": {
@@ -25,6 +25,10 @@
         "portalUrl": {
             "type": "string",
             "format": "url"
+        },
+        "gepubliceerd": {
+            "description": "Of deze publicatie gepubliceerd is of niet.",
+            "format": "bool"
         },
         "publicatiedatum": {
             "description": "Publicatiedatum van een Woo object is nooit in de toekomst.",

@@ -6,6 +6,7 @@
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "00000001001998389000",
+        "allowPDFOnly": false,
         "portalUrl": "https://conductionnl.github.io/woo-website-waddinxveen",
         "source": "https://commongateway.woo.nl/source/waddinxveen.openwoo.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",

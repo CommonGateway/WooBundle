@@ -6,6 +6,7 @@
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "00000001825792150000",
+        "allowPDFOnly": false,
         "portalUrl": "https://conductionnl.github.io/woo-website-noordwijk",
         "source": "https://commongateway.woo.nl/source/noordwijk.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",

@@ -10,6 +10,9 @@
       "domains": [
         "localhost",
         "https://api.gateway.commonground.nu"
+      ],
+      "configuraiton": [
+        
       ]
     }
   ],
