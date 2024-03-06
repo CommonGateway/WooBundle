@@ -9,7 +9,7 @@
     "id": "object_id",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
-    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'false' }}{% endif %}",
+    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'true' }}{% endif %}",
     "titel": "{% if values['case&#46;subject_external']|default %}{{ values['case&#46;subject_external'] }}{% endif %}",
     "beschrijving": "{% if values['attribute&#46;woo_beschrijving']|default %}{{ values['attribute&#46;woo_beschrijving'] }}{% endif %}",
     "samenvatting": "{% if values['attribute&#46;woo_samenvatting']|default %}{{ values['attribute&#46;woo_samenvatting'] }}{% endif %}",

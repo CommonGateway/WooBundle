@@ -9,7 +9,7 @@
     "id": "identifier",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
-    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'false' }}{% endif %}",
+    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'true' }}{% endif %}",
     "categorie": "categorie",
     "titel": "{% if Onderwerp|default %}{{ Onderwerp }}{% endif %}",
     "samenvatting": "{% if Samenvatting|default %}{{ Samenvatting }}{% endif %}",

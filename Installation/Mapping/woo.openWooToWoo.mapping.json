@@ -10,7 +10,7 @@
     "portalUrl": "Portal_url",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
-    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'false' }}{% endif %}",
+    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'true' }}{% endif %}",
     "categorie": "categorie",
     "titel": "{% if Titel|default %}{{ Titel }}{% endif %}",
     "samenvatting": "{% if Samenvatting|default %}{{ Samenvatting }}{% endif %}",
