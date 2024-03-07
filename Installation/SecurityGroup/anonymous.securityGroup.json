@@ -1,0 +1,18 @@
+{
+  "$id": "https://docs.commongateway.nl/securityGroup/default.anonymous.securityGroup.json",
+  "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
+  "version": "0.0.1",
+  "title": "Default Anonymous",
+  "anonymous": true,
+  "scopes": [
+    "schemas.https://commongateway.nl/pdd.openWOO.schema.json.GET",
+    "schemas.https://commongateway.nl/pdd.bijlage.schema.json.GET",
+    "schemas.https://commongateway.nl/pdd.openConvenant.schema.json.GET",
+    "schemas.https://commongateway.nl/pdd.partij.schema.json.GET",
+    "schemas.https://commongateway.nl/pdd.thema.schema.json.GET",
+    "schemas.https://commongateway.nl/woo.behandelendBestuursorgaan.schema.json.GET",
+    "schemas.https://commongateway.nl/woo.metadata.schema.json.GET",
+    "schemas.https://commongateway.nl/woo.publicatie.schema.json.GET",
+    "schemas.https://commongateway.nl/woo.sitemap.schema.json.GET"
+  ]
+}
