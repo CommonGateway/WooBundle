@@ -8,13 +8,13 @@ use App\Entity\Mapping;
 use App\Entity\ObjectEntity;
 use App\Service\ObjectEntityService;
 use App\Service\SynchronizationService;
+use CommonGateway\CoreBundle\Service\ActionService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
 use CommonGateway\CoreBundle\Service\CacheService;
-use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
@@ -37,53 +37,9 @@ class SyncOpenWooService
 {
 
     /**
-     * @var GatewayResourceService
-     */
-    private GatewayResourceService $resourceService;
-
-    /**
-     * @var CallService
-     */
-    private CallService $callService;
-
-    /**
-     * @var SynchronizationService
-     */
-    private SynchronizationService $syncService;
-
-    /**
-     * @var MappingService
-     */
-    private MappingService $mappingService;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private EntityManagerInterface $entityManager;
-
-    /**
-     * @var SymfonyStyle|null
-     */
-    private ?SymfonyStyle $style = null;
-
-    /**
-     * @var LoggerInterface $logger.
+     * @var LoggerInterface $logger The plugin logger.
      */
     private LoggerInterface $logger;
-
-    /**
-     * @var ValidationService $validationService.
-     */
-    private ValidationService $validationService;
-
-    /**
-     * @var CacheService $cacheService.
-     */
-    private CacheService $cacheService;
-
-    private FileService $fileService;
-
-    private ObjectEntityService $gatewayOEService;
 
     /**
      * @var array
@@ -108,27 +64,18 @@ class SyncOpenWooService
      * @param FileService            $fileService
      */
     public function __construct(
-        GatewayResourceService $resourceService,
-        CallService $callService,
-        SynchronizationService $syncService,
-        EntityManagerInterface $entityManager,
-        MappingService $mappingService,
+        private readonly GatewayResourceService $resourceService,
+        private readonly CallService $callService,
+        private readonly SynchronizationService $syncService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly MappingService $mappingService,
         LoggerInterface $pluginLogger,
-        ValidationService $validationService,
-        CacheService $cacheService,
-        FileService $fileService,
-        ObjectEntityService $gatewayOEService
+        private readonly ValidationService $validationService,
+        private readonly CacheService $cacheService,
+        private readonly FileService $fileService,
+        private ActionService $actionService
     ) {
-        $this->resourceService   = $resourceService;
-        $this->callService       = $callService;
-        $this->syncService       = $syncService;
-        $this->entityManager     = $entityManager;
-        $this->mappingService    = $mappingService;
-        $this->logger            = $pluginLogger;
-        $this->validationService = $validationService;
-        $this->cacheService      = $cacheService;
-        $this->fileService       = $fileService;
-        $this->gatewayOEService  = $gatewayOEService;
+        $this->logger = $pluginLogger;
 
     }//end __construct()
 
@@ -164,7 +111,7 @@ class SyncOpenWooService
     private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie): int
     {
         // Get all existing sourceIds.
-        $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
+        $source            = $this->entityManager->find(Source::class, $source->getId()->toString());
         $existingSourceIds = [];
         $existingObjects   = [];
         foreach ($source->getSynchronizations() as $synchronization) {
@@ -347,7 +294,7 @@ class SyncOpenWooService
                     $documents[] = $renderedObject['metadata']['verzoek']['besluit'];
                 }
             } catch (Exception $exception) {
-                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['ID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle', 'trace' => $exception->getTraceAsString()]);
                 continue;
             }//end try
         }//end foreach
@@ -357,7 +304,7 @@ class SyncOpenWooService
         foreach ($documents as $document) {
             $documentData['document'] = $document;
             $documentData['source']   = $source->getReference();
-            $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
+            $this->actionService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 
         $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
@@ -388,7 +335,7 @@ class SyncOpenWooService
             return $data;
         }
 
-        $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->find($document['_self']['id']);
+        $bijlageObject = $this->entityManager->getRepository(ObjectEntity::class)->find($document['_self']['id']);
         if ($bijlageObject instanceof ObjectEntity === false) {
             return $data;
         }

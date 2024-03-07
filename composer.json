@@ -15,8 +15,8 @@
     "license": "EUPL-1.2",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.4",
-        "commongateway/corebundle": "^1.1.52"
+        "php": ">=8.2",
+        "commongateway/corebundle": "^1.1.52 | dev-feature/GW-1596/Symfony54 | dev-feature/GW-1595/Symfony64"
     },
     "require-dev": {
         "symfony/dependency-injection": "~3.4|~4.1|~5.0"
