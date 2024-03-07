@@ -22,13 +22,20 @@ services:
       - api
 
   ui:
-    image: ghcr.io/conductionnl/gateway-ui:dev
+    image: ghcr.io/conductionnl/gateway-ui:latest
     depends_on:
       - api
     ports:
       - "8000:80"
     volumes:
       - ./ui/env.js:/usr/share/nginx/html/env.js:rw
+
+  woo-frontend:
+    image: ghcr.io/conductionnl/woo-website:dev
+    depends_on:
+      - api
+    ports:
+      - "8080:8080"
 
   php:
     &php
@@ -41,6 +48,7 @@ services:
       - db
     volumes:
       - ./src:/srv/api/vendor/common-gateway/woo-bundle/src:rw,cached
+      - ./Installation:/srv/api/vendor/common-gateway/woo-bundle/Installation:rw,cached
       - ./composer.json:/srv/api/vendor/common-gateway/woo-bundle/composer.json:rw,cached
     environment:
       - APP_INIT='true'
