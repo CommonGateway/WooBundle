@@ -23,7 +23,8 @@
             "required": true
         },
         "gepubliceerd": {
-            "type": "bool"
+            "type": "bool",
+            "default": true
         },
         "portalUrl": {
             "type": "string",

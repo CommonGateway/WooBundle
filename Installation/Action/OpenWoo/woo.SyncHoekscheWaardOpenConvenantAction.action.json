@@ -6,7 +6,6 @@
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "00000001825766096000",
-        "autoPublish": true,
         "portalUrl": "https://conductionnl.github.io/woo-website-rijssenholten",
         "source": "https://commongateway.woo.nl/source/hoekschewaard.openwoo.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",

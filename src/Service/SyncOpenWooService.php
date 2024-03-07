@@ -299,7 +299,7 @@ class SyncOpenWooService
                 'naam' => $this->configuration['organisatie'],
             ],
             'categorie'   => $categorie,
-            'autoPublish' => $this->configuration['autoPublish'] ?? null,
+            'autoPublish' => $this->configuration['autoPublish'] ?? true,
         ];
 
         $idsSynced        = [];

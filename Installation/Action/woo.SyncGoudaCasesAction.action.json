@@ -6,7 +6,6 @@
     "listens": ["woo.default.listens"],
     "configuration": {
         "oin": "00000001001997956000",
-        "autoPublish": true,
         "portalUrl": "https://conductionnl.github.io/woo-website-gouda",
         "source": "https://commongateway.woo.nl/source/gouda.zaaksysteem.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
