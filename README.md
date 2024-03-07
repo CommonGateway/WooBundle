@@ -27,7 +27,35 @@ De OpenWoo Service versterkt de toegankelijkheid van overheidspublicaties volgen
 
 ## Gebruik
 
-Na de installatie kunt u de OpenWoo Service configureren om te beginnen met de automatische synchronisatie van uw organisatiebronnen naar Open Index. Raadpleeg de gedetailleerde documentatie voor verdere instructies en beste praktijken.
+Na de installatie kunt u de OpenWoo Service configureren om te beginnen met de automatische synchronisatie van uw organisatiebronnen naar Open Index. 
+
+De synchronisaties werken aan de hand van een action in combinatie met een source.
+
+### Action
+
+Voor een voorbeeld van een action voor het zaaksysteem kan je kijken naar SyncEpeAction en als voor OpenWoo naar SyncBurenOpenWooAction. Voor OpenConvenant kan er gekeken worden naar SyncBurenOpenConvenantAction.
+
+Een action heeft standaard een reference en een name nodig. De reference moet uniek zijn als bijvoorbeeld `https://commongateway.nl/woo.SyncXxllncAction.action.json`.
+
+Een action heeft ook een listens veld. Deze is in deze context meestal de 'throws' van de cronjob: `woo.default.listens`. Dit zorgt ervoor dat de action (synchronisatie) elke x minuten afgaat als in de cronjob ingesteld staat.
+
+De action heeft in configuratie array een aantal velden wat geconfigureerd moet worden, sommige velden zijn verplicht en andere niet. Het verschilt ook vanuit wat voor type source (zaaksysteem, OpenWoo of OpenConvenant) gesynchroniseerd wordt:
+- oin (required): oin vanuit het oin register van Logius. Deze waarde wordt gebruikt zodat er later op gefiltered kan worden `?organsiatie.oin=value`.
+- portalUrl (required): Wordt gebruikt om de link naar de frontend mee te genereren.
+- source (required): De reference van de source, zodat vanuit die source  gesynchroniseerd wordt.
+- schema (required): Meestal de reference van het publicatie schema, voor bijna alle Woo synchronisaties wil je naar het publicatie schema mappen:` https://commongateway.nl/woo.publicatie.schema.json`
+- mapping (required): De mapping die gebruikt wordt om het van source object naar publicatie object te krijgen. Voor het zaaksysteem is dit `https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json` en voor OpenWoo is dit `https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json`, voor OpenConvenant is het `https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json`.
+- organisatie (required): Textueele representatie van de organisatie waar de publicaties van zijn, meestal de gemeente naam in het geval van een gemeente.
+- zaaksysteemSearchEndpoint (required in geval zaaksysteem): Het endpoint wat gebruikt wordt om de publicaties op te halen in het zaaksysteem.
+- sourceEndpoint (required in geval OpenWoo of OpenConvenant): Endpoint waar publicaties vandaan gehaald worden.
+- fileEndpointReference (required in geval zaaksysteem): De reference naar het view-file endpoint voor de gesynchroniseerde documenten. Zorgt ervoor dat binnengehaalde documenten een endpoint hebben en bekeken kunnen worden. Standaard: `https://commongateway.nl/woo.ViewFile.endpoint.json` invoeren.
+- sourceType (required in geval OpenWoo of OpenConvenant): Niet verplicht in geval zaaksysteem, staat default op zaaksysteem. Anders voor OpenWoo of OpenCovenant 'OpenWoo' invoeren.
+- autoPublish: Niet verplicht, standaard op true. Als de wens is dat gesynchroniseerde publicaties niet meteen op te halen zijn, dan moet dit veld op false staan.
+- allowPDFOnly: Niet verplicht. Op true zetten als de wens is om alleen pdf documenten te synchroniseren.
+
+### Source
+
+
 
 ## Bijdragen
 
