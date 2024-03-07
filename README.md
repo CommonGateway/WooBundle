@@ -33,8 +33,8 @@ Deze file is beschikbaar in de root folder van deze repository. Om deze te draai
 1. Open een terminalvenster waarmee Docker kan worden gedraaid
 2. Navigeer naar de map waarin u de repository heeft gecloned
 3. Draai het commando `docker compose up`
-    1. Indien de image nog niet in docker beschikbaar is, zal de image opnieuw worden opgebouwd op basis van de latest versie van de [common gateway images](https://github.com/conductionnl/commonground-gateway).
-    2. Daarna worden de containers gestart (als de image wel beschikbaar is zal dit direct gebeuren)
+   1. Indien de image nog niet in docker beschikbaar is, zal de image opnieuw worden opgebouwd op basis van de latest versie van de [common gateway images](https://github.com/conductionnl/commonground-gateway).
+   2. Daarna worden de containers gestart (als de image wel beschikbaar is zal dit direct gebeuren)
 4. De admin omgeving komt beschikbaar op https://localhost:8000, de frontend op https://localhost:8080
 
 Op de admin omgeving kan worden ingelogd met de default credentials `username: no-reply@test.com, password: !ChangeMe!`. Daarmee kan dan de configuratie van de omgeving worden beïnvloed.
@@ -55,4 +55,4 @@ De OpenWoo Service is uitgegeven onder de EUPL 1.2 licentie. Voor meer details, 
 
 ## Contact
 
-Voor meer informatie over de OpenWoo Service en hoe deze in uw organisatie geïmplementeerd kan worden, kunt u contact met ons opnemen via [info@openwoo.nl](mailto:info@openwoo.nl).
+Voor meer informatie over de OpenWoo Service en hoe deze in uw organisatie geïmplementeerd kan worden, kunt u contact met ons opnemen via <info@openwoo.nl>.
