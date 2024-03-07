@@ -1,0 +1,174 @@
+version: '3.5'
+
+x-cache:
+  &cache
+  cache_from:
+    - ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-php
+    - ghcr.io/conductionnl/commonground-gateway-nginx
+    - ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-cron
+
+services:
+  #  gateway-frontend:
+  #    &gateway-frontend
+  #    image: ghcr.io/conductionnl/commonground-gateway-frontend:latest
+  #    depends_on:
+  #      - php
+  #    ports:
+  #      - "83:80"
+  
+  cron:
+    image: ghcr.io/conductionnl/commonground-gateway_cron:latest
+    depends_on:
+      - api
+
+  ui:
+    image: ghcr.io/conductionnl/gateway-ui:dev
+    depends_on:
+      - api
+    ports:
+      - "8000:80"
+    volumes:
+      - ./ui/env.js:/usr/share/nginx/html/env.js:rw
+
+  php:
+    &php
+    image: ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-php:${APP_ENV}
+    build:
+      context: .
+      target: common_gateway
+      <<: *cache
+    depends_on:
+      - db
+    volumes:
+      - ./src:/srv/api/vendor/common-gateway/woo-bundle/src:rw,cached
+      - ./composer.json:/srv/api/vendor/common-gateway/woo-bundle/composer.json:rw,cached
+    environment:
+      - APP_INIT='true'
+      - CONTAINER_REGISTRY_BASE=${CONTAINER_REGISTRY_BASE}
+      - CONTAINER_PROJECT_NAME=${CONTAINER_PROJECT_NAME}
+      - DATABASE_URL=postgres://api-platform:!ChangeMe!@db/api?serverVersion=10.1
+      - CACHE_URL=mongodb://api-platform:!ChangeMe!@mongodb
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - APP_CACHE=${APP_CACHE}
+      - APP_VERSION=${APP_VERSION}
+      - APP_NAME=${APP_NAME}
+      - APP_NAME_TECHNICAL=${APP_NAME_TECHNICAL}
+      - APP_DOMAIN=${APP_DOMAIN}
+      - APP_SUBDOMAIN=${APP_SUBDOMAIN}
+      - APP_SUBPATH=${APP_SUBPATH}
+      - APP_SUBPATH_ROUTING=${APP_SUBPATH_ROUTING}
+      - APP_DEMO=${APP_DEMO}
+      - APP_REPRO=${APP_REPRO}
+      - APP_DESCRIPTION=${APP_DESCRIPTION}
+      - APP_LOGO=${APP_LOGO}
+      - APP_HOME=${APP_HOME}
+      - APP_APPLICATION_KEY=${APP_APPLICATION_KEY}
+      - APP_BUILD_ALL_FIXTURES=${APP_BUILD_ALL_FIXTURES}
+      - APP_WEB=${APP_WEB}
+      - APP_BUILD=${APP_BUILD}
+      - APP_INTERNAL=${APP_INTERNAL}
+      - GLOBAL_DOMAIN=${GLOBAL_DOMAIN}
+      - APP_URL=${APP_URL}
+      - APP_CHART=${APP_CHART}
+      - HELM_REPOSITORY=${HELM_REPOSITORY}
+      - ARTIFACTHUB_ID=${ARTIFACTHUB_ID}
+      - ARTIFACTHUB_USER=${ARTIFACTHUB_USER}
+      - OWNER_NAME=${OWNER_NAME}
+      - OWNER_URL=${OWNER_URL}
+      - APP_SESSION_DURATION=${APP_SESSION_DURATION}
+      - LICENCE_NAME=${LICENCE_NAME}
+      - TRUSTED_PROXIES=${TRUSTED_PROXIES}
+      - TRUSTED_HOSTS=${TRUSTED_HOSTS}
+      - AUDITTRAIL_ENABLED=${AUDITTRAIL_ENABLED}
+      - NOTIFICATION_ENABLED=${NOTIFICATION_ENABLED}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - APP_AUTH=${APP_AUTH}
+      - GITHUB_KEY=${GITHUB_KEY}
+      - PUBLICCODE=${PUBLICCODE}
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - READ_ONLY=false
+      - DOCUMENTATION_TITLE=${DOCUMENTATION_TITLE}
+      - DOCUMENTATION_DESCRIPTION=${DOCUMENTATION_DESCRIPTION}
+      - DOCUMENTATION_TERMS_OF_SERVICE=${DOCUMENTATION_TERMS_OF_SERVICE}
+      - DOCUMENTATION_CONTACT_NAME=${DOCUMENTATION_CONTACT_NAME}
+      - DOCUMENTATION_CONTACT_URL=${DOCUMENTATION_CONTACT_URL}
+      - DOCUMENTATION_CONTACT_EMAIL=${DOCUMENTATION_CONTACT_EMAIL}
+      - DOCUMENTATION_LICENCE_NAME=${DOCUMENTATION_LICENCE_NAME}
+      - DOCUMENTATION_LICENCE_URL=${DOCUMENTATION_LICENCE_URL}
+      - DOCUMENTATION_VERSION=${DOCUMENTATION_VERSION}
+      - CRON_RUNNER_ENABLED=${CRON_RUNNER_ENABLED}
+      - CRON_RUNNER_CRONTAB=${CRON_RUNNER_CRONTAB}
+      - CRON_RUNNER_CONCURRENCY_POLICY=${CRON_RUNNER_CONCURRENCY_POLICY}
+      - LOG_LEVEL=${LOG_LEVEL}
+    ports:
+      - "82:80"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges
+
+  api:
+    &nginx
+    image: ghcr.io/conductionnl/commonground-gateway-nginx:latest
+    depends_on:
+      - php
+    ports:
+      - "80:8080"
+    environment:
+      - NGINX_HOST=php
+      - NGINX_ENV=${APP_ENV}
+    cap_drop:
+      - ALL
+    cap_add:
+      - chown
+      - dac_override
+      - setgid
+      - setuid
+      - net_bind_service
+    security_opt:
+      - no-new-privileges
+
+  redis:
+    image: redis:4-alpine
+
+#  Postgres db:
+  db:
+    image: postgres:10
+    environment:
+      - POSTGRES_DB=api
+      - POSTGRES_USER=api-platform
+      - POSTGRES_PASSWORD=!ChangeMe!
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+    ports:
+      - "5432:5432"
+
+  mongodb:
+    image: mongo:4.4.14
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: api-platform
+      MONGO_INITDB_ROOT_PASSWORD: '!ChangeMe!'
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq:3.12.0
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+
+networks:
+  nlx:
+    name: nlx
+
+volumes:
+  db-data: {}
+  db-mysql: {}
+  uc-data: {}
+  nlx-data-2: {}
