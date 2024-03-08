@@ -86,6 +86,7 @@ class FileService
         $this->logger        = $pluginLogger;
         $this->parameterBag  = $parameterBag;
         $this->pdfParser     = new Parser();
+
     }//end __construct()
 
 
