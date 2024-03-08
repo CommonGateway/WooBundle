@@ -1,0 +1,11 @@
+{
+  "title": "PublicatieQueryIn",
+  "description": "Forces the gepubliceerd filter to true.",
+  "$id": "https://commongateway.nl/mapping/woo.publicatieQueryIn.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": true,
+  "mapping": {
+    "gepubliceerd": "{{ 'true' }}"
+  }
+}
