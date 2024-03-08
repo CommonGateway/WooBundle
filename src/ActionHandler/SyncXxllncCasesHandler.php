@@ -113,6 +113,12 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                     'reference'   => 'https://commongateway.nl/woo.ViewFile.endpoint.json',
                     'required'    => true,
                 ],
+                'allowPDFOnly'              => [
+                    'type'        => 'bool',
+                    'description' => 'If pdf documents should only be allowed.',
+                    'example'     => true,
+                    'required'    => true,
+                ],
             ],
         ];
 
