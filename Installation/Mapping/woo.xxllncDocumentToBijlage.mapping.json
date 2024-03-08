@@ -2,12 +2,18 @@
   "title": "XxllncDocumentToBijlage",
   "$id": "https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "passTrough": false,
   "mapping": {
     "_sourceId": "uuid",
     "titel": "filename",
     "url": "url",
+    "documentText": "documentText",
     "status": "{% if accepted|default and accepted == 1 %}{{ \"accepted\" }}{% endif %}"
+  },
+  "cast": {
+    "titel": "unsetIfValue==filename",
+    "documentText": "unsetIfValue==documentText",
+    "url": "unsetIfValue==url"
   }
 }

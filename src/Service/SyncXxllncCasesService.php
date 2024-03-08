@@ -218,9 +218,10 @@ class SyncXxllncCasesService
 
         $this->entityManager->persist($value);
 
-        $url = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        $url          = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        $documentText = $this->fileService->getTextFromDocument($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
 
-        return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url]));
+        return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
     }//end retrieveFile()
 

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
+use Smalot\PdfParser\Parser;
 
 /**
  * Service responsible for woo files.
@@ -51,6 +52,11 @@ class FileService
     private ParameterBagInterface $parameterBag;
 
     /**
+     * @var Parser $pdfParser.
+     */
+    private Parser $pdfParser;
+
+    /**
      * @var array
      */
     private array $data;
@@ -79,6 +85,7 @@ class FileService
         $this->entityManager = $entityManager;
         $this->logger        = $pluginLogger;
         $this->parameterBag  = $parameterBag;
+        $this->pdfParser     = new Parser()
 
     }//end __construct()
 
@@ -153,7 +160,7 @@ class FileService
         $file->setMimeType(($mimeType ?? 'application/pdf'));
         $file->setName($title);
         $file->setExtension('');
-        $file->setSize(mb_strlen(base64_decode($base64)));
+        $file->setSize(mb_strlen(\Safe\base64_decode($base64)));
         $file->setValue($value);
 
         $this->entityManager->persist($file);
@@ -187,6 +194,43 @@ class FileService
         return $baseUrl.'/api/'.implode('/', $pathArray);
 
     }//end generateDownloadEndpoint()
+
+
+    /**
+     * Extracts text from a document (File).
+     *
+     * @param Value $value The value associated with the file.
+     *
+     * @return string|null
+     */
+    public function getTextFromDocument(Value $value): ?string
+    {
+        if ($value->getFiles()->count() > 0) {
+            $file = $value->getFiles()->first();
+        } else {
+            return null;
+        }
+
+        switch ($file->getMimeType()) {
+        case 'pdf':
+        case 'application/pdf':
+            try {
+                $pdf  = $this->pdfParser->parseContent(\Safe\base64_decode($file->getBase64()));
+                $text = $pdf->getText();
+            } catch (\Exception $e) {
+                $this->logger->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
+                $this->style && $this->style->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
+
+                $text = null;
+            }
+            break;
+        default:
+            $text = null;
+        }
+
+        return $text;
+
+    }//end getTextFromDocument()
 
 
     /**
