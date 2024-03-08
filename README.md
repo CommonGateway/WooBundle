@@ -29,7 +29,7 @@ De OpenWoo Service versterkt de toegankelijkheid van overheidspublicaties volgen
 
 Na de installatie kunt u de OpenWoo Service configureren om te beginnen met de automatische synchronisatie van uw organisatiebronnen naar Open Index.
 
-De synchronisaties werken aan de hand van een action in combinatie met een source. Hieronder wordt uigelegd hoe deze ingevuld moeten worden, er zijn ook genoeg voorbeelden in de `/Installation/Action` en `/Installation/Source` folders.
+De synchronisaties werken aan de hand van een action in combinatie met een source. Hieronder wordt uitgelegd hoe deze ingevuld moeten worden, er zijn ook genoeg voorbeelden in de `/Installation/Action` en `/Installation/Source` folders.
 
 Er kan vanuit de volgende brontypen gesynchroniseerd worden:
 
@@ -60,7 +60,7 @@ De volledige POST van een goed ingevulde source voor het zaaksysteem ziet er als
 `
 {
     "reference": "https://commongateway.woo.nl/source/example.zaaksysteem.source.json"
-    "name": "Jou zaaksysteem",
+    "name": "Jouw zaaksysteem",
     "location": "https://{zaaksysteemUrl}/api",
     "isEnabled": true,
     "headers": {
@@ -81,7 +81,7 @@ De volledige POST van een goed ingevulde source voor het OpenWoo of OpenConvenan
 `
 {
     "reference": "https://commongateway.woo.nl/source/example.openwoo.source.json"
-    "name": "Jou OpenWoo",
+    "name": "Jouw OpenWoo",
     "location": "https://{openWooUrl}/wp-json",
     "isEnabled": true
 }`
@@ -105,7 +105,7 @@ De action heeft in de `configuratie` array een aantal velden wat geconfigureerd 
 
 * oin (required): oin vanuit het oin register van Logius. Deze waarde wordt gebruikt zodat er later op gefiltered kan worden `?organsiatie.oin=value`.
 * portalUrl (required): Wordt gebruikt om de link naar de frontend mee te genereren.
-* source (required): De reference van de source, die je meegeeft aan je source bij het aanmaken daarvan(bijv: `https://commongateway.woo.nl/source/example.zaaksysteem.source.json`).
+* source (required): De reference van de source, die je meegeeft aan je source bij het aanmaken daarvan (bijv: `https://commongateway.woo.nl/source/example.zaaksysteem.source.json`).
 * schema (required): Meestal de reference van het publicatie schema, voor bijna alle Woo synchronisaties wil je naar het publicatie schema mappen:` https://commongateway.nl/woo.publicatie.schema.json`
 * mapping (required): De mapping die gebruikt wordt om het van source object naar publicatie object te krijgen. Voor het zaaksysteem is dit `https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json` en voor OpenWoo is dit `https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json`, voor OpenConvenant is het `https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json`.
 * organisatie (required): Textueele representatie van de organisatie waar de publicaties van zijn, meestal de gemeente naam in het geval van een gemeente.
