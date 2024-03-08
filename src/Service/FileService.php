@@ -85,8 +85,7 @@ class FileService
         $this->entityManager = $entityManager;
         $this->logger        = $pluginLogger;
         $this->parameterBag  = $parameterBag;
-        $this->pdfParser     = new Parser()
-
+        $this->pdfParser     = new Parser();
     }//end __construct()
 
 
