@@ -29,11 +29,12 @@ De OpenWoo Service versterkt de toegankelijkheid van overheidspublicaties volgen
 
 Na de installatie kunt u de OpenWoo Service configureren om te beginnen met de automatische synchronisatie van uw organisatiebronnen naar Open Index.
 
-De synchronisaties werken aan de hand van een action in combinatie met een source. Hieronder wordt uigelegd hoe deze ingevuld moeten worden, er zijn ook genoeg voorbeelden in de `/Installation/Action` en `/Installation/Source` folders. 
+De synchronisaties werken aan de hand van een action in combinatie met een source. Hieronder wordt uigelegd hoe deze ingevuld moeten worden, er zijn ook genoeg voorbeelden in de `/Installation/Action` en `/Installation/Source` folders.
 
 Er kan vanuit de volgende brontypen gesynchroniseerd worden:
-- Zaaksysteem
-- OpenWoo (en OpenConvenant)
+
+* Zaaksysteem
+* OpenWoo (en OpenConvenant)
 
 Voor elk brontypen verschilt de configuratie voor de source en action die ingevuld moet worden.
 
@@ -46,14 +47,12 @@ Een source heeft standaard een reference en een name nodig. De reference moet un
 Voor een source voor een zaaksysteem moeten de location ingevoerd worden. Dat is de volledige url van het zaaksysteem url, dus inclusief `https://` aan het begin en `/api` aan het eind.
 
 Ook moeten er headers geset worden met auth gegevens om te kunnen autoriseren voor het ophalen van documenten, hier een voorbeeld:
-`
-    "headers": {
+`     "headers": {
         "Accept": "*/*",
         "API-Interface-ID": "{apiInterfaceId}",
         "API-KEY": "{apiKey}",
         "Content-Type": "application/json"
-    } 
-` 
+    }  `
 
 Als je al de velden van je source goed ingevuld heb kan je hem aanzetten door `isEnabled` op true te zetten.
 
@@ -98,8 +97,9 @@ Een action heeft ook een `listens` veld. Deze is in deze context meestal gelijk 
 Het `conditions` veld. Dit zijn extra regels waneer een action af mag gaan. In dit geval gaan de actions standaard op de `throws` van de cronjob af, ingesteld via het `listens` van de action, dus mag hier de `conditions` standaard op `{"==": [1,1]}`. Deze json logic betekend dat hij altijd afgaat (op het `listens` event).
 
 Het `class` veld. Dit geeft aan welke code uitgevoerd gaat worden voor deze action. Voor verschillende bronnen kan dit anders zijn:
-- zaaksysteem: `CommonGateway\\WOOBundle\\ActionHandler\\SyncXxllncCasesHandler`.
-- OpenWoo en OpenConvenant: `CommonGateway\\WOOBundle\\ActionHandler\\SyncOpenWooHandler`.
+
+* zaaksysteem: `CommonGateway\\WOOBundle\\ActionHandler\\SyncXxllncCasesHandler`.
+* OpenWoo en OpenConvenant: `CommonGateway\\WOOBundle\\ActionHandler\\SyncOpenWooHandler`.
 
 De action heeft in de `configuratie` array een aantal velden wat geconfigureerd moet worden, sommige velden zijn verplicht en andere niet. Het verschilt ook vanuit wat voor type source (zaaksysteem, OpenWoo of OpenConvenant) gesynchroniseerd wordt:
 
@@ -119,8 +119,7 @@ De action heeft in de `configuratie` array een aantal velden wat geconfigureerd 
 Check altijd ook of de action aan staat met het `isEnabled` veld. Deze moet op true staan als er gesynchroniseerd moet worden.
 
 De POST van een action voor het zaaksysteem ziet er als volgt uit:
-`
-{
+`{
     "reference": "https://commongateway.nl/woo.SyncExampleAction.action.json",
     "name": "SyncExampleCasesAction",
     "listens": [
@@ -144,12 +143,10 @@ De POST van een action voor het zaaksysteem ziet er als volgt uit:
         "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json"
     },
     "isEnabled": true
-}
-`
+}`
 
 De POST van een action voor het OpenWoo of OpenConvenant ziet er als volgt uit:
-`
-{
+`{
     "reference": "https://commongateway.nl/woo.SyncExampleOpenConvenantAction.action.json",
     "name": "SyncExampleOpenConvenantAction",
     "listens": [
@@ -173,12 +170,9 @@ De POST van een action voor het OpenWoo of OpenConvenant ziet er als volgt uit:
         "sourceEndpoint": "{sourceEndpoint}"
     },
     "isEnabled": true
-}
-`
+}`
 
-
-Als de action en source aangemaakt/ingeregeld zijn en `isEnabled` staat op true. Zou de cronjob elke x minuten deze action afvuren en de synchrosatie aftrappen. Check de logs of om te kijken of deze de 1e keer goed gaat. 
-
+Als de action en source aangemaakt/ingeregeld zijn en `isEnabled` staat op true. Zou de cronjob elke x minuten deze action afvuren en de synchrosatie aftrappen. Check de logs of om te kijken of deze de 1e keer goed gaat.
 
 ## Bijdragen
 
