@@ -112,7 +112,7 @@ class SyncOpenWooHandler implements ActionHandlerInterface
                     'example'     => '/wp-json/owc/openwoo/v1/items',
                     'required'    => true,
                 ],
-                'allowPDFOnly'              => [
+                'allowPDFOnly'   => [
                     'type'        => 'bool',
                     'description' => 'If pdf documents should only be allowed.',
                     'example'     => true,
