@@ -390,7 +390,9 @@ class SyncOpenWooService
         if (substr($document['url'], 0, strlen($source->getLocation())) === $source->getLocation()) {
             $path = substr($document['url'], strlen($source->getLocation()));
         } else {
-            $this->logger->warning('Url of document does not correspond with source, so will fetch from a different location than the source');
+            $this->logger->error('Url of document does not correspond with source');
+
+            return $data;
         }
 
         $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->find($document['_self']['id']);
@@ -406,18 +408,7 @@ class SyncOpenWooService
             $file = new File();
         }
 
-        if (isset($path) === true) {
-            $response = $this->callService->call($source, $path);
-        } else {
-            try {
-                $response = $this->callService->customCall($document['url']);
-            } catch (\Exception $e) {
-                $this->logger->error('Something went wrong fetching '.$document['url'].' '.$e->getMessage());
-                $this->style && $this->style->error('Something went wrong fetching '.$document['url'].' '.$e->getMessage());
-
-                return $data;
-            }
-        }
+        $response = $this->callService->call($source, $path);
 
         $file->setBase64(base64_encode($response->getBody()));
         $file->setMimeType($response->getHeader('content-type')[0]);
