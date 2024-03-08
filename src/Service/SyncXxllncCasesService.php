@@ -196,15 +196,20 @@ class SyncXxllncCasesService
      * @param array $documentMeta Metadata about a document, including the id.
      * @param array $config       Gateway config objects.
      *
-     * @return array The view urls for files.
+     * @return array|null The view urls for files.
      */
-    private function retrieveFile(array $result, array $documentMeta, array $config): array
+    private function retrieveFile(array $result, array $documentMeta, array $config): ?array
     {
         // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
         // ^ Note: this is necessary, so we always have a ObjectEntity and Value to attach the File to, so we don't create duplicated Files when syncing every 10 minutes.
         $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($documentMeta['uuid']);
 
         $mimeType = $documentMeta['mimetype'];
+
+        // Check if we only have to allow PDF documents.
+        if (isset($this->configuration['allowPDFOnly']) === true && $this->configuration['allowPDFOnly'] === true && ($mimeType !== 'pdf' || $mimeType !== 'application/pdf')) {
+            return null;
+        }
 
         $base64 = $this->fileService->getInhoudDocument($result['id'], $documentMeta['uuid'], $mimeType, $config['source']);
 
