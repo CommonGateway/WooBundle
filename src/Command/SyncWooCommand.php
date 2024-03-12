@@ -5,6 +5,7 @@ namespace CommonGateway\WOOBundle\Command;
 use App\Entity\Action;
 use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
 use CommonGateway\WOOBundle\Service\SyncOpenWooService;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -133,17 +134,40 @@ class SyncWooCommand extends Command
             return Command::FAILURE;
         }//end if
 
-        $config = $action->getConfiguration();
+        $config     = $action->getConfiguration();
+        $startTimer = microtime(true);
         if (isset($config['sourceType']) === true && $config['sourceType'] === 'openWoo') {
             $this->syncOpenWooService->setStyle($style);
             if ($this->syncOpenWooService->syncOpenWooHandler([], $config) === null) {
+                $stopTimer = microtime(true);
+                $totalTime = ($stopTimer - $startTimer);
+                $action->setLastRunTime($totalTime);
+                $action->setStatus(false);
+                $this->entityManager->persist($action);
+                $this->entityManager->flush();
+
                 return Command::FAILURE;
             }
         } else {
             if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $config) === null) {
+                $stopTimer = microtime(true);
+                $totalTime = ($stopTimer - $startTimer);
+                $action->setLastRunTime($totalTime);
+                $action->setStatus(false);
+                $this->entityManager->persist($action);
+                $this->entityManager->flush();
+
                 return Command::FAILURE;
             }
-        }
+        }//end if
+
+        $stopTimer = microtime(true);
+        $totalTime = ($stopTimer - $startTimer);
+        $action->setLastRun(new DateTime());
+        $action->setLastRunTime($totalTime);
+        $action->setStatus(true);
+        $this->entityManager->persist($action);
+        $this->entityManager->flush();
 
         return Command::SUCCESS;
 
