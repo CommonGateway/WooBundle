@@ -134,7 +134,7 @@ class SyncWooCommand extends Command
             return Command::FAILURE;
         }//end if
 
-        $config = $action->getConfiguration();
+        $config     = $action->getConfiguration();
         $startTimer = microtime(true);
         if (isset($config['sourceType']) === true && $config['sourceType'] === 'openWoo') {
             $this->syncOpenWooService->setStyle($style);
@@ -145,7 +145,7 @@ class SyncWooCommand extends Command
                 $action->setStatus(false);
                 $this->entityManager->persist($action);
                 $this->entityManager->flush();
-                
+
                 return Command::FAILURE;
             }
         } else {
@@ -156,11 +156,11 @@ class SyncWooCommand extends Command
                 $action->setStatus(false);
                 $this->entityManager->persist($action);
                 $this->entityManager->flush();
-                
+
                 return Command::FAILURE;
             }
-        }
-        
+        }//end if
+
         $stopTimer = microtime(true);
         $totalTime = ($stopTimer - $startTimer);
         $action->setLastRun(new DateTime());
