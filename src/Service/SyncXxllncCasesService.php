@@ -196,15 +196,20 @@ class SyncXxllncCasesService
      * @param array $documentMeta Metadata about a document, including the id.
      * @param array $config       Gateway config objects.
      *
-     * @return array The view urls for files.
+     * @return array|null The view urls for files.
      */
-    private function retrieveFile(array $result, array $documentMeta, array $config): array
+    private function retrieveFile(array $result, array $documentMeta, array $config): ?array
     {
         // There can be expected here that there always should be a Bijlage ObjectEntity because of the mapping and hydration + flush that gets executed before this function.
         // ^ Note: this is necessary, so we always have a ObjectEntity and Value to attach the File to, so we don't create duplicated Files when syncing every 10 minutes.
         $bijlageObject = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($documentMeta['uuid']);
 
         $mimeType = $documentMeta['mimetype'];
+
+        // Check if we only have to allow PDF documents.
+        if (isset($this->configuration['allowPDFOnly']) === true && $this->configuration['allowPDFOnly'] === true && ($mimeType !== 'pdf' || $mimeType !== 'application/pdf')) {
+            return null;
+        }
 
         $base64 = $this->fileService->getInhoudDocument($result['id'], $documentMeta['uuid'], $mimeType, $config['source']);
 
@@ -213,9 +218,10 @@ class SyncXxllncCasesService
 
         $this->entityManager->persist($value);
 
-        $url = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        $url          = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        $documentText = $this->fileService->getTextFromDocument($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
 
-        return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url]));
+        return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
     }//end retrieveFile()
 
@@ -299,8 +305,15 @@ class SyncXxllncCasesService
      */
     private function fetchObjects(Source $source, ?int $page=1, array $results=[]): array
     {
-        $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', ['query' => ['zapi_page' => $page]]);
-        $decodedResponse = $this->callService->decodeResponse($source, $response);
+        try {
+            $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', ['query' => ['zapi_page' => $page]]);
+            $decodedResponse = $this->callService->decodeResponse($source, $response);
+        } catch (Exception $e) {
+            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
+            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+
+            return [];
+        }
 
         $results = array_merge($results, $decodedResponse['result']);
 
@@ -373,7 +386,7 @@ class SyncXxllncCasesService
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
             try {
-                $result       = array_merge($result, ['organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
+                $result       = array_merge($result, ['autoPublish' => $this->configuration['autoPublish'] ?? true, 'organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
                 $mappedResult = $this->mappingService->mapping($mapping, $result);
                 // Map categories to prevent multiple variants of the same categorie.
                 $mappedResult = $this->mappingService->mapping($categorieMapping, $mappedResult);
