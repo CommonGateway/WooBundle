@@ -16,7 +16,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.4",
-        "commongateway/corebundle": "^1.1.52",
+        "commongateway/corebundle": "^1.1.52 | <2.0",
         "smalot/pdfparser": "^2.8"
     },
     "require-dev": {
