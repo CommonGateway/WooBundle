@@ -7,7 +7,6 @@ use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
 use CommonGateway\WOOBundle\Service\SyncOpenWooService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -85,11 +84,6 @@ class SyncWooCommand extends Command
                 'action',
                 InputArgument::REQUIRED,
                 'Action reference to find the action and execute for different organizations (municipalities)'
-            )
-            ->addArgument(
-                'id',
-                InputArgument::OPTIONAL,
-                'Case id to fetch'
             );
 
     }//end configure()
@@ -110,12 +104,10 @@ class SyncWooCommand extends Command
 
         if (($actionRef = $input->getArgument('action')) === null
         ) {
-            $style->error("No id and/or caseId given to the command");
+            $style->error("No action reference given to the command");
 
             return Command::FAILURE;
         }
-
-        $caseId = $input->getArgument('id');
 
         $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => $actionRef]);
         if ($action instanceof Action === false) {
@@ -123,16 +115,6 @@ class SyncWooCommand extends Command
 
             return Command::FAILURE;
         }
-
-        if (Uuid::isValid($caseId) === true
-        ) {
-            // if ($this->syncXxllncCasesService->getZaak($action->getConfiguration(), $caseId) === true) {
-            // return Command::FAILURE;
-            // }
-            isset($style) === true && $style->error("Single object synchronization not supported yet.");
-
-            return Command::FAILURE;
-        }//end if
 
         $config     = $action->getConfiguration();
         $startTimer = microtime(true);
