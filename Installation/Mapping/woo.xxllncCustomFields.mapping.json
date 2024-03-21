@@ -2,10 +2,10 @@
   "title": "XxllncCustomFields",
   "$id": "https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "passTrough": false,
   "mapping": {
-    "_sourceId": "id",
+    "_sourceId": "{{ oin~id }}",
     "metadata.verzoek.informatieverzoek": "{% if informatieverzoek|default %}{{ informatieverzoek|json_encode }}{% endif %}",
     "metadata.verzoek.inventarisatielijst": "{% if inventarisatielijst|default %}{{ inventarisatielijst|json_encode }}{% endif %}",
     "metadata.verzoek.besluit": "{% if besluit|default %}{{ besluit|json_encode }}{% endif %}",
