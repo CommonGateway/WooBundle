@@ -119,12 +119,12 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                     'example'     => false,
                     'required'    => true,
                 ],
-                'autoPublish'   => [
+                'autoPublish'               => [
                     'type'        => 'bool',
                     'description' => 'If publications automatically should be visible and public.',
                     'example'     => true,
                     'required'    => true,
-                    'default'     => true
+                    'default'     => true,
                 ],
             ],
         ];
