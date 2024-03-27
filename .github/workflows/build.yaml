@@ -122,10 +122,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nginx.tar
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: postgres.tar
       - name: Load Docker images from previous workflows
         run: docker load --input  php.tar && docker load --input nginx.tar
       - name: Show all images
@@ -137,6 +133,7 @@ jobs:
   Fossa:
     needs: build
     runs-on: ubuntu-latest
+    if: ${{ secrets.fossaApiKey }} != null
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -184,7 +181,7 @@ jobs:
         with:
           name: nginx.tar
       - name: Load Docker images from previous workflows
-        run: docker load --input php.tar && docker load --input nginx.tar && docker load
+        run: docker load --input php.tar && docker load --input nginx.tar
       - name: Default Environment Variables
         run:
          export NAME=$(grep CONTAINER_PROJECT_NAME= .env | cut -d '=' -f2);
@@ -210,15 +207,16 @@ jobs:
         run: sleep 20
       - name: Database Update
         run: docker-compose -f docker-compose.check.yml exec -T php bin/console doctrine:schema:update --force
-#  Snyk:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@master
-#      - name: Run Snyk to check for vulnerabilities
-#        uses: snyk/actions/node@master
-#        continue-on-error: true
-#        env:
-#          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  Snyk:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.SNYK_TOKEN }} != null
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   Docker-Scout:
     needs: build
     runs-on: ubuntu-latest
