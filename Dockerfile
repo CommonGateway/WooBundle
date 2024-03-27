@@ -1,4 +1,4 @@
-FROM ghcr.io/conductionnl/commonground-gateway-php:latest AS common_gateway
+FROM ghcr.io/conductionnl/commonground-gateway-php:dev AS common_gateway
 
 USER root
 
