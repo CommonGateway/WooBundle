@@ -279,7 +279,7 @@ jobs:
           dockerhub-user: ${{ secrets.DOCKER_USER }}
           dockerhub-password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
   Publish:
-    needs: [Dependency-check,Database]
+    needs: [Dependency-check,Database,Docker-Scout]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/development'
     steps:
