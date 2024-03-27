@@ -270,8 +270,11 @@ jobs:
         run: docker load --input php.tar && docker load --input nginx.tar
       - name: Show docker images
         run: docker images
-      - name: Run Docker Scout
-        run: docker scout ${REGISTRY_BASE}/${APP_NAME}-php:${APP_ENV}
+      - name: Docker Scout
+        uses: docker/scout-action@v1.6.4
+        with:
+          command: quickview,cves
+          image: ${REGISTRY_BASE}/${APP_NAME}-php:${APP_ENV}
   Publish:
     needs: [Dependency-check,Database]
     runs-on: ubuntu-latest
