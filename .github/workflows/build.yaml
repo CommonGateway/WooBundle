@@ -275,7 +275,7 @@ jobs:
         with:
           command: quickview,cves
           image: ${{ env.REGISTRY_BASE }}/${{ env.APP_NAME }}-php:${{ env.APP_ENV }}
-          github-token: ${{ secrets.GITHUB-TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   Publish:
     needs: [Dependency-check,Database]
     runs-on: ubuntu-latest
