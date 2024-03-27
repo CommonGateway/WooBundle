@@ -34,6 +34,7 @@ jobs:
         run: docker ps
       - name: Dumping the logs
         run: docker-compose logs
+      - run: images=$(docker-compose images -q | xargs docker inspect --format='{{ index .RepoTags 0}}' | cut -d':' -f1 | grep $APP_NAME)
       - name: Add docker tags
         run: |
           images=$(docker-compose images -q | xargs docker inspect --format='{{ index .RepoTags 0}}' | cut -d':' -f1 | grep $APP_NAME)
