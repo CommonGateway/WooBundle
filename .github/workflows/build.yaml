@@ -20,11 +20,6 @@ jobs:
           echo "GITHUB_REF_PROTECTED is $GITHUB_REF_PROTECTED";
           echo "APP_NAME=$NAME" >> $GITHUB_ENV
           echo "APP_ENV=prod">> $GITHUB_ENV
-      - name: Create vendor folder
-        run: |
-          mkdir api/vendor
-          chmod +777 api/vendor
-          chmod +777 -R api/public
       - name: Build Docker Image
         run: docker-compose build --build-arg APP_ENV=$APP_ENV
       - name: Run docker image
