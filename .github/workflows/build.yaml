@@ -39,6 +39,9 @@ jobs:
           images=$(docker-compose images -q | xargs docker inspect --format='{{ index .RepoTags 0}}' | cut -d':' -f1 | grep $APP_NAME)
           for image in $images
           do
+            echo "${image}"
+            echo "${APP_ENV}"
+            echo "$GITHUB_REF_NAME.$RELEASE"
             docker tag "${image}":${APP_ENV} "${image}":"$GITHUB_REF_NAME.$RELEASE"
           done
           echo 'IMAGES=$images' >> $GITHUB_ENV
