@@ -344,6 +344,7 @@ jobs:
         if: (success() || failure())
         run: docker-compose down
   Generate-SBOM:
+    needs: [Dependency-check,Database,Docker-Scout]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
