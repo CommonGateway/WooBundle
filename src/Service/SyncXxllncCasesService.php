@@ -420,7 +420,7 @@ class SyncXxllncCasesService
                     false
                 );
 
-                $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($this->configuration['oin'] . $result['id']);
+                $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($this->configuration['oin'].$result['id']);
 
                 // Get all synced sourceIds.
                 if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {

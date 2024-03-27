@@ -115,8 +115,15 @@ class SyncOpenWooHandler implements ActionHandlerInterface
                 'allowPDFOnly'   => [
                     'type'        => 'bool',
                     'description' => 'If pdf documents should only be allowed.',
+                    'example'     => false,
+                    'required'    => true,
+                ],
+                'autoPublish'    => [
+                    'type'        => 'bool',
+                    'description' => 'If publications automatically should be visible and public.',
                     'example'     => true,
                     'required'    => true,
+                    'default'     => true,
                 ],
             ],
         ];
