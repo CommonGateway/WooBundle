@@ -205,7 +205,7 @@ jobs:
 #      - name: Run Docker Scout
 #        run:
   Publish:
-    needs: [Dependencies,Database]
+    needs: [Dependency-check,Database]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/development'
     steps:
