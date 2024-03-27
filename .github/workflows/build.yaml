@@ -21,6 +21,9 @@ jobs:
           echo "GITHUB_REF_PROTECTED is $GITHUB_REF_PROTECTED";
           echo "APP_NAME=$NAME" >> $GITHUB_ENV;
           echo "APP_ENV=prod">> $GITHUB_ENV;
+          export VERSION=$(grep APP_VERSION= .env | cut -d '=' -f2);
+          export RELEASE=$VERSION.$(date --utc +%y%m%d);
+          echo "RELEASE=$RELEASE" >> $GITHUB_ENV;
       - name: Build Docker Image
         run: docker-compose build --build-arg APP_ENV=$APP_ENV
       - name: Run docker image
