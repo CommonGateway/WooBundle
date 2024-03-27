@@ -34,16 +34,13 @@ jobs:
         run: docker ps
       - name: Dumping the logs
         run: docker-compose logs
-      - run: images=$(docker-compose images -q | xargs docker inspect --format='{{ index .RepoTags 0}}' | cut -d':' -f1 | grep $APP_NAME)
       - name: Add docker tags
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/development'
         run: |
           images=$(docker-compose images -q | xargs docker inspect --format='{{ index .RepoTags 0}}' | cut -d':' -f1 | grep $APP_NAME)
           for image in $images
           do
-            echo "${image}"
-            echo "${APP_ENV}"
-            echo "$GITHUB_REF_NAME.$RELEASE"
-            docker tag "${image}":${APP_ENV} "${image}":"$GITHUB_REF_NAME.$RELEASE"
+            docker tag "${image}":${APP_ENV} "${image}":"$GITHUB_REF_NAME_$RELEASE"
           done
           echo 'IMAGES=$images' >> $GITHUB_ENV
       - name: Show all images
@@ -250,7 +247,7 @@ jobs:
           images=$(docker-compose images -q | xargs docker inspect --format='{{ index .RepoTags 0}}' | cut -d':' -f1 | grep $APP_NAME)
           for image in $images
           do
-            docker push "${image}":"$GITHUB_REF_NAME.$RELEASE"
+            docker push "${image}":"$GITHUB_REF_NAME_$RELEASE"
           done
       - name: Print release name
         if: (success() || failure())
