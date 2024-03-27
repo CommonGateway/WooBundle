@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v1
       - name: Default Environment Variables
         run:
-          export NAME=$(grep APP_NAME= .env | cut -d '=' -f2);
+          export NAME=$(grep CONTAINER_PROJECT_NAME= .env | cut -d '=' -f2);
           echo "https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables";
           echo "GITHUB_WORKFLOW is $GITHUB_WORKFLOW";
           echo "GITHUB_WORKFLOW_REF is $GITHUB_WORKFLOW_REF";

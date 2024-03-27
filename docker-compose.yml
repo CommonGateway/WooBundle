@@ -4,7 +4,7 @@ x-cache:
   &cache
   cache_from:
     - ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-php
-    - ghcr.io/conductionnl/commonground-gateway-nginx
+    - ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-nginx
     - ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-cron
 
 services:
@@ -122,7 +122,7 @@ services:
 
   api:
     &nginx
-    image: ghcr.io/conductionnl/commonground-gateway-nginx:latest
+    image: ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-nginx:latest
     depends_on:
       - php
     ports:
