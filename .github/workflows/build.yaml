@@ -274,7 +274,7 @@ jobs:
       - name: Docker Scout
         uses: docker/scout-action@v1.6.4
         with:
-          command: quickview,cves,sbom
+          command: quickview,cves
           image: ${{ env.REGISTRY_BASE }}/${{ env.APP_NAME }}-php:${{ env.APP_ENV }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           dockerhub-user: ${{ secrets.DOCKER_USER }}
@@ -343,3 +343,13 @@ jobs:
       - name: Chores
         if: (success() || failure())
         run: docker-compose down
+  Generate-SBOM:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: advanced-security/generate-sbom-action@v1
+        id: gensbom
+      - uses: actions/upload-artifact@v3
+        with:
+          name: sbom
+          path: ${{ steps.gensbom.outputs.fileName }}
