@@ -133,7 +133,9 @@ jobs:
   Fossa:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ secrets.fossaApiKey }} != null
+    env:
+      fossaApiKey: ${{ secrets.fossaApiKey }}
+    if: ${{ env.fossaApiKey != '' }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -209,7 +211,9 @@ jobs:
         run: docker-compose -f docker-compose.check.yml exec -T php bin/console doctrine:schema:update --force
   Snyk:
     runs-on: ubuntu-latest
-    if: ${{ secrets.SNYK_TOKEN }} != null
+    env:
+     snykToken: ${{ secrets.SNYK_TOKEN }}
+    if: ${{ env.snykToken != '' }}
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
