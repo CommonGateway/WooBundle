@@ -48,7 +48,7 @@ jobs:
 
       # Lets save the images
       - name: Create PHP Artifact
-        run: docker save -o php.tar ghcr.io/conductionnl/commonground-gateway-php
+        run: docker save -o php.tar "${APP_NAME}"-php
       - name: Upload PHP artifact
         uses: actions/upload-artifact@v2
         with:
