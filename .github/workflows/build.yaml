@@ -1,9 +1,7 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches:
-      - main
+  push
 
 jobs:
   Build:
@@ -65,11 +63,6 @@ jobs:
           path: nginx.tar
       - name: Create postgres Artifact
         run: docker save -o postgres.tar postgres
-      - name: Upload postgres artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: postgres.tar
-          path: postgres.tar
   Dependency-check:
     runs-on: ubuntu-latest
     steps:
@@ -85,12 +78,9 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: nginx.tar
-    - name: Download a single artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: postgres.tar
+
     - name: Load Docker images from previous workflows
-      run: docker load --input  php.tar && docker load --input nginx.tar && docker load --input postgres.tar
+      run: docker load --input  php.tar && docker load --input nginx.tar
     - name: Show all images
       run: docker images
     - name: Up the images
@@ -118,7 +108,7 @@ jobs:
         with:
           name: postgres.tar
       - name: Load Docker images from previous workflows
-        run: docker load --input  php.tar && docker load --input nginx.tar && docker load --input postgres.tar
+        run: docker load --input  php.tar && docker load --input nginx.tar
       - name: Show all images
         run: docker images
       - name: Up the images
@@ -141,12 +131,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nginx.tar
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: postgres.tar
       - name: Load Docker images from previous workflows
-        run: docker load --input  php.tar && docker load --input nginx.tar && docker load --input postgres.tar
+        run: docker load --input  php.tar && docker load --input nginx.tar
       - name: Show all images
         run: docker images
       - name: Up the images
@@ -162,33 +148,6 @@ jobs:
         with:
           name: 'fossa-results'
           path: ./fossa.debug.json.gz
-  Snyk:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16'
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: php.tar
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: nginx.tar
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: postgres.tar
-      - name: Load Docker images from previous workflows
-        run: docker load --input  php.tar && docker load --input nginx.tar && docker load --input postgres.tar
-      - name: Show all images
-        run: docker images
-      - name: Up the images
-        run: docker compose up -d
-      # @todo add snyk
   Database:
     needs: build
     runs-on: ubuntu-latest
@@ -205,12 +164,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nginx.tar
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: postgres.tar
       - name: Load Docker images from previous workflows
-        run: docker load --input php.tar && docker load --input nginx.tar && docker load --input postgres.tar
+        run: docker load --input php.tar && docker load --input nginx.tar && docker load
       - name: Show all images
         run: docker images
       - name: Up the images
@@ -219,8 +174,16 @@ jobs:
         run: sleep 20
       - name: Database Update
         run: docker-compose -f docker-compose.check.yml exec -T php bin/console doctrine:schema:update --force
-  publish:
-    needs: [Dependencies,Database]
+#  Snyk:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@master
+#      - name: Run Snyk to check for vulnerabilities
+#        uses: snyk/actions/node@master
+#        continue-on-error: true
+#        env:
+#          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  Docker-Scout:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -235,12 +198,31 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nginx.tar
+      - name: Load Docker images from previous workflows
+        run: docker load --input php.tar && docker load --input nginx.tar
+      - name: Show docker images
+        run: docker images
+#      - name: Run Docker Scout
+#        run:
+  Publish:
+    needs: [Dependencies,Database]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/development'
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16'
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         with:
-          name: postgres.tar
+          name: php.tar
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nginx.tar
       - name: Load Docker images from previous workflows
-        run: docker load --input  php.tar && docker load --input nginx.tar && docker load --input postgres.tar
+        run: docker load --input  php.tar && docker load --input nginx.tar
       - name: Show all images
         run: docker images
       - name: Up the images
@@ -254,11 +236,11 @@ jobs:
           else
             echo "##[set-output name=success;]false"
           fi
-      - if: steps.containerregistry-login.outputs.success == 'true' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/development' || github.ref == 'refs/heads/feature-soap' || github.ref == 'refs/heads/feature-soap-extra' || github.ref == 'refs/heads/feature-cleanup')
+      - if: steps.containerregistry-login.outputs.success == 'true'
         name: Push to Container Registry
         run: docker-compose push
 
-      - if: steps.containerregistry-login.outputs.success == 'true' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/development' || github.ref == 'refs/heads/feature-soap' || github.ref == 'refs/heads/feature-soap-extra' || github.ref == 'refs/heads/feature-cleanup')
+      - if: steps.containerregistry-login.outputs.success == 'true'
         name: Push versioned containers to Container Registry
         run: |
           images=$(docker-compose images -q | xargs docker inspect --format='{{ index .RepoTags 0}}' | cut -d':' -f1 | grep $APP_NAME)
@@ -266,22 +248,6 @@ jobs:
           do
             docker push "${image}":"${APP_BUILD}"
           done
-      - name: Create kube config
-        id: kubeconfig
-        if: contains( github.ref, 'development' )
-        run: |
-          if [ "${{ secrets.KUBECONFIG }}" != "" ]; then
-            printf "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
-            echo "##[set-output name=success]true"
-          else
-            echo "##[set-output name=success]false"
-          fi
-        #            - name: Export release code
-        #              if: (success() || failure())
-        #              id: releasecode
-        #              run: |
-        #                  export RELEASE=$APP_BUILD-$(git rev-parse --short $GITHUB_SHA)
-        #                  echo "##[set-output name=releasename]$RELEASE"
       - name: Print release name
         if: (success() || failure())
         run: echo $RELEASENAME
