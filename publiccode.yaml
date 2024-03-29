@@ -17,24 +17,24 @@ developmentStatus: beta
 softwareType: softwareAddon
 description:
   en:
-    localisedName: null
-    genericName: null
+    localisedName: "WooBundle"
+    genericName: "WooBundle"
     shortDescription: "Symfony bundle for WOO functionality."
-    longDescription: "Symfony bundle for WOO functionality."
-    documentation: null
-    apiDocumentation: null
+    longDescription: "Symfony bundle for WOO functionality. The Wet Open Overheid (Woo) is an initiative aimed at improving the publicity of government information. The aim is to make government information more accessible to everyone."
+    documentation: "https://openwoo.app/"
+    apiDocumentation: "https://github.com/CommonGateway/WooBundle/blob/main/docs/openapi.json"
     features:
       - Common Ground Gateway Plugin
     screenshots: []
     videos: []
     awards: []
   nl:
-    localisedName: null
-    genericName: null
+    localisedName: "WooBundle"
+    genericName: "WooBundle"
     shortDescription: "Symfony bundle voor WOO functionaliteit."
-    longDescription: "Symfony bundle voor WOO functionaliteit."
-    documentation: null
-    apiDocumentation: null
+    longDescription: "Symfony bundle voor WOO functionaliteit. De Wet Open Overheid (Woo) is een initiatief gericht op het verbeteren van de openbaarheid van overheidsinformatie. Het doel is om overheidsinformatie beter toegankelijk te maken voor iedereen."
+    documentation: "https://openwoo.app/"
+    apiDocumentation: "https://github.com/CommonGateway/WooBundle/blob/main/docs/openapi.json"
     features:
       - Common Ground Gateway Plugin
     screenshots: []
@@ -69,17 +69,29 @@ localisation:
   availableLanguages: 
      - en
      - nl
+nl:
+  countryExtensionVersion: null
+  commonground:
+    intendedOrganisations: []
+    installationType: null
+    layerType: data
+  gemma:
+    bedrijfsfuncties: []
+    bedrijfsservices: []
+    applicatiefunctie: null
+    model: null
+  upl: []
 dependsOn: 
   open: 
     - name: CommonGateway
-      versionMin: 1.2
-      versionMax: 1.3
-      version: 1.2.47
+      versionMin: 1.3
+      versionMax: 2.0
+      version: 1.3.8
       optional: false
     - name: CoreBundle
-      versionMin: 1.2
-      versionMax: 1.3
-      version: 1.2.47
+      versionMin: 1.3
+      versionMax: 2.0
+      version: 1.3.8
       optional: false
 roadmap: null
 inputTypes:
@@ -90,17 +102,5 @@ outputTypes:
   - application/json+ld
   - application/xml
   - application/x-yaml
-nl: 
-  countryExtensionVersion: null
-  commonground: 
-    intendedOrganisations: []
-    installationType: null
-    layerType: data
-  gemma:
-    bedrijfsfuncties: []
-    bedrijfsservices: []
-    applicatiefunctie: null
-    model: null
-  upl: []
 downloadUrls:
   - https://github.com/CommonGateway/WooBundle/archive/refs/heads/main.zip
