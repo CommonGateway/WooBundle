@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
 use Smalot\PdfParser\Parser;
+use PhpOffice\PhpWord\IOFactory;
 
 /**
  * Service responsible for woo files.
@@ -211,12 +212,43 @@ class FileService
             return null;
         }
 
+        $base64Decoded = \Safe\base64_decode($file->getBase64());
+
         switch ($file->getMimeType()) {
         case 'pdf':
         case 'application/pdf':
             try {
-                $pdf  = $this->pdfParser->parseContent(\Safe\base64_decode($file->getBase64()));
+                $pdf  = $this->pdfParser->parseContent($base64Decoded);
                 $text = $pdf->getText();
+            } catch (\Exception $e) {
+                $this->logger->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
+                $this->style && $this->style->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
+
+                $text = null;
+            }
+            break;
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            try {
+                $tempFilePath = tempnam(sys_get_temp_dir(), 'docx');
+                if ($tempFilePath === false) {
+                    $this->logger->error('Failed to create a temporary file '.$file->getName());
+                    $this->style && $this->style->error('Failed to create a temporary file '.$file->getName());
+                }
+                file_put_contents($tempFilePath, $base64Decoded);
+
+                $phpWord = IOFactory::load($tempFilePath);
+
+                $text = '';
+                foreach ($phpWord->getSections() as $section) {
+                    $text .= $this->processElements($section->getElements(), $text);
+                }
+
+                if (empty($text) === true) {
+                    $text = null;
+                }
+
+                unlink($tempFilePath);
+
             } catch (\Exception $e) {
                 $this->logger->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
                 $this->style && $this->style->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
@@ -231,6 +263,42 @@ class FileService
         return $text;
 
     }//end getTextFromDocument()
+
+
+
+    /**
+     * Loops through docx elements to get the text from.
+     *
+     * @param $elements Docx elements.
+     * @param string $text variable to extend.
+     *
+     * @return string $text
+     */
+    private function processElements($elements, string $text): string
+    {
+        foreach ($elements as $element) {
+            switch (get_class($element)) {
+                case 'PhpOffice\PhpWord\Element\TextRun':
+                case 'PhpOffice\PhpWord\Element\Cell':
+                    $text .= $this->processElements($element->getElements(), $text);
+                    break;
+
+                case 'PhpOffice\PhpWord\Element\Table':
+                    foreach ($element->getRows() as $row) {
+                        foreach ($row->getCells() as $cell) {
+                            $text .= $this->processElements($cell->getElements(), $text);
+                        }
+                    }
+                    break;
+
+                case 'PhpOffice\PhpWord\Element\Text':
+                    $text .= $element->getText();
+                    break;
+            }
+        }
+
+        return $text;
+    }//end processElements()
 
 
     /**
