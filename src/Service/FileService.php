@@ -196,6 +196,59 @@ class FileService
 
     }//end generateDownloadEndpoint()
 
+    /**
+     * Writes a temporary file for short use.
+     *
+     * Don't forget to unlink($tempFilePath) after using the file to remove the temporary file.
+     *
+     * @param File $file File to write a temporary file from.
+     * @param string $fileExtension Extension to write the file with.
+     * @param $base64Decoded File in its decoded form.
+     *
+     * @return string|null $tempFilePath The temporary file path.
+     */
+    private function createTemporaryFile(File $file, string $fileExtension, $base64Decoded): ?string
+    {
+        $tempFilePath = tempnam(sys_get_temp_dir(), $fileExtension);
+        if ($tempFilePath === false) {
+            $this->logger->error('Failed to create a temporary file '.$file->getName());
+            $this->style && $this->style->error('Failed to create a temporary file '.$file->getName());
+
+            return null;
+        }
+        file_put_contents($tempFilePath, $base64Decoded);
+
+        return $tempFilePath;
+    }//end createTemporaryFile()
+
+    /**
+     * Extracts text from a docx file.
+     *
+     * @param File $file to get text from.
+     * @param $base64Decoded File in its decoded form.
+     *
+     * @return string
+     */
+    private function getTextFromDocx(File $file, $base64Decoded): string
+    {
+        $tempFilePath = $this->createTemporaryFile($file, 'docx', $base64Decoded);
+        if ($tempFilePath === null) {
+            return '';
+        }
+
+        $phpWord = IOFactory::load($tempFilePath);
+
+        $text = '';
+        foreach ($phpWord->getSections() as $section) {
+            $text .= $this->processElements($section->getElements(), $text);
+        }
+
+        // Remove temp file.
+        unlink($tempFilePath);
+
+        return $text;
+    }//end getTextFromDocx()
+
 
     /**
      * Extracts text from a document (File).
@@ -214,49 +267,27 @@ class FileService
 
         $base64Decoded = \Safe\base64_decode($file->getBase64());
 
-        switch ($file->getMimeType()) {
-        case 'pdf':
-        case 'application/pdf':
-            try {
-                $pdf  = $this->pdfParser->parseContent($base64Decoded);
-                $text = $pdf->getText();
-            } catch (\Exception $e) {
-                $this->logger->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
-                $this->style && $this->style->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
-
-                $text = null;
-            }
-            break;
-        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            try {
-                $tempFilePath = tempnam(sys_get_temp_dir(), 'docx');
-                if ($tempFilePath === false) {
-                    $this->logger->error('Failed to create a temporary file '.$file->getName());
-                    $this->style && $this->style->error('Failed to create a temporary file '.$file->getName());
-                }
-                file_put_contents($tempFilePath, $base64Decoded);
-
-                $phpWord = IOFactory::load($tempFilePath);
-
-                $text = '';
-                foreach ($phpWord->getSections() as $section) {
-                    $text .= $this->processElements($section->getElements(), $text);
-                }
-
-                if (empty($text) === true) {
+        try {
+            switch ($file->getMimeType()) {
+                case 'pdf':
+                case 'application/pdf':
+                    $pdf  = $this->pdfParser->parseContent($base64Decoded);
+                    $text = $pdf->getText();
+                    break;
+                case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                    $text = $this->getTextFromDocx($file, $base64Decoded);
+                    break;
+                default:
                     $text = null;
-                }
-
-                unlink($tempFilePath);
-
-            } catch (\Exception $e) {
-                $this->logger->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
-                $this->style && $this->style->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
-
-                $text = null;
             }
-            break;
-        default:
+        } catch (\Exception $e) {
+            $this->logger->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
+            $this->style && $this->style->error('Something went wrong extracting text from '.$file->getName().' '.$e->getMessage());
+
+            $text = null;
+        }
+
+        if (empty($text) === true) {
             $text = null;
         }
 
