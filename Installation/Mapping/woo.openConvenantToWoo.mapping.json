@@ -2,10 +2,10 @@
   "title": "OpenConvenantToWoo",
   "$id": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.6",
+  "version": "0.0.5",
   "passTrough": false,
   "mapping": {
-    "_sourceId": "{{ organisatie.oin~ID }}",
+    "_sourceId": "ID",
     "id": "identifier",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",

@@ -276,11 +276,10 @@ class SyncXxllncCasesService
      * @param array    $result       The result data that contains the information of file fields.
      * @param Endpoint $fileEndpoint The endpoint entity for the file.
      * @param Source   $source       The source entity that provides the source of the result data.
-     * @param string   $oin          The oin from the organisation.
      *
      * @return array                     The hydrated object.
      */
-    private function handleCustomLogic(array $objectArray, array $result, Endpoint $fileEndpoint, Source $source, string $oin): array
+    private function handleCustomLogic(array $objectArray, array $result, Endpoint $fileEndpoint, Source $source): array
     {
         $documentMapping     = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncDocumentToBijlage.mapping.json", "common-gateway/woo-bundle");
         $customFieldsMapping = $this->resourceService->getMapping("https://commongateway.nl/mapping/woo.xxllncCustomFields.mapping.json", "common-gateway/woo-bundle");
@@ -290,7 +289,7 @@ class SyncXxllncCasesService
         $bijlagen  = $this->getBijlagen($result, ['endpoint' => $fileEndpoint, 'source' => $source, 'mapping' => $documentMapping], $fileURLS);
         $portalURL = $this->configuration['portalUrl'].'/'.$objectArray['_self']['id'];
 
-        return $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id'], 'oin' => $oin]));
+        return $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id']]));
 
     }//end handleCustomLogic()
 
@@ -409,7 +408,7 @@ class SyncXxllncCasesService
                 );
 
                 // Some custom logic.
-                $hydrateArray = $this->handleCustomLogic($object->toArray(), $result, $fileEndpoint, $source, $this->configuration['oin']);
+                $hydrateArray = $this->handleCustomLogic($object->toArray(), $result, $fileEndpoint, $source);
 
                 // Second time to update Bijlagen.
                 $object = $hydrationService->searchAndReplaceSynchronizations(
@@ -420,7 +419,7 @@ class SyncXxllncCasesService
                     false
                 );
 
-                $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($this->configuration['oin'].$result['id']);
+                $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($result['id']);
 
                 // Get all synced sourceIds.
                 if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
