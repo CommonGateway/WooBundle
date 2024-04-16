@@ -100,8 +100,8 @@ class SyncOpenWooService
      * @var array
      */
     private array $configuration;
-
-
+    
+    
     /**
      * SyncOpenWooService constructor.
      *
@@ -111,7 +111,10 @@ class SyncOpenWooService
      * @param EntityManagerInterface $entityManager
      * @param MappingService         $mappingService
      * @param LoggerInterface        $pluginLogger
+     * @param ValidationService      $validationService
+     * @param CacheService           $cacheService
      * @param FileService            $fileService
+     * @param ObjectEntityService    $gatewayOEService
      */
     public function __construct(
         GatewayResourceService $resourceService,

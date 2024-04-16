@@ -1,0 +1,16 @@
+{
+  "title": "notubizDocumentToBijlage",
+  "$id": "https://commongateway.nl/mapping/woo.notubizDocumentToBijlage.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "_sourceId": "document_id",
+    "titel": "title",
+    "url": "url"
+  },
+  "cast": {
+    "titel": "unsetIfValue==title",
+    "url": "unsetIfValue==url"
+  }
+}
