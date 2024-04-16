@@ -48,7 +48,7 @@ class SyncWooCommand extends Command
      * @var SyncOpenWooService
      */
     private SyncOpenWooService $syncOpenWooService;
-    
+
     /**
      * The NotuBiz service.
      *
@@ -68,7 +68,7 @@ class SyncWooCommand extends Command
      * @param SyncXxllncCasesService $syncXxllncCasesService The case service
      * @param SyncOpenWooService     $syncOpenWooService     The OpenWoo service
      * @param SyncNotubizService     $syncNotubizService     The Notubiz service
-     * @param EntityManagerInterface $entityManager The entity manager.
+     * @param EntityManagerInterface $entityManager          The entity manager.
      */
     public function __construct(
         SyncXxllncCasesService $syncXxllncCasesService,
@@ -141,7 +141,7 @@ class SyncWooCommand extends Command
                 $action->setStatus(false);
                 $this->entityManager->persist($action);
                 $this->entityManager->flush();
-                
+
                 return Command::FAILURE;
             }
         } else if (isset($config['sourceType']) === true && $config['sourceType'] === 'openWoo') {

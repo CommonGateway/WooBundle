@@ -93,8 +93,8 @@ class SyncNotubizService
      * @var array
      */
     private array $configuration;
-    
-    
+
+
     /**
      * SyncNotubizService constructor.
      *
@@ -146,12 +146,12 @@ class SyncNotubizService
         return $this;
 
     }//end setStyle()
-    
-    
+
+
     /**
      * Fetches objects from NotuBiz.
      *
-     * @param Source   $source    The source entity that provides the source of the result data.
+     * @param Source $source The source entity that provides the source of the result data.
      *
      * @return array The fetched objects.
      */
@@ -163,18 +163,18 @@ class SyncNotubizService
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
             $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
-            
+
             return [];
         }
-        
+
         // todo: Pagination? get results from correct key in decodedResponse
         $results = $decodedResponse;
-        
+
         return $results;
-        
+
     }//end fetchObjects()
-    
-    
+
+
     /**
      * Handles the synchronization of openwoo objects.
      *
@@ -189,10 +189,10 @@ class SyncNotubizService
     {
         $this->data          = $data;
         $this->configuration = $configuration;
-        
+
         isset($this->style) === true && $this->style->success('SyncNotubizService triggered');
         $this->logger->info('SyncNotubizService triggered', ['plugin' => 'common-gateway/woo-bundle']);
-        
+
         // TODO: check if need all of these config options, remove the ones we don't use and update error message & SyncNotubizHandler->getConfiguration():
         if (isset($this->configuration['source']) === false
             || isset($this->configuration['oin']) === false
@@ -204,50 +204,48 @@ class SyncNotubizService
         ) {
             isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler');
             $this->logger->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler', ['plugin' => 'common-gateway/woo-bundle']);
-            
+
             return [];
         }//end if
-        
-        $source           = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-        $schema           = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
-        $mapping          = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
+
+        $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+        $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
+        $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
         if ($source instanceof Source === false
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
         ) {
             isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncNotubizHandler");
             $this->logger->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncNotubizHandler", ['plugin' => 'common-gateway/woo-bundle']);
-            
+
             return [];
         }//end if
-        
+
         isset($this->style) === true && $this->style->info("Fetching objects from {$source->getLocation()}");
         $this->logger->info("Fetching objects from {$source->getLocation()}", ['plugin' => 'common-gateway/woo-bundle']);
-        
+
         $results = $this->fetchObjects($source);
         if (empty($results) === true) {
             $this->logger->info('No results found, ending syncNotubizHandler', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
-        
+
         // todo...
-        
         return $this->data;
-        
-    }//end syncOpenWooHandler()
-    
-    
+
+    }//end syncNotubizHandler()
+
+
     public function syncNotubizDocumentHandler(array $data, array $config): array
     {
         $source   = $this->resourceService->getSource($data['source'], 'common-gateway/woo-bundle');
         $document = $data['document'];
         $endpoint = $this->resourceService->getEndpoint($config['endpoint'], 'common-gateway/woo-bundle');
-        
+
         // todo... do we even need this document handler? if we just sync one main object and also the documents connected to it with the syncNotubizHandler?
-        
         return $data;
-        
-    }//end syncOpenWooDocumentHandler()
+
+    }//end syncNotubizDocumentHandler()
 
 
 }//end class

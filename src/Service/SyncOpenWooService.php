@@ -100,8 +100,8 @@ class SyncOpenWooService
      * @var array
      */
     private array $configuration;
-    
-    
+
+
     /**
      * SyncOpenWooService constructor.
      *
