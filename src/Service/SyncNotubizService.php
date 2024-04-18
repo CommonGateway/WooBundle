@@ -152,13 +152,29 @@ class SyncNotubizService
      * Fetches objects from NotuBiz.
      *
      * @param Source $source The source entity that provides the source of the result data.
+     * @param int|null $page The page we are fetching, increments each iteration.
+     * @param array $results The results from NotuBiz api we merge each iteration.
      *
      * @return array The fetched objects.
      */
-    private function fetchObjects(Source $source)
+    private function fetchObjects(Source $source, ?int $page=1, array $results=[])
     {
+        $dateTo = new DateTime();
+        $dateFrom = new DateTime();
+        $dateFrom->add(DateInterval::createFromDateString('-10 years'));
+        
+        $query = [
+            'format' => 'json',
+            'page' => $page,
+            'organisation_id' => $this->configuration['organisationId'],
+            'version' => $this->configuration['notubizVersion'] ?? '1.21.1',
+            'date_to' => $dateTo->format('c'),
+            'date_from' => $dateFrom->format('c')
+            // todo: gremium?
+        ];
+        
         try {
-            $response        = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET');
+            $response        = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET', ['query' => $query]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
@@ -166,9 +182,14 @@ class SyncNotubizService
 
             return [];
         }
-
-        // todo: Pagination? get results from correct key in decodedResponse
-        $results = $decodedResponse;
+        
+        $results = array_merge($results, $decodedResponse['events']);
+        
+        // Pagination NotuBiz.
+        if (isset($decodedResponse['pagination']['has_more_pages']) === true && $decodedResponse['pagination']['has_more_pages'] === true) {
+            $page++;
+            $results = $this->fetchObjects($source, $page, $results);
+        }
 
         return $results;
 
@@ -192,18 +213,17 @@ class SyncNotubizService
 
         isset($this->style) === true && $this->style->success('SyncNotubizService triggered');
         $this->logger->info('SyncNotubizService triggered', ['plugin' => 'common-gateway/woo-bundle']);
-
-        // TODO: check if need all of these config options, remove the ones we don't use and update error message & SyncNotubizHandler->getConfiguration():
+        
         if (isset($this->configuration['source']) === false
-            || isset($this->configuration['oin']) === false
+            || isset($this->configuration['organisationId']) === false
             || isset($this->configuration['organisatie']) === false
             || isset($this->configuration['portalUrl']) === false
             || isset($this->configuration['schema']) === false
             || isset($this->configuration['mapping']) === false
             || isset($this->configuration['sourceEndpoint']) === false
         ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler');
-            $this->logger->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler', ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('No source, schema, mapping, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler');
+            $this->logger->error('No source, schema, mapping, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler', ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }//end if
@@ -231,21 +251,15 @@ class SyncNotubizService
         }
 
         // todo...
+        // voor elk event (zie SyncOpenWooService) searchAndReplaceSynchronizations en --->
+        // - check of event_type_data een meetings url heeft, zo ja deze ophalen
+        // - alle documenten verzamelen die in deze meeting zitten
+        // - map gegevens van event naar woo object en voor documenten doe mapping indien nodig
+        // - objecten aanmaken
+        
         return $this->data;
 
     }//end syncNotubizHandler()
-
-
-    public function syncNotubizDocumentHandler(array $data, array $config): array
-    {
-        $source   = $this->resourceService->getSource($data['source'], 'common-gateway/woo-bundle');
-        $document = $data['document'];
-        $endpoint = $this->resourceService->getEndpoint($config['endpoint'], 'common-gateway/woo-bundle');
-
-        // todo... do we even need this document handler? if we just sync one main object and also the documents connected to it with the syncNotubizHandler?
-        return $data;
-
-    }//end syncNotubizDocumentHandler()
 
 
 }//end class

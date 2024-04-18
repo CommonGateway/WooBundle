@@ -62,12 +62,6 @@ class SyncNotubizHandler implements ActionHandlerInterface
                 'sourceEndpoint',
             ],
             'properties'  => [
-                'oin'            => [
-                    'type'        => 'string',
-                    'description' => 'The oin of the publication.',
-                    'example'     => 'buren',
-                    'required'    => true,
-                ],
                 'portalUrl'      => [
                     'type'        => 'string',
                     'description' => 'The portal url of the publication.',
@@ -106,10 +100,22 @@ class SyncNotubizHandler implements ActionHandlerInterface
                     'example'     => 'Gemeente Buren',
                     'required'    => true,
                 ],
+                'organisationId' => [
+                    'type'        => 'string',
+                    'description' => 'The organization id of the organization in Notubiz.',
+                    'example'     => '429',
+                    'required'    => true,
+                ],
+                'notubizVersion' => [
+                    'type'        => 'string',
+                    'description' => 'The api version of Notubiz, used for getting events.',
+                    'example'     => '1.21.1',
+                    'required'    => false,
+                ],
                 'sourceEndpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint of the source.',
-                    'example'     => '??? TODO ???',
+                    'example'     => '/events',
                     'required'    => true,
                 ],
                 'allowPDFOnly'   => [
