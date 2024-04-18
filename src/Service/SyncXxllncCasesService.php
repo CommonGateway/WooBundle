@@ -150,6 +150,7 @@ class SyncXxllncCasesService
 
 
     /**
+     * todo Duplicate function (SyncOpenWooService & SyncNotubizService)
      * Checks if existing objects still exist in the source, if not deletes them.
      *
      * @param array  $idsSynced ID's from objects we just synced from the source.
@@ -430,8 +431,8 @@ class SyncXxllncCasesService
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
             } catch (Exception $exception) {
-                isset($this->style) === true && $this->style->error("Something wen't wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}");
-                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+                isset($this->style) === true && $this->style->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}");
+                $this->logger->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
             }//end try
         }//end foreach

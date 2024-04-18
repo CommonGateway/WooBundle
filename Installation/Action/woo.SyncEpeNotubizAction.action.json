@@ -5,6 +5,7 @@
     "version": "0.0.1",
     "listens": ["woo.default.listens"],
     "configuration": {
+        "oin": "00000001001299992000",
         "portalUrl": "https://conductionnl.github.io/woo-website-epe",
         "source": "https://commongateway.woo.nl/source/woo.notubiz.source.json",
         "schema": "https://commongateway.nl/woo.publicatie.schema.json",
@@ -12,7 +13,6 @@
         "sourceType": "notubiz",
         "organisatie": "Gemeente Epe",
         "organisationId": "429",
-        "notubizVersion": "1.21.1",
         "sourceEndpoint": "/events"
     },
     "conditions":

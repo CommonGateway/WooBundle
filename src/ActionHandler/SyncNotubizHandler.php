@@ -62,6 +62,12 @@ class SyncNotubizHandler implements ActionHandlerInterface
                 'sourceEndpoint',
             ],
             'properties'  => [
+                'oin'            => [
+                    'type'        => 'string',
+                    'description' => 'The oin of the publication.',
+                    'example'     => 'buren',
+                    'required'    => true,
+                ],
                 'portalUrl'      => [
                     'type'        => 'string',
                     'description' => 'The portal url of the publication.',

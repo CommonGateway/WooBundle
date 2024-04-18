@@ -5,6 +5,16 @@
   "version": "0.0.1",
   "passTrough": false,
   "mapping": {
-
+    "_sourceId": "id",
+    "portalUrl": "portalUrl",
+    "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
+    "organisatie.naam": "organisatie.naam",
+    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'true' }}{% endif %}",
+    "categorie": "categorie"
+  },
+  "cast": {
+    "gepubliceerd": "bool",
+    "portalUrl": "unsetIfValue==",
+    "categorie": "unsetIfValue=="
   }
 }

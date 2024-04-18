@@ -162,6 +162,7 @@ class SyncOpenWooService
 
 
     /**
+     * todo Duplicate function (SyncXxllncCasesService & SyncNotubizService)
      * Checks if existing objects still exist in the source, if not deletes them.
      *
      * @param array  $idsSynced ID's from objects we just synced from the source.
@@ -365,7 +366,7 @@ class SyncOpenWooService
                     $documents[] = $renderedObject['metadata']['verzoek']['besluit'];
                 }
             } catch (Exception $exception) {
-                $this->logger->error("Something wen't wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+                $this->logger->error("Something went wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
             }//end try
         }//end foreach
