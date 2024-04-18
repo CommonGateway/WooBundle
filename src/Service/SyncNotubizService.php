@@ -151,28 +151,28 @@ class SyncNotubizService
     /**
      * Fetches objects from NotuBiz.
      *
-     * @param Source $source The source entity that provides the source of the result data.
-     * @param int|null $page The page we are fetching, increments each iteration.
-     * @param array $results The results from NotuBiz api we merge each iteration.
+     * @param Source   $source  The source entity that provides the source of the result data.
+     * @param int|null $page    The page we are fetching, increments each iteration.
+     * @param array    $results The results from NotuBiz api we merge each iteration.
      *
      * @return array The fetched objects.
      */
     private function fetchObjects(Source $source, ?int $page=1, array $results=[])
     {
-        $dateTo = new DateTime();
+        $dateTo   = new DateTime();
         $dateFrom = new DateTime();
         $dateFrom->add(DateInterval::createFromDateString('-10 years'));
-        
+
         $query = [
-            'format' => 'json',
-            'page' => $page,
+            'format'          => 'json',
+            'page'            => $page,
             'organisation_id' => $this->configuration['organisationId'],
-            'version' => $this->configuration['notubizVersion'] ?? '1.21.1',
-            'date_to' => $dateTo->format('c'),
-            'date_from' => $dateFrom->format('c')
+            'version'         => ($this->configuration['notubizVersion'] ?? '1.21.1'),
+            'date_to'         => $dateTo->format('c'),
+            'date_from'       => $dateFrom->format('c'),
             // todo: gremium?
         ];
-        
+
         try {
             $response        = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET', ['query' => $query]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
@@ -182,9 +182,9 @@ class SyncNotubizService
 
             return [];
         }
-        
+
         $results = array_merge($results, $decodedResponse['events']);
-        
+
         // Pagination NotuBiz.
         if (isset($decodedResponse['pagination']['has_more_pages']) === true && $decodedResponse['pagination']['has_more_pages'] === true) {
             $page++;
@@ -213,7 +213,7 @@ class SyncNotubizService
 
         isset($this->style) === true && $this->style->success('SyncNotubizService triggered');
         $this->logger->info('SyncNotubizService triggered', ['plugin' => 'common-gateway/woo-bundle']);
-        
+
         if (isset($this->configuration['source']) === false
             || isset($this->configuration['organisationId']) === false
             || isset($this->configuration['organisatie']) === false
@@ -256,7 +256,6 @@ class SyncNotubizService
         // - alle documenten verzamelen die in deze meeting zitten
         // - map gegevens van event naar woo object en voor documenten doe mapping indien nodig
         // - objecten aanmaken
-        
         return $this->data;
 
     }//end syncNotubizHandler()
