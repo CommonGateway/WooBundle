@@ -147,8 +147,8 @@ class SyncNotubizService
         return $this;
 
     }//end setStyle()
-    
-    
+
+
     /**
      * todo Duplicate function (SyncOpenWooService & SyncXxllncCasesService)
      * Checks if existing objects still exist in the source, if not deletes them.
@@ -171,10 +171,10 @@ class SyncNotubizService
                 $existingObjects[]   = $synchronization->getObject();
             }
         }
-        
+
         // Check if existing sourceIds are in the array of new synced sourceIds.
         $objectIdsToDelete = array_diff($existingSourceIds, $idsSynced);
-        
+
         // If not it means the object does not exist in the source anymore and should be deleted here.
         $deletedObjectsCount = 0;
         foreach ($objectIdsToDelete as $key => $id) {
@@ -182,11 +182,11 @@ class SyncNotubizService
             $this->entityManager->remove($existingObjects[$key]);
             $deletedObjectsCount++;
         }
-        
+
         $this->entityManager->flush();
-        
+
         return $deletedObjectsCount;
-        
+
     }//end deleteNonExistingObjects()
 
 
@@ -291,13 +291,14 @@ class SyncNotubizService
             $this->logger->info('No results found, ending syncNotubizHandler', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
-        
+
         $customFields = [
             'organisatie' => [
                 'oin'  => $this->configuration['oin'],
                 'naam' => $this->configuration['organisatie'],
             ],
-            'categorie'   => "Vergaderstukken decentrale overheden", // todo: of misschien: "Agenda's en besluitenlijsten bestuurscolleges"
+            'categorie'   => "Vergaderstukken decentrale overheden",
+            // todo: of misschien: "Agenda's en besluitenlijsten bestuurscolleges"
             'autoPublish' => $this->configuration['autoPublish'] ?? true,
         ];
 
@@ -307,7 +308,6 @@ class SyncNotubizService
         // - alle documenten verzamelen die in deze meeting zitten
         // - map gegevens van event naar woo object en voor documenten doe mapping indien nodig
         // - objecten aanmaken
-        
         // todo, this contains a lot of duplicate code (with SyncOpenWooService), maybe move it to another service and only keep Notubiz specific code
         $idsSynced        = [];
         $responseItems    = [];
@@ -317,7 +317,7 @@ class SyncNotubizService
             try {
                 $result       = array_merge($result, $customFields);
                 $mappedResult = $this->mappingService->mapping($mapping, $result);
-                
+
                 $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
                 if ($validationErrors !== null) {
                     $validationErrors = implode(', ', $validationErrors);
@@ -325,7 +325,7 @@ class SyncNotubizService
                     isset($this->style) === true && $this->style->warning("SyncNotubiz validation errors: $validationErrors");
                     continue;
                 }
-                
+
                 $object = $hydrationService->searchAndReplaceSynchronizations(
                     $mappedResult,
                     $source,
@@ -333,28 +333,26 @@ class SyncNotubizService
                     true,
                     true
                 );
-                
+
                 // Get all synced sourceIds.
                 if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                     $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
                 }
-                
+
                 $this->entityManager->persist($object);
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
-                
+
                 // todo...
-                
             } catch (Exception $exception) {
                 $this->logger->error("Something went wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
             }//end try
         }//end foreach
-        
+
         $this->entityManager->flush();
-        
+
         // todo...
-        
         return $this->data;
 
     }//end syncNotubizHandler()
