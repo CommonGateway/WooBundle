@@ -78,6 +78,7 @@ class SyncWooCommand extends Command
     ) {
         $this->syncXxllncCasesService = $syncXxllncCasesService;
         $this->syncOpenWooService     = $syncOpenWooService;
+        $this->syncNotubizService     = $syncNotubizService;
         $this->entityManager          = $entityManager;
         parent::__construct();
 

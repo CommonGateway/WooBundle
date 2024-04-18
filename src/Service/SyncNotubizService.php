@@ -12,7 +12,8 @@ use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
 use CommonGateway\CoreBundle\Service\CacheService;
-use CommonGateway\WOOBundle\Service\FileService;
+use DateTime;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
@@ -168,8 +169,8 @@ class SyncNotubizService
             'page'            => $page,
             'organisation_id' => $this->configuration['organisationId'],
             'version'         => ($this->configuration['notubizVersion'] ?? '1.21.1'),
-            'date_to'         => $dateTo->format('c'),
-            'date_from'       => $dateFrom->format('c'),
+            'date_to'         => $dateTo->format('Y-m-d H:i:s'),
+            'date_from'       => $dateFrom->format('Y-m-d H:i:s'),
             // todo: gremium?
         ];
 
