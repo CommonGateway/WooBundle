@@ -6,15 +6,15 @@
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
-    "portalUrl": "portalUrl",
     "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
     "organisatie.naam": "organisatie.naam",
     "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'true' }}{% endif %}",
-    "categorie": "categorie"
+    "categorie": "categorie",
+    "publicatiedatum": "creation_date",
+    "titel": "{% if attributes|default %}{% set flag = false %}{% for attribute in attributes %}{% if attribute.id == 1 %}{{ attribute.value }}{% set flag = true %}{% endif %}{% endfor %}{% if flag == false %}Event{% endif %}{% else %}Event{% endif %} {{creation_date|date(Y-m-d)}}"
   },
   "cast": {
     "gepubliceerd": "bool",
-    "portalUrl": "unsetIfValue==",
     "categorie": "unsetIfValue=="
   }
 }

@@ -236,6 +236,38 @@ class SyncNotubizService
         return $results;
 
     }//end fetchObjects()
+    
+    
+    /**
+     * Fetches meeting object for an Event from NotuBiz.
+     *
+     * @param Source $source  The source entity that provides the source of the result data.
+     * @param array  $result  A Event result body from the NotuBiz API.
+     *
+     * @return array|null The fetched meeting object.
+     */
+    private function fetchMeeting(Source $source, array $result): ?array
+    {
+        if (isset($result['event_type_data']['self']) === false || str_contains($result['event_type_data']['self'], 'meetings') === false) {
+            return null;
+        }
+        
+        $sourceLocation = str_replace('https://', '', $source->getLocation());
+        $endpoint = str_replace($sourceLocation, '', $result['event_type_data']['self']);
+        
+        try {
+            $response        = $this->callService->call($source, $endpoint, 'GET', ['query' => ['format' => 'json']]);
+            $decodedResponse = $this->callService->decodeResponse($source, $response);
+        } catch (Exception $e) {
+            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
+            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            
+            return [];
+        }
+        
+        return $decodedResponse;
+        
+    }//end fetchObjects()
 
 
     /**
@@ -301,13 +333,7 @@ class SyncNotubizService
             // todo: of misschien: "Agenda's en besluitenlijsten bestuurscolleges"
             'autoPublish' => $this->configuration['autoPublish'] ?? true,
         ];
-
-        // todo w.i.p. ...
-        // voor elk event (zie SyncOpenWooService) searchAndReplaceSynchronizations en --->
-        // - check of event_type_data een meetings url heeft, zo ja deze ophalen
-        // - alle documenten verzamelen die in deze meeting zitten
-        // - map gegevens van event naar woo object en voor documenten doe mapping indien nodig
-        // - objecten aanmaken
+        
         // todo, this contains a lot of duplicate code (with SyncOpenWooService), maybe move it to another service and only keep Notubiz specific code
         $idsSynced        = [];
         $responseItems    = [];
@@ -317,6 +343,8 @@ class SyncNotubizService
             try {
                 $result       = array_merge($result, $customFields);
                 $mappedResult = $this->mappingService->mapping($mapping, $result);
+                
+                $meetingObject = $this->fetchMeeting($source, $result);
 
                 $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
                 if ($validationErrors !== null) {
@@ -344,15 +372,27 @@ class SyncNotubizService
                 $responseItems[] = $object;
 
                 // todo...
+                // - check of event_type_data een meetings url heeft, zo ja deze ophalen
+                // - alle documenten verzamelen die in deze meeting zitten
+                // - map gegevens van event naar woo object en voor documenten doe mapping indien nodig
+                // - objecten aanmaken
             } catch (Exception $exception) {
-                $this->logger->error("Something went wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+                $this->logger->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
             }//end try
         }//end foreach
 
         $this->entityManager->flush();
-
-        // todo...
+        
+        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        
+        $this->data['response'] = new Response(json_encode($responseItems), 200);
+        
+        $countItems = count($responseItems);
+        $logMessage = "Synchronized $countItems events to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
+        isset($this->style) === true && $this->style->success($logMessage);
+        $this->logger->info($logMessage, ['plugin' => 'common-gateway/woo-bundle']);
+        
         return $this->data;
 
     }//end syncNotubizHandler()
