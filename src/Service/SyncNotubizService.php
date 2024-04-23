@@ -210,7 +210,7 @@ class SyncNotubizService
             'version'         => ($this->configuration['notubizVersion'] ?? '1.21.1'),
             'date_to'         => $dateTo->format('Y-m-d H:i:s'),
             'date_from'       => $dateFrom->format('Y-m-d H:i:s'),
-            // todo: gremium?
+            // todo: filter on specific gremia? /gremium
         ];
 
         try {
@@ -263,7 +263,7 @@ class SyncNotubizService
             return [];
         }
 
-        return $decodedResponse;
+        return $decodedResponse['meeting'];
 
     }//end fetchMeeting()
 
@@ -328,7 +328,7 @@ class SyncNotubizService
                 'naam' => $this->configuration['organisatie'],
             ],
             'categorie'   => "Vergaderstukken decentrale overheden",
-            // todo: of misschien: "Agenda's en besluitenlijsten bestuurscolleges"
+            // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
             'autoPublish' => $this->configuration['autoPublish'] ?? true,
         ];
 
@@ -388,6 +388,8 @@ class SyncNotubizService
         foreach ($documents as $document) {
             $documentData['document'] = $document;
             $documentData['source']   = $source->getReference();
+            // Use the Notubiz url instead of Gateway /api/view-file endpoint for viewing / downloading the file.
+            $documentData['keepUrl']  = true;
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 

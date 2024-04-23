@@ -69,9 +69,9 @@
       },
       {
         "$id": "https://commongateway.nl/woo.ViewFile.endpoint.json",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "reference": "https://commongateway.nl/woo.bijlage.schema.json",
-        "path": "view-file/id",
+        "path": "view-file",
         "methods": ["GET"],
         "throws": [
           "woo.file.view"

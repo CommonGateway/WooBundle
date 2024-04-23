@@ -424,7 +424,11 @@ class SyncOpenWooService
 
         $file->setBase64(base64_encode($response->getBody()));
         $file->setMimeType($response->getHeader('content-type')[0]);
-        $file->setSize($response->getHeader('content-length')[0]);
+        if (empty($response->getHeader('content-length')) === false) {
+            $file->setSize($response->getHeader('content-length')[0]);
+        } else {
+            $file->setSize($this->gatewayOEService->getBase64Size($file->getBase64()));
+        }
         $file->setName(($document['titel'] ?? $document['url']));
 
         $explodedFilename = explode('.', ($document['titel'] ?? $document['url']));
@@ -449,14 +453,16 @@ class SyncOpenWooService
         default:
             $text = null;
         }
-
-        $bijlageObject->hydrate(
-            [
-                'url'          => $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint),
-                'extension'    => end($explodedFilename),
-                'documentText' => $text,
-            ]
-        );
+        
+        $body = [
+            'extension'    => end($explodedFilename),
+            'documentText' => $text,
+        ];
+        if (isset($data['keepUrl']) === false || $data['keepUrl'] !== true) {
+            $body['url'] = $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint);
+        }
+        
+        $bijlageObject->hydrate($body);
 
         $this->entityManager->persist($bijlageObject);
 
