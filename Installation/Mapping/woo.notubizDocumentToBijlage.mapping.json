@@ -6,7 +6,7 @@
   "passTrough": false,
   "mapping": {
     "_sourceId": "{{ self.value|split('/')|last }}",
-    "titel": "title.value",
+    "titel": "versions.0.file_name",
     "url": "url.value"
   },
   "cast": {
