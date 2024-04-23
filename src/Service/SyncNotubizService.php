@@ -80,7 +80,7 @@ class SyncNotubizService
      * @var CacheService $cacheService.
      */
     private CacheService $cacheService;
-    
+
     private ObjectEntityService $gatewayOEService;
 
     /**
@@ -347,6 +347,7 @@ class SyncNotubizService
                         $result['bijlagen'] = array_merge($result['bijlagen'], $agenda_item['documents']);
                     }
                 }
+
                 $mappedResult = $this->mappingService->mapping($mapping, $result);
 
                 $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
@@ -373,7 +374,7 @@ class SyncNotubizService
                 $this->entityManager->persist($object);
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
-                
+
                 $renderedObject = $object->toArray();
                 $documents      = array_merge($documents, $renderedObject['bijlagen']);
             } catch (Exception $exception) {
@@ -383,7 +384,7 @@ class SyncNotubizService
         }//end foreach
 
         $this->entityManager->flush();
-        
+
         foreach ($documents as $document) {
             $documentData['document'] = $document;
             $documentData['source']   = $source->getReference();
