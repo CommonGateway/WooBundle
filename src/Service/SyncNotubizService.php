@@ -209,9 +209,9 @@ class SyncNotubizService
             'organisation_id' => $this->configuration['organisationId'],
             'version'         => ($this->configuration['notubizVersion'] ?? '1.21.1'),
             'date_to'         => $dateTo->format('Y-m-d H:i:s'),
-            'date_from'       => $dateFrom->format('Y-m-d H:i:s')
+            'date_from'       => $dateFrom->format('Y-m-d H:i:s'),
         ];
-        
+
         if (isset($this->configuration['gremiaIds']) === true) {
             $query['gremia_ids'] = $this->configuration['gremiaIds'];
         }
