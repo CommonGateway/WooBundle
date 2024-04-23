@@ -5,12 +5,12 @@
   "version": "0.0.1",
   "passTrough": false,
   "mapping": {
-    "_sourceId": "document_id",
-    "titel": "title",
-    "url": "url"
+    "_sourceId": "self.value",
+    "titel": "title.value",
+    "url": "url.value"
   },
   "cast": {
-    "titel": "unsetIfValue==title",
-    "url": "unsetIfValue==url"
+    "titel": "unsetIfValue==",
+    "url": "unsetIfValue=="
   }
 }

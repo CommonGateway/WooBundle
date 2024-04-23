@@ -5,6 +5,7 @@ namespace CommonGateway\WOOBundle\Service;
 use App\Entity\Entity as Schema;
 use App\Entity\Mapping;
 use App\Entity\Endpoint;
+use App\Service\ObjectEntityService;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
@@ -79,11 +80,8 @@ class SyncNotubizService
      * @var CacheService $cacheService.
      */
     private CacheService $cacheService;
-
-    /**
-     * @var FileService $fileService.
-     */
-    private FileService $fileService;
+    
+    private ObjectEntityService $gatewayOEService;
 
     /**
      * @var array
@@ -106,8 +104,8 @@ class SyncNotubizService
      * @param MappingService         $mappingService
      * @param LoggerInterface        $pluginLogger
      * @param ValidationService      $validationService
-     * @param FileService            $fileService
      * @param CacheService           $cacheService
+     * @param ObjectEntityService    $gatewayOEService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -117,8 +115,8 @@ class SyncNotubizService
         MappingService $mappingService,
         LoggerInterface $pluginLogger,
         ValidationService $validationService,
-        FileService $fileService,
-        CacheService $cacheService
+        CacheService $cacheService,
+        ObjectEntityService $gatewayOEService
     ) {
         $this->resourceService   = $resourceService;
         $this->callService       = $callService;
@@ -127,8 +125,8 @@ class SyncNotubizService
         $this->mappingService    = $mappingService;
         $this->logger            = $pluginLogger;
         $this->validationService = $validationService;
-        $this->fileService       = $fileService;
         $this->cacheService      = $cacheService;
+        $this->gatewayOEService  = $gatewayOEService;
 
     }//end __construct()
 
@@ -242,7 +240,7 @@ class SyncNotubizService
      * Fetches meeting object for an Event from NotuBiz.
      *
      * @param Source $source The source entity that provides the source of the result data.
-     * @param array  $result A Event result body from the NotuBiz API.
+     * @param array  $result An Event result body from the NotuBiz API.
      *
      * @return array|null The fetched meeting object.
      */
@@ -341,10 +339,15 @@ class SyncNotubizService
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
             try {
-                $result       = array_merge($result, $customFields);
-                $mappedResult = $this->mappingService->mapping($mapping, $result);
-
+                $result        = array_merge($result, $customFields);
                 $meetingObject = $this->fetchMeeting($source, $result);
+                if (isset($meetingObject['documents']) === true) {
+                    $result['bijlagen'] = $meetingObject['documents'];
+                    foreach ($meetingObject['agenda_items'] as $agenda_item) {
+                        $result['bijlagen'] = array_merge($result['bijlagen'], $agenda_item['documents']);
+                    }
+                }
+                $mappedResult = $this->mappingService->mapping($mapping, $result);
 
                 $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
                 if ($validationErrors !== null) {
@@ -370,12 +373,9 @@ class SyncNotubizService
                 $this->entityManager->persist($object);
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
-
-                // todo...
-                // - check of event_type_data een meetings url heeft, zo ja deze ophalen
-                // - alle documenten verzamelen die in deze meeting zitten
-                // - map gegevens van event naar woo object en voor documenten doe mapping indien nodig
-                // - objecten aanmaken
+                
+                $renderedObject = $object->toArray();
+                $documents      = array_merge($documents, $renderedObject['bijlagen']);
             } catch (Exception $exception) {
                 $this->logger->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
@@ -383,6 +383,12 @@ class SyncNotubizService
         }//end foreach
 
         $this->entityManager->flush();
+        
+        foreach ($documents as $document) {
+            $documentData['document'] = $document;
+            $documentData['source']   = $source->getReference();
+            $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
+        }
 
         $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
 
