@@ -389,7 +389,7 @@ class SyncNotubizService
             $documentData['document'] = $document;
             $documentData['source']   = $source->getReference();
             // Use the Notubiz url instead of Gateway /api/view-file endpoint for viewing / downloading the file.
-            $documentData['keepUrl']  = true;
+            $documentData['keepUrl'] = true;
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 
