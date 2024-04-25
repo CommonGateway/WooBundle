@@ -18,16 +18,177 @@ De OpenWoo Service versterkt de toegankelijkheid van overheidspublicaties volgen
 * Symfony 5 of hoger
 * Docker (voor containerisatie en lokale ontwikkeling)
 
-### Stap-voor-stap Installatiegids
+### Stap-voor-stap Installatiegids in een Common Gateway
 
 1. Clone het OpenWoo repository: `git clone https://github.com/OpenWoo/OpenWooService.git`
 2. Installeer afhankelijkheden met Composer: `composer install`
 3. Pas de `.env` bestanden aan met uw specifieke configuraties voor de database en andere diensten.
 4. Start de OpenWoo Service met Docker: `docker-compose up -d`
 
+### Docker container
+
+Er is ook een docker-compose.yml beschikbaar voor de OpenWoo service om bovenstaande snel op te bouwen.
+Deze file is beschikbaar in de root folder van deze repository. Om deze te draaien is docker benodigd en zet u de volgende stappen:
+
+1. Open een terminalvenster waarmee Docker kan worden gedraaid
+2. Navigeer naar de map waarin u de repository heeft gecloned
+3. Draai het commando `docker compose up`
+   1. Indien de image nog niet in docker beschikbaar is, zal de image opnieuw worden opgebouwd op basis van de latest versie van de [common gateway images](https://github.com/conductionnl/commonground-gateway).
+   2. Daarna worden de containers gestart (als de image wel beschikbaar is zal dit direct gebeuren)
+4. De admin omgeving komt beschikbaar op https://localhost:8000, de frontend op https://localhost:8080
+
+Op de admin omgeving kan worden ingelogd met de default credentials `username: no-reply@test.com, password: !ChangeMe!`. Daarmee kan dan de configuratie van de omgeving worden beïnvloed.
+
+Wijzigingen die in de code van deze repository (de map src) worden gedaan worden lokaal direct overgenomen. Changes in de configuratiebestanden in deze repository (Installation-folder) worden eveneens overgenomen, maar moeten om actief te worden in de lokale omgeving nog worden ingeladen met het commando `docker compose exec php bin/console commongateway:initialize`
+
 ## Gebruik
 
-Na de installatie kunt u de OpenWoo Service configureren om te beginnen met de automatische synchronisatie van uw organisatiebronnen naar Open Index. Raadpleeg de gedetailleerde documentatie voor verdere instructies en beste praktijken.
+Na de installatie kunt u de OpenWoo Service configureren om te beginnen met de automatische synchronisatie van uw organisatiebronnen naar Open Index.
+
+De synchronisaties werken aan de hand van een action in combinatie met een source. Hieronder wordt uitgelegd hoe deze ingevuld moeten worden, er zijn ook genoeg voorbeelden in de `/Installation/Action` en `/Installation/Source` folders.
+
+Er kan vanuit de volgende brontypen gesynchroniseerd worden:
+
+* Zaaksysteem
+* OpenWoo (en OpenConvenant)
+
+Voor elk brontypen verschilt de configuratie voor de source en action die ingevuld moet worden.
+
+### Source
+
+Een source heeft standaard een reference en een name nodig. De reference moet uniek zijn als bijvoorbeeld `https://commongateway.woo.nl/source/example.zaaksysteem.source.json`.
+
+#### Zaaksysteem
+
+Voor een source voor een zaaksysteem moeten de location ingevoerd worden. Dat is de volledige url van het zaaksysteem url, dus inclusief `https://` aan het begin en `/api` aan het eind.
+
+Ook moeten er headers geset worden met auth gegevens om te kunnen autoriseren voor het ophalen van documenten, hier een voorbeeld:
+`     "headers": {
+        "Accept": "*/*",
+        "API-Interface-ID": "{apiInterfaceId}",
+        "API-KEY": "{apiKey}",
+        "Content-Type": "application/json"
+    }  `
+
+Als je al de velden van je source goed ingevuld heb kan je hem aanzetten door `isEnabled` op true te zetten.
+
+De volledige POST van een goed ingevulde source voor het zaaksysteem ziet er als volgt uit:
+`
+{
+    "reference": "https://commongateway.woo.nl/source/example.zaaksysteem.source.json"
+    "name": "Jouw zaaksysteem",
+    "location": "https://{zaaksysteemUrl}/api",
+    "isEnabled": true,
+    "headers": {
+        "Accept": "*/*",
+        "API-Interface-ID": "{apiInterfaceId}",
+        "API-KEY": "{apiKey}",
+        "Content-Type": "application/json"
+    }
+}`
+
+#### OpenWoo en OpenConvenant
+
+Voor een source voor OpenWoo of OpenConvenant hoeft alleen de `location` geset te worden, inclusief `https://` aan het begin en `/wp-json` aan het eind (bijv: `https://{openWooUrl}/wp-json`).
+
+Als je wilt dat je source en dus synchronisatie aanstaat moet `isEnabled` op true staan.
+
+De volledige POST van een goed ingevulde source voor het OpenWoo of OpenConvenant ziet er als volgt uit:
+`
+{
+    "reference": "https://commongateway.woo.nl/source/example.openwoo.source.json"
+    "name": "Jouw OpenWoo",
+    "location": "https://{openWooUrl}/wp-json",
+    "isEnabled": true
+}`
+
+### Action
+
+Voor een voorbeeld van een action voor het zaaksysteem kan je kijken naar SyncEpeAction en als voor OpenWoo naar SyncBurenOpenWooAction. Voor OpenConvenant kan er gekeken worden naar SyncBurenOpenConvenantAction.
+
+Een action heeft standaard een reference en een name nodig. De reference moet uniek zijn als bijvoorbeeld `https://commongateway.nl/woo.SyncExampleAction.action.json`.
+
+Een action heeft ook een `listens` veld. Deze is in deze context meestal gelijk aan de `throws` van de algemene cronjob: `woo.default.listens`. Dit zorgt ervoor dat de action (synchronisatie) elke x minuten afgaat als in de cronjob ingesteld staat (standaard 10 minuten).
+
+Het `conditions` veld. Dit zijn extra regels waneer een action af mag gaan. In dit geval gaan de actions standaard op de `throws` van de cronjob af, ingesteld via het `listens` van de action, dus mag hier de `conditions` standaard op `{"==": [1,1]}`. Deze json logic betekend dat hij altijd afgaat (op het `listens` event).
+
+Het `class` veld. Dit geeft aan welke code uitgevoerd gaat worden voor deze action. Voor verschillende bronnen kan dit anders zijn:
+
+* zaaksysteem: `CommonGateway\\WOOBundle\\ActionHandler\\SyncXxllncCasesHandler`.
+* OpenWoo en OpenConvenant: `CommonGateway\\WOOBundle\\ActionHandler\\SyncOpenWooHandler`.
+
+De action heeft in de `configuratie` array een aantal velden wat geconfigureerd moet worden, sommige velden zijn verplicht en andere niet. Het verschilt ook vanuit wat voor type source (zaaksysteem, OpenWoo of OpenConvenant) gesynchroniseerd wordt:
+
+* oin (required): oin vanuit het oin register van Logius. Deze waarde wordt gebruikt zodat er later op gefiltered kan worden `?organsiatie.oin=value`.
+* portalUrl (required): Wordt gebruikt om de link naar de frontend mee te genereren.
+* source (required): De reference van de source, die je meegeeft aan je source bij het aanmaken daarvan (bijv: `https://commongateway.woo.nl/source/example.zaaksysteem.source.json`).
+* schema (required): Meestal de reference van het publicatie schema, voor bijna alle Woo synchronisaties wil je naar het publicatie schema mappen:` https://commongateway.nl/woo.publicatie.schema.json`
+* mapping (required): De mapping die gebruikt wordt om het van source object naar publicatie object te krijgen. Voor het zaaksysteem is dit `https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json` en voor OpenWoo is dit `https://commongateway.nl/mapping/woo.openWooToWoo.mapping.json`, voor OpenConvenant is het `https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json`.
+* organisatie (required): Textueele representatie van de organisatie waar de publicaties van zijn, meestal de gemeente naam in het geval van een gemeente.
+* zaaksysteemSearchEndpoint (required in geval zaaksysteem): Het endpoint wat gebruikt wordt om de publicaties op te halen in het zaaksysteem.
+* sourceEndpoint (required in geval OpenWoo of OpenConvenant): Endpoint waar publicaties vandaan gehaald worden.
+* fileEndpointReference (required in geval zaaksysteem): De reference naar het view-file endpoint voor de gesynchroniseerde documenten. Zorgt ervoor dat binnengehaalde documenten een endpoint hebben en bekeken kunnen worden. Standaard: `https://commongateway.nl/woo.ViewFile.endpoint.json` invoeren.
+* sourceType (required in geval OpenWoo of OpenConvenant): Niet verplicht in geval zaaksysteem, staat default op zaaksysteem. Anders voor OpenWoo of OpenCovenant 'OpenWoo' invoeren.
+* autoPublish: Niet verplicht, standaard op true. Als de wens is dat gesynchroniseerde publicaties niet meteen op te halen zijn, dan moet dit veld op false staan.
+* allowPDFOnly: Niet verplicht. Op true zetten als de wens is om alleen pdf documenten te synchroniseren en geen andere bestandstypen.
+
+Check altijd ook of de action aan staat met het `isEnabled` veld. Deze moet op true staan als er gesynchroniseerd moet worden.
+
+De POST van een action voor het zaaksysteem ziet er als volgt uit:
+`{
+    "reference": "https://commongateway.nl/woo.SyncExampleAction.action.json",
+    "name": "SyncExampleCasesAction",
+    "listens": [
+        "woo.default.listens"
+    ],
+    "conditions": {
+        "==": [
+            1,
+            1
+        ]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncXxllncCasesHandler",
+    "configuration": {
+        "oin": "{oinNummer}",
+        "portalUrl": "https://conductionnl.github.io/woo-website-example",
+        "source": "https://commongateway.woo.nl/source/example.zaaksysteem.source.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json",
+        "organisatie": "Example",
+        "zaaksysteemSearchEndpoint": "{zaaksysteemZoekEndpoint}",
+        "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json"
+    },
+    "isEnabled": true
+}`
+
+De POST van een action voor het OpenWoo of OpenConvenant ziet er als volgt uit:
+`{
+    "reference": "https://commongateway.nl/woo.SyncExampleOpenConvenantAction.action.json",
+    "name": "SyncExampleOpenConvenantAction",
+    "listens": [
+        "woo.default.listens"
+    ],
+    "conditions": {
+        "==": [
+            1,
+            1
+        ]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncOpenWooHandler",
+    "configuration": {
+        "oin": "{oinNummer}",
+        "portalUrl": "https://conductionnl.github.io/woo-website-example",
+        "source": "https://commongateway.woo.nl/source/example.openwoo.source.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.openConvenantToWoo.mapping.json",
+        "sourceType": "openWoo",
+        "organisatie": "Exanoke",
+        "sourceEndpoint": "{sourceEndpoint}"
+    },
+    "isEnabled": true
+}`
+
+Als de action en source aangemaakt/ingeregeld zijn en `isEnabled` staat op true. Zou de cronjob elke x minuten deze action afvuren en de synchrosatie aftrappen. Check de logs of om te kijken of deze de 1e keer goed gaat.
 
 ## Bijdragen
 

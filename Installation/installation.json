@@ -10,6 +10,17 @@
       "domains": [
         "localhost",
         "https://api.gateway.commonground.nu"
+      ],
+      "configuration": [
+        {
+            "https://commongateway.nl/woo.publicatie.endpoint.json": {
+                "in": {
+                    "query": {
+                        "mapping": "https://commongateway.nl/mapping/woo.publicatieQueryIn.mapping.json"
+                    }
+                }
+            }
+        }
       ]
     }
   ],
@@ -26,6 +37,7 @@
   "endpoints": {
     "schemas": [
       {
+        "$id": "https://commongateway.nl/woo.publicatie.endpoint.json",
         "reference": "https://commongateway.nl/woo.publicatie.schema.json",
         "path": "publicaties",
         "methods": [],
