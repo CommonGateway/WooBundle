@@ -164,14 +164,14 @@ class SyncOpenWooService
     /**
      * Checks if existing objects still exist in the source, if not deletes them.
      *
-     * @param array  $idsSynced ID's from objects we just synced from the source.
-     * @param Source $source    These objects belong to.
-     * @param string $schemaRef These objects belong to.
+     * @param array       $idsSynced ID's from objects we just synced from the source.
+     * @param Source      $source    These objects belong to.
+     * @param string      $schemaRef These objects belong to.
      * @param string|null $categorie The categorie these objects came from.
      *
      * @return int Count of deleted objects.
      */
-    public function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie = null): int
+    public function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie=null): int
     {
         // Get all existing sourceIds.
         $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
@@ -244,18 +244,18 @@ class SyncOpenWooService
         return $results;
 
     }//end fetchObjects()
-    
-    
+
+
     /**
      * Validates if the Configuration array has the required keys (with a value set).
      * Will check a default list of keys ('source','oin','organisatie','portalUrl','schema','mapping','sourceEndpoint'), more keys to check can be given.
      *
      * @param array|null $requiredKeys More keys to check besides the default keys, will default to empty array.
-     * @param string $handlerName The name of the handler we are checking these keys for, used in case of throwing error / creating a log.
+     * @param string     $handlerName  The name of the handler we are checking these keys for, used in case of throwing error / creating a log.
      *
      * @return bool True if all keys are present, else this will return false.
      */
-    public function validateHandlerConfig(array $configuration, ?array $requiredKeys = [], string $handlerName = 'syncOpenWooHandler'): bool
+    public function validateHandlerConfig(array $configuration, ?array $requiredKeys=[], string $handlerName='syncOpenWooHandler'): bool
     {
         $defaultRequired = [
             'source',
@@ -263,24 +263,25 @@ class SyncOpenWooService
             'organisatie',
             'portalUrl',
             'schema',
-            'mapping'
+            'mapping',
         ];
-        
+
         $requiredKeys = array_merge($defaultRequired, $requiredKeys);
-        
+
         foreach ($requiredKeys as $key) {
             if (isset($configuration[$key]) === false) {
                 $keys = implode(', ', array_slice($requiredKeys, 0, -1)).' or '.end($requiredKeys);
-                
+
                 isset($this->style) === true && $this->style->error("No $keys configured on this action, ending $handlerName");
                 $this->logger->error('No source, schema, mapping, oin, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending '.$handlerName, ['plugin' => 'common-gateway/woo-bundle']);
-                
+
                 return false;
             }
         }
-        
+
         return true;
-    }
+
+    }//end validateHandlerConfig()
 
 
     /**

@@ -80,12 +80,12 @@ class SyncNotubizService
      * @var CacheService $cacheService.
      */
     private CacheService $cacheService;
-    
+
     /**
      * @var ObjectEntityService
      */
     private ObjectEntityService $gatewayOEService;
-    
+
     /**
      * @var SyncOpenWooService
      */
@@ -259,8 +259,14 @@ class SyncNotubizService
         isset($this->style) === true && $this->style->success('syncNotubizHandler triggered');
         $this->logger->info('syncNotubizHandler triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if ($this->syncOpenWooService->validateHandlerConfig($this->configuration,
-                ['sourceEndpoint', 'organisationId'], 'syncNotubizHandler') === false
+        if ($this->syncOpenWooService->validateHandlerConfig(
+            $this->configuration,
+            [
+                'sourceEndpoint',
+                'organisationId',
+            ],
+            'syncNotubizHandler'
+        ) === false
         ) {
             return [];
         }
@@ -287,7 +293,7 @@ class SyncNotubizService
             return $this->data;
         }
 
-        $categorie = "Vergaderstukken decentrale overheden";
+        $categorie    = "Vergaderstukken decentrale overheden";
         $customFields = [
             'organisatie' => [
                 'oin'  => $this->configuration['oin'],

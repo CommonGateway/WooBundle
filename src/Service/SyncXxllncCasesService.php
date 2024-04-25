@@ -83,7 +83,7 @@ class SyncXxllncCasesService
      * @var FileService $fileService.
      */
     private FileService $fileService;
-    
+
     /**
      * @var SyncOpenWooService
      */
@@ -98,21 +98,21 @@ class SyncXxllncCasesService
      * @var array
      */
     private array $configuration;
-    
-    
+
+
     /**
      * SyncXxllncCasesService constructor.
      *
      * @param GatewayResourceService $resourceService
-     * @param CallService $callService
+     * @param CallService            $callService
      * @param SynchronizationService $syncService
      * @param EntityManagerInterface $entityManager
-     * @param MappingService $mappingService
-     * @param LoggerInterface $pluginLogger
-     * @param ValidationService $validationService
-     * @param FileService $fileService
-     * @param CacheService $cacheService
-     * @param SyncOpenWooService $syncOpenWooService
+     * @param MappingService         $mappingService
+     * @param LoggerInterface        $pluginLogger
+     * @param ValidationService      $validationService
+     * @param FileService            $fileService
+     * @param CacheService           $cacheService
+     * @param SyncOpenWooService     $syncOpenWooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -315,8 +315,14 @@ class SyncXxllncCasesService
         isset($this->style) === true && $this->style->success('SyncXxllncCasesService triggered');
         $this->logger->info('SyncXxllncCasesService triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if ($this->syncOpenWooService->validateHandlerConfig($this->configuration,
-                ['fileEndpointReference', 'zaaksysteemSearchEndpoint'], 'syncXxllncCasesHandler') === false
+        if ($this->syncOpenWooService->validateHandlerConfig(
+            $this->configuration,
+            [
+                'fileEndpointReference',
+                'zaaksysteemSearchEndpoint',
+            ],
+            'syncXxllncCasesHandler'
+        ) === false
         ) {
             return [];
         }
