@@ -25,7 +25,7 @@ use Exception;
 /**
  * Service responsible for synchronizing xxllnc cases to woo objects.
  *
- * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>.
+ * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>, Wilco Louwerse <wilco@conduction.nl>.
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
  * @package  CommonGateway\WOOBundle
@@ -83,6 +83,11 @@ class SyncXxllncCasesService
      * @var FileService $fileService.
      */
     private FileService $fileService;
+    
+    /**
+     * @var SyncOpenWooService
+     */
+    private SyncOpenWooService $syncOpenWooService;
 
     /**
      * @var array
@@ -93,19 +98,21 @@ class SyncXxllncCasesService
      * @var array
      */
     private array $configuration;
-
-
+    
+    
     /**
      * SyncXxllncCasesService constructor.
      *
      * @param GatewayResourceService $resourceService
-     * @param CallService            $callService
+     * @param CallService $callService
      * @param SynchronizationService $syncService
      * @param EntityManagerInterface $entityManager
-     * @param MappingService         $mappingService
-     * @param LoggerInterface        $pluginLogger
-     * @param ValidationService      $validationService
-     * @param FileService            $fileService
+     * @param MappingService $mappingService
+     * @param LoggerInterface $pluginLogger
+     * @param ValidationService $validationService
+     * @param FileService $fileService
+     * @param CacheService $cacheService
+     * @param SyncOpenWooService $syncOpenWooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -116,17 +123,19 @@ class SyncXxllncCasesService
         LoggerInterface $pluginLogger,
         ValidationService $validationService,
         FileService $fileService,
-        CacheService $cacheService
+        CacheService $cacheService,
+        SyncOpenWooService $syncOpenWooService
     ) {
-        $this->resourceService   = $resourceService;
-        $this->callService       = $callService;
-        $this->syncService       = $syncService;
-        $this->entityManager     = $entityManager;
-        $this->mappingService    = $mappingService;
-        $this->logger            = $pluginLogger;
-        $this->validationService = $validationService;
-        $this->fileService       = $fileService;
-        $this->cacheService      = $cacheService;
+        $this->resourceService    = $resourceService;
+        $this->callService        = $callService;
+        $this->syncService        = $syncService;
+        $this->entityManager      = $entityManager;
+        $this->mappingService     = $mappingService;
+        $this->logger             = $pluginLogger;
+        $this->validationService  = $validationService;
+        $this->fileService        = $fileService;
+        $this->cacheService       = $cacheService;
+        $this->syncOpenWooService = $syncOpenWooService;
 
     }//end __construct()
 
@@ -147,47 +156,6 @@ class SyncXxllncCasesService
         return $this;
 
     }//end setStyle()
-
-
-    /**
-     * todo Duplicate function (SyncOpenWooService & SyncNotubizService)
-     * Checks if existing objects still exist in the source, if not deletes them.
-     *
-     * @param array  $idsSynced ID's from objects we just synced from the source.
-     * @param Source $source    These objects belong to.
-     * @param string $schemaRef These objects belong to.
-     *
-     * @return int Count of deleted objects.
-     */
-    private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef): int
-    {
-        // Get all existing sourceIds.
-        $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
-        $existingSourceIds = [];
-        $existingObjects   = [];
-        foreach ($source->getSynchronizations() as $synchronization) {
-            if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null) {
-                $existingSourceIds[] = $synchronization->getSourceId();
-                $existingObjects[]   = $synchronization->getObject();
-            }
-        }
-
-        // Check if existing sourceIds are in the array of new synced sourceIds.
-        $objectIdsToDelete = array_diff($existingSourceIds, $idsSynced);
-
-        // If not it means the object does not exist in the source anymore and should be deleted here.
-        $deletedObjectsCount = 0;
-        foreach ($objectIdsToDelete as $key => $id) {
-            $this->logger->info("Object $id does not exist at the source, deleting.", ['plugin' => 'common-gateway/woo-bundle']);
-            $this->entityManager->remove($existingObjects[$key]);
-            $deletedObjectsCount++;
-        }
-
-        $this->entityManager->flush();
-
-        return $deletedObjectsCount;
-
-    }//end deleteNonExistingObjects()
 
 
     /**
@@ -347,20 +315,11 @@ class SyncXxllncCasesService
         isset($this->style) === true && $this->style->success('SyncXxllncCasesService triggered');
         $this->logger->info('SyncXxllncCasesService triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if (isset($this->configuration['source']) === false
-            || isset($this->configuration['oin']) === false
-            || isset($this->configuration['organisatie']) === false
-            || isset($this->configuration['portalUrl']) === false
-            || isset($this->configuration['schema']) === false
-            || isset($this->configuration['mapping']) === false
-            || isset($this->configuration['fileEndpointReference']) === false
-            || isset($this->configuration['zaaksysteemSearchEndpoint']) === false
+        if ($this->syncOpenWooService->validateHandlerConfig($this->configuration,
+                ['fileEndpointReference', 'zaaksysteemSearchEndpoint'], 'syncXxllncCasesHandler') === false
         ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler');
-            $this->logger->error('No source, schema, mapping, oin, organisatie, fileEndpointReference, zaaksysteemSearchEndpoint or portalUrl configured on this action, ending syncXxllncCasesHandler', ['plugin' => 'common-gateway/woo-bundle']);
-
             return [];
-        }//end if
+        }
 
         $fileEndpoint     = $this->resourceService->getEndpoint($this->configuration['fileEndpointReference'], 'common-gateway/woo-bundle');
         $source           = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
@@ -439,7 +398,7 @@ class SyncXxllncCasesService
 
         $this->entityManager->flush();
 
-        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        $deletedObjectsCount = $this->syncOpenWooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 

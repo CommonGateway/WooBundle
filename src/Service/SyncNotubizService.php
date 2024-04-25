@@ -80,8 +80,16 @@ class SyncNotubizService
      * @var CacheService $cacheService.
      */
     private CacheService $cacheService;
-
+    
+    /**
+     * @var ObjectEntityService
+     */
     private ObjectEntityService $gatewayOEService;
+    
+    /**
+     * @var SyncOpenWooService
+     */
+    private SyncOpenWooService $syncOpenWooService;
 
     /**
      * @var array
@@ -106,6 +114,7 @@ class SyncNotubizService
      * @param ValidationService      $validationService
      * @param CacheService           $cacheService
      * @param ObjectEntityService    $gatewayOEService
+     * @param SyncOpenWooService     $syncOpenWooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -116,17 +125,19 @@ class SyncNotubizService
         LoggerInterface $pluginLogger,
         ValidationService $validationService,
         CacheService $cacheService,
-        ObjectEntityService $gatewayOEService
+        ObjectEntityService $gatewayOEService,
+        SyncOpenWooService $syncOpenWooService
     ) {
-        $this->resourceService   = $resourceService;
-        $this->callService       = $callService;
-        $this->syncService       = $syncService;
-        $this->entityManager     = $entityManager;
-        $this->mappingService    = $mappingService;
-        $this->logger            = $pluginLogger;
-        $this->validationService = $validationService;
-        $this->cacheService      = $cacheService;
-        $this->gatewayOEService  = $gatewayOEService;
+        $this->resourceService    = $resourceService;
+        $this->callService        = $callService;
+        $this->syncService        = $syncService;
+        $this->entityManager      = $entityManager;
+        $this->mappingService     = $mappingService;
+        $this->logger             = $pluginLogger;
+        $this->validationService  = $validationService;
+        $this->cacheService       = $cacheService;
+        $this->gatewayOEService   = $gatewayOEService;
+        $this->syncOpenWooService = $syncOpenWooService;
 
     }//end __construct()
 
@@ -145,47 +156,6 @@ class SyncNotubizService
         return $this;
 
     }//end setStyle()
-
-
-    /**
-     * todo Duplicate function (SyncOpenWooService & SyncXxllncCasesService)
-     * Checks if existing objects still exist in the source, if not deletes them.
-     *
-     * @param array  $idsSynced ID's from objects we just synced from the source.
-     * @param Source $source    These objects belong to.
-     * @param string $schemaRef These objects belong to.
-     *
-     * @return int Count of deleted objects.
-     */
-    private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef): int
-    {
-        // Get all existing sourceIds.
-        $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
-        $existingSourceIds = [];
-        $existingObjects   = [];
-        foreach ($source->getSynchronizations() as $synchronization) {
-            if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null) {
-                $existingSourceIds[] = $synchronization->getSourceId();
-                $existingObjects[]   = $synchronization->getObject();
-            }
-        }
-
-        // Check if existing sourceIds are in the array of new synced sourceIds.
-        $objectIdsToDelete = array_diff($existingSourceIds, $idsSynced);
-
-        // If not it means the object does not exist in the source anymore and should be deleted here.
-        $deletedObjectsCount = 0;
-        foreach ($objectIdsToDelete as $key => $id) {
-            $this->logger->info("Object $id does not exist at the source, deleting.", ['plugin' => 'common-gateway/woo-bundle']);
-            $this->entityManager->remove($existingObjects[$key]);
-            $deletedObjectsCount++;
-        }
-
-        $this->entityManager->flush();
-
-        return $deletedObjectsCount;
-
-    }//end deleteNonExistingObjects()
 
 
     /**
@@ -286,22 +256,14 @@ class SyncNotubizService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        isset($this->style) === true && $this->style->success('SyncNotubizService triggered');
-        $this->logger->info('SyncNotubizService triggered', ['plugin' => 'common-gateway/woo-bundle']);
+        isset($this->style) === true && $this->style->success('syncNotubizHandler triggered');
+        $this->logger->info('syncNotubizHandler triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if (isset($this->configuration['source']) === false
-            || isset($this->configuration['organisationId']) === false
-            || isset($this->configuration['organisatie']) === false
-            || isset($this->configuration['portalUrl']) === false
-            || isset($this->configuration['schema']) === false
-            || isset($this->configuration['mapping']) === false
-            || isset($this->configuration['sourceEndpoint']) === false
+        if ($this->syncOpenWooService->validateHandlerConfig($this->configuration,
+                ['sourceEndpoint', 'organisationId'], 'syncNotubizHandler') === false
         ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler');
-            $this->logger->error('No source, schema, mapping, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncNotubizHandler', ['plugin' => 'common-gateway/woo-bundle']);
-
             return [];
-        }//end if
+        }
 
         $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
         $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
@@ -325,12 +287,13 @@ class SyncNotubizService
             return $this->data;
         }
 
+        $categorie = "Vergaderstukken decentrale overheden";
         $customFields = [
             'organisatie' => [
                 'oin'  => $this->configuration['oin'],
                 'naam' => $this->configuration['organisatie'],
             ],
-            'categorie'   => "Vergaderstukken decentrale overheden",
+            'categorie'   => $categorie,
             // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
             'autoPublish' => $this->configuration['autoPublish'] ?? true,
         ];
@@ -396,7 +359,7 @@ class SyncNotubizService
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 
-        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        $deletedObjectsCount = $this->syncOpenWooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
