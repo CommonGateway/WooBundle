@@ -94,6 +94,7 @@ class SimCrawlerService
         $this->mappingService         = $mappingService;
         $this->synchronizationService = $synchronizationService;
         $this->logger                 = $pluginLogger;
+
     }//end __construct()
 
 
@@ -145,7 +146,7 @@ class SimCrawlerService
         foreach ($pages as $page) {
             $parsedUrl = parse_url($page);
 
-            try {    
+            try {
                 $metaDataResponse = $this->callService->call($source, $configuration['sourceEndpoint'], 'GET', ['query' => ['path' => $parsedUrl['path']]]);
                 $metadata         = $this->callService->decodeResponse($source, $metaDataResponse);
             } catch (Exception $e) {
