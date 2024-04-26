@@ -12,6 +12,7 @@ COPY src vendor/common-gateway/woo-bundle/src
 COPY composer.json vendor/common-gateway/woo-bundle/composer.json
 
 RUN composer install --no-scripts --no-plugins
+RUN chown -R commonground-gateway:commonground-gateway public
 
 USER commonground-gateway
 
