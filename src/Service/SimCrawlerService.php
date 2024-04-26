@@ -18,6 +18,9 @@ use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Psr\Log\LoggerInterface;
+use Exception;
 
 class SimCrawlerService
 {
@@ -57,6 +60,16 @@ class SimCrawlerService
      */
     private SynchronizationService $synchronizationService;
 
+    /**
+     * @var SymfonyStyle|null
+     */
+    private ?SymfonyStyle $style = null;
+
+    /**
+     * @var LoggerInterface $logger.
+     */
+    private LoggerInterface $logger;
+
 
     /**
      * Service constructor.
@@ -72,15 +85,35 @@ class SimCrawlerService
         EntityManagerInterface $entityManager,
         GatewayResourceService $resourceService,
         MappingService $mappingService,
-        SynchronizationService $synchronizationService
+        SynchronizationService $synchronizationService,
+        LoggerInterface $pluginLogger,
     ) {
         $this->callService            = $callService;
         $this->entityManager          = $entityManager;
         $this->resourceService        = $resourceService;
         $this->mappingService         = $mappingService;
         $this->synchronizationService = $synchronizationService;
+        $this->logger                 = $pluginLogger;
 
     }//end __construct()
+
+
+    /**
+     * Set symfony style in order to output to the console.
+     *
+     * @param SymfonyStyle $style
+     *
+     * @return self
+     *
+     * @todo change to monolog
+     */
+    public function setStyle(SymfonyStyle $style): self
+    {
+        $this->style = $style;
+
+        return $this;
+
+    }//end setStyle()
 
 
     /**
@@ -98,16 +131,31 @@ class SimCrawlerService
         $sitemapMapping = $this->resourceService->getMapping($configuration['sitemapMapping'], 'common-gateway/woo-bundle');
         $pageMapping    = $this->resourceService->getMapping($configuration['pageMapping'], 'common-gateway/woo-bundle');
 
-        $sitemapResponse = $this->callService->call($source, '/sitemap.xml');
-        $sitemap         = $this->callService->decodeResponse($source, $sitemapResponse, 'application/xml');
+        try {
+            $sitemapResponse = $this->callService->call($source, '/sitemap.xml');
+            $sitemap         = $this->callService->decodeResponse($source, $sitemapResponse, 'application/xml');
+        } catch (Exception $e) {
+            isset($this->style) === true && $this->style->error('Something went wrong fetching '.$source->getLocation().$configuration['sourceEndpoint'].': '.$e->getMessage());
+            $this->logger->error('Something went wrong fetching '.$source->getLocation().$configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+
+            return [];
+        }
 
         $pages = $this->mappingService->mapping($sitemapMapping, $sitemap)['pages'];
 
         foreach ($pages as $page) {
             $parsedUrl = parse_url($page);
 
-            $metaDataResponse = $this->callService->call($source, $configuration['sourceEndpoint'], 'GET', ['query' => ['path' => $parsedUrl['path']]]);
-            $metadata         = $this->callService->decodeResponse($source, $metaDataResponse);
+            try {
+                $metaDataResponse = $this->callService->call($source, $configuration['sourceEndpoint'], 'GET', ['query' => ['path' => $parsedUrl['path']]]);
+                $metadata         = $this->callService->decodeResponse($source, $metaDataResponse);
+            } catch (Exception $e) {
+                isset($this->style) === true && $this->style->error('Something went wrong fetching '.$source->getLocation().$configuration['sourceEndpoint'].': '.$e->getMessage());
+                $this->logger->error('Something went wrong fetching '.$source->getLocation().$configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+
+                continue;
+            }
+
             $metadata['site'] = $source->getLocation();
 
             $wooArray = $this->mappingService->mapping($pageMapping, $metadata);
