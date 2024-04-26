@@ -16,13 +16,13 @@
     }
   ],
   "paths": {
-    "/api/publications": {
+    "/api/publicaties": {
       "get": {
         "tags": [
           "Publicaties"
         ],
         "summary": "Retrieve publication collection",
-        "operationId": "get-api-publications",
+        "operationId": "get-api-publicaties",
         "parameters": [
           {
             "name": "oin.organisation",
@@ -67,7 +67,7 @@
           "Publicaties"
         ],
         "summary": "Create a publication",
-        "operationId": "post-api-publications",
+        "operationId": "post-api-publicaties",
         "requestBody": {
           "content": {
             "application/json": {
@@ -102,7 +102,7 @@
           "Publicaties"
         ],
         "summary": "Retrieve a publication",
-        "operationId": "get-api-publications-id",
+        "operationId": "get-api-publicaties-id",
         "parameters": [
           {
             "name": "id",
@@ -1107,48 +1107,7 @@
         "type": "object",
         "title": "Publicatie",
         "properties": {
-          "themas": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/Thema"
-            }
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/Metadata"
-          },
-          "bijlagen": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Bijlage"
-            }
-          },
-          "organisatie": {
-            "$ref": "#/components/schemas/Organisatie"
-          },
-          "publicatiedatum": {
-            "type": "string",
-            "nullable": true,
-            "description": "Publicatiedatum van een Woo object is nooit in de toekomst."
-          },
-          "portalUrl": {
-            "type": "string",
-            "nullable": true,
-            "format": "url"
-          },
-          "gepubliceerd": {
-            "type": "boolean",
-            "default": true
-          },
-          "categorie": {
-            "type": "string",
-            "nullable": true
-          },
-          "samenvatting": {
-            "type": "string",
-            "nullable": true
-          },
-          "beschrijving": {
+          "id": {
             "type": "string",
             "nullable": true
           },
@@ -1156,35 +1115,130 @@
             "type": "string",
             "nullable": true
           },
+          "beschrijving": {
+            "type": "string",
+            "nullable": true
+          },
+          "samenvatting": {
+            "type": "string",
+            "nullable": true
+          },
+          "categorie": {
+            "type": "string",
+            "nullable": true
+          },
+          "gepubliceerd": {
+            "type": "boolean",
+            "default": true
+          },
+          "portalUrl": {
+            "type": "string",
+            "nullable": true,
+            "format": "url"
+          },
+          "publicatiedatum": {
+            "type": "string",
+            "nullable": true,
+            "description": "Publicatiedatum van een Woo object is nooit in de toekomst."
+          },
+          "organisatie": {
+            "$ref": "#/components/schemas/Organisatie"
+          },
+          "bijlagen": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bijlage"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "themas": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Thema"
+            }
+          }
+        },
+        "required": [
+          "categorie",
+          "publicatiedatum"
+        ]
+      },
+      "Organisatie": {
+        "type": "object",
+        "title": "Organisatie",
+        "properties": {
           "id": {
             "type": "string",
             "nullable": true
+          },
+          "uuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "oin": {
+            "type": "string",
+            "nullable": true
+          },
+          "tooi": {
+            "type": "string",
+            "nullable": true
+          },
+          "rsin": {
+            "type": "string",
+            "nullable": true
+          },
+          "naam": {
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
-          "publicatiedatum",
-          "categorie"
+          "naam"
         ]
       },
-      "Thema": {
+      "Bijlage": {
         "type": "object",
-        "title": "Thema",
+        "title": "Bijlage",
         "properties": {
-          "hoofdthema": {
+          "id": {
             "type": "string",
             "nullable": true
           },
-          "subthema": {
+          "titel": {
             "type": "string",
             "nullable": true
           },
-          "aanvullendThema": {
+          "url": {
+            "type": "string",
+            "nullable": true,
+            "format": "url"
+          },
+          "documentText": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "categorie": {
+            "type": "string",
+            "nullable": true
+          },
+          "extension": {
             "type": "string",
             "nullable": true
           }
         },
         "required": [
-          "hoofdthema"
+          "titel"
         ]
       },
       "Metadata": {
@@ -1192,9 +1246,6 @@
         "title": "Metadata",
         "description": "Metadata object for Woo object",
         "properties": {
-          "verzoek": {
-            "$ref": "#/components/schemas/Verzoek"
-          },
           "volgnummer": {
             "type": "string",
             "nullable": true
@@ -1203,6 +1254,9 @@
             "type": "string",
             "nullable": true,
             "description": "format: Y-m-d"
+          },
+          "verzoek": {
+            "$ref": "#/components/schemas/Verzoek"
           }
         }
       },
@@ -1238,77 +1292,25 @@
           }
         }
       },
-      "Bijlage": {
+      "Thema": {
         "type": "object",
-        "title": "Bijlage",
+        "title": "Thema",
         "properties": {
-          "id": {
+          "hoofdthema": {
             "type": "string",
             "nullable": true
           },
-          "type": {
+          "subthema": {
             "type": "string",
             "nullable": true
           },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "tijdstipLaatsteWijziging": {
-            "type": "string",
-            "nullable": true,
-            "description": "format: Y-m-d\\TH:i:s",
-            "format": "datetime"
-          },
-          "titel": {
-            "type": "string",
-            "nullable": true
-          },
-          "label": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
-            "type": "string",
-            "nullable": true,
-            "format": "url"
-          }
-        },
-        "required": [
-          "titel"
-        ]
-      },
-      "Organisatie": {
-        "type": "object",
-        "title": "Organisatie",
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "uuid": {
-            "type": "string",
-            "nullable": true
-          },
-          "oin": {
-            "type": "string",
-            "nullable": true
-          },
-          "tooi": {
-            "type": "string",
-            "nullable": true
-          },
-          "rsin": {
-            "type": "string",
-            "nullable": true
-          },
-          "naam": {
+          "aanvullendThema": {
             "type": "string",
             "nullable": true
           }
         },
         "required": [
-          "naam"
+          "hoofdthema"
         ]
       }
     }
