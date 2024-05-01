@@ -2,7 +2,7 @@
   "title": "Metadata",
   "$id": "https://commongateway.nl/woo.metadata.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "object",
   "description": "Metadata object for Woo object",
   "required": [],
@@ -17,7 +17,8 @@
     "verzoek": {
         "type": "object",
         "$ref": "https://commongateway.nl/woo.verzoek.schema.json",
-        "format": "json"
+        "format": "json",
+        "cascadeDelete": true
     }
   }
 }
