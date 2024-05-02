@@ -4,6 +4,7 @@ namespace CommonGateway\WOOBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\File;
+use App\Entity\Gateway as Source;
 use App\Entity\Mapping;
 use App\Entity\ObjectEntity;
 use App\Service\ObjectEntityService;
@@ -18,10 +19,9 @@ use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Psr\Log\LoggerInterface;
-use App\Entity\Gateway as Source;
 use Exception;
 use Smalot\PdfParser\Parser;
 
