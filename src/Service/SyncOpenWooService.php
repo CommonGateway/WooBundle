@@ -220,8 +220,8 @@ class SyncOpenWooService
             $response        = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET', ['query' => ['page' => $page]]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
         } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
-            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('Something went wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
+            $this->logger->error('Something went wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }
@@ -336,6 +336,7 @@ class SyncOpenWooService
         $results = $this->fetchObjects($source, 1, [], $categorie);
         if (empty($results) === true) {
             $this->logger->info('No results found, ending SyncOpenWooService', ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->info('No results found, ending SyncOpenWooService');
             return $this->data;
         }
 
@@ -397,6 +398,8 @@ class SyncOpenWooService
                 }
             } catch (Exception $exception) {
                 $this->logger->error("Something went wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+                isset($this->style) === true && $this->style->warning("Something went wrong synchronizing sourceId: {$result['UUID']} with error: {$exception->getMessage()}");
+
                 continue;
             }//end try
         }//end foreach

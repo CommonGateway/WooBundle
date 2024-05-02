@@ -278,8 +278,8 @@ class SyncXxllncCasesService
             $response        = $this->callService->call($source, $this->configuration['zaaksysteemSearchEndpoint'], 'GET', ['query' => ['zapi_page' => $page]]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
         } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
-            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('Something went wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
+            $this->logger->error('Something went wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }
