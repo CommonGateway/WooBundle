@@ -6,7 +6,7 @@
   "passTrough": false,
   "mapping": {
     "_sourceId": "{{ self.value|split('/')|last }}",
-    "titel": "{% set versionId = 0 %}{% set filename = '' %}{% for version in versions %}{% if version.id > versionId %}{% set versionId = version.id %}{% set filename = version.file_name %}{% endfor %} {{filename}}",
+    "titel": "{% set versionId = 0 %}{% set filename = '' %}{% for version in versions %}{% if version.id > versionId %}{% set versionId = version.id %}{% set filename = version.file_name %}{% endif %}{% endfor %}{{filename}}",
     "url": "url.value"
   },
   "cast": {
