@@ -91,7 +91,7 @@ class SyncNotubizService
      * @var SyncOpenWooService
      */
     private SyncOpenWooService $syncOpenWooService;
-    
+
     /**
      * @var HydrationService
      */
@@ -214,8 +214,8 @@ class SyncNotubizService
         return $results;
 
     }//end fetchObjects()
-    
-    
+
+
     /**
      * Gets the custom fields for creating a publication object.
      *
@@ -234,7 +234,8 @@ class SyncNotubizService
             // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
             'autoPublish' => $this->configuration['autoPublish'] ?? true,
         ];
-    }
+
+    }//end getCustomFields()
 
 
     /**
@@ -267,15 +268,15 @@ class SyncNotubizService
         return $decodedResponse['meeting'];
 
     }//end fetchMeeting()
-    
-    
+
+
     /**
      * Syncs a single result fromt the Notubiz source.
      *
-     * @param array $meetingObject
-     * @param Source $source The source used.
-     * @param Mapping $mapping The mapping we need to map the result.
-     * @param Schema $schema The schema we are going to map the result to.
+     * @param array   $meetingObject
+     * @param Source  $source        The source used.
+     * @param Mapping $mapping       The mapping we need to map the result.
+     * @param Schema  $schema        The schema we are going to map the result to.
      *
      * @return string|ObjectEntity|array|null
      */
@@ -287,18 +288,18 @@ class SyncNotubizService
                 $result['bijlagen'] = array_merge($result['bijlagen'], $agenda_item['documents']);
             }
         }
-        
+
         $mappedResult = $this->mappingService->mapping($mapping, $result);
-        
+
         $validationErrors = $this->validationService->validateData($mappedResult, $schema, 'POST');
         if ($validationErrors !== null) {
             $validationErrors = implode(', ', $validationErrors);
             $this->logger->warning("SyncNotubiz validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
             isset($this->style) === true && $this->style->warning("SyncNotubiz validation errors: $validationErrors");
-            
+
             return 'continue';
         }
-        
+
         return $this->hydrationService->searchAndReplaceSynchronizations(
             $mappedResult,
             $source,
@@ -306,14 +307,15 @@ class SyncNotubizService
             true,
             true
         );
-    }
-    
-    
+
+    }//end syncResult()
+
+
     /**
      * Dispatches an event for creating all files / bijlagen.
      *
-     * @param array $documents All the documents to create files for.
-     * @param Source $source The sources used to get the documents.
+     * @param array  $documents All the documents to create files for.
+     * @param Source $source    The sources used to get the documents.
      *
      * @return void
      */
@@ -324,9 +326,10 @@ class SyncNotubizService
             $documentData['source']   = $source->getReference();
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
-    }
-    
-    
+
+    }//end handleDocuments()
+
+
     /**
      * Builds the response in the data array and returns it.
      *
@@ -335,23 +338,24 @@ class SyncNotubizService
     private function returnResponse(array $responseItems, Source $source, int $deletedObjectsCount): array
     {
         $this->data['response'] = new Response(json_encode($responseItems), 200);
-        
+
         $countItems = count($responseItems);
         $logMessage = "Synchronized $countItems events to woo objects for ".$source->getName()." and deleted $deletedObjectsCount objects";
         isset($this->style) === true && $this->style->success($logMessage);
         $this->logger->info($logMessage, ['plugin' => 'common-gateway/woo-bundle']);
-        
+
         return $this->data;
-    }
-    
-    
+
+    }//end returnResponse()
+
+
     /**
      * Handles syncing the results we got from the Notubiz source to the gateway.
      *
-     * @param array $results The array of results form the source.
-     * @param Source $source The source used.
+     * @param array   $results The array of results form the source.
+     * @param Source  $source  The source used.
      * @param Mapping $mapping The mapping we need to map the results.
-     * @param Schema $schema The schema we are going to map the results to.
+     * @param Schema  $schema  The schema we are going to map the results to.
      *
      * @return array
      */
@@ -359,27 +363,27 @@ class SyncNotubizService
     {
         $categorie    = "Vergaderstukken decentrale overheden";
         $customFields = $this->getCustomFields($categorie);
-        
+
         $documents = $idsSynced = $responseItems = [];
         foreach ($results as $result) {
             try {
                 $result        = array_merge($result, $customFields);
                 $meetingObject = $this->fetchMeeting($source, $result);
-                
+
                 $object = $this->syncResult($meetingObject, $source, $mapping, $schema);
                 if ($object === 'continue') {
                     continue;
                 }
-                
+
                 // Get all synced sourceIds.
                 if (empty($object->getSynchronizations()) === false && $object->getSynchronizations()[0]->getSourceId() !== null) {
                     $idsSynced[] = $object->getSynchronizations()[0]->getSourceId();
                 }
-                
+
                 $this->entityManager->persist($object);
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
-                
+
                 $renderedObject = $object->toArray();
                 $documents      = array_merge($documents, $renderedObject['bijlagen']);
             } catch (Exception $exception) {
@@ -387,15 +391,16 @@ class SyncNotubizService
                 continue;
             }//end try
         }//end foreach
-        
+
         $this->entityManager->flush();
-        
+
         $this->handleDocuments($documents, $source);
-        
+
         $deletedObjectsCount = $this->syncOpenWooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
-        
+
         return $this->returnResponse($responseItems, $source, $deletedObjectsCount);
-    }
+
+    }//end handleResults()
 
 
     /**
@@ -449,7 +454,7 @@ class SyncNotubizService
             $this->logger->info('No results found, ending syncNotubizHandler', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
-        
+
         return $this->handleResults($results, $source, $schema, $mapping);
 
     }//end syncNotubizHandler()
