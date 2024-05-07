@@ -268,16 +268,16 @@ class SyncNotubizService
         return $decodedResponse['meeting'];
 
     }//end fetchMeeting()
-    
-    
+
+
     /**
      * Syncs a single result from the Notubiz source.
      *
-     * @param array $meetingObject
-     * @param Source $source The source used.
-     * @param Mapping $mapping The mapping we need to map the result.
-     * @param Schema $schema The schema we are going to map the result to.
-     * @param array $result The result array to map and sync
+     * @param array   $meetingObject
+     * @param Source  $source        The source used.
+     * @param Mapping $mapping       The mapping we need to map the result.
+     * @param Schema  $schema        The schema we are going to map the result to.
+     * @param array   $result        The result array to map and sync
      *
      * @return string|ObjectEntity|array|null
      */
