@@ -208,13 +208,13 @@ class SyncOpenWooService
      * Fetches objects from openWoo with pagination.
      *
      * @param Source   $source    The source entity that provides the source of the result data.
+     * @param string $categorie The type of object we are fetching.
      * @param int|null $page      The page we are fetching, increments each iteration.
      * @param array    $results   The results from xxllnc api we merge each iteration.
-     * @param string   $categorie The type of object we are fetching.
      *
      * @return array The fetched objects.
      */
-    private function fetchObjects(Source $source, ?int $page=1, array $results=[], string $categorie)
+    private function fetchObjects(Source $source, string $categorie, ?int $page=1, array $results=[])
     {
         try {
             $response        = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET', ['query' => ['page' => $page]]);
@@ -238,7 +238,7 @@ class SyncOpenWooService
         // Pagination xxllnc.
         if (isset($decodedResponse['pagination']) === true && $decodedResponse['pagination']['pages']['current'] < $decodedResponse['pagination']['pages']['total']) {
             $page++;
-            $results = $this->fetchObjects($source, $page, $results, $categorie);
+            $results = $this->fetchObjects($source, $categorie, $page, $results);
         }
 
         return $results;
@@ -333,7 +333,7 @@ class SyncOpenWooService
         isset($this->style) === true && $this->style->info("Fetching objects from {$source->getLocation()}");
         $this->logger->info("Fetching objects from {$source->getLocation()}", ['plugin' => 'common-gateway/woo-bundle']);
 
-        $results = $this->fetchObjects($source, 1, [], $categorie);
+        $results = $this->fetchObjects($source, $categorie);
         if (empty($results) === true) {
             $this->logger->info('No results found, ending SyncOpenWooService', ['plugin' => 'common-gateway/woo-bundle']);
             isset($this->style) === true && $this->style->info('No results found, ending SyncOpenWooService');
