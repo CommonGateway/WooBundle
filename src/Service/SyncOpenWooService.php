@@ -208,7 +208,7 @@ class SyncOpenWooService
      * Fetches objects from openWoo with pagination.
      *
      * @param Source   $source    The source entity that provides the source of the result data.
-     * @param string $categorie The type of object we are fetching.
+     * @param string   $categorie The type of object we are fetching.
      * @param int|null $page      The page we are fetching, increments each iteration.
      * @param array    $results   The results from xxllnc api we merge each iteration.
      *
