@@ -1,7 +1,7 @@
 publiccodeYmlVersion: '0.1'
-name: WooBundle
+name: Open Woo Service
 applicationSuite: null
-url: https://github.com/CommonGateway/WooBundle
+url: https://openwoo.openservices.online/
 landingURL: null
 isBasedOn: https://github.com/CommonGateway/PetstoreBundle
 softwareVersion: null
@@ -17,29 +17,31 @@ developmentStatus: beta
 softwareType: softwareAddon
 description:
   en:
-    localisedName: "WooBundle"
-    genericName: "WooBundle"
-    shortDescription: "Symfony bundle for WOO functionality."
-    longDescription: "Symfony bundle for WOO functionality. The Wet Open Overheid (Woo) is an initiative aimed at improving the publicity of government information. The aim is to make government information more accessible to everyone."
-    documentation: "https://openwoo.app/"
+    localisedName: "Open Woo Service"
+    genericName: "Open Woo Service"
+    shortDescription: "Easily collects WOO-related information from various source systems for dissemination to your Open Index."
+    longDescription: "The OpenWoo service is at the core of a system that makes government publications more accessible in accordance with the Open Government Act (Woo) specifically [OpenWoo.app](https://openwoo.app/). This service works together with Open Index to enable efficient searching in Woo categories and facilitates data exchange between sources via the FSC/NLX. The system offers a versatile solution for managing and searching government information, suitable for both open source and proprietary platforms. Open Woo Service is built on the popular [Open Services](https://openservices.online/) framework."
+    documentation: "https://openwoo.openservices.online/"
     apiDocumentation: "https://github.com/CommonGateway/WooBundle/blob/main/docs/openapi.json"
     features:
-      - Common Ground Gateway Plugin
+      - Open Services
     screenshots: []
     videos: []
-    awards: []
+    awards:
+      - Common Ground Gold Status
   nl:
-    localisedName: "WooBundle"
-    genericName: "WooBundle"
-    shortDescription: "Symfony bundle voor WOO functionaliteit."
-    longDescription: "Symfony bundle voor WOO functionaliteit. De Wet Open Overheid (Woo) is een initiatief gericht op het verbeteren van de openbaarheid van overheidsinformatie. Het doel is om overheidsinformatie beter toegankelijk te maken voor iedereen."
-    documentation: "https://openwoo.app/"
+    localisedName: "Open Woo Service"
+    genericName: "Open Woo Service"
+    shortDescription: "Verzameld gemakkelijk WOO-gerelateerde informatie uit verschillende bronsystemen voor ontsluiting naar uw Open Index."
+    longDescription: "De OpenWoo-service vormt het hart van een systeem dat overheidspublicaties toegankelijker maakt volgens de Wet open overheid (Woo) namenlijk [OpenWoo.app](https://openwoo.app/). Deze service werkt samen met Open Index om efficiënt zoeken in Woo-categorieën mogelijk te maken en faciliteert data-uitwisseling tussen bronnen via het FSC/NLX. Het systeem biedt een veelzijdige oplossing voor het beheren en doorzoeken van overheidsinformatie, geschikt voor zowel open source als proprietary platforms. Open Woo Service is gebouwd op het populaire [Open Services](https://openservices.online/) framework."
+    documentation: "https://openwoo.openservices.online/"
     apiDocumentation: "https://github.com/CommonGateway/WooBundle/blob/main/docs/openapi.json"
     features:
-      - Common Ground Gateway Plugin
+      - Open Services
     screenshots: []
     videos: []
-    awards: []
+    awards:
+      - Common Ground status goud
 intendedaudience: 
   countries: 
     - nl
