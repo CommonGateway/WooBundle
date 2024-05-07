@@ -455,7 +455,7 @@ class SyncNotubizService
             return $this->data;
         }
 
-        return $this->handleResults($results, $source, $schema, $mapping);
+        return $this->handleResults($results, $source, $mapping, $schema);
 
     }//end syncNotubizHandler()
 
