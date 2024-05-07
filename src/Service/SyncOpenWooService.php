@@ -4,6 +4,7 @@ namespace CommonGateway\WOOBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\File;
+use App\Entity\Gateway as Source;
 use App\Entity\Mapping;
 use App\Entity\ObjectEntity;
 use App\Service\ObjectEntityService;
@@ -18,17 +19,16 @@ use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Psr\Log\LoggerInterface;
-use App\Entity\Gateway as Source;
 use Exception;
 use Smalot\PdfParser\Parser;
 
 /**
  * Service responsible for synchronizing OpenWoo objects to woo objects.
  *
- * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>.
+ * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>, Wilco Louwerse <wilco@conduction.nl>.
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
  * @package  CommonGateway\WOOBundle
@@ -111,7 +111,10 @@ class SyncOpenWooService
      * @param EntityManagerInterface $entityManager
      * @param MappingService         $mappingService
      * @param LoggerInterface        $pluginLogger
+     * @param ValidationService      $validationService
+     * @param CacheService           $cacheService
      * @param FileService            $fileService
+     * @param ObjectEntityService    $gatewayOEService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -161,21 +164,23 @@ class SyncOpenWooService
     /**
      * Checks if existing objects still exist in the source, if not deletes them.
      *
-     * @param array  $idsSynced ID's from objects we just synced from the source.
-     * @param Source $source    These objects belong to.
-     * @param string $schemaRef These objects belong to.
-     * @param string $categorie The categorie these objects came from.
+     * @param array       $idsSynced ID's from objects we just synced from the source.
+     * @param Source      $source    These objects belong to.
+     * @param string      $schemaRef These objects belong to.
+     * @param string|null $categorie The categorie these objects came from.
      *
      * @return int Count of deleted objects.
      */
-    private function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie): int
+    public function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie=null): int
     {
         // Get all existing sourceIds.
         $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
         $existingSourceIds = [];
         $existingObjects   = [];
         foreach ($source->getSynchronizations() as $synchronization) {
-            if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null && $synchronization->getObject()->getValue('categorie') === $categorie) {
+            if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null
+                && ($categorie === null || $synchronization->getObject()->getValue('categorie') === $categorie)
+            ) {
                 $existingSourceIds[] = $synchronization->getSourceId();
                 $existingObjects[]   = $synchronization->getObject();
             }
@@ -242,6 +247,44 @@ class SyncOpenWooService
 
 
     /**
+     * Validates if the Configuration array has the required keys (with a value set).
+     * Will check a default list of keys ('source','oin','organisatie','portalUrl','schema','mapping','sourceEndpoint'), more keys to check can be given.
+     *
+     * @param array|null $requiredKeys More keys to check besides the default keys, will default to empty array.
+     * @param string     $handlerName  The name of the handler we are checking these keys for, used in case of throwing error / creating a log.
+     *
+     * @return bool True if all keys are present, else this will return false.
+     */
+    public function validateHandlerConfig(array $configuration, ?array $requiredKeys=[], string $handlerName='syncOpenWooHandler'): bool
+    {
+        $defaultRequired = [
+            'source',
+            'oin',
+            'organisatie',
+            'portalUrl',
+            'schema',
+            'mapping',
+        ];
+
+        $requiredKeys = array_merge($defaultRequired, $requiredKeys);
+
+        foreach ($requiredKeys as $key) {
+            if (isset($configuration[$key]) === false) {
+                $keys = implode(', ', array_slice($requiredKeys, 0, -1)).' or '.end($requiredKeys);
+
+                isset($this->style) === true && $this->style->error("No $keys configured on this action, ending $handlerName");
+                $this->logger->error('No source, schema, mapping, oin, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending '.$handlerName, ['plugin' => 'common-gateway/woo-bundle']);
+
+                return false;
+            }
+        }
+
+        return true;
+
+    }//end validateHandlerConfig()
+
+
+    /**
      * Handles the synchronization of openwoo objects.
      *
      * @param array $data
@@ -256,22 +299,12 @@ class SyncOpenWooService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        isset($this->style) === true && $this->style->success('SyncOpenWooService triggered');
-        $this->logger->info('SyncOpenWooService triggered', ['plugin' => 'common-gateway/woo-bundle']);
+        isset($this->style) === true && $this->style->success('syncOpenWooHandler triggered');
+        $this->logger->info('syncOpenWooHandler triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if (isset($this->configuration['source']) === false
-            || isset($this->configuration['oin']) === false
-            || isset($this->configuration['organisatie']) === false
-            || isset($this->configuration['portalUrl']) === false
-            || isset($this->configuration['schema']) === false
-            || isset($this->configuration['mapping']) === false
-            || isset($this->configuration['sourceEndpoint']) === false
-        ) {
-            isset($this->style) === true && $this->style->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler');
-            $this->logger->error('No source, schema, mapping, oin, organisatie, sourceEndpoint or portalUrl configured on this action, ending syncOpenWooHandler', ['plugin' => 'common-gateway/woo-bundle']);
-
+        if ($this->validateHandlerConfig($this->configuration, ['sourceEndpoint']) === false) {
             return [];
-        }//end if
+        }
 
         $source           = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
         $schema           = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
@@ -281,8 +314,8 @@ class SyncOpenWooService
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
         ) {
-            $this->logger->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncOpenWooHandler", ['plugin' => 'common-gateway/woo-bundle']);
             isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncOpenWooHandler");
+            $this->logger->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncOpenWooHandler", ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }//end if
@@ -424,7 +457,12 @@ class SyncOpenWooService
 
         $file->setBase64(base64_encode($response->getBody()));
         $file->setMimeType($response->getHeader('content-type')[0]);
-        $file->setSize($response->getHeader('content-length')[0]);
+        if (empty($response->getHeader('content-length')) === false) {
+            $file->setSize($response->getHeader('content-length')[0]);
+        } else {
+            $file->setSize($this->gatewayOEService->getBase64Size($file->getBase64()));
+        }
+
         $file->setName(($document['titel'] ?? $document['url']));
 
         $explodedFilename = explode('.', ($document['titel'] ?? $document['url']));
@@ -450,13 +488,15 @@ class SyncOpenWooService
             $text = null;
         }
 
-        $bijlageObject->hydrate(
-            [
-                'url'          => $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint),
-                'extension'    => end($explodedFilename),
-                'documentText' => $text,
-            ]
-        );
+        $body = [
+            'extension'    => end($explodedFilename),
+            'documentText' => $text,
+        ];
+        if (isset($data['keepUrl']) === false || $data['keepUrl'] !== true) {
+            $body['url'] = $this->fileService->generateDownloadEndpoint($file->getId()->toString(), $endpoint);
+        }
+
+        $bijlageObject->hydrate($body);
 
         $this->entityManager->persist($bijlageObject);
 

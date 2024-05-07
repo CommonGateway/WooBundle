@@ -1,0 +1,22 @@
+{
+  "title": "notubizEventToWoo",
+  "$id": "https://commongateway.nl/mapping/woo.notubizEventToWoo.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "_sourceId": "id",
+    "organisatie.oin": "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
+    "organisatie.naam": "organisatie.naam",
+    "gepubliceerd": "{% if autoPublish|default %}{{ autoPublish }}{% else %}{{ 'true' }}{% endif %}",
+    "categorie": "categorie",
+    "publicatiedatum": "creation_date",
+    "titel": "{% if attributes|default %}{% set flag = false %}{% for attribute in attributes %}{% if attribute.id == 1 %}{{ attribute.value }}{% set flag = true %}{% endif %}{% endfor %}{% if flag == false %}Event{% endif %}{% else %}Event{% endif %} {{creation_date|date('Y-m-d')}}",
+    "bijlagen": "{% if bijlagen|default %}{{ map('https://commongateway.nl/mapping/woo.notubizDocumentToBijlage.mapping.json', bijlagen, true)|json_encode }}{% endif %}"
+  },
+  "cast": {
+    "gepubliceerd": "bool",
+    "categorie": "unsetIfValue==",
+    "bijlagen": ["jsonToArray", "unsetIfValue=="]
+  }
+}

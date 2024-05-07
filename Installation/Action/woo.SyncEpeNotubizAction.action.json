@@ -1,0 +1,23 @@
+{
+    "title": "SyncEpeNotubizAction",
+    "$id": "https://commongateway.nl/woo.SyncEpeNotubizAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.default.listens"],
+    "configuration": {
+        "oin": "00000001001299992000",
+        "portalUrl": "https://conductionnl.github.io/woo-website-epe",
+        "source": "https://commongateway.woo.nl/source/woo.notubiz.source.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.notubizEventToWoo.mapping.json",
+        "sourceType": "notubiz",
+        "organisatie": "Gemeente Epe",
+        "organisationId": "429",
+        "sourceEndpoint": "/events"
+    },
+    "conditions":
+    {
+        "==": [1, 1]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\SyncNotubizHandler"
+}

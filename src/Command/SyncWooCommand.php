@@ -3,6 +3,7 @@
 namespace CommonGateway\WOOBundle\Command;
 
 use App\Entity\Action;
+use CommonGateway\WOOBundle\Service\SyncNotubizService;
 use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
 use CommonGateway\WOOBundle\Service\SyncOpenWooService;
 use DateTime;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * This Command can execute multiple services.
  *
- * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
+ * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>, Wilco Louwerse <wilco@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  *
  * @package  CommonGateway\WOOBundle
@@ -49,6 +50,13 @@ class SyncWooCommand extends Command
     private SyncOpenWooService $syncOpenWooService;
 
     /**
+     * The NotuBiz service.
+     *
+     * @var SyncNotubizService
+     */
+    private SyncNotubizService $syncNotubizService;
+
+    /**
      * @var EntityManagerInterface
      */
     private EntityManagerInterface $entityManager;
@@ -59,11 +67,18 @@ class SyncWooCommand extends Command
      *
      * @param SyncXxllncCasesService $syncXxllncCasesService The case service
      * @param SyncOpenWooService     $syncOpenWooService     The OpenWoo service
+     * @param SyncNotubizService     $syncNotubizService     The Notubiz service
+     * @param EntityManagerInterface $entityManager          The entity manager.
      */
-    public function __construct(SyncXxllncCasesService $syncXxllncCasesService, SyncOpenWooService $syncOpenWooService, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        SyncXxllncCasesService $syncXxllncCasesService,
+        SyncOpenWooService $syncOpenWooService,
+        SyncNotubizService $syncNotubizService,
+        EntityManagerInterface $entityManager
+    ) {
         $this->syncXxllncCasesService = $syncXxllncCasesService;
         $this->syncOpenWooService     = $syncOpenWooService;
+        $this->syncNotubizService     = $syncNotubizService;
         $this->entityManager          = $entityManager;
         parent::__construct();
 
@@ -118,7 +133,19 @@ class SyncWooCommand extends Command
 
         $config     = $action->getConfiguration();
         $startTimer = microtime(true);
-        if (isset($config['sourceType']) === true && $config['sourceType'] === 'openWoo') {
+        if (isset($config['sourceType']) === true && $config['sourceType'] === 'notubiz') {
+            $this->syncNotubizService->setStyle($style);
+            if ($this->syncNotubizService->syncNotubizHandler([], $config) === null) {
+                $stopTimer = microtime(true);
+                $totalTime = ($stopTimer - $startTimer);
+                $action->setLastRunTime($totalTime);
+                $action->setStatus(false);
+                $this->entityManager->persist($action);
+                $this->entityManager->flush();
+
+                return Command::FAILURE;
+            }
+        } else if (isset($config['sourceType']) === true && $config['sourceType'] === 'openWoo') {
             $this->syncOpenWooService->setStyle($style);
             if ($this->syncOpenWooService->syncOpenWooHandler([], $config) === null) {
                 $stopTimer = microtime(true);

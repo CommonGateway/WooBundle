@@ -128,7 +128,7 @@ De action heeft in de `configuratie` array een aantal velden wat geconfigureerd 
 * zaaksysteemSearchEndpoint (required in geval zaaksysteem): Het endpoint wat gebruikt wordt om de publicaties op te halen in het zaaksysteem.
 * sourceEndpoint (required in geval OpenWoo of OpenConvenant): Endpoint waar publicaties vandaan gehaald worden.
 * fileEndpointReference (required in geval zaaksysteem): De reference naar het view-file endpoint voor de gesynchroniseerde documenten. Zorgt ervoor dat binnengehaalde documenten een endpoint hebben en bekeken kunnen worden. Standaard: `https://commongateway.nl/woo.ViewFile.endpoint.json` invoeren.
-* sourceType (required in geval OpenWoo of OpenConvenant): Niet verplicht in geval zaaksysteem, staat default op zaaksysteem. Anders voor OpenWoo of OpenCovenant 'OpenWoo' invoeren.
+* sourceType (required in geval OpenWoo, OpenConvenant of Notubiz): Niet verplicht in geval zaaksysteem, staat default op zaaksysteem. Anders voor OpenWoo of OpenCovenant 'openWoo' invoeren en voor Notubiz 'notubiz' invoeren.
 * autoPublish: Niet verplicht, standaard op true. Als de wens is dat gesynchroniseerde publicaties niet meteen op te halen zijn, dan moet dit veld op false staan.
 * allowPDFOnly: Niet verplicht. Op true zetten als de wens is om alleen pdf documenten te synchroniseren en geen andere bestandstypen.
 

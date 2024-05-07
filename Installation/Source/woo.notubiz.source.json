@@ -1,0 +1,25 @@
+{
+    "title": "Notubiz demo API",
+    "$id": "https://commongateway.woo.nl/source/woo.notubiz.source.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+    "version": "0.0.1",
+    "description": "Notubiz demo API",
+    "location": "https://api.demo.notubiz.nl",
+    "auth": "apikey",
+    "apiKey": "!ChangeMe!",
+    "authorizationHeader": "application_token",
+    "authorizationPassthroughMethod": "query",
+    "isEnabled": false,
+    "loggingConfig": {
+        "callMethod": true,
+        "callUrl": true,
+        "callQuery": true,
+        "callContentType": true,
+        "callBody": true,
+        "responseStatusCode": true,
+        "responseContentType": true,
+        "responseBody": false,
+        "maxCharCountBody": 500,
+        "maxCharCountErrorBody": 2000
+    }
+}
