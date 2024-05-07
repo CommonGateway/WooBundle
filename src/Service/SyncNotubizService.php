@@ -268,19 +268,20 @@ class SyncNotubizService
         return $decodedResponse['meeting'];
 
     }//end fetchMeeting()
-
-
+    
+    
     /**
-     * Syncs a single result fromt the Notubiz source.
+     * Syncs a single result from the Notubiz source.
      *
-     * @param array   $meetingObject
-     * @param Source  $source        The source used.
-     * @param Mapping $mapping       The mapping we need to map the result.
-     * @param Schema  $schema        The schema we are going to map the result to.
+     * @param array $meetingObject
+     * @param Source $source The source used.
+     * @param Mapping $mapping The mapping we need to map the result.
+     * @param Schema $schema The schema we are going to map the result to.
+     * @param array $result The result array to map and sync
      *
      * @return string|ObjectEntity|array|null
      */
-    private function syncResult(array $meetingObject, Source $source, Mapping $mapping, Schema $schema): ObjectEntity|array|string|null
+    private function syncResult(array $meetingObject, Source $source, Mapping $mapping, Schema $schema, array $result): ObjectEntity|array|string|null
     {
         if (isset($meetingObject['documents']) === true) {
             $result['bijlagen'] = $meetingObject['documents'];
@@ -370,7 +371,7 @@ class SyncNotubizService
                 $result        = array_merge($result, $customFields);
                 $meetingObject = $this->fetchMeeting($source, $result);
 
-                $object = $this->syncResult($meetingObject, $source, $mapping, $schema);
+                $object = $this->syncResult($meetingObject, $source, $mapping, $schema, $result);
                 if ($object === 'continue') {
                     continue;
                 }
