@@ -37,6 +37,22 @@
   "endpoints": {
     "schemas": [
       {
+        "reference": "https://commongateway.nl/woo.notification.schema.json",
+        "path": [
+          "woo",
+          "notifications"
+        ],
+        "pathRegex": "^woo/notifications$",
+        "version": "0.0.1",
+        "methods": [
+          "POST",
+          "GET"
+        ],
+        "throws": [
+          "woo.notification"
+        ]
+      },
+      {
         "$id": "https://commongateway.nl/woo.publicatie.endpoint.json",
         "reference": "https://commongateway.nl/woo.publicatie.schema.json",
         "path": "publicaties",

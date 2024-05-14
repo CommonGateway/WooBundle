@@ -88,9 +88,9 @@ class SyncNotubizService
     private ObjectEntityService $gatewayOEService;
 
     /**
-     * @var SyncOpenWooService
+     * @var WooService
      */
-    private SyncOpenWooService $syncOpenWooService;
+    private WooService $wooService;
 
     /**
      * @var HydrationService
@@ -120,7 +120,7 @@ class SyncNotubizService
      * @param ValidationService      $validationService
      * @param CacheService           $cacheService
      * @param ObjectEntityService    $gatewayOEService
-     * @param SyncOpenWooService     $syncOpenWooService
+     * @param WooService     $wooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -132,7 +132,7 @@ class SyncNotubizService
         ValidationService $validationService,
         CacheService $cacheService,
         ObjectEntityService $gatewayOEService,
-        SyncOpenWooService $syncOpenWooService
+        WooService $wooService
     ) {
         $this->resourceService    = $resourceService;
         $this->callService        = $callService;
@@ -143,7 +143,7 @@ class SyncNotubizService
         $this->validationService  = $validationService;
         $this->cacheService       = $cacheService;
         $this->gatewayOEService   = $gatewayOEService;
-        $this->syncOpenWooService = $syncOpenWooService;
+        $this->wooService         = $wooService;
         $this->hydrationService   = new HydrationService($this->syncService, $this->entityManager);
 
     }//end __construct()
@@ -397,7 +397,7 @@ class SyncNotubizService
 
         $this->handleDocuments($documents, $source);
 
-        $deletedObjectsCount = $this->syncOpenWooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
+        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
 
         return $this->returnResponse($responseItems, $source, $deletedObjectsCount);
 
@@ -422,7 +422,7 @@ class SyncNotubizService
         isset($this->style) === true && $this->style->success('syncNotubizHandler triggered');
         $this->logger->info('syncNotubizHandler triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if ($this->syncOpenWooService->validateHandlerConfig(
+        if ($this->wooService->validateHandlerConfig(
             $this->configuration,
             [
                 'sourceEndpoint',

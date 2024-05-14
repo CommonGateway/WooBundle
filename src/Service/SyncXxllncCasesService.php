@@ -85,9 +85,9 @@ class SyncXxllncCasesService
     private FileService $fileService;
 
     /**
-     * @var SyncOpenWooService
+     * @var WooService
      */
-    private SyncOpenWooService $syncOpenWooService;
+    private WooService $wooService;
 
     /**
      * @var array
@@ -112,7 +112,7 @@ class SyncXxllncCasesService
      * @param ValidationService      $validationService
      * @param FileService            $fileService
      * @param CacheService           $cacheService
-     * @param SyncOpenWooService     $syncOpenWooService
+     * @param WooService             $wooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -124,7 +124,7 @@ class SyncXxllncCasesService
         ValidationService $validationService,
         FileService $fileService,
         CacheService $cacheService,
-        SyncOpenWooService $syncOpenWooService
+        WooService $wooService
     ) {
         $this->resourceService    = $resourceService;
         $this->callService        = $callService;
@@ -135,7 +135,7 @@ class SyncXxllncCasesService
         $this->validationService  = $validationService;
         $this->fileService        = $fileService;
         $this->cacheService       = $cacheService;
-        $this->syncOpenWooService = $syncOpenWooService;
+        $this->wooService = $wooService;
 
     }//end __construct()
 
@@ -315,7 +315,7 @@ class SyncXxllncCasesService
         isset($this->style) === true && $this->style->success('SyncXxllncCasesService triggered');
         $this->logger->info('SyncXxllncCasesService triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if ($this->syncOpenWooService->validateHandlerConfig(
+        if ($this->wooService->validateHandlerConfig(
             $this->configuration,
             [
                 'fileEndpointReference',
@@ -404,7 +404,7 @@ class SyncXxllncCasesService
 
         $this->entityManager->flush();
 
-        $deletedObjectsCount = $this->syncOpenWooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
