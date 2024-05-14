@@ -35,12 +35,12 @@ class WooNotificationService
      * @var LoggerInterface $logger.
      */
     private LoggerInterface $logger;
-    
+
     /**
      * @var array
      */
     private array $configuration;
-    
+
     /**
      * @var array
      */
@@ -78,40 +78,39 @@ class WooNotificationService
     {
         // todo: check url of notification to get the source that matches it
         // todo: somehow decide what sourceType this is ??? ... and continue to one of the other services for actual syncing
-        
         if ($data['method'] !== 'POST') {
             return $data;
         }
-        
+
         $this->data          = $data;
         $this->configuration = $configuration;
-        
+
         $this->logger->debug('NotificationService -> notificationHandler()');
-        
+
         $dot = new Dot($this->data);
         $url = $dot->get($this->configuration['urlLocation']);
-        
+
         // Get the correct Entity.
         $entity = $this->resourceService->getSchema($this->configuration['entity'], 'commongateway/corebundle');
         if ($entity === null) {
             $response = json_encode(['Message' => "Could not find an Entity with this reference: {$this->configuration['entity']}"]);
             return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
         }
-        
+
         try {
             $this->syncService->aquireObject($url, $entity);
         } catch (\Exception $exception) {
             $response = json_encode(['Message' => "Notification call before sync returned an Exception: {$exception->getMessage()}"]);
             return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
         }//end try
-        
+
         $this->entityManager->flush();
-        
+
         $response         = ['Message' => 'Notification received, object synchronized'];
         $data['response'] = new Response(json_encode($response), 200, ['Content-type' => 'application/json']);
-        
+
         return $data;
-        
+
     }//end notificationHandler()
 
 

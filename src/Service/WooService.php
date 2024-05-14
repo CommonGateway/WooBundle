@@ -51,8 +51,8 @@ class WooService
         $this->logger        = $pluginLogger;
 
     }//end __construct()
-    
-    
+
+
     /**
      * Checks if existing objects still exist in the source, if not deletes them.
      *
@@ -77,10 +77,10 @@ class WooService
                 $existingObjects[]   = $synchronization->getObject();
             }
         }
-        
+
         // Check if existing sourceIds are in the array of new synced sourceIds.
         $objectIdsToDelete = array_diff($existingSourceIds, $idsSynced);
-        
+
         // If not it means the object does not exist in the source anymore and should be deleted here.
         $deletedObjectsCount = 0;
         foreach ($objectIdsToDelete as $key => $id) {
@@ -88,14 +88,14 @@ class WooService
             $this->entityManager->remove($existingObjects[$key]);
             $deletedObjectsCount++;
         }
-        
+
         $this->entityManager->flush();
-        
+
         return $deletedObjectsCount;
-        
+
     }//end deleteNonExistingObjects()
-    
-    
+
+
     /**
      * Validates if the Configuration array has the required keys (with a value set).
      * Will check a default list of keys ('source','oin','organisatie','portalUrl','schema','mapping','sourceEndpoint'), more keys to check can be given.
@@ -115,22 +115,22 @@ class WooService
             'schema',
             'mapping',
         ];
-        
+
         $requiredKeys = array_merge($defaultRequired, $requiredKeys);
-        
+
         foreach ($requiredKeys as $key) {
             if (isset($configuration[$key]) === false) {
                 $keys = implode(', ', array_slice($requiredKeys, 0, -1)).' or '.end($requiredKeys);
-                
+
                 isset($this->style) === true && $this->style->error("No $keys configured on this action, ending $handlerName");
                 $this->logger->error('No source, schema, mapping, oin, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending '.$handlerName, ['plugin' => 'common-gateway/woo-bundle']);
-                
+
                 return false;
             }
         }
-        
+
         return true;
-        
+
     }//end validateHandlerConfig()
 
 

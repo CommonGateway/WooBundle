@@ -126,16 +126,16 @@ class SyncXxllncCasesService
         CacheService $cacheService,
         WooService $wooService
     ) {
-        $this->resourceService    = $resourceService;
-        $this->callService        = $callService;
-        $this->syncService        = $syncService;
-        $this->entityManager      = $entityManager;
-        $this->mappingService     = $mappingService;
-        $this->logger             = $pluginLogger;
-        $this->validationService  = $validationService;
-        $this->fileService        = $fileService;
-        $this->cacheService       = $cacheService;
-        $this->wooService = $wooService;
+        $this->resourceService   = $resourceService;
+        $this->callService       = $callService;
+        $this->syncService       = $syncService;
+        $this->entityManager     = $entityManager;
+        $this->mappingService    = $mappingService;
+        $this->logger            = $pluginLogger;
+        $this->validationService = $validationService;
+        $this->fileService       = $fileService;
+        $this->cacheService      = $cacheService;
+        $this->wooService        = $wooService;
 
     }//end __construct()
 

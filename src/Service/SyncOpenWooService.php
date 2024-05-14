@@ -80,17 +80,17 @@ class SyncOpenWooService
      * @var CacheService $cacheService.
      */
     private CacheService $cacheService;
-    
+
     /**
      * @var FileService
      */
     private FileService $fileService;
-    
+
     /**
      * @var ObjectEntityService
      */
     private ObjectEntityService $gatewayOEService;
-    
+
     /**
      * @var WooService
      */

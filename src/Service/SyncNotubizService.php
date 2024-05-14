@@ -120,7 +120,7 @@ class SyncNotubizService
      * @param ValidationService      $validationService
      * @param CacheService           $cacheService
      * @param ObjectEntityService    $gatewayOEService
-     * @param WooService     $wooService
+     * @param WooService             $wooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -134,17 +134,17 @@ class SyncNotubizService
         ObjectEntityService $gatewayOEService,
         WooService $wooService
     ) {
-        $this->resourceService    = $resourceService;
-        $this->callService        = $callService;
-        $this->syncService        = $syncService;
-        $this->entityManager      = $entityManager;
-        $this->mappingService     = $mappingService;
-        $this->logger             = $pluginLogger;
-        $this->validationService  = $validationService;
-        $this->cacheService       = $cacheService;
-        $this->gatewayOEService   = $gatewayOEService;
-        $this->wooService         = $wooService;
-        $this->hydrationService   = new HydrationService($this->syncService, $this->entityManager);
+        $this->resourceService   = $resourceService;
+        $this->callService       = $callService;
+        $this->syncService       = $syncService;
+        $this->entityManager     = $entityManager;
+        $this->mappingService    = $mappingService;
+        $this->logger            = $pluginLogger;
+        $this->validationService = $validationService;
+        $this->cacheService      = $cacheService;
+        $this->gatewayOEService  = $gatewayOEService;
+        $this->wooService        = $wooService;
+        $this->hydrationService  = new HydrationService($this->syncService, $this->entityManager);
 
     }//end __construct()
 
