@@ -214,42 +214,40 @@ class SyncNotubizService
         return $results;
 
     }//end fetchObjects()
-    
-    
+
+
     /**
      * Fetches a single Event object from NotuBiz.
      *
-     * @param Source   $source  The source entity that provides the source of the result data.
+     * @param Source $source The source entity that provides the source of the result data.
      *
      * @return array The fetched objects.
      */
     private function fetchObject(Source $source)
     {
-        $query = [
-            'format'          => 'json'
-        ];
-        
+        $query = ['format' => 'json'];
+
         try {
-            //todo use correct endpoint
+            // todo use correct endpoint
             $response        = $this->callService->call($source, 'TODO', 'GET', ['query' => $query]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
             $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
-            
+
             return [];
         }
-        
+
         $result = $decodedResponse['event'][0];
-        
-        //todo check if organisationId matches
-        
+
+        // todo check if organisationId matches
         if (isset($this->configuration['gremiaIds']) === true) {
-            //todo check if gremium id is allowed
+            // todo check if gremium id is allowed
         }
-        
+
         return $result;
-    }
+
+    }//end fetchObject()
 
 
     /**
@@ -434,24 +432,24 @@ class SyncNotubizService
         return $this->returnResponse($responseItems, $config['source'], $deletedObjectsCount);
 
     }//end handleResults()
-    
-    
+
+
     /**
      * Handles syncing a single Event object result we got from the Notubiz source to the gateway.
      *
      * @param array $result The result form the source.
-     * @param array $config  An array containing the Source, Mapping and Schema we need in order to sync.
+     * @param array $config An array containing the Source, Mapping and Schema we need in order to sync.
      *
      * @return array
      */
     private function handleResult(array $result, array $config)
     {
         $response = $result;
-        
-        //todo
-        
+
+        // todo
         return $response;
-    }
+
+    }//end handleResult()
 
 
     /**
@@ -551,7 +549,7 @@ class SyncNotubizService
         if ($config === null) {
             return [];
         }
-        
+
         $this->logger->info("Fetching object {$this->data['body']['resourceUrl']}", ['plugin' => 'common-gateway/woo-bundle']);
 
         $result = $this->fetchObject($config['source']);
@@ -559,7 +557,7 @@ class SyncNotubizService
             $this->logger->info('No result found, stop handling notification for Notubiz sync', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
         }
-        
+
         return $this->handleResult($result, $config);
 
     }//end handleNotification()

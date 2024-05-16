@@ -118,7 +118,7 @@ class WooNotificationHandler implements ActionHandlerInterface
                     'example'     => '1.21.1',
                     'required'    => false,
                 ],
-                'gremiaIds' => [
+                'gremiaIds'      => [
                     'type'        => 'array',
                     'description' => 'The gremia ids that we allow to sync Events for.',
                     'example'     => ['342'],
