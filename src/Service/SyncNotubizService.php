@@ -273,9 +273,9 @@ class SyncNotubizService
     /**
      * Syncs a single result from the Notubiz source.
      *
-     * @param array   $meetingObject
-     * @param array $config An array containing the Source, Mapping and Schema we need in order to sync.
-     * @param array   $result        The result array to map and sync
+     * @param array $meetingObject
+     * @param array $config        An array containing the Source, Mapping and Schema we need in order to sync.
+     * @param array $result        The result array to map and sync
      *
      * @return string|ObjectEntity|array|null
      */
@@ -352,7 +352,7 @@ class SyncNotubizService
      * Handles syncing the results we got from the Notubiz source to the gateway.
      *
      * @param array $results The array of results form the source.
-     * @param array $config An array containing the Source, Mapping and Schema we need in order to sync.
+     * @param array $config  An array containing the Source, Mapping and Schema we need in order to sync.
      *
      * @return array
      */
@@ -398,8 +398,8 @@ class SyncNotubizService
         return $this->returnResponse($responseItems, $source, $deletedObjectsCount);
 
     }//end handleResults()
-    
-    
+
+
     /**
      * Validates if the Configuration array has the required information to sync from Notubiz to OpenWoo.
      *
@@ -408,17 +408,17 @@ class SyncNotubizService
     private function validateConfiguration(): ?array
     {
         if ($this->wooService->validateHandlerConfig(
-                $this->configuration,
-                [
-                    'sourceEndpoint',
-                    'organisationId',
-                ],
-                'syncNotubizHandler'
-            ) === false
+            $this->configuration,
+            [
+                'sourceEndpoint',
+                'organisationId',
+            ],
+            'syncNotubizHandler'
+        ) === false
         ) {
             return null;
         }
-        
+
         $source  = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
         $schema  = $this->resourceService->getSchema($this->configuration['schema'], 'common-gateway/woo-bundle');
         $mapping = $this->resourceService->getMapping($this->configuration['mapping'], 'common-gateway/woo-bundle');
@@ -428,16 +428,17 @@ class SyncNotubizService
         ) {
             isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncNotubizHandler");
             $this->logger->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncNotubizHandler", ['plugin' => 'common-gateway/woo-bundle']);
-            
+
             return null;
         }//end if
-        
+
         return [
-            "source" => $source,
-            "schema" => $schema,
-            'mapping' => $mapping
+            "source"  => $source,
+            "schema"  => $schema,
+            'mapping' => $mapping,
         ];
-    }
+
+    }//end validateConfiguration()
 
 
     /**
@@ -476,8 +477,8 @@ class SyncNotubizService
         return $this->handleResults($results, $config);
 
     }//end syncNotubizHandler()
-    
-    
+
+
     /**
      * Handles the synchronization of one single Notubiz API Event object to an OpenWoo publicatie object when a notification got triggered.
      *
@@ -490,15 +491,16 @@ class SyncNotubizService
     {
         $this->data          = $data;
         $this->configuration = $configuration;
-        
+
         // Check if configuration array contains the required data and check if source, schema and mapping exist.
         $config = $this->validateConfiguration();
         if ($config === null) {
             return [];
         }
-        
+
         return [];
-    }
+
+    }//end handleNotification()
 
 
 }//end class

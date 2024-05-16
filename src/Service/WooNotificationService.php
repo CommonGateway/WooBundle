@@ -27,7 +27,7 @@ class WooNotificationService
      * @var LoggerInterface $logger.
      */
     private LoggerInterface $logger;
-    
+
     /**
      * @var SyncNotubizService
      */
@@ -91,12 +91,12 @@ class WooNotificationService
 
         try {
             switch ($configuration['sourceType']) {
-                case 'notubiz':
-                    $this->syncNotubizService->handleNotification($data, $configuration);
-                    break;
-                default:
-                    $response = json_encode(['Message' => "The 'sourceType' {$configuration['sourceType']} is not supported"]);
-                    return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
+            case 'notubiz':
+                $this->syncNotubizService->handleNotification($data, $configuration);
+                break;
+            default:
+                $response = json_encode(['Message' => "The 'sourceType' {$configuration['sourceType']} is not supported"]);
+                return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
             }
         } catch (\Exception $exception) {
             $response = json_encode(['Message' => "Notification received, but sync failed and returned an Exception: {$exception->getMessage()}"]);
@@ -108,7 +108,7 @@ class WooNotificationService
 
         return $data;
 
-    }//end notificationHandler()
+    }//end wooNotificationHandler()
 
 
 }//end class
