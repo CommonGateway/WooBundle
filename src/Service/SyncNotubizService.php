@@ -391,11 +391,11 @@ class SyncNotubizService
 
         $this->entityManager->flush();
 
-        $this->handleDocuments($documents, $source);
+        $this->handleDocuments($documents, $config['source']);
 
-        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
+        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $config['source'], $this->configuration['schema'], $categorie);
 
-        return $this->returnResponse($responseItems, $source, $deletedObjectsCount);
+        return $this->returnResponse($responseItems, $config['source'], $deletedObjectsCount);
 
     }//end handleResults()
 
