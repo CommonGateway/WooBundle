@@ -321,7 +321,7 @@ class SyncXxllncCasesService
                 'fileEndpointReference',
                 'zaaksysteemSearchEndpoint',
             ],
-            'syncXxllncCasesHandler'
+            'sync XxllncCases'
         ) === false
         ) {
             return [];

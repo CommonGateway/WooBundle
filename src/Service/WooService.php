@@ -101,11 +101,11 @@ class WooService
      * Will check a default list of keys ('source','oin','organisatie','portalUrl','schema','mapping','sourceEndpoint'), more keys to check can be given.
      *
      * @param array|null $requiredKeys More keys to check besides the default keys, will default to empty array.
-     * @param string     $handlerName  The name of the handler we are checking these keys for, used in case of throwing error / creating a log.
+     * @param string     $handlerName  A string used to describe de type of sync we are ending when an error occurs, used when creating a log.
      *
      * @return bool True if all keys are present, else this will return false.
      */
-    public function validateHandlerConfig(array $configuration, ?array $requiredKeys=[], string $handlerName='syncOpenWooHandler'): bool
+    public function validateHandlerConfig(array $configuration, ?array $requiredKeys=[], string $handlerName='sync OpenWoo'): bool
     {
         $defaultRequired = [
             'source',

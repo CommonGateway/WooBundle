@@ -118,6 +118,12 @@ class SyncNotubizHandler implements ActionHandlerInterface
                     'example'     => '1.21.1',
                     'required'    => false,
                 ],
+                'gremiaIds' => [
+                    'type'        => 'array',
+                    'description' => 'The gremia ids that we allow to sync Events for.',
+                    'example'     => ['342'],
+                    'required'    => false,
+                ],
                 'sourceEndpoint' => [
                     'type'        => 'string',
                     'description' => 'The endpoint of the source.',

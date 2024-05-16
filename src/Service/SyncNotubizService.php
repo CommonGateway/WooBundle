@@ -166,7 +166,7 @@ class SyncNotubizService
 
 
     /**
-     * Fetches objects from NotuBiz.
+     * Fetches Event objects from NotuBiz.
      *
      * @param Source   $source  The source entity that provides the source of the result data.
      * @param int|null $page    The page we are fetching, increments each iteration.
@@ -174,7 +174,7 @@ class SyncNotubizService
      *
      * @return array The fetched objects.
      */
-    private function fetchObjects(Source $source, ?int $page=1, array $results=[])
+    private function fetchObjects(Source $source, ?int $page=1, array $results=[]): array
     {
         $dateTo   = new DateTime();
         $dateFrom = new DateTime();
@@ -214,6 +214,42 @@ class SyncNotubizService
         return $results;
 
     }//end fetchObjects()
+    
+    
+    /**
+     * Fetches a single Event object from NotuBiz.
+     *
+     * @param Source   $source  The source entity that provides the source of the result data.
+     *
+     * @return array The fetched objects.
+     */
+    private function fetchObject(Source $source)
+    {
+        $query = [
+            'format'          => 'json'
+        ];
+        
+        try {
+            //todo use correct endpoint
+            $response        = $this->callService->call($source, 'TODO', 'GET', ['query' => $query]);
+            $decodedResponse = $this->callService->decodeResponse($source, $response);
+        } catch (Exception $e) {
+            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
+            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            
+            return [];
+        }
+        
+        $result = $decodedResponse['event'][0];
+        
+        //todo check if organisationId matches
+        
+        if (isset($this->configuration['gremiaIds']) === true) {
+            //todo check if gremium id is allowed
+        }
+        
+        return $result;
+    }
 
 
     /**
@@ -349,7 +385,7 @@ class SyncNotubizService
 
 
     /**
-     * Handles syncing the results we got from the Notubiz source to the gateway.
+     * Handles syncing the Event object results we got from the Notubiz source to the gateway.
      *
      * @param array $results The array of results form the source.
      * @param array $config  An array containing the Source, Mapping and Schema we need in order to sync.
@@ -398,6 +434,24 @@ class SyncNotubizService
         return $this->returnResponse($responseItems, $config['source'], $deletedObjectsCount);
 
     }//end handleResults()
+    
+    
+    /**
+     * Handles syncing a single Event object result we got from the Notubiz source to the gateway.
+     *
+     * @param array $result The result form the source.
+     * @param array $config  An array containing the Source, Mapping and Schema we need in order to sync.
+     *
+     * @return array
+     */
+    private function handleResult(array $result, array $config)
+    {
+        $response = $result;
+        
+        //todo
+        
+        return $response;
+    }
 
 
     /**
@@ -413,7 +467,7 @@ class SyncNotubizService
                 'sourceEndpoint',
                 'organisationId',
             ],
-            'syncNotubizHandler'
+            'sync Notubiz'
         ) === false
         ) {
             return null;
@@ -426,8 +480,8 @@ class SyncNotubizService
             || $schema instanceof Schema === false
             || $mapping instanceof Mapping === false
         ) {
-            isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncNotubizHandler");
-            $this->logger->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncNotubizHandler", ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending sync NotuBiz");
+            $this->logger->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending sync NotuBiz", ['plugin' => 'common-gateway/woo-bundle']);
 
             return null;
         }//end if
@@ -497,8 +551,16 @@ class SyncNotubizService
         if ($config === null) {
             return [];
         }
+        
+        $this->logger->info("Fetching object {$this->data['body']['resourceUrl']}", ['plugin' => 'common-gateway/woo-bundle']);
 
-        return [];
+        $result = $this->fetchObject($config['source']);
+        if (empty($result) === true) {
+            $this->logger->info('No result found, stop handling notification for Notubiz sync', ['plugin' => 'common-gateway/woo-bundle']);
+            return $this->data;
+        }
+        
+        return $this->handleResult($result, $config);
 
     }//end handleNotification()
 
