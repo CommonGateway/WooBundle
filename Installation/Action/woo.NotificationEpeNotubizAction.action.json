@@ -17,7 +17,40 @@
     },
     "conditions":
     {
-        "==": [1, 1]
+        "and": [
+            {
+                "in": [
+                    "https://api.demo.notubiz.nl",
+                    {
+                        "var": "body.hoofdObject"
+                    }
+                ]
+            },
+            {
+                "==": [
+                    {
+                        "var": "body.kanaal"
+                    },
+                    "events"
+                ]
+            },
+            {
+                "==": [
+                    {
+                        "var": "body.resource"
+                    },
+                    "event"
+                ]
+            },
+            {
+                "in": [
+                    {
+                        "var": "body.actie"
+                    },
+                    ["create", "update", "delete"]
+                ]
+            }
+        ]
     },
     "class": "CommonGateway\\WOOBundle\\ActionHandler\\WooNotificationHandler"
 }

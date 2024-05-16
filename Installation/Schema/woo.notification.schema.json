@@ -3,7 +3,7 @@
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
   "version": "0.1",
   "title": "WooNotification",
-  "description": "A notification object conform ZGW Notification API: https://petstore.swagger.io/?url=https://raw.githubusercontent.com/VNG-Realisatie/notificaties-api/1.0.0/src/openapi.yaml#/notificaties/notificaties_create",
+  "description": "A notification object largely based on ZGW Notification API: https://petstore.swagger.io/?url=https://raw.githubusercontent.com/VNG-Realisatie/notificaties-api/1.0.0/src/openapi.yaml#/notificaties/notificaties_create",
   "type": "object",
   "properties": {
     "kanaal": {
@@ -12,6 +12,7 @@
       "description": "De naam van het kanaal (KANAAL.naam) waar het bericht op moet worden gepubliceerd.",
       "maxLength": 50,
       "minLength": 1,
+      "example": "events",
       "required": true
     },
     "hoofdObject": {
@@ -20,6 +21,7 @@
       "title": "hoofd object",
       "description": "URL-referentie naar het hoofd object van de publicerende API die betrekking heeft op de resource.",
       "minLength": 1,
+      "example": "https://api.demo.notubiz.nl/events/205282",
       "required": true
     },
     "resource": {
@@ -28,6 +30,7 @@
       "description": "De resourcenaam waar de notificatie over gaat.",
       "maxLength": 100,
       "minLength": 1,
+      "example": "event",
       "required": true
     },
     "resourceUrl": {
@@ -36,14 +39,22 @@
       "title": "resource URL",
       "description": "URL-referentie naar de resource van de publicerende API.",
       "minLength": 1,
+      "example": "https://api.demo.notubiz.nl/events/205282",
+      "required": true
+    },
+    "resourceId": {
+      "type": "string",
+      "title": "resource ID",
+      "description": "ID van de resource in de publicerende API.",
+      "minLength": 1,
+      "example": "205282",
       "required": true
     },
     "actie": {
       "type": "string",
       "title": "actie",
-      "description": "De actie die door de publicerende API is gedaan. De publicerende API specificeert de toegestane acties.",
-      "maxLength": 100,
-      "minLength": 1,
+      "description": "De actie die door de publicerende API is gedaan.",
+      "enum": ["create", "update", "delete"],
       "required": true
     },
     "aanmaakdatum": {

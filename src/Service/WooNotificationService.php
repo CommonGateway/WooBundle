@@ -2,17 +2,9 @@
 
 namespace CommonGateway\WOOBundle\Service;
 
-use App\Entity\Value;
-use App\Entity\Endpoint;
-use App\Entity\File;
-use CommonGateway\CoreBundle\Service\CallService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
-use App\Entity\Gateway as Source;
-use Smalot\PdfParser\Parser;
 
 /**
  * Service responsible for basic woo functionality and re-usable functions for the other WooBundle services.
@@ -35,6 +27,11 @@ class WooNotificationService
      * @var LoggerInterface $logger.
      */
     private LoggerInterface $logger;
+    
+    /**
+     * @var SyncNotubizService
+     */
+    private SyncNotubizService $syncNotubizService;
 
     /**
      * @var array
@@ -52,13 +49,16 @@ class WooNotificationService
      *
      * @param EntityManagerInterface $entityManager
      * @param LoggerInterface        $pluginLogger
+     * @param SyncNotubizService     $syncNotubizService
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        SyncNotubizService $syncNotubizService
     ) {
-        $this->entityManager = $entityManager;
-        $this->logger        = $pluginLogger;
+        $this->entityManager      = $entityManager;
+        $this->logger             = $pluginLogger;
+        $this->syncNotubizService = $syncNotubizService;
 
     }//end __construct()
 
@@ -66,18 +66,14 @@ class WooNotificationService
     /**
      * Handles incoming WOO notification api-call and is responsible for generating a response.
      *
-     * TODO: this is a copy past from CoreBundle needs to change
-     *
      * @param array $data          The data from the call
      * @param array $configuration The configuration from the call
      *
      * @return array A handler must ALWAYS return an array
      * @throws Exception
      */
-    public function notificationHandler(array $data, array $configuration): array
+    public function wooNotificationHandler(array $data, array $configuration): array
     {
-        // todo: check url of notification to get the source that matches it
-        // todo: somehow decide what sourceType this is ??? ... and continue to one of the other services for actual syncing
         if ($data['method'] !== 'POST') {
             return $data;
         }
@@ -85,26 +81,27 @@ class WooNotificationService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        $this->logger->debug('NotificationService -> notificationHandler()');
+        $this->logger->debug('WooNotificationService -> notificationHandler()');
 
-        $dot = new Dot($this->data);
-        $url = $dot->get($this->configuration['urlLocation']);
-
-        // Get the correct Entity.
-        $entity = $this->resourceService->getSchema($this->configuration['entity'], 'commongateway/corebundle');
-        if ($entity === null) {
-            $response = json_encode(['Message' => "Could not find an Entity with this reference: {$this->configuration['entity']}"]);
+        // Make sure the action has the field sourceType
+        if (isset($configuration['sourceType']) === false) {
+            $response = json_encode(['Message' => "Could not find the field 'sourceType' in the action configuration"]);
             return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
         }
 
         try {
-            $this->syncService->aquireObject($url, $entity);
+            switch ($configuration['sourceType']) {
+                case 'notubiz':
+                    $this->syncNotubizService->handleNotification($data, $configuration);
+                    break;
+                default:
+                    $response = json_encode(['Message' => "The 'sourceType' {$configuration['sourceType']} is not supported"]);
+                    return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
+            }
         } catch (\Exception $exception) {
-            $response = json_encode(['Message' => "Notification call before sync returned an Exception: {$exception->getMessage()}"]);
+            $response = json_encode(['Message' => "Notification received, but sync failed and returned an Exception: {$exception->getMessage()}"]);
             return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
         }//end try
-
-        $this->entityManager->flush();
 
         $response         = ['Message' => 'Notification received, object synchronized'];
         $data['response'] = new Response(json_encode($response), 200, ['Content-type' => 'application/json']);
