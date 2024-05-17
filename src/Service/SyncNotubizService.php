@@ -220,7 +220,7 @@ class SyncNotubizService
      * Fetches a single Event object from NotuBiz.
      *
      * @param Source $source The source entity that provides the source of the result data.
-     * @param string $id The id of and Event from the NotuBiz API to get.
+     * @param string $id     The id of and Event from the NotuBiz API to get.
      *
      * @return array The fetched objects.
      */
@@ -229,11 +229,11 @@ class SyncNotubizService
         $query = ['format' => 'json'];
 
         $endpoint = $this->configuration['sourceEndpoint'].'/'.$id;
-        
+
         try {
             $response        = $this->callService->call($source, $endpoint, 'GET', ['query' => $query]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
-            
+
             $result = $decodedResponse['event'][0];
         } catch (Exception $e) {
             isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage());
@@ -246,15 +246,15 @@ class SyncNotubizService
             $this->logger->info('Fetched Notubiz Event does not match the organisationId of the Action', ['plugin' => 'common-gateway/woo-bundle']);
             return [];
         }
-        
+
         if (isset($this->configuration['gremiaIds']) === true) {
             // todo check if gremium id is allowed, we need to fetch meeting object of the Event in orde to check this
             // todo do want to do this here, because we will do the same api-call again later, prevent doing this twice somehow?
-//            $meetingObject = $this->fetchMeeting($source, $id);
-//            if (in_array($meetingObject['gremium']['id'], $this->configuration['gremiaIds']) === false) {
-//                $this->logger->info('Fetched Notubiz Event (Meeting) does not match one of the valid gremium id\'s configured in the Action', ['plugin' => 'common-gateway/woo-bundle']);
-//                return [];
-//            }
+            // $meetingObject = $this->fetchMeeting($source, $id);
+            // if (in_array($meetingObject['gremium']['id'], $this->configuration['gremiaIds']) === false) {
+            // $this->logger->info('Fetched Notubiz Event (Meeting) does not match one of the valid gremium id\'s configured in the Action', ['plugin' => 'common-gateway/woo-bundle']);
+            // return [];
+            // }
         }
 
         return $result;
@@ -287,7 +287,7 @@ class SyncNotubizService
      * Fetches meeting object for an Event from NotuBiz.
      *
      * @param Source $source The source entity that provides the source of the result data.
-     * @param string $id The id of and Event from the NotuBiz API to get the Metting object for.
+     * @param string $id     The id of and Event from the NotuBiz API to get the Metting object for.
      *
      * @return array|null The fetched meeting object.
      */
@@ -398,7 +398,7 @@ class SyncNotubizService
      */
     private function handleResults(array $results, array $config): array
     {
-        $categorie    = "Vergaderstukken decentrale overheden";
+        $categorie = "Vergaderstukken decentrale overheden";
         // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
         $customFields = $this->getCustomFields($categorie);
 
@@ -451,29 +451,29 @@ class SyncNotubizService
      */
     private function handleResult(array $result, array $config): array
     {
-        $categorie    = "Vergaderstukken decentrale overheden";
+        $categorie = "Vergaderstukken decentrale overheden";
         // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
         $customFields = $this->getCustomFields($categorie);
-        
+
         $result        = array_merge($result, $customFields);
         $meetingObject = $this->fetchMeeting($config['source'], $this->data['body']['resourceId']);
-        
+
         $object = $this->syncResult($meetingObject, $config, $result);
         if ($object === 'continue') {
             return ["Message" => "Validation errors, check warning logs"];
         }
-        
+
         $this->entityManager->persist($object);
         $this->cacheService->cacheObject($object);
-        
+
         $renderedObject = $object->toArray();
-        
+
         $this->entityManager->flush();
-        
+
         $this->handleDocuments($renderedObject['bijlagen'], $config['source']);
-        
+
         $this->logger->info("Synchronized Event {$this->data['body']['resourceUrl']} to woo object", ['plugin' => 'common-gateway/woo-bundle']);
-        
+
         return $renderedObject;
 
     }//end handleResult()
@@ -576,15 +576,13 @@ class SyncNotubizService
         if ($config === null) {
             return [];
         }
-        
+
         if ($this->data['body']['actie'] === 'delete') {
-            //todo new function, find Synchronization / object using notification info and delete the OpenWoo publication and documents.
-//            return [
-//                "Message" => "Object deleted successfully"
-//            ];
-            return [
-                "Message" => "Deleting objects is not yet implemented"
-            ];
+            // todo new function, find Synchronization / object using notification info and delete the OpenWoo publication and documents.
+            // return [
+            // "Message" => "Object deleted successfully"
+            // ];
+            return ["Message" => "Deleting objects is not yet implemented"];
         }
 
         $this->logger->info("Fetching object {$this->data['body']['resourceUrl']}", ['plugin' => 'common-gateway/woo-bundle']);

@@ -96,9 +96,9 @@ class WooNotificationService
                 $result = $this->syncNotubizService->handleNotification($data, $configuration);
                 break;
             case 'openWoo':
-                //todo
+                // todo
             case 'xxllncCases':
-                //todo
+                // todo
             default:
                 $response = json_encode(['Message' => "The 'sourceType' {$configuration['sourceType']} is not supported"]);
                 return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
@@ -108,7 +108,10 @@ class WooNotificationService
             return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
         }//end try
 
-        $response         = ['Message' => 'Notification received, object synchronized', 'Object' => $result];
+        $response         = [
+            'Message' => 'Notification received, object synchronized',
+            'Object'  => $result,
+        ];
         $data['response'] = new Response(json_encode($response), 200, ['Content-type' => 'application/json']);
 
         return $data;
