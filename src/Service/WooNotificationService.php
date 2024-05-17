@@ -89,11 +89,16 @@ class WooNotificationService
             return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
         }
 
+        $result = ["Message" => "Something went wrong"];
         try {
             switch ($configuration['sourceType']) {
             case 'notubiz':
-                $this->syncNotubizService->handleNotification($data, $configuration);
+                $result = $this->syncNotubizService->handleNotification($data, $configuration);
                 break;
+            case 'openWoo':
+                //todo
+            case 'xxllncCases':
+                //todo
             default:
                 $response = json_encode(['Message' => "The 'sourceType' {$configuration['sourceType']} is not supported"]);
                 return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
@@ -103,7 +108,7 @@ class WooNotificationService
             return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];
         }//end try
 
-        $response         = ['Message' => 'Notification received, object synchronized'];
+        $response         = ['Message' => 'Notification received, object synchronized', 'Object' => $result];
         $data['response'] = new Response(json_encode($response), 200, ['Content-type' => 'application/json']);
 
         return $data;

@@ -220,29 +220,41 @@ class SyncNotubizService
      * Fetches a single Event object from NotuBiz.
      *
      * @param Source $source The source entity that provides the source of the result data.
+     * @param string $id The id of and Event from the NotuBiz API to get.
      *
      * @return array The fetched objects.
      */
-    private function fetchObject(Source $source)
+    private function fetchObject(Source $source, string $id)
     {
         $query = ['format' => 'json'];
 
+        $endpoint = $this->configuration['sourceEndpoint'].'/'.$id;
+        
         try {
-            // todo use correct endpoint
-            $response        = $this->callService->call($source, 'TODO', 'GET', ['query' => $query]);
+            $response        = $this->callService->call($source, $endpoint, 'GET', ['query' => $query]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
+            
+            $result = $decodedResponse['event'][0];
         } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
-            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage());
+            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }
 
-        $result = $decodedResponse['event'][0];
-
-        // todo check if organisationId matches
+        if ($result['organisation'] !== $this->configuration['organisationId']) {
+            $this->logger->info('Fetched Notubiz Event does not match the organisationId of the Action', ['plugin' => 'common-gateway/woo-bundle']);
+            return [];
+        }
+        
         if (isset($this->configuration['gremiaIds']) === true) {
-            // todo check if gremium id is allowed
+            // todo check if gremium id is allowed, we need to fetch meeting object of the Event in orde to check this
+            // todo do want to do this here, because we will do the same api-call again later, prevent doing this twice somehow?
+//            $meetingObject = $this->fetchMeeting($source, $id);
+//            if (in_array($meetingObject['gremium']['id'], $this->configuration['gremiaIds']) === false) {
+//                $this->logger->info('Fetched Notubiz Event (Meeting) does not match one of the valid gremium id\'s configured in the Action', ['plugin' => 'common-gateway/woo-bundle']);
+//                return [];
+//            }
         }
 
         return $result;
@@ -265,7 +277,6 @@ class SyncNotubizService
                 'naam' => $this->configuration['organisatie'],
             ],
             'categorie'   => $categorie,
-            // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
             'autoPublish' => $this->configuration['autoPublish'] ?? true,
         ];
 
@@ -276,25 +287,20 @@ class SyncNotubizService
      * Fetches meeting object for an Event from NotuBiz.
      *
      * @param Source $source The source entity that provides the source of the result data.
-     * @param array  $result An Event result body from the NotuBiz API.
+     * @param string $id The id of and Event from the NotuBiz API to get the Metting object for.
      *
      * @return array|null The fetched meeting object.
      */
-    private function fetchMeeting(Source $source, array $result): ?array
+    private function fetchMeeting(Source $source, string $id): ?array
     {
-        if (isset($result['event_type_data']['self']) === false || str_contains($result['event_type_data']['self'], 'meetings') === false) {
-            return null;
-        }
-
-        $sourceLocation = str_replace('https://', '', $source->getLocation());
-        $endpoint       = str_replace($sourceLocation, '', $result['event_type_data']['self']);
+        $endpoint = "/events/meetings/$id";
 
         try {
             $response        = $this->callService->call($source, $endpoint, 'GET', ['query' => ['format' => 'json']]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
         } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
-            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage());
+            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }
@@ -393,13 +399,14 @@ class SyncNotubizService
     private function handleResults(array $results, array $config): array
     {
         $categorie    = "Vergaderstukken decentrale overheden";
+        // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
         $customFields = $this->getCustomFields($categorie);
 
         $documents = $idsSynced = $responseItems = [];
         foreach ($results as $result) {
             try {
                 $result        = array_merge($result, $customFields);
-                $meetingObject = $this->fetchMeeting($config['source'], $result);
+                $meetingObject = $this->fetchMeeting($config['source'], $result['id']);
 
                 $object = $this->syncResult($meetingObject, $config, $result);
                 if ($object === 'continue') {
@@ -442,12 +449,32 @@ class SyncNotubizService
      *
      * @return array
      */
-    private function handleResult(array $result, array $config)
+    private function handleResult(array $result, array $config): array
     {
-        $response = $result;
-
-        // todo
-        return $response;
+        $categorie    = "Vergaderstukken decentrale overheden";
+        // todo: or maybe: "Agenda's en besluitenlijsten bestuurscolleges"
+        $customFields = $this->getCustomFields($categorie);
+        
+        $result        = array_merge($result, $customFields);
+        $meetingObject = $this->fetchMeeting($config['source'], $this->data['body']['resourceId']);
+        
+        $object = $this->syncResult($meetingObject, $config, $result);
+        if ($object === 'continue') {
+            return ["Message" => "Validation errors, check warning logs"];
+        }
+        
+        $this->entityManager->persist($object);
+        $this->cacheService->cacheObject($object);
+        
+        $renderedObject = $object->toArray();
+        
+        $this->entityManager->flush();
+        
+        $this->handleDocuments($renderedObject['bijlagen'], $config['source']);
+        
+        $this->logger->info("Synchronized Event {$this->data['body']['resourceUrl']} to woo object", ['plugin' => 'common-gateway/woo-bundle']);
+        
+        return $renderedObject;
 
     }//end handleResult()
 
@@ -549,10 +576,20 @@ class SyncNotubizService
         if ($config === null) {
             return [];
         }
+        
+        if ($this->data['body']['actie'] === 'delete') {
+            //todo new function, find Synchronization / object using notification info and delete the OpenWoo publication and documents.
+//            return [
+//                "Message" => "Object deleted successfully"
+//            ];
+            return [
+                "Message" => "Deleting objects is not yet implemented"
+            ];
+        }
 
         $this->logger->info("Fetching object {$this->data['body']['resourceUrl']}", ['plugin' => 'common-gateway/woo-bundle']);
 
-        $result = $this->fetchObject($config['source']);
+        $result = $this->fetchObject($config['source'], $this->data['body']['resourceId']);
         if (empty($result) === true) {
             $this->logger->info('No result found, stop handling notification for Notubiz sync', ['plugin' => 'common-gateway/woo-bundle']);
             return $this->data;
