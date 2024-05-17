@@ -224,7 +224,7 @@ class SyncNotubizService
      *
      * @return array The fetched objects.
      */
-    private function fetchObject(Source $source, string $id)
+    private function fetchObject(Source $source, string $id): array
     {
         $query = ['format' => 'json'];
 
@@ -239,12 +239,12 @@ class SyncNotubizService
             isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage());
             $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
 
-            return [];
+            return ["Message" => 'Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage()];
         }
 
         if ($result['organisation'] !== $this->configuration['organisationId']) {
             $this->logger->info('Fetched Notubiz Event does not match the organisationId of the Action', ['plugin' => 'common-gateway/woo-bundle']);
-            return [];
+            return ["Message" => 'Fetched Notubiz Event does not match the organisationId of the Action'];
         }
 
         if (isset($this->configuration['gremiaIds']) === true) {
@@ -457,7 +457,12 @@ class SyncNotubizService
 
         $result        = array_merge($result, $customFields);
         $meetingObject = $this->fetchMeeting($config['source'], $this->data['body']['resourceId']);
-
+        
+        // Make sure we add id to the result so the Synchronization uses the correct SourceId
+        $result['id'] = $this->data['body']['resourceId'];
+        // Use creation_date of meeting because Event doesn't have this field when getting one single Event object.
+        $result['creation_date'] = $meetingObject['creation_date'];
+        
         $object = $this->syncResult($meetingObject, $config, $result);
         if ($object === 'continue') {
             return ["Message" => "Validation errors, check warning logs"];
@@ -590,7 +595,7 @@ class SyncNotubizService
         $result = $this->fetchObject($config['source'], $this->data['body']['resourceId']);
         if (empty($result) === true) {
             $this->logger->info('No result found, stop handling notification for Notubiz sync', ['plugin' => 'common-gateway/woo-bundle']);
-            return $this->data;
+            return $result;
         }
 
         return $this->handleResult($result, $config);
