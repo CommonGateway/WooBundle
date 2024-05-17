@@ -95,10 +95,10 @@ class WooNotificationService
             case 'notubiz':
                 $result = $this->syncNotubizService->handleNotification($data, $configuration);
                 break;
-                case 'openWoo':
-                //todo: please use syncNotubizService as an example and update syncOpenWooService to match the same structure.
+            case 'openWoo':
+                // todo: please use syncNotubizService as an example and update syncOpenWooService to match the same structure.
             case 'xxllncCases':
-                //todo please use syncNotubizService as an example and update syncXxllncCasesService to match the same structure.
+                // todo please use syncNotubizService as an example and update syncXxllncCasesService to match the same structure.
             default:
                 $response = json_encode(['Message' => "The 'sourceType' {$configuration['sourceType']} is not supported"]);
                 return ['response' => new Response($response, 500, ['Content-type' => 'application/json'])];

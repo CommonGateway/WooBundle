@@ -457,12 +457,12 @@ class SyncNotubizService
 
         $result        = array_merge($result, $customFields);
         $meetingObject = $this->fetchMeeting($config['source'], $this->data['body']['resourceId']);
-        
+
         // Make sure we add id to the result so the Synchronization uses the correct SourceId
         $result['id'] = $this->data['body']['resourceId'];
         // Use creation_date of meeting because Event doesn't have this field when getting one single Event object.
         $result['creation_date'] = $meetingObject['creation_date'];
-        
+
         $object = $this->syncResult($meetingObject, $config, $result);
         if ($object === 'continue') {
             return ["Message" => "Validation errors, check warning logs"];
