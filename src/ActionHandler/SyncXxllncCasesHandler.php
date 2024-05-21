@@ -126,6 +126,13 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                     'required'    => true,
                     'default'     => true,
                 ],
+                'extractTextFromDocuments'  => [
+                    'type'        => 'bool',
+                    'description' => 'If text should be extracted from documents and set in to the Bijlage.documentText.',
+                    'example'     => true,
+                    'required'    => false,
+                    'default'     => false,
+                ],
             ],
         ];
 
