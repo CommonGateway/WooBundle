@@ -187,16 +187,18 @@ class SyncXxllncCasesService
 
         $this->entityManager->persist($value);
 
-        $url          = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        $url = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
 
         $documentText = null;
-        if (isset($config['extractTextFromDocuments']) ===  true && $config['extractTextFromDocuments'] === true) {
+        if (isset($config['extractTextFromDocuments']) === true && $config['extractTextFromDocuments'] === true) {
             // Give the code 5 sec max to extract text.
-            $starttime = time(); // Start timing
+            $starttime = time();
+            // Start timing
             do {
                 $documentText = $this->fileService->getTextFromDocument($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
             } while (isset($documentText) === false && (time() - $starttime) < 5);
         }
+
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
     }//end retrieveFile()
