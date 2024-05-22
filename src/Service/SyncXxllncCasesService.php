@@ -187,8 +187,17 @@ class SyncXxllncCasesService
 
         $this->entityManager->persist($value);
 
-        $url          = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
-        $documentText = $this->fileService->getTextFromDocument($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+        $url = $this->fileService->createOrUpdateFile($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+
+        $documentText = null;
+        if (isset($config['extractTextFromDocuments']) === true && $config['extractTextFromDocuments'] === true) {
+            // Give the code 5 sec max to extract text.
+            $starttime = time();
+            // Start timing
+            do {
+                $documentText = $this->fileService->getTextFromDocument($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
+            } while (isset($documentText) === false && (time() - $starttime) < 5);
+        }
 
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
@@ -352,6 +361,9 @@ class SyncXxllncCasesService
         $hydrationService = new HydrationService($this->syncService, $this->entityManager);
         foreach ($results as $result) {
             try {
+                isset($this->style) === true && $this->style->info("Trying to synchronize publication with sourceId: {$result['id']}");
+                $this->logger->info("Trying to synchronize publication with sourceId: {$result['id']}", ['plugin' => 'common-gateway/woo-bundle']);
+
                 $result       = array_merge($result, ['autoPublish' => $this->configuration['autoPublish'] ?? true, 'organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
                 $mappedResult = $this->mappingService->mapping($mapping, $result);
                 // Map categories to prevent multiple variants of the same categorie.
@@ -395,6 +407,9 @@ class SyncXxllncCasesService
                 $this->entityManager->persist($object);
                 $this->cacheService->cacheObject($object);
                 $responseItems[] = $object;
+
+                isset($this->style) === true && $this->style->info("Succesfully synced publication with sourceId: {$result['id']}");
+                $this->logger->info("Succesfully synced publication with sourceId: {$result['id']}", ['plugin' => 'common-gateway/woo-bundle']);
             } catch (Exception $exception) {
                 isset($this->style) === true && $this->style->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}");
                 $this->logger->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
