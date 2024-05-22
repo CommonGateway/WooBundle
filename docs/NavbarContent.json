@@ -16,67 +16,14 @@
     },
     "subItems": [
       {
-        "label": "Architectuur",
+        "label": "Installatie",
         "type": "internalMarkdown",
         "current": {
-          "pathname": "/docs/Architectuur"
+          "pathname": "/docs/Installatie"
         },
         "handleClick": {
           "internalMarkdown": {
-            "directoryName": "docs",
-            "fileName": "Architectuur"
-          }
-        }
-      },
-      {
-        "label": "Functionaliteit",
-        "type": "internalMarkdown",
-        "current": {
-          "pathname": "/docs/Features"
-        },
-        "handleClick": {
-          "internalMarkdown": {
-            "directoryName": "docs",
-            "fileName": "Features"
-          }
-        }
-      },
-      {
-        "label": "Taken",
-        "type": "internalMarkdown",
-        "current": {
-          "pathname": "/docs/klanten"
-        },
-        "handleClick": {
-          "internalMarkdown": {
-            "directoryName": "taken",
-            "fileName": "klanten"
-          }
-        }
-      },
-      {
-        "label": "Berichten",
-        "type": "internalMarkdown",
-        "current": {
-          "pathname": "/docs/berichten"
-        },
-        "handleClick": {
-          "internalMarkdown": {
-            "directoryName": "berichten",
-            "fileName": "berichten"
-          }
-        }
-      },
-      {
-        "label": "Objecten",
-        "type": "internalMarkdown",
-        "current": {
-          "pathname": "/docs/schema/README"
-        },
-        "handleClick": {
-          "internalMarkdown": {
-            "directoryName": "objecten",
-            "fileName": "README"
+            "fileName": "Installatie"
           }
         }
       },
@@ -95,23 +42,13 @@
     ]
   },
   {
-    "label": "Redocly",
+    "label": "Open Services",
     "type": "external",
     "current": {
-      "pathname": "/Redocly"
+      "pathname": "/services"
     },
     "handleClick": {
-      "link": "https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/CommonGateway/CustomerInteractionBundle/main/docs/openapi.json&nocors"
-    }
-  },
-  {
-    "label": "Open Registers",
-    "type": "external",
-    "current": {
-      "pathname": "/registers"
-    },
-    "handleClick": {
-      "link":  "https://openregisters.app/" 
+      "link":  "https://openservices.app/" 
       }
   }
 ]

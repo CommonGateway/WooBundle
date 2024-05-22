@@ -19,6 +19,8 @@ jobs:
           github_repository_name_as_prefix: false
           github_repository_url: https://github.com/CommonGateway/WooBundle
           github_api_base_url: https://api.github.com/repos/CommonGateway/WooBundle/contents
+          slack_url: "https://github.com/openwebconcept/"
+          READ_THE_DOCS_URL: "false"
           navbar_content: 'https://raw.githubusercontent.com/CommonGateway/WooBundle/master/docs/NavbarContent.json'
           footer_show_logo: true
           footer_logo_href: "https://opencatalogi.nl/"
