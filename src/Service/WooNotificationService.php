@@ -109,7 +109,7 @@ class WooNotificationService
         }//end try
 
         $response         = [
-            'Message' => 'Notification received, object synchronized',
+            'Message' => 'Notification received',
             'Object'  => $result,
         ];
         $data['response'] = new Response(json_encode($response), 200, ['Content-type' => 'application/json']);

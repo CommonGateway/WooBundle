@@ -36,119 +36,120 @@ use Exception;
  */
 class SyncNotubizService
 {
-
+    
     /**
      * @var GatewayResourceService
      */
     private GatewayResourceService $resourceService;
-
+    
     /**
      * @var CallService
      */
     private CallService $callService;
-
+    
     /**
      * @var SynchronizationService
      */
     private SynchronizationService $syncService;
-
+    
     /**
      * @var MappingService
      */
     private MappingService $mappingService;
-
+    
     /**
      * @var EntityManagerInterface
      */
     private EntityManagerInterface $entityManager;
-
+    
     /**
      * @var SymfonyStyle|null
      */
     private ?SymfonyStyle $style = null;
-
+    
     /**
-     * @var LoggerInterface $logger.
+     * @var LoggerInterface $logger .
      */
     private LoggerInterface $logger;
-
+    
     /**
-     * @var ValidationService $validationService.
+     * @var ValidationService $validationService .
      */
     private ValidationService $validationService;
-
+    
     /**
-     * @var CacheService $cacheService.
+     * @var CacheService $cacheService .
      */
     private CacheService $cacheService;
-
+    
     /**
      * @var ObjectEntityService
      */
     private ObjectEntityService $gatewayOEService;
-
+    
     /**
      * @var WooService
      */
     private WooService $wooService;
-
+    
     /**
      * @var HydrationService
      */
     private HydrationService $hydrationService;
-
+    
     /**
      * @var array
      */
     private array $data;
-
+    
     /**
      * @var array
      */
     private array $configuration;
-
-
+    
+    
     /**
      * SyncNotubizService constructor.
      *
      * @param GatewayResourceService $resourceService
-     * @param CallService            $callService
+     * @param CallService $callService
      * @param SynchronizationService $syncService
      * @param EntityManagerInterface $entityManager
-     * @param MappingService         $mappingService
-     * @param LoggerInterface        $pluginLogger
-     * @param ValidationService      $validationService
-     * @param CacheService           $cacheService
-     * @param ObjectEntityService    $gatewayOEService
-     * @param WooService             $wooService
+     * @param MappingService $mappingService
+     * @param LoggerInterface $pluginLogger
+     * @param ValidationService $validationService
+     * @param CacheService $cacheService
+     * @param ObjectEntityService $gatewayOEService
+     * @param WooService $wooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
-        CallService $callService,
+        CallService            $callService,
         SynchronizationService $syncService,
         EntityManagerInterface $entityManager,
-        MappingService $mappingService,
-        LoggerInterface $pluginLogger,
-        ValidationService $validationService,
-        CacheService $cacheService,
-        ObjectEntityService $gatewayOEService,
-        WooService $wooService
-    ) {
-        $this->resourceService   = $resourceService;
-        $this->callService       = $callService;
-        $this->syncService       = $syncService;
-        $this->entityManager     = $entityManager;
-        $this->mappingService    = $mappingService;
-        $this->logger            = $pluginLogger;
+        MappingService         $mappingService,
+        LoggerInterface        $pluginLogger,
+        ValidationService      $validationService,
+        CacheService           $cacheService,
+        ObjectEntityService    $gatewayOEService,
+        WooService             $wooService
+    )
+    {
+        $this->resourceService = $resourceService;
+        $this->callService = $callService;
+        $this->syncService = $syncService;
+        $this->entityManager = $entityManager;
+        $this->mappingService = $mappingService;
+        $this->logger = $pluginLogger;
         $this->validationService = $validationService;
-        $this->cacheService      = $cacheService;
-        $this->gatewayOEService  = $gatewayOEService;
-        $this->wooService        = $wooService;
-        $this->hydrationService  = new HydrationService($this->syncService, $this->entityManager);
-
+        $this->cacheService = $cacheService;
+        $this->gatewayOEService = $gatewayOEService;
+        $this->wooService = $wooService;
+        $this->hydrationService = new HydrationService($this->syncService, $this->entityManager);
+        
     }//end __construct()
-
-
+    
+    
     /**
      * Set symfony style in order to output to the console.
      *
@@ -159,94 +160,94 @@ class SyncNotubizService
     public function setStyle(SymfonyStyle $style): self
     {
         $this->style = $style;
-
+        
         return $this;
-
+        
     }//end setStyle()
-
-
+    
+    
     /**
      * Fetches Event objects from NotuBiz.
      *
-     * @param Source   $source  The source entity that provides the source of the result data.
-     * @param int|null $page    The page we are fetching, increments each iteration.
-     * @param array    $results The results from NotuBiz api we merge each iteration.
+     * @param Source $source The source entity that provides the source of the result data.
+     * @param int|null $page The page we are fetching, increments each iteration.
+     * @param array $results The results from NotuBiz api we merge each iteration.
      *
      * @return array The fetched objects.
      */
-    private function fetchObjects(Source $source, ?int $page=1, array $results=[]): array
+    private function fetchObjects(Source $source, ?int $page = 1, array $results = []): array
     {
-        $dateTo   = new DateTime();
+        $dateTo = new DateTime();
         $dateFrom = new DateTime();
         $dateFrom->add(DateInterval::createFromDateString('-10 years'));
-
+        
         $query = [
-            'format'          => 'json',
-            'page'            => $page,
+            'format' => 'json',
+            'page' => $page,
             'organisation_id' => $this->configuration['organisationId'],
-            'version'         => ($this->configuration['notubizVersion'] ?? '1.21.1'),
-            'date_to'         => $dateTo->format('Y-m-d H:i:s'),
-            'date_from'       => $dateFrom->format('Y-m-d H:i:s'),
+            'version' => ($this->configuration['notubizVersion'] ?? '1.21.1'),
+            'date_to' => $dateTo->format('Y-m-d H:i:s'),
+            'date_from' => $dateFrom->format('Y-m-d H:i:s'),
         ];
-
+        
         if (isset($this->configuration['gremiaIds']) === true) {
             $query['gremia_ids'] = $this->configuration['gremiaIds'];
         }
-
+        
         try {
-            $response        = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET', ['query' => $query]);
+            $response = $this->callService->call($source, $this->configuration['sourceEndpoint'], 'GET', ['query' => $query]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
         } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage());
-            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$this->configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
-
+            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching ' . $source->getLocation() . $this->configuration['sourceEndpoint'] . ': ' . $e->getMessage());
+            $this->logger->error('Something wen\'t wrong fetching ' . $source->getLocation() . $this->configuration['sourceEndpoint'] . ': ' . $e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            
             return [];
         }
-
+        
         $results = array_merge($results, $decodedResponse['events']);
-
+        
         // Pagination NotuBiz.
         if (isset($decodedResponse['pagination']['has_more_pages']) === true && $decodedResponse['pagination']['has_more_pages'] === true) {
             $page++;
             $results = $this->fetchObjects($source, $page, $results);
         }
-
+        
         return $results;
-
+        
     }//end fetchObjects()
-
-
+    
+    
     /**
      * Fetches a single Event object from NotuBiz.
      *
      * @param Source $source The source entity that provides the source of the result data.
-     * @param string $id     The id of and Event from the NotuBiz API to get.
+     * @param string $id The id of and Event from the NotuBiz API to get.
      *
-     * @return array The fetched objects.
+     * @return array The fetched object.
      */
     private function fetchObject(Source $source, string $id): array
     {
         $query = ['format' => 'json'];
-
-        $endpoint = $this->configuration['sourceEndpoint'].'/'.$id;
-
+        
+        $endpoint = $this->configuration['sourceEndpoint'] . '/' . $id;
+        
         try {
-            $response        = $this->callService->call($source, $endpoint, 'GET', ['query' => $query]);
+            $response = $this->callService->call($source, $endpoint, 'GET', ['query' => $query]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
-
+            
             $result = $decodedResponse['event'][0];
         } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage());
-            $this->logger->error('Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
-
-            return ["Message" => 'Something wen\'t wrong fetching '.$source->getLocation().$endpoint.': '.$e->getMessage()];
+            isset($this->style) === true && $this->style->error('Something wen\'t wrong fetching ' . $source->getLocation() . $endpoint . ': ' . $e->getMessage());
+            $this->logger->error('Something wen\'t wrong fetching ' . $source->getLocation() . $endpoint . ': ' . $e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            
+            return ["Message" => 'Something wen\'t wrong fetching ' . $source->getLocation() . $endpoint . ': ' . $e->getMessage()];
         }
-
-        if ($result['organisation'] !== $this->configuration['organisationId']) {
+        
+        if ((string) $result['organisation'] !== (string) $this->configuration['organisationId']) {
             $this->logger->info('Fetched Notubiz Event does not match the organisationId of the Action', ['plugin' => 'common-gateway/woo-bundle']);
             return ["Message" => 'Fetched Notubiz Event does not match the organisationId of the Action'];
         }
-
+        
         if (isset($this->configuration['gremiaIds']) === true) {
             // todo check if gremium id is allowed, we need to fetch meeting object of the Event in orde to check this
             // todo do want to do this here, because we will do the same api-call again later, prevent doing this twice somehow?
@@ -256,10 +257,39 @@ class SyncNotubizService
             // return [];
             // }
         }
-
+        
         return $result;
-
+        
     }//end fetchObject()
+    
+    
+    /**
+     * Deletes a single Synchronization and its object(s) from the gateway.
+     *
+     * @param array $config An array containing the Source, Mapping and Schema we need in order to sync/delete.
+     * @param string $id The id of and Event from the NotuBiz API (sourceId) to find a Synchronization with in the gateway.
+     *
+     * @return array An array with a success message or error message.
+     */
+    private function deleteObject(array $config, string $id, string $categorie=null): array
+    {
+        // Make sure this object does no longer exist in the Notubiz source.
+        $result = $this->fetchObject($config['source'], $id);
+        if (count($result) !== 1 || isset($result['Message']) === false) {
+            return ["Message" => "Object still exists in the NotuBiz API, object in the gateway did not get deleted"];
+        }
+        
+        $synchronization = $this->syncService->findSyncBySource($config['source'], $config['schema'], $id);
+        
+        if ($categorie !== null && $synchronization->getObject()->getValue('categorie') !== $categorie) {
+            return ["Message" => "Object does not match the categorie: $categorie"];
+        }
+        
+        $this->entityManager->remove($synchronization->getObject());
+        $this->entityManager->flush();
+        
+        return ["Message" => "Object deleted successfully"];
+    }
 
 
     /**
@@ -313,7 +343,7 @@ class SyncNotubizService
     /**
      * Syncs a single result from the Notubiz source.
      *
-     * @param array $meetingObject
+     * @param array $meetingObject The meetingObject of the Event we are syncing.
      * @param array $config        An array containing the Source, Mapping and Schema we need in order to sync.
      * @param array $result        The result array to map and sync
      *
@@ -586,17 +616,13 @@ class SyncNotubizService
         }
 
         if ($this->data['body']['actie'] === 'delete') {
-            // todo new function, find Synchronization / object using notification info and delete the OpenWoo publication and documents.
-            // return [
-            // "Message" => "Object deleted successfully"
-            // ];
-            return ["Message" => "Deleting objects is not yet implemented"];
+            return $this->deleteObject($config, $this->data['body']['resourceId']);
         }
 
         $this->logger->info("Fetching object {$this->data['body']['resourceUrl']}", ['plugin' => 'common-gateway/woo-bundle']);
 
         $result = $this->fetchObject($config['source'], $this->data['body']['resourceId']);
-        if (empty($result) === true) {
+        if (count($result) === 1 && isset($result['Message']) === true) {
             $this->logger->info('No result found, stop handling notification for Notubiz sync', ['plugin' => 'common-gateway/woo-bundle']);
             return $result;
         }
