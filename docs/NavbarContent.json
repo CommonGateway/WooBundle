@@ -49,6 +49,7 @@
         },
         "handleClick": {
           "internalMarkdown": {
+            "directoryName": "docs",
             "fileName": "Kosten"
           }
         }
