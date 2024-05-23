@@ -16,19 +16,6 @@
     },
     "subItems": [
       {
-        "label": "Architectuur",
-        "type": "internalMarkdown",
-        "current": {
-          "pathname": "/docs/Architectuur"
-        },
-        "handleClick": {
-          "internalMarkdown": {
-            "directoryName": "docs",
-            "fileName": "Architectuur"
-          }
-        }
-      },
-      {
         "label": "Functionaliteit",
         "type": "internalMarkdown",
         "current": {
@@ -42,41 +29,15 @@
         }
       },
       {
-        "label": "Taken",
+        "label": "Installatie",
         "type": "internalMarkdown",
         "current": {
-          "pathname": "/docs/klanten"
+          "pathname": "/docs/Installatie"
         },
         "handleClick": {
           "internalMarkdown": {
-            "directoryName": "taken",
-            "fileName": "klanten"
-          }
-        }
-      },
-      {
-        "label": "Berichten",
-        "type": "internalMarkdown",
-        "current": {
-          "pathname": "/docs/berichten"
-        },
-        "handleClick": {
-          "internalMarkdown": {
-            "directoryName": "berichten",
-            "fileName": "berichten"
-          }
-        }
-      },
-      {
-        "label": "Objecten",
-        "type": "internalMarkdown",
-        "current": {
-          "pathname": "/docs/schema/README"
-        },
-        "handleClick": {
-          "internalMarkdown": {
-            "directoryName": "objecten",
-            "fileName": "README"
+            "directoryName": "docs",
+            "fileName": "Installatie"
           }
         }
       },
