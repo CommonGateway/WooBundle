@@ -85,8 +85,13 @@ class WooService
         $deletedObjectsCount = 0;
         foreach ($objectIdsToDelete as $key => $id) {
             $this->logger->info("Object $id does not exist at the source, deleting.", ['plugin' => 'common-gateway/woo-bundle']);
-            $this->entityManager->remove($existingObjects[$key]);
-            $deletedObjectsCount++;
+            try {
+                $this->entityManager->remove($existingObjects[$key]);
+                $deletedObjectsCount++;
+            } catch (Exception $e) {
+                $this->logger->error("Something went wrong deleting object ({$existingObjects[$key]->getId()->toString()}) with sourceId: {$existingObjects[$key]->getSynchronizations()[0]->getSourceId()} with error: {$e->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
+                isset($this->style) === true && $this->style->error("Something went wrong deleting object ({$existingObjects[$key]->getId()->toString()}) with sourceId: {$existingObjects[$key]->getSynchronizations()[0]->getSourceId()} with error: {$e->getMessage()}");
+            }
         }
 
         $this->entityManager->flush();

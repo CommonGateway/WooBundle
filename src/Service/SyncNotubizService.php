@@ -343,8 +343,8 @@ class SyncNotubizService
             $mappedResult,
             $config['source'],
             $config['schema'],
-            true,
-            true
+            false,
+            false
         );
 
     }//end syncResult()
@@ -457,6 +457,9 @@ class SyncNotubizService
 
         $result        = array_merge($result, $customFields);
         $meetingObject = $this->fetchMeeting($config['source'], $this->data['body']['resourceId']);
+        if (empty($meetingObject) === true) {
+            return ["Message" => "Something went wrong fetching the Meeting object for Event {$this->data['body']['resourceId']}, check error logs for more info"];
+        }
 
         // Make sure we add id to the result so the Synchronization uses the correct SourceId
         $result['id'] = $this->data['body']['resourceId'];
@@ -465,7 +468,7 @@ class SyncNotubizService
 
         $object = $this->syncResult($meetingObject, $config, $result);
         if ($object === 'continue') {
-            return ["Message" => "Validation errors, check warning logs"];
+            return ["Message" => "Validation errors, check warning logs for more info"];
         }
 
         $this->entityManager->persist($object);
