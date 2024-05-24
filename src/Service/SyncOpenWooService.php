@@ -15,7 +15,6 @@ use CommonGateway\CoreBundle\Service\MappingService;
 use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
 use CommonGateway\CoreBundle\Service\CacheService;
-use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
@@ -82,9 +81,20 @@ class SyncOpenWooService
      */
     private CacheService $cacheService;
 
+    /**
+     * @var FileService
+     */
     private FileService $fileService;
 
+    /**
+     * @var ObjectEntityService
+     */
     private ObjectEntityService $gatewayOEService;
+
+    /**
+     * @var WooService
+     */
+    private WooService $wooService;
 
     /**
      * @var Parser $pdfParser.
@@ -115,6 +125,7 @@ class SyncOpenWooService
      * @param CacheService           $cacheService
      * @param FileService            $fileService
      * @param ObjectEntityService    $gatewayOEService
+     * @param WooService             $wooService
      */
     public function __construct(
         GatewayResourceService $resourceService,
@@ -126,7 +137,8 @@ class SyncOpenWooService
         ValidationService $validationService,
         CacheService $cacheService,
         FileService $fileService,
-        ObjectEntityService $gatewayOEService
+        ObjectEntityService $gatewayOEService,
+        WooService $wooService
     ) {
         $this->resourceService   = $resourceService;
         $this->callService       = $callService;
@@ -138,6 +150,7 @@ class SyncOpenWooService
         $this->cacheService      = $cacheService;
         $this->fileService       = $fileService;
         $this->gatewayOEService  = $gatewayOEService;
+        $this->wooService        = $wooService;
         $this->pdfParser         = new Parser();
 
     }//end __construct()
@@ -159,54 +172,6 @@ class SyncOpenWooService
         return $this;
 
     }//end setStyle()
-
-
-    /**
-     * Checks if existing objects still exist in the source, if not deletes them.
-     *
-     * @param array       $idsSynced ID's from objects we just synced from the source.
-     * @param Source      $source    These objects belong to.
-     * @param string      $schemaRef These objects belong to.
-     * @param string|null $categorie The categorie these objects came from.
-     *
-     * @return int Count of deleted objects.
-     */
-    public function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie=null): int
-    {
-        // Get all existing sourceIds.
-        $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
-        $existingSourceIds = [];
-        $existingObjects   = [];
-        foreach ($source->getSynchronizations() as $synchronization) {
-            if ($synchronization->getEntity()->getReference() === $schemaRef && $synchronization->getSourceId() !== null
-                && ($categorie === null || $synchronization->getObject()->getValue('categorie') === $categorie)
-            ) {
-                $existingSourceIds[] = $synchronization->getSourceId();
-                $existingObjects[]   = $synchronization->getObject();
-            }
-        }
-
-        // Check if existing sourceIds are in the array of new synced sourceIds.
-        $objectIdsToDelete = array_diff($existingSourceIds, $idsSynced);
-
-        // If not it means the object does not exist in the source anymore and should be deleted here.
-        $deletedObjectsCount = 0;
-        foreach ($objectIdsToDelete as $key => $id) {
-            $this->logger->info("Object $id does not exist at the source, deleting.", ['plugin' => 'common-gateway/woo-bundle']);
-            try {
-                $this->entityManager->remove($existingObjects[$key]);
-                $deletedObjectsCount++;
-            } catch (Exception $e) {
-                $this->logger->error("Something went wrong deleting object ({$existingObjects[$key]->getId()->toString()}) with sourceId: {$existingObjects[$key]->getSynchronizations()[0]->getSourceId()} with error: {$e->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
-                isset($this->style) === true && $this->style->error("Something went wrong deleting object ({$existingObjects[$key]->getId()->toString()}) with sourceId: {$existingObjects[$key]->getSynchronizations()[0]->getSourceId()} with error: {$e->getMessage()}");
-            }
-        }
-
-        $this->entityManager->flush();
-
-        return $deletedObjectsCount;
-
-    }//end deleteNonExistingObjects()
 
 
     /**
@@ -252,44 +217,6 @@ class SyncOpenWooService
 
 
     /**
-     * Validates if the Configuration array has the required keys (with a value set).
-     * Will check a default list of keys ('source','oin','organisatie','portalUrl','schema','mapping','sourceEndpoint'), more keys to check can be given.
-     *
-     * @param array|null $requiredKeys More keys to check besides the default keys, will default to empty array.
-     * @param string     $handlerName  The name of the handler we are checking these keys for, used in case of throwing error / creating a log.
-     *
-     * @return bool True if all keys are present, else this will return false.
-     */
-    public function validateHandlerConfig(array $configuration, ?array $requiredKeys=[], string $handlerName='syncOpenWooHandler'): bool
-    {
-        $defaultRequired = [
-            'source',
-            'oin',
-            'organisatie',
-            'portalUrl',
-            'schema',
-            'mapping',
-        ];
-
-        $requiredKeys = array_merge($defaultRequired, $requiredKeys);
-
-        foreach ($requiredKeys as $key) {
-            if (isset($configuration[$key]) === false) {
-                $keys = implode(', ', array_slice($requiredKeys, 0, -1)).' or '.end($requiredKeys);
-
-                isset($this->style) === true && $this->style->error("No $keys configured on this action, ending $handlerName");
-                $this->logger->error('No source, schema, mapping, oin, organisationId, organisatie, sourceEndpoint or portalUrl configured on this action, ending '.$handlerName, ['plugin' => 'common-gateway/woo-bundle']);
-
-                return false;
-            }
-        }
-
-        return true;
-
-    }//end validateHandlerConfig()
-
-
-    /**
      * Handles the synchronization of openwoo objects.
      *
      * @param array $data
@@ -307,7 +234,7 @@ class SyncOpenWooService
         isset($this->style) === true && $this->style->success('syncOpenWooHandler triggered');
         $this->logger->info('syncOpenWooHandler triggered', ['plugin' => 'common-gateway/woo-bundle']);
 
-        if ($this->validateHandlerConfig($this->configuration, ['sourceEndpoint']) === false) {
+        if ($this->wooService->validateHandlerConfig($this->configuration, ['sourceEndpoint']) === false) {
             return [];
         }
 
@@ -417,7 +344,7 @@ class SyncOpenWooService
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 
-        $deletedObjectsCount = $this->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
+        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 

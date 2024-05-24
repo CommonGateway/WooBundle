@@ -1,0 +1,56 @@
+{
+    "title": "NotificationEpeNotubizAction",
+    "$id": "https://commongateway.nl/woo.NotificationEpeNotubizAction.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["woo.notification"],
+    "configuration": {
+        "oin": "00000001001299992000",
+        "portalUrl": "https://conductionnl.github.io/woo-website-epe",
+        "source": "https://commongateway.woo.nl/source/woo.notubiz.source.json",
+        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
+        "mapping": "https://commongateway.nl/mapping/woo.notubizEventToWoo.mapping.json",
+        "sourceType": "notubiz",
+        "organisatie": "Gemeente Epe",
+        "organisationId": "429",
+        "sourceEndpoint": "/events"
+    },
+    "conditions":
+    {
+        "and": [
+            {
+                "in": [
+                    "https://api.demo.notubiz.nl",
+                    {
+                        "var": "body.hoofdObject"
+                    }
+                ]
+            },
+            {
+                "==": [
+                    {
+                        "var": "body.kanaal"
+                    },
+                    "events"
+                ]
+            },
+            {
+                "==": [
+                    {
+                        "var": "body.resource"
+                    },
+                    "event"
+                ]
+            },
+            {
+                "in": [
+                    {
+                        "var": "body.actie"
+                    },
+                    ["create", "update", "delete"]
+                ]
+            }
+        ]
+    },
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\WooNotificationHandler"
+}

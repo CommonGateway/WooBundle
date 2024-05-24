@@ -2,7 +2,7 @@
 
 namespace CommonGateway\WOOBundle\ActionHandler;
 
-use CommonGateway\WOOBundle\Service\SyncNotubizService;
+use CommonGateway\WOOBundle\Service\WooNotificationService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -10,7 +10,7 @@ use Twig\Error\SyntaxError;
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 
 /**
- * ActionHandler executing SyncNotubizService->syncNotubizHandler.
+ * ActionHandler executing WooNotificationService->notificationHandler.
  *
  * @author  Conduction BV <info@conduction.nl>, Wilco Louwerse <wilco@conduction.nl>
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
@@ -18,21 +18,21 @@ use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
  * @package  CommonGateway\WOOBundle
  * @category ActionHandler
  */
-class SyncNotubizHandler implements ActionHandlerInterface
+class WooNotificationHandler implements ActionHandlerInterface
 {
 
     /**
-     * @var SyncNotubizService
+     * @var WooNotificationService
      */
-    private SyncNotubizService $service;
+    private WooNotificationService $service;
 
 
     /**
      * SyncNotubizHandler constructor.
      *
-     * @param SyncNotubizService $service
+     * @param WooNotificationService $service
      */
-    public function __construct(SyncNotubizService $service)
+    public function __construct(WooNotificationService $service)
     {
         $this->service = $service;
 
@@ -161,7 +161,7 @@ class SyncNotubizHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->service->syncNotubizHandler($data, $configuration);
+        return $this->service->wooNotificationHandler($data, $configuration);
 
     }//end run()
 
