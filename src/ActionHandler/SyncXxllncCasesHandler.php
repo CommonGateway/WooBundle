@@ -47,7 +47,7 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://commongateway.nl/pdd.SyncCasesAction.action.json',
+            '$id'         => 'https://commongateway.nl/ActionHandler/woo.SyncXxllncCasesHandler.actionHandler.json',
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'SyncXxllncCasesHandler',
             'description' => 'Handles the sync for xxllnc cases.',

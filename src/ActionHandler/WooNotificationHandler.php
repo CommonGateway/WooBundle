@@ -28,7 +28,7 @@ class WooNotificationHandler implements ActionHandlerInterface
 
 
     /**
-     * SyncNotubizHandler constructor.
+     * WooNotificationHandler constructor.
      *
      * @param WooNotificationService $service
      */
@@ -47,10 +47,10 @@ class WooNotificationHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://commongateway.nl/pdd.SyncNotubizAction.action.json',
+            '$id'         => 'https://commongateway.nl/ActionHandler/woo.WooNotificationHandler.actionHandler.json',
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
-            'title'       => 'SyncNotubizHandler',
-            'description' => 'Handles the sync for notubiz requests.',
+            'title'       => 'WooNotificationHandler',
+            'description' => 'Handles WOO notifications.',
             'required'    => [
                 'oin',
                 'portalUrl',
@@ -150,7 +150,7 @@ class WooNotificationHandler implements ActionHandlerInterface
 
 
     /**
-     * This function runs the SyncNotubiz service plugin.
+     * This function runs the WooNotification service.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action

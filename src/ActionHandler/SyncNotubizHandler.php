@@ -47,7 +47,7 @@ class SyncNotubizHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://commongateway.nl/pdd.SyncNotubizAction.action.json',
+            '$id'         => 'https://commongateway.nl/ActionHandler/woo.SyncNotubizHandler.actionHandler.json',
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'SyncNotubizHandler',
             'description' => 'Handles the sync for notubiz requests.',

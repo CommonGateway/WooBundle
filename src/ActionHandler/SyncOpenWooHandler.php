@@ -47,7 +47,7 @@ class SyncOpenWooHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://commongateway.nl/pdd.SyncOpenWooAction.action.json',
+            '$id'         => 'https://commongateway.nl/ActionHandler/woo.SyncOpenWooHandler.actionHandler.json',
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'SyncOpenWooHandler',
             'description' => 'Handles the sync for open woo requests.',
