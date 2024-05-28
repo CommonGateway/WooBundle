@@ -463,7 +463,7 @@ class SyncNotubizService
         $this->entityManager->flush();
 
         $this->handleDocuments($documents, $config['source']);
-        
+
         // Make sure to cache all objects with updated documents (specific their urls)
         foreach ($responseItems as $responseItem) {
             $this->cacheService->cacheObject($responseItem);
@@ -505,16 +505,16 @@ class SyncNotubizService
         if ($object === 'continue') {
             return ["Message" => "Validation errors, check warning logs for more info"];
         }
-        
+
         $this->entityManager->persist($object);
         $this->entityManager->flush();
-        
+
         $this->handleDocuments($object->toArray()['bijlagen'], $config['source']);
-        
+
         $this->cacheService->cacheObject($object);
-        
+
         $this->logger->info("Synchronized Event {$this->data['body']['resourceUrl']} to woo object", ['plugin' => 'common-gateway/woo-bundle']);
-        
+
         return $object->toArray();
 
     }//end handleResult()
