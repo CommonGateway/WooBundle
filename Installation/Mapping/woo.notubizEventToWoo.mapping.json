@@ -2,7 +2,7 @@
   "title": "notubizEventToWoo",
   "$id": "https://commongateway.nl/mapping/woo.notubizEventToWoo.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "passTrough": false,
   "mapping": {
     "_sourceId": "id",
@@ -12,11 +12,13 @@
     "categorie": "categorie",
     "publicatiedatum": "creation_date",
     "titel": "{% if title|default %}{{ title }}{% elseif attributes|default %}{% set flag = false %}{% for attribute in attributes %}{% if attribute.id == 1 %}{{ attribute.value }}{% set flag = true %}{% endif %}{% endfor %}{% if flag == false %}Event{% endif %}{% else %}Event{% endif %} {{creation_date|date('Y-m-d')}}",
-    "bijlagen": "{% if bijlagen|default %}{{ map('https://commongateway.nl/mapping/woo.notubizDocumentToBijlage.mapping.json', bijlagen, true)|json_encode }}{% endif %}"
+    "bijlagen": "{% if bijlagen|default %}{{ map('https://commongateway.nl/mapping/woo.notubizDocumentToBijlage.mapping.json', bijlagen, true)|json_encode }}{% endif %}",
+    "samenvatting": "{% if description|default %}{{ description }}{% endif %}"
   },
   "cast": {
     "gepubliceerd": "bool",
     "categorie": "unsetIfValue==",
-    "bijlagen": ["jsonToArray", "unsetIfValue=="]
+    "bijlagen": ["jsonToArray", "unsetIfValue=="],
+    "samenvatting": ["htmlDecode", "unsetIfValue=="]
   }
 }
