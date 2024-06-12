@@ -31,6 +31,7 @@ class SyncXxllncService
 
     private array $configuration = [];
 
+
     /**
      * SyncXxllncCasesService constructor.
      *
@@ -57,20 +58,24 @@ class SyncXxllncService
         private readonly WooService $wooService,
         LoggerInterface $pluginLogger,
     ) {
-        $this->logger = $pluginLogger;
+        $this->logger           = $pluginLogger;
         $this->hydrationService = new HydrationService($this->syncService, $this->entityManager);
+
     }//end __construct()
+
 
     public function getConfiguration(): array
     {
         return $this->configuration;
-    }
+
+    }//end getConfiguration()
+
 
     public function setConfiguration(array $configuration): void
     {
         $this->configuration = $configuration;
-    }
 
+    }//end setConfiguration()
 
 
     /**
@@ -112,52 +117,56 @@ class SyncXxllncService
 
     }//end fetchObjects()
 
+
     private function fetchCase(string $caseId, array $configuration): array
     {
         $case = [];
 
         return $case;
-    }
+
+    }//end fetchCase()
+
 
     public function createAttachmentObject (array $attachment, array $case, ObjectEntity $objectEntity, Value $value)
 
-    public function createAttachmentObjects (array $case, ObjectEntity $publication): void
+    public function createAttachmentObjects(array $case, ObjectEntity $publication): void
     {
 
         if (isset($case['values']['attribute.woo_publicatie']) === true) {
-
-
             foreach ($case['values']['attribute.woo_publicatie'] as $attachment) {
-
             }
         }
 
         if (isset($case['values']['attribute.woo_informatieverzoek'][0]) === true) {
-            $attachments[] =  $case['values']['attribute.woo_informatieverzoek'][0];
+            $attachments[] = $case['values']['attribute.woo_informatieverzoek'][0];
+
+
         }
 
         if (isset($case['values']['attribute.woo_inventarisatielijst'][0]) === true) {
-            $attachments[] =  $case['values']['attribute.woo_inventarisatielijst'][0];
+            $attachments[] = $case['values']['attribute.woo_inventarisatielijst'][0];
         }
-    }
+
+    }//end createAttachmentObjects()
+
 
     public function syncXxllncCase(array $data, array $configuration): array
     {
-        if(isset($data['case']) === false) {
+        if (isset($data['case']) === false) {
             $data['case'] = $this->fetchCase(
                 caseId: $data['caseId'],
                 configuration: $configuration
             );
         }
+
         $case = $data['case'];
 
         $schema  = $this->resourceService->getSchema($configuration['schema'], 'common-gateway/woo-bundle');
         $mapping = $this->resourceService->getMapping($configuration['mapping'], 'common-gateway/woo-bundle');
         $source  = $this->resourceService->getSource($configuration['source'], 'common-gateway/woo-bundle');
 
-
         // TODO: Check if we can put this into the mapping.
-        $case       = array_merge($case, ['autoPublish' => $configuration['autoPublish'] ?? true, 'organisatie' => ['oin' => $configuration['oin'], 'naam' => $configuration['organisatie']]]);
+        $case = array_merge($case, ['autoPublish' => $configuration['autoPublish'] ?? true, 'organisatie' => ['oin' => $configuration['oin'], 'naam' => $configuration['organisatie']]]);
 
         $mappedCase = $this->mappingService->mapping($mapping, $case);
 
@@ -182,10 +191,10 @@ class SyncXxllncService
         $this->entityManager->persist($object);
         $this->cacheService->cacheObject($object);
 
-
-
         return $data;
-    }
+
+    }//end syncXxllncCase()
+
 
     public function discoverXxllncCases(array $data, array $configuration): array
     {
@@ -196,11 +205,13 @@ class SyncXxllncService
         $this->fetchObjects(source: $source);
 
         return $data;
-    }
+
+    }//end discoverXxllncCases()
+
 
     public function syncXxllncCaseHandler(array $data, array $configuration): array
     {
-        if(isset($data['case']) === true || isset($data['caseId']) === true) {
+        if (isset($data['case']) === true || isset($data['caseId']) === true) {
             return $this->syncXxllncCase(
                 data: $data,
                 configuration: $configuration
@@ -211,5 +222,8 @@ class SyncXxllncService
             data: $data,
             configuration: $configuration
         );
-    }
-}
+
+    }//end syncXxllncCaseHandler()
+
+
+}//end class
