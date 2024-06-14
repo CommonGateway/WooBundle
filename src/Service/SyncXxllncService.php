@@ -126,6 +126,7 @@ class SyncXxllncService
 
     }//end fetchCase()
 
+
     public function extractText(Value $value, array $configuration): ?string
     {
         $documentText = null;
@@ -139,11 +140,13 @@ class SyncXxllncService
         }
 
         return $documentText;
-    }
+
+    }//end extractText()
+
 
     public function populateXxllncDocumentHandler(array $data, array $configuration): array
     {
-        $source = $this->resourceService->getSource($configuration['source'], "common-gateway/woo-bundle");
+        $source   = $this->resourceService->getSource($configuration['source'], "common-gateway/woo-bundle");
         $endpoint = $this->resourceService->getEndpoint($configuration['fileEndpoint'], "common-gateway/woo-bundle");
 
         $document = $this->entityManager->getRepository(ObjectEntity::class)->findByAnyId($data['sourceId']);
@@ -154,8 +157,8 @@ class SyncXxllncService
             zaaksysteem: $source
         );
 
-        $value    = $document->getValueObject('url');
-        $url      = $this->fileService->createOrUpdateFile(
+        $value = $document->getValueObject('url');
+        $url   = $this->fileService->createOrUpdateFile(
             value: $value,
             title: $data['metadata']['filename'],
             base64: $base64,
@@ -176,14 +179,13 @@ class SyncXxllncService
         $publication = $this->entityManager->getRepository(ObjectEntity::class)->find($data['publication']);
         $this->cacheService->cacheObject($publication);
         return $data;
-    }
 
+    }//end populateXxllncDocumentHandler()
 
 
     public function createAttachmentMessages(array $case, ObjectEntity $publication): void
     {
-        foreach($case['attribute.woo_publicatie'] as $document)
-        {
+        foreach ($case['attribute.woo_publicatie'] as $document) {
             $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $document['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $document, 'publication' => $publication->getId()]);
         }
 
@@ -199,7 +201,7 @@ class SyncXxllncService
             $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $case['attribute.woo_besluit']['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $case['attribute.woo_besluit'], 'publication' => $publication->getId()]);
         }
 
-    }//end createAttachmentObjects()
+    }//end createAttachmentMessages()
 
 
     public function syncXxllncCase(array $data, array $configuration): array
