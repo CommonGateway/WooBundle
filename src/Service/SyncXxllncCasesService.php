@@ -176,7 +176,7 @@ class SyncXxllncCasesService
         $mimeType = $documentMeta['mimetype'];
 
         // Check if we only have to allow PDF documents.
-        if (isset($this->configuration['allowPDFOnly']) === true && $this->configuration['allowPDFOnly'] === true && ($mimeType !== 'pdf' || $mimeType !== 'application/pdf')) {
+        if (isset($this->configuration['allowPDFOnly']) === true && $this->configuration['allowPDFOnly'] === true && ($mimeType !== 'pdf' && $mimeType !== 'application/pdf')) {
             return null;
         }
 

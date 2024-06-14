@@ -126,25 +126,77 @@ class SyncXxllncService
 
     }//end fetchCase()
 
-
-    public function createAttachmentObject (array $attachment, array $case, ObjectEntity $objectEntity, Value $value)
-
-    public function createAttachmentObjects(array $case, ObjectEntity $publication): void
+    public function extractText(Value $value, array $configuration): ?string
     {
-
-        if (isset($case['values']['attribute.woo_publicatie']) === true) {
-            foreach ($case['values']['attribute.woo_publicatie'] as $attachment) {
-            }
+        $documentText = null;
+        if (isset($configuration['extractTextFromDocuments']) === true && $configuration['extractTextFromDocuments'] === true) {
+            // Give the code 5 sec max to extract text.
+            $starttime = time();
+            // Start timing
+            do {
+                $documentText = $this->fileService->getTextFromDocument(value: $value);
+            } while (isset($documentText) === false && (time() - $starttime) < 5);
         }
 
-        if (isset($case['values']['attribute.woo_informatieverzoek'][0]) === true) {
-            $attachments[] = $case['values']['attribute.woo_informatieverzoek'][0];
+        return $documentText;
+    }
+
+    public function populateXxllncDocumentHandler(array $data, array $configuration): array
+    {
+        $source = $this->resourceService->getSource($configuration['source'], "common-gateway/woo-bundle");
+        $endpoint = $this->resourceService->getEndpoint($configuration['fileEndpoint'], "common-gateway/woo-bundle");
+
+        $document = $this->entityManager->getRepository(ObjectEntity::class)->findByAnyId($data['sourceId']);
+        $base64   = $this->fileService->getInhoudDocument(
+            caseId: $data['caseSourceId'],
+            documentId: $data['sourceId'],
+            mimeType: $data['metadata']['mimetype'],
+            zaaksysteem: $source
+        );
+
+        $value    = $document->getValueObject('url');
+        $url      = $this->fileService->createOrUpdateFile(
+            value: $value,
+            title: $data['metadata']['filename'],
+            base64: $base64,
+            mimeType: $data['metadata']['mimetype'],
+            downloadEndpoint: $endpoint
+        );
+
+        $documentText = $this->extractText(
+            value: $value,
+            configuration: $configuration
+        );
+
+        $document->hydrate(['url' => $url, 'documentText' => $documentText]);
+
+        $this->entityManager->persist($document);
+        $this->entityManager->flush();
+
+        $publication = $this->entityManager->getRepository(ObjectEntity::class)->find($data['publication']);
+        $this->cacheService->cacheObject($publication);
+        return $data;
+    }
 
 
+
+    public function createAttachmentMessages(array $case, ObjectEntity $publication): void
+    {
+        foreach($case['attribute.woo_publicatie'] as $document)
+        {
+            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $document['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $document, 'publication' => $publication->getId()]);
         }
 
-        if (isset($case['values']['attribute.woo_inventarisatielijst'][0]) === true) {
-            $attachments[] = $case['values']['attribute.woo_inventarisatielijst'][0];
+        if (isset($case['attribute.woo_informatieverzoek']) === true) {
+            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $case['attribute.woo_informatieverzoek']['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $case['attribute.woo_informatieversoek'], 'publication' => $publication->getId()]);
+        }
+
+        if (isset($case['attribute.woo_inventarisatielijst']) === true) {
+            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $case['attribute.woo_inventarisatielijst']['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $case['attribute.woo_inventarisatielijst'], 'publication' => $publication->getId()]);
+        }
+
+        if (isset($case['attribute.woo_besluit']) === true) {
+            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $case['attribute.woo_besluit']['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $case['attribute.woo_besluit'], 'publication' => $publication->getId()]);
         }
 
     }//end createAttachmentObjects()
@@ -187,6 +239,8 @@ class SyncXxllncService
         );
 
         $object = $this->entityManager->getRepository('App:ObjectEntity')->findByAnyId($case['id']);
+
+        $object->hydrate(['portalUrl' => "{$configuration['portalUrl']}/{$object->getId()->toString()}"]);
 
         $this->entityManager->persist($object);
         $this->cacheService->cacheObject($object);
