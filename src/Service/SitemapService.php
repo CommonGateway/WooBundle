@@ -214,6 +214,12 @@ class SitemapService
         $publisherSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
         $publishers      = $this->cacheService->searchObjects(null, ['oin' => $parameters['oin']], [$publisherSchema->getId()->toString()])['results'];
 
+        if (count($publishers) === 0) {
+            $this->logger->error('Couldn\'t find a publisher for this oin: '.$parameters['oin'], ['plugin' => 'common-gateway/woo-bundle']);
+            $this->data['response'] = $this->createResponse(['Message' => 'Couldn\'t find a publisher for this oin: '.$parameters['oin']], 404, 'error');
+            return $this->data;
+        }
+
         unset($filter['oin'], $filter['sitemaps'], $filter['sitemap']);
 
         // $filter = ['_limit' => 50000];
@@ -337,6 +343,7 @@ class SitemapService
             }
         } else {
             $this->logger->warning('No oin found for this domain, returning no sitemaps');
+            $this->data['response'] = $this->createResponse(['Message' => "No oin found for this domain: $host"], 404, 'error');
             return $this->data;
         }
 
@@ -414,7 +421,12 @@ class SitemapService
         // Remove CDATA
         $contentString = str_replace(["<![CDATA[", "]]>"], "", $contentString);
 
-        return new Response($contentString, $status);
+        $contentType = "application/xml";
+        if (isset($this->data['headers']['Accept']) === true) {
+            $contentType = $this->data['headers']['Accept'];
+        }
+
+        return new Response($contentString, $status, ['Content-Type' => $contentType]);
 
     }//end createResponse()
 

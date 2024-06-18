@@ -94,8 +94,17 @@
         ]
       },
       {
+        "$id": "https://commongateway.nl/woo.sitemap.publishers.endpoint.json",
+        "name": "WOO sitemap publishers endpoint",
+        "version": "0.0.1",
+        "path": "sitemaps/publishers",
+        "reference": "https://commongateway.nl/woo.sitemap.schema.json",
+        "methods": []
+      },
+      {
         "$id": "https://commongateway.nl/woo.sitemap.endpoint.json",
-        "version": "0.0.2",
+        "name": "WOO sitemap endpoint",
+        "version": "0.0.3",
         "path": "sitemaps/oin/sitemap",
         "pathRegex": "^sitemaps/?[0-9]{20}/sitemap/?([a-z0-9-]+)?$",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
@@ -106,7 +115,8 @@
       },
       {
         "$id": "https://commongateway.nl/woo.sitemapindex.endpoint.json",
-        "version": "0.0.2",
+        "name": "WOO sitemapindex endpoint",
+        "version": "0.0.3",
         "path": "sitemapsitemaps/oin/sitemapindex",
         "pathRegex": "^sitemaps/?([0-9]){20}?/sitemapindex-diwoo-infocat-?([0-9]{3})?.xml$",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
@@ -117,7 +127,8 @@
       },
       {
         "$id": "https://commongateway.nl/woo.robot.txt.endpoint.json",
-        "version": "0.0.2",
+        "name": "WOO robots.txt endpoint",
+        "version": "0.0.3",
         "reference": "https://commongateway.nl/woo.sitemap.schema.json",
         "path": "sitemaps/robots",
         "pathRegex": "^sitemaps/robots.txt$",
