@@ -202,6 +202,15 @@ class SitemapService
             $this->data['response'] = $this->createResponse(['Message' => 'The publication schema or the sitemap mapping cannot be found.'], 409, 'error');
             return $this->data;
         }
+        
+        // todo: This is a temp fix for dealing with amp; but we should probably be using htmlspecialchars_decode on the full url somehow.
+        foreach ($parameters as $key => $value) {
+            $newKey = str_replace('amp;', '', $key);
+            if ($newKey !== $key) {
+                $parameters[$newKey] = $value;
+                unset($parameters[$key]);
+            }
+        }
 
         $filter = array_merge(
             $parameters,
