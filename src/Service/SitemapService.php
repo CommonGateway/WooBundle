@@ -203,6 +203,15 @@ class SitemapService
             return $this->data;
         }
 
+        // todo: This is a temp fix for dealing with amp; but we should probably be using htmlspecialchars_decode on the full url somehow.
+        foreach ($parameters as $key => $value) {
+            $newKey = str_replace('amp;', '', $key);
+            if ($newKey !== $key) {
+                $parameters[$newKey] = $value;
+                unset($parameters[$key]);
+            }
+        }
+
         $filter = array_merge(
             $parameters,
             [
