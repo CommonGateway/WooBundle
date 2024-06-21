@@ -407,37 +407,39 @@ class SitemapService
         return htmlspecialchars($str);
 
     }//end nonAsciiUrlEncode()
-    
-    
+
+
     /**
      * Creates a response based on content.
      *
-     * @param array $content The content to incorporate in the response
-     * @param int $status The status code of the response
+     * @param array  $content  The content to incorporate in the response
+     * @param int    $status   The status code of the response
      * @param string $rootName The rootName of the xml.
-     * @param bool $sitemap True if this is a response for the sitemap api call.
+     * @param bool   $sitemap  True if this is a response for the sitemap api call.
      *
      * @return Response
      */
-    private function createResponse(array $content, int $status, string $rootName, bool $sitemap = false): Response
+    private function createResponse(array $content, int $status, string $rootName, bool $sitemap=false): Response
     {
         $this->logger->debug('Creating XML response', ['plugin' => 'common-gateway/woo-bundle']);
         $xmlEncoder = new XmlEncoder(['xml_root_node_name' => $rootName]);
-        $xml        = [
-            '@xmlns'              => 'http://www.sitemaps.org/schemas/sitemap/0.9',
-        ];
+        $xml        = ['@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9'];
         if ($sitemap === true) {
-            $xml = array_merge($xml, [
-                '@xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
-                '@xmlns:diwoo'        => 'https://standaarden.overheid.nl/diwoo/metadata/',
-                '@xsi:schemaLocation' => 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd https://standaarden.overheid.nl/diwoo/metadata/ https://standaarden.overheid.nl/diwoo/metadata/0.9.1/xsd/diwoo-metadata.xsd',
-                '@xmlns:xhtml'        => 'http://www.w3.org/1999/xhtml',
-                '@xmlns:image'        => 'http://www.google.com/schemas/sitemap-image/1.1',
-                '@xmlns:video'        => 'http://www.google.com/schemas/sitemap-video/1.1',
-                '@xmlns:news'         => 'http://www.google.com/schemas/sitemap-news/0.9',
-            ]);
+            $xml = array_merge(
+                $xml,
+                [
+                    '@xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+                    '@xmlns:diwoo'        => 'https://standaarden.overheid.nl/diwoo/metadata/',
+                    '@xsi:schemaLocation' => 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd https://standaarden.overheid.nl/diwoo/metadata/ https://standaarden.overheid.nl/diwoo/metadata/0.9.1/xsd/diwoo-metadata.xsd',
+                    '@xmlns:xhtml'        => 'http://www.w3.org/1999/xhtml',
+                    '@xmlns:image'        => 'http://www.google.com/schemas/sitemap-image/1.1',
+                    '@xmlns:video'        => 'http://www.google.com/schemas/sitemap-video/1.1',
+                    '@xmlns:news'         => 'http://www.google.com/schemas/sitemap-news/0.9',
+                ]
+            );
         }
-        $content    = array_merge($xml, $content);
+
+        $content = array_merge($xml, $content);
 
         $contentString = $xmlEncoder->encode($content, 'xml', ['xml_encoding' => 'utf-8', 'remove_empty_tags' => true]);
 
