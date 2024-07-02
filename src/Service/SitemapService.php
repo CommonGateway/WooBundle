@@ -299,7 +299,7 @@ class SitemapService
         }
 
         // Count all the publication objects with the given query.
-        $count = $this->cacheService->countObjects(null, $filter, [$publicatieSchema->getId()->toString()]);
+        $count = $this->cacheService->countObjects($filter, [$publicatieSchema->getId()->toString()]);
         $pages = ((int) (($count - 1) / 50000) + 1);
 
         // Get the domain of the request.
