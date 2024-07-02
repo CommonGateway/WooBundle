@@ -221,7 +221,7 @@ class SitemapService
         );
 
         $publisherSchema = $this->resourceService->getSchema('https://commongateway.nl/woo.sitemap.schema.json', 'common-gateway/woo-bundle');
-        $publishers      = $this->cacheService->searchObjects(null, ['oin' => $parameters['oin']], [$publisherSchema->getId()->toString()])['results'];
+        $publishers      = $this->cacheService->searchObjects(['oin' => $parameters['oin']], [$publisherSchema->getId()->toString()])['results'];
 
         if (count($publishers) === 0) {
             $this->logger->error('Couldn\'t find a publisher for this oin: '.$parameters['oin'], ['plugin' => 'common-gateway/woo-bundle']);
@@ -233,7 +233,7 @@ class SitemapService
 
         // $filter = ['_limit' => 50000];
         // Get all the publication objects with the given query.
-        $objects = $this->cacheService->searchObjects(null, $filter, [$publicatieSchema->getId()->toString()])['results'];
+        $objects = $this->cacheService->searchObjects($filter, [$publicatieSchema->getId()->toString()])['results'];
 
         $sitemap = [];
         foreach ($objects as $object) {
@@ -341,7 +341,7 @@ class SitemapService
 
         $host = $this->requestStack->getMainRequest()->getHost();
 
-        $sitemaps = $this->cacheService->searchObjects(null, ['domains' => $host], [$sitemapSchema->getId()->toString()]);
+        $sitemaps = $this->cacheService->searchObjects(['domains' => $host], [$sitemapSchema->getId()->toString()]);
 
         if (count($sitemaps['results']) === 1) {
             $oin = $sitemaps['results'][0]['oin'];
