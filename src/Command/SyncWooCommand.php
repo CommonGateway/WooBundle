@@ -3,6 +3,7 @@
 namespace CommonGateway\WOOBundle\Command;
 
 use App\Entity\Action;
+use App\Entity\User;
 use CommonGateway\WOOBundle\Service\SyncNotubizService;
 use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
 use CommonGateway\WOOBundle\Service\SyncOpenWooService;
@@ -13,6 +14,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * This class handles the command for the synchronization of woo objects.
@@ -61,6 +64,11 @@ class SyncWooCommand extends Command
      */
     private EntityManagerInterface $entityManager;
 
+    /**
+     * @var SessionInterface
+     */
+    private SessionInterface $session;
+
 
     /**
      * Class constructor.
@@ -69,17 +77,20 @@ class SyncWooCommand extends Command
      * @param SyncOpenWooService     $syncOpenWooService     The OpenWoo service
      * @param SyncNotubizService     $syncNotubizService     The Notubiz service
      * @param EntityManagerInterface $entityManager          The entity manager.
+     * @param SessionInterface       $session                The session interface
      */
     public function __construct(
         SyncXxllncCasesService $syncXxllncCasesService,
         SyncOpenWooService $syncOpenWooService,
         SyncNotubizService $syncNotubizService,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SessionInterface $session
     ) {
         $this->syncXxllncCasesService = $syncXxllncCasesService;
         $this->syncOpenWooService     = $syncOpenWooService;
         $this->syncNotubizService     = $syncNotubizService;
         $this->entityManager          = $entityManager;
+        $this->session                = $session;
         parent::__construct();
 
     }//end __construct()
@@ -129,6 +140,14 @@ class SyncWooCommand extends Command
             $style->error("Action with reference $actionRef not found");
 
             return Command::FAILURE;
+        }
+
+        $this->session->remove('currentActionUserId');
+        if ($action->getUserId() !== null && Uuid::isValid($action->getUserId()) === true) {
+            $user = $this->entityManager->getRepository('App:User')->find($action->getUserId());
+            if ($user instanceof User === true) {
+                $this->session->set('currentActionUserId', $action->getUserId());
+            }
         }
 
         $config     = $action->getConfiguration();
