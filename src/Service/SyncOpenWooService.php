@@ -396,11 +396,11 @@ class SyncOpenWooService
         }
 
         $file->setName(($document['titel'] ?? $document['url']));
-        
+
         $file->setValue($value);
 
         $this->entityManager->persist($file);
-        
+
         $extension = null;
         switch ($file->getMimeType()) {
         case 'pdf':
@@ -419,13 +419,14 @@ class SyncOpenWooService
         default:
             $text = null;
         }
-        
+
         if (isset($extension) === false) {
             $explodedFilename = explode('.', ($document['titel'] ?? $document['url']));
-            $extension = end($explodedFilename);
+            $extension        = end($explodedFilename);
         }
+
         $file->setExtension($extension);
-        
+
         $body = [
             'extension'    => $extension,
             'documentText' => $text,
