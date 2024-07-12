@@ -198,7 +198,14 @@ class SyncXxllncCasesService
                 $documentText = $this->fileService->getTextFromDocument($value, $documentMeta['filename'], $base64, $mimeType, $config['endpoint']);
             } while (isset($documentText) === false && (time() - $starttime) < 5);
         }
-
+        
+        if (isset($documentMeta['extension']) === false) {
+            $documentMeta['extension'] = match ($mimeType) {
+                'pdf', 'application/pdf' => 'pdf',
+                default => '',
+            };
+        }
+        
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
     }//end retrieveFile()
