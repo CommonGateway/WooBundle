@@ -170,15 +170,18 @@ class SitemapService
      */
     private function getAllDocumentsForObject(array $object): array
     {
-        $documents = array_filter($object['bijlagen'], function ($bijlage) {
-            return isset($bijlage['url']) === true;
-        });
+        $documents = array_filter(
+            $object['bijlagen'],
+            function ($bijlage) {
+                return isset($bijlage['url']) === true;
+            }
+        );
 
         // Make sure to check if url is set before adding it to the list of documents!
         if (isset($object['metadata']['informatieverzoek']['verzoek']['url']) === true) {
             $documents[] = $object['metadata']['informatieverzoek']['verzoek'];
         }
-        
+
         // Make sure to check if url is set before adding it to the list of documents!
         if (isset($object['metadata']['informatieverzoek']['besluit']['url']) === true) {
             $documents[] = $object['metadata']['informatieverzoek']['besluit'];
