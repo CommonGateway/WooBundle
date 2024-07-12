@@ -2,10 +2,13 @@
     "title": "Publicatie",
     "$id": "https://commongateway.nl/woo.publicatie.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "type": "object",
     "description": "",
     "properties": {
+        "_sourceId": {
+            "type": "string"
+        },
         "id": {
             "type": "string"
         },

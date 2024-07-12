@@ -47,9 +47,10 @@ services:
     depends_on:
       - db
     volumes:
-      - ./src:/srv/api/vendor/common-gateway/woo-bundle/src:rw,cached
-      - ./Installation:/srv/api/vendor/common-gateway/woo-bundle/Installation:rw,cached
-      - ./composer.json:/srv/api/vendor/common-gateway/woo-bundle/composer.json:rw,cached
+      - ./src:/srv/api/vendor/common-gateway/woo-bundle/src:rw
+      - ./Installation:/srv/api/vendor/common-gateway/woo-bundle/Installation:rw
+      - ./composer.json:/srv/api/vendor/common-gateway/woo-bundle/composer.json:rw
+      - ./debug.log:/srv/api/var/log/debug.log:rw
     environment:
       - APP_INIT='true'
       - CONTAINER_REGISTRY_BASE=${CONTAINER_REGISTRY_BASE}
