@@ -156,10 +156,15 @@ class FileService
             $file = new File();
         }
 
+        $file->setName($title);
         $file->setBase64($base64);
         $file->setMimeType(($mimeType ?? 'application/pdf'));
-        $file->setName($title);
-        $file->setExtension('');
+        $extension = match ($file->getMimeType()) {
+            'pdf', 'application/pdf' => 'pdf',
+            default => '',
+        };
+
+        $file->setExtension($extension);
         $file->setSize(mb_strlen(\Safe\base64_decode($base64)));
         $file->setValue($value);
 
