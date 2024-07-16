@@ -1,0 +1,28 @@
+{
+    "title" : "SyncTilburgCasesAction",
+    "$id" : "https://commongateway.nl/woo.SyncTilburgCasesAction.action.json",
+    "$schema" : "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version" : "0.0.1",
+    "listens" : [
+        "woo.default.listens"
+    ],
+    "configuration" : {
+        "oin" : "00000001001172773000",
+        "portalUrl" : "https://conductionnl.github.io/woo-website-tubbergen",
+        "source" : "https://commongateway.woo.nl/source/tilburg.zaaksysteem.source.json",
+        "schema" : "https://commongateway.nl/woo.publicatie.schema.json",
+        "mapping" : "https://commongateway.nl/mapping/woo.tilburgCaseToWoo.mapping.json",
+        "organisatie" : "Gemeente Tilburg",
+        "caseIndex" : "/v1/zaken",
+        "caseDetail" : "/v1/zaken/:identificatie/informatieobjecten",
+        "caseDocument" : "/v1/informatieobjecten/:identificatie",
+        "fileEndpoint" : "https://commongateway.nl/woo.ViewFile.endpoint.json"
+    },
+    "conditions" : {
+        "==" : [
+            1,
+            1
+        ]
+    },
+    "class" : "CommonGateway\\WOOBundle\\ActionHandler\\SyncTilburgCasesHandler"
+}
