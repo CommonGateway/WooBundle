@@ -17,7 +17,6 @@ use CommonGateway\CoreBundle\Service\HydrationService;
 use CommonGateway\CoreBundle\Service\ValidationService;
 use CommonGateway\CoreBundle\Service\CacheService;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -112,6 +111,11 @@ class SyncTilburgCasesService {
 	private Parser $pdfParser;
 
 	/**
+	 * @var HydrationService $hydrationService .
+	 */
+	private HydrationService $hydrationService;
+
+	/**
 	 * SyncTilburgCasesService constructor.
 	 *
 	 * @param GatewayResourceService $resourceService
@@ -151,8 +155,7 @@ class SyncTilburgCasesService {
 		$this->wooService        = $wooService;
 		$this->gatewayOEService  = $gatewayOEService;
 		$this->pdfParser         = new Parser();
-
-	}//end __construct()
+	}
 
 	/**
 	 * Set symfony style in order to output to the console.
@@ -168,7 +171,7 @@ class SyncTilburgCasesService {
 
 		return $this;
 
-	}//end setStyle()
+	}
 
 	/**
 	 * Handles the synchronization of TIP cases.
@@ -177,7 +180,7 @@ class SyncTilburgCasesService {
 	 * @param array $configuration
 	 *
 	 * @return array
-	 * @throws Exception|ExceptionCacheException|InvalidArgumentException
+	 * @throws Exception|InvalidArgumentException
 	 *
 	 */
 	public function SyncTilburgCasesHandler( array $data, array $configuration ): array {
@@ -203,17 +206,13 @@ class SyncTilburgCasesService {
 		$results = $this->fetchObjects( $source, '2024-05-01', date( 'Y-m-d' ) );
 		$this->entityManager->flush();
 
-		$responseItems    = [];
-		$hydrationService = new HydrationService( $this->syncService, $this->entityManager );
+		$responseItems          = [];
+		$this->hydrationService = new HydrationService( $this->syncService, $this->entityManager );
 
 		foreach ( $results as $result ) {
 
-			try {
-				$mappedResult = $this->mappingService->mapping( $mapping, $result );
-			} catch ( Exception $exception ) {
-				$this->logger->error( var_export( [ 'ERROR mappingService' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
-				continue;
-			}
+			// Map the result.
+			$mappedResult = $this->map( $mapping, $result );
 
 			// Add organisation data.
 			$mappedResult = array_merge(
@@ -227,131 +226,44 @@ class SyncTilburgCasesService {
 			);
 
 			// Run validation against the provided schema.
-			try {
-				$validationErrors = $this->validationService->validateData( $mappedResult, $schema, 'POST' );
-				if ( null !== $validationErrors ) {
-					$this->logger->error( var_export( [ 'validationErrors' => $validationErrors ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
-					continue;
-				}
-			} catch ( Exception $exception ) {
-				$this->logger->error( var_export( [ 'ERROR validationService' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+			if ( ! $this->isValidData( $mappedResult, $schema ) ) {
 				continue;
 			}
 
 			// Fetch all documents for the publication and save them for later enrichment.
-			try {
-				$temporaryDocuments = [];
-				$attachments        = $this->fetchDetails( $source, $mappedResult['id'] );
-
-				// Create temporary documents for later enrichment.
-				if ( ! empty( $attachments ) ) {
-					foreach ( $attachments as $attachment ) {
-
-						// Map the document.
-						$temporaryDocument    = $this->mappingService->mapping( $documentSourceIdMapping, $attachment );
-						$temporaryDocuments[] = $temporaryDocument;
-					}
-				}
-
-				// Add them to the 'bijlagen' of the publication.
-				$mappedResult['bijlagen'] = $temporaryDocuments;
-
-			} catch ( Exception $exception ) {
-				$this->logger->error( var_export( [ 'ERROR fetchDetails' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
-				continue;
+			$attachments = $this->fetchDetails( $source, $mappedResult['id'] );
+			if ( ! empty( $attachments ) ) {
+				$mappedResult['bijlagen'] = $this->processTemporaryAttachments( $attachments, $documentSourceIdMapping );
 			}
 
 			// First save the publication object before enriching documents.
-			try {
-				$hydrationService->searchAndReplaceSynchronizations(
-					$mappedResult,
-					$source,
-					$schema,
-					true,
-					true
-				);
-
-			} catch ( Exception $exception ) {
-				$this->logger->error( var_export( [ 'ERROR' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+			$publication = $this->savePublication( $mappedResult, $source, $schema, true, true );
+			if ( $publication === false ) {
 				continue;
 			}
 
 			// Enrich the attached documents.
 			if ( ! empty( $attachments ) ) {
-
 				$mappedDocuments = [];
 				foreach ( $attachments as $attachment ) {
 
-					// Fetch the actual file from the TIP.
-					$document = $this->fetchDocument( $source, $attachment['identificatie'] );
-
-					// Fetch the existing temporary document.
-					$bijlageObject = $this->entityManager->getRepository( 'App:ObjectEntity' )->findByAnyId( $document['identificatie'] );
-
-					// Define the value.
-					$value = $bijlageObject->getValueObject( "url" );
-
-					// Persist?
-					$this->entityManager->persist( $value );
-
-					// Create the actual file with contents.
-					$url = $this->fileService->createOrUpdateFile(
-						$value,
-						$document['titel'],
-						$document['inhoud'],
-						$document['formaat'],
-						$fileEndpoint
-					);
-
-					// Apply document mapping and add url.
-					$mappedDocument = $this->mappingService->mapping( $documentMapping, $attachment );
-
-					// Get the file extension.
-					$extension = strtolower( pathinfo( $document['titel'], PATHINFO_EXTENSION ) );
-
-					// Set default empty document text.
-					$text = null;
-
-					// Try extracting text from PDF.
-					if ( $extension === 'pdf' ) {
-						try {
-							$pdf  = $this->pdfParser->parseContent( \Safe\base64_decode( $document['inhoud'] ) );
-							$text = $pdf->getText();
-						} catch ( \Exception $e ) {
-							$this->logger->error( var_export( [ 'ERROR pdfParser' => $e->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
-						}
-					}
-
 					// Add the enriched document to the array of documents.
-					$mappedDocuments[] = array_merge(
-						$mappedDocument,
-						[
-							'extension'    => $extension,
-							'url'          => $url,
-							'documentText' => $text,
-						]
-					);
+					$mappedDocument = $this->processAttachment( $attachment, $source, $documentMapping, $fileEndpoint );
+					if ( $mappedDocument ) {
+						$mappedDocuments[] = $mappedDocument;
+					}
 				}
 
 				// Overwrite 'bijlagen' to update the enriched documents.
 				$mappedResult['bijlagen'] = $mappedDocuments;
 			}
 
-			try {
-				$publication = $hydrationService->searchAndReplaceSynchronizations(
-					$mappedResult,
-					$source,
-					$schema,
-					true,
-					false
-				);
-
-			} catch ( Exception $exception ) {
-				$this->logger->error( var_export( [ 'ERROR' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
-				continue;
+			// Update the publication object with the enriched documents.
+			$publication = $this->savePublication( $mappedResult, $source, $schema, true, false );
+			if ( $publication !== false ) {
+				$responseItems[] = $publication->toArray();
 			}
 
-			$responseItems[] = $publication->toArray();
 		}
 
 		$this->entityManager->flush();
@@ -359,6 +271,152 @@ class SyncTilburgCasesService {
 		$this->data['response'] = new Response( json_encode( $responseItems ), 200 );
 
 		return $this->data;
+	}
+
+	/**
+	 * Processes the attachment.
+	 *
+	 * @param array    $attachment The attachment that needs to be processed.
+	 * @param Source   $source     The source entity that provides the source of the result data.
+	 * @param Mapping  $mapping    The mapping entity that provides the mapping of the result data.
+	 * @param Endpoint $endpoint   The endpoint entity that provides the endpoint of the result data.
+	 *
+	 * @return array|bool The processed attachment.
+	 */
+	private function processAttachment( array $attachment, Source $source, Mapping $mapping, Endpoint $endpoint ): array|bool {
+
+		// Fetch the actual file from the TIP.
+		$document = $this->fetchDocument( $source, $attachment['identificatie'] );
+		if ( $document === false ) {
+			return false;
+		}
+
+		// Fetch the existing temporary document.
+		$documentObject = $this->entityManager->getRepository( 'App:ObjectEntity' )->findByAnyId( $document['identificatie'] );
+
+		// Define the value.
+		$value = $documentObject->getValueObject( "url" );
+
+		// Persist?
+		$this->entityManager->persist( $value );
+
+		// Create the actual file with contents.
+		try {
+			$url = $this->fileService->createOrUpdateFile(
+				$value,
+				$document['titel'],
+				$document['inhoud'],
+				$document['formaat'],
+				$endpoint
+			);
+		} catch ( Exception $e ) {
+			$this->logger->error( var_export( [ 'ERROR fileService' => $e->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+
+			return false;
+		}
+
+		// Apply document mapping and add url.
+		$mappedDocument = $this->map( $mapping, $attachment );
+
+		// Get the file extension.
+		$extension = strtolower( pathinfo( $document['titel'], PATHINFO_EXTENSION ) );
+
+		// Set default empty document text.
+		$text = null;
+
+		// Try extracting text from PDF.
+		if ( $extension === 'pdf' ) {
+			try {
+				$pdf  = $this->pdfParser->parseContent( \Safe\base64_decode( $document['inhoud'] ) );
+				$text = $pdf->getText();
+			} catch ( \Exception $e ) {
+				$this->logger->error( var_export( [ 'ERROR pdfParser' => $e->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+			}
+		}
+
+		return array_merge(
+			$mappedDocument,
+			[
+				'extension'    => $extension,
+				'url'          => $url,
+				'documentText' => $text,
+			]
+		);
+	}
+
+	/**
+	 * Saves the publication.
+	 *
+	 * @param array  $data          The data that needs to be saved.
+	 * @param Source $source        The source entity that provides the source of the result data.
+	 * @param Schema $schema        The schema entity that provides the schema of the result data.
+	 * @param bool   $flush         Whether to flush the entity manager.
+	 * @param bool   $unsafeHydrate Whether to hydrate the entity in an unsafe way.
+	 *
+	 * @return ObjectEntity|bool The saved publication.
+	 */
+	private function savePublication( array $data, Source $source, Schema $schema, $flush = true, $unsafeHydrate = false ): ObjectEntity|bool {
+		try {
+			$publication = $this->hydrationService->searchAndReplaceSynchronizations(
+				$data,
+				$source,
+				$schema,
+				$flush,
+				$unsafeHydrate
+			);
+
+			return $publication;
+		} catch ( Exception $exception ) {
+			$this->logger->error( var_export( [ 'ERROR' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Maps the result to the provided mapping.
+	 *
+	 * @param Mapping $mapping The mapping entity that provides the mapping of the result data.
+	 * @param array   $result  The result data that needs to be mapped.
+	 *
+	 * @return array The mapped result.
+	 */
+	private function map( Mapping $mapping, array $result ): array {
+		try {
+			$mappedResult = $this->mappingService->mapping( $mapping, $result );
+		} catch ( Exception $exception ) {
+			$this->logger->error( var_export( [ 'ERROR mappingService' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+			$mappedResult = [];
+		}
+
+		return $mappedResult;
+	}
+
+	/**
+	 * Validates the result against the provided schema.
+	 *
+	 * @param array  $result The result data that needs to be validated.
+	 * @param Schema $schema The schema entity that provides the schema of the result data.
+	 * @param string $method The method that is used for the validation.
+	 *
+	 * @return bool The validation result.
+	 */
+	private function isValidData( array $result, Schema $schema, string $method = 'POST' ): bool {
+		try {
+			$validationErrors = $this->validationService->validateData( $result, $schema, $method );
+			if ( null !== $validationErrors ) {
+				$this->logger->error( var_export( [ 'validationErrors' => $validationErrors ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+
+				return false;
+			}
+		} catch ( Exception $exception ) {
+			$this->logger->error( var_export( [ 'ERROR validationService' => $exception->getMessage() ], true ), [ 'plugin' => 'common-gateway/woo-bundle' ] );
+
+			return false;
+		}
+
+		return true;
+
 	}
 
 	/**
@@ -391,8 +449,16 @@ class SyncTilburgCasesService {
 
 		return [];
 
-	}//end fetchObjects()
+	}
 
+	/**
+	 * Fetches details from TIP with identification.
+	 *
+	 * @param Source $source         The source entity that provides the source of the result data.
+	 * @param string $identification The identification of the object.
+	 *
+	 * @return array The fetched details.
+	 */
 	private function fetchDetails( Source $source, string $identification ): array {
 		try {
 			$endpoint        = str_replace( ':identificatie', $identification, $this->configuration['caseDetail'] );
@@ -410,9 +476,38 @@ class SyncTilburgCasesService {
 
 		return [];
 
-	}//end fetchObjects()
+	}
 
-	private function fetchDocument( Source $source, string $identification ): array {
+	/**
+	 * Processes temporary attachments.
+	 *
+	 * @param array   $attachments The attachments that need to be processed.
+	 * @param Mapping $mapping     The mapping entity that provides the mapping of the result data.
+	 *
+	 * @return array The processed temporary attachments.
+	 */
+	private function processTemporaryAttachments( array $attachments, Mapping $mapping ): array {
+		$temporaryDocuments = [];
+		if ( ! empty( $attachments ) ) {
+			foreach ( $attachments as $attachment ) {
+				// Map the document.
+				$temporaryDocument    = $this->map( $mapping, $attachment );
+				$temporaryDocuments[] = $temporaryDocument;
+			}
+		}
+
+		return $temporaryDocuments;
+	}
+
+	/**
+	 * Fetches a document from TIP with identification.
+	 *
+	 * @param Source $source         The source entity that provides the source of the result data.
+	 * @param string $identification The identification of the object.
+	 *
+	 * @return array|bool The fetched document.
+	 */
+	private function fetchDocument( Source $source, string $identification ): array|bool {
 		try {
 			$endpoint        = str_replace( ':identificatie', $identification, $this->configuration['caseDocument'] );
 			$response        = $this->callService->call( $source, $endpoint );
@@ -420,7 +515,7 @@ class SyncTilburgCasesService {
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Something went wrong fetching ' . $source->getLocation() . $endpoint . ': ' . $e->getMessage(), [ 'plugin' => 'common-gateway/woo-bundle' ] );
 
-			return [];
+			return false;
 		}
 
 		if ( ! empty( $decodedResponse['identificatie'] ) ) {
@@ -431,4 +526,4 @@ class SyncTilburgCasesService {
 
 	}
 
-}//end class
+}
