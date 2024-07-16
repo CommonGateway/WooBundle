@@ -2,7 +2,7 @@
     "title" : "Tilburg Zaaksysteem",
     "$id" : "https://commongateway.woo.nl/source/tilburg.zaaksysteem.source.json",
     "$schema" : "https://docs.commongateway.nl/schemas/Gateway.schema.json",
-    "version" : "0.0.99",
+    "version" : "0.0.1",
     "description" : "Tilburg Zaaksysteem api",
     "location" : "https://secure1.acc.enable-u.cloud/tlb/zaaksysteem/api",
     "headers" : {

@@ -1,11 +1,11 @@
 {
-  "title": "TilburgDocumentSetSourceId",
-  "$id": "https://commongateway.nl/mapping/woo.tilburgDocumentSetSourceId.schema.json",
-  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.1",
-  "passTrough": false,
-  "mapping": {
-    "_sourceId": "identificatie",
-    "titel": "Temporarily title so a object gets created for file fetching and url genering."
-  }
+    "title" : "TilburgDocumentSetSourceId",
+    "$id" : "https://commongateway.nl/mapping/woo.tilburgDocumentSetSourceId.schema.json",
+    "$schema" : "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version" : "0.0.1",
+    "passTrough" : false,
+    "mapping" : {
+        "_sourceId" : "identificatie",
+        "titel" : "Temporarily title so a object gets created for file fetching and url genering."
+    }
 }

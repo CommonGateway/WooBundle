@@ -1,15 +1,15 @@
 {
-  "title": "tilburgDocumentToBijlage",
-  "$id": "https://commongateway.nl/mapping/woo.tilburgDocumentToBijlage.mapping.json",
-  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.5",
-  "passTrough": false,
-  "mapping": {
-    "_sourceId": "identificatie",
-    "id" : "identificatie",
-    "titel": "titel",
-    "url": "url",
-    "documentText": "beschrijving",
-    "type": "formaat"
-  }
+    "title" : "tilburgDocumentToBijlage",
+    "$id" : "https://commongateway.nl/mapping/woo.tilburgDocumentToBijlage.mapping.json",
+    "$schema" : "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version" : "0.0.1",
+    "passTrough" : false,
+    "mapping" : {
+        "_sourceId" : "identificatie",
+        "id" : "identificatie",
+        "titel" : "titel",
+        "url" : "url",
+        "documentText" : "beschrijving",
+        "type" : "formaat"
+    }
 }
