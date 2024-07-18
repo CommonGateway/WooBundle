@@ -190,12 +190,14 @@ class SyncXxllncService
 
     }//end populateXxllncDocumentHandler()
 
+
     private function sendMessage(string $throw, array $data): void
     {
         $event = new ActionEvent(type: 'commongateway.action.event', data: $data, subType: $throw);
 
         $this->eventDispatcher->dispatch(event: $event, eventName: 'commongateway.action.event');
-    }
+
+    }//end sendMessage()
 
 
     public function createAttachmentMessages(array $case, ObjectEntity $publication): void
@@ -205,10 +207,10 @@ class SyncXxllncService
             $this->sendMessage(
                 throw: 'woo.xxllnc.document.populate',
                 data: [
-                    'sourceId' => $document['uuid'],
+                    'sourceId'     => $document['uuid'],
                     'caseSourceId' => $case['id'],
-                    'metadata' => $document,
-                    'publication' => $publication->getId()
+                    'metadata'     => $document,
+                    'publication'  => $publication->getId(),
                 ]
             );
         }
@@ -218,10 +220,10 @@ class SyncXxllncService
             $this->sendMessage(
                 throw:'woo.xxllnc.document.populate',
                 data: [
-                    'sourceId' => $case['values']['attribute.woo_informatieverzoek'][0]['uuid'],
+                    'sourceId'     => $case['values']['attribute.woo_informatieverzoek'][0]['uuid'],
                     'caseSourceId' => $case['id'],
-                    'metadata' => $case['values']['attribute.woo_informatieverzoek'][0],
-                    'publication' => $publication->getId()
+                    'metadata'     => $case['values']['attribute.woo_informatieverzoek'][0],
+                    'publication'  => $publication->getId(),
                 ]
             );
         }
@@ -230,10 +232,10 @@ class SyncXxllncService
             $this->sendMessage(
                 throw: 'woo.xxllnc.document.populate',
                 data: [
-                    'sourceId' => $case['values']['attribute.woo_inventarisatielijst'][0]['uuid'],
+                    'sourceId'     => $case['values']['attribute.woo_inventarisatielijst'][0]['uuid'],
                     'caseSourceId' => $case['id'],
-                    'metadata' => $case['values']['attribute.woo_inventarisatielijst'][0],
-                    'publication' => $publication->getId()
+                    'metadata'     => $case['values']['attribute.woo_inventarisatielijst'][0],
+                    'publication'  => $publication->getId(),
                 ]
             );
         }
@@ -241,13 +243,13 @@ class SyncXxllncService
         if (isset($case['values']['attribute.woo_besluit']) === true && $case['values']['attribute.woo_besluit'] !== []) {
             $this->sendMessage(
                 throw: 'woo.xxllnc.document.populate',
-                data: ['sourceId' => $case['values']['attribute.woo_besluit'][0]['uuid'],
+                data: [
+                    'sourceId'     => $case['values']['attribute.woo_besluit'][0]['uuid'],
                     'caseSourceId' => $case['id'],
-                    'metadata' => $case['values']['attribute.woo_besluit'][0],
-                    'publication' => $publication->getId()
+                    'metadata'     => $case['values']['attribute.woo_besluit'][0],
+                    'publication'  => $publication->getId(),
                 ]
             );
-
         }
 
     }//end createAttachmentMessages()
@@ -274,13 +276,14 @@ class SyncXxllncService
             [
                 'autoPublish' => $configuration['autoPublish'] ?? true,
                 'organisatie' => [
-                    'oin' => $configuration['oin'],
-                    'naam' => $configuration['organisatie']
+                    'oin'  => $configuration['oin'],
+                    'naam' => $configuration['organisatie'],
                 ],
-                'settings' => [
-                    'allowPdfOnly' => $configuration['allowPdfOnly']
-                ]
-            ]);
+                'settings'    => [
+                    'allowPdfOnly' => $configuration['allowPdfOnly'],
+                ],
+            ]
+        );
 
         $mappedCase = $this->mappingService->mapping($mapping, $case);
 
@@ -322,7 +325,7 @@ class SyncXxllncService
 
         $objects = $this->fetchObjects(source: $source);
 
-        foreach($objects as $object) {
+        foreach ($objects as $object) {
             $this->sendMessage(throw: $configuration['throw'], data: ['case' => $object]);
         }
 
