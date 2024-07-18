@@ -5,6 +5,9 @@ namespace CommonGateway\WOOBundle\Service;
 use App\Entity\Entity as Schema;
 use App\Entity\Mapping;
 use App\Entity\Endpoint;
+use App\Entity\ObjectEntity;
+use App\Entity\Value;
+use App\Event\ActionEvent;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
@@ -16,6 +19,7 @@ use CommonGateway\WOOBundle\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
@@ -56,6 +60,7 @@ class SyncXxllncService
         private readonly FileService $fileService,
         private readonly CacheService $cacheService,
         private readonly WooService $wooService,
+        private readonly EventDispatcherInterface $eventDispatcher,
         LoggerInterface $pluginLogger,
     ) {
         $this->logger           = $pluginLogger;
@@ -95,8 +100,11 @@ class SyncXxllncService
             $response        = $this->callService->call($source, $configuration['zaaksysteemSearchEndpoint'], 'GET', ['query' => ['zapi_page' => $page]]);
             $decodedResponse = $this->callService->decodeResponse($source, $response);
         } catch (Exception $e) {
-            isset($this->style) === true && $this->style->error('Something went wrong fetching '.$source->getLocation().$configuration['sourceEndpoint'].': '.$e->getMessage());
-            $this->logger->error('Something went wrong fetching '.$source->getLocation().$configuration['sourceEndpoint'].': '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('Something went wrong fetching '.$source->getLocation().$configuration['zaaksysteemSearchEndpoint'].': '.$e->getMessage());
+            $this->logger->error(
+                message: 'Something went wrong fetching '.$source->getLocation().$configuration['zaaksysteemSearchEndpoint'].': '.$e->getMessage(),
+                context: ['plugin' => 'common-gateway/woo-bundle']
+            );
 
             return [];
         }
@@ -182,23 +190,64 @@ class SyncXxllncService
 
     }//end populateXxllncDocumentHandler()
 
+    private function sendMessage(string $throw, array $data): void
+    {
+        $event = new ActionEvent(type: 'commongateway.action.event', data: $data, subType: $throw);
+
+        $this->eventDispatcher->dispatch(event: $event, eventName: 'commongateway.action.event');
+    }
+
 
     public function createAttachmentMessages(array $case, ObjectEntity $publication): void
     {
-        foreach ($case['attribute.woo_publicatie'] as $document) {
-            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $document['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $document, 'publication' => $publication->getId()]);
+
+        foreach ($case['values']['attribute.woo_publicatie'] as $document) {
+            $this->sendMessage(
+                throw: 'woo.xxllnc.document.populate',
+                data: [
+                    'sourceId' => $document['uuid'],
+                    'caseSourceId' => $case['id'],
+                    'metadata' => $document,
+                    'publication' => $publication->getId()
+                ]
+            );
         }
 
-        if (isset($case['attribute.woo_informatieverzoek']) === true) {
-            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $case['attribute.woo_informatieverzoek']['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $case['attribute.woo_informatieversoek'], 'publication' => $publication->getId()]);
+        if (isset($case['values']['attribute.woo_informatieverzoek']) === true && $case['values']['attribute.woo_informatieverzoek'] !== []) {
+            var_dump($case['values']['attribute.woo_informatieverzoek']);
+            $this->sendMessage(
+                throw:'woo.xxllnc.document.populate',
+                data: [
+                    'sourceId' => $case['values']['attribute.woo_informatieverzoek'][0]['uuid'],
+                    'caseSourceId' => $case['id'],
+                    'metadata' => $case['values']['attribute.woo_informatieverzoek'][0],
+                    'publication' => $publication->getId()
+                ]
+            );
         }
 
-        if (isset($case['attribute.woo_inventarisatielijst']) === true) {
-            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $case['attribute.woo_inventarisatielijst']['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $case['attribute.woo_inventarisatielijst'], 'publication' => $publication->getId()]);
+        if (isset($case['values']['attribute.woo_inventarisatielijst']) === true && $case['values']['attribute.woo_inventarisatielijst'] !== []) {
+            $this->sendMessage(
+                throw: 'woo.xxllnc.document.populate',
+                data: [
+                    'sourceId' => $case['values']['attribute.woo_inventarisatielijst'][0]['uuid'],
+                    'caseSourceId' => $case['id'],
+                    'metadata' => $case['values']['attribute.woo_inventarisatielijst'][0],
+                    'publication' => $publication->getId()
+                ]
+            );
         }
 
-        if (isset($case['attribute.woo_besluit']) === true) {
-            $this->sendMessage('woo.xxllnc.document.populate', ['sourceId' => $case['attribute.woo_besluit']['uuid'], 'caseSourceId' => $case['id'], 'metadata' => $case['attribute.woo_besluit'], 'publication' => $publication->getId()]);
+        if (isset($case['values']['attribute.woo_besluit']) === true && $case['values']['attribute.woo_besluit'] !== []) {
+            $this->sendMessage(
+                throw: 'woo.xxllnc.document.populate',
+                data: ['sourceId' => $case['values']['attribute.woo_besluit'][0]['uuid'],
+                    'caseSourceId' => $case['id'],
+                    'metadata' => $case['values']['attribute.woo_besluit'][0],
+                    'publication' => $publication->getId()
+                ]
+            );
+
         }
 
     }//end createAttachmentMessages()
@@ -220,7 +269,18 @@ class SyncXxllncService
         $source  = $this->resourceService->getSource($configuration['source'], 'common-gateway/woo-bundle');
 
         // TODO: Check if we can put this into the mapping.
-        $case = array_merge($case, ['autoPublish' => $configuration['autoPublish'] ?? true, 'organisatie' => ['oin' => $configuration['oin'], 'naam' => $configuration['organisatie']]]);
+        $case = array_merge(
+            $case,
+            [
+                'autoPublish' => $configuration['autoPublish'] ?? true,
+                'organisatie' => [
+                    'oin' => $configuration['oin'],
+                    'naam' => $configuration['organisatie']
+                ],
+                'settings' => [
+                    'allowPdfOnly' => $configuration['allowPdfOnly']
+                ]
+            ]);
 
         $mappedCase = $this->mappingService->mapping($mapping, $case);
 
@@ -247,6 +307,8 @@ class SyncXxllncService
         $this->entityManager->persist($object);
         $this->cacheService->cacheObject($object);
 
+        $this->createAttachmentMessages(case: $case, publication: $object);
+
         return $data;
 
     }//end syncXxllncCase()
@@ -258,7 +320,11 @@ class SyncXxllncService
 
         $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
 
-        $this->fetchObjects(source: $source);
+        $objects = $this->fetchObjects(source: $source);
+
+        foreach($objects as $object) {
+            $this->sendMessage(throw: $configuration['throw'], data: ['case' => $object]);
+        }
 
         return $data;
 

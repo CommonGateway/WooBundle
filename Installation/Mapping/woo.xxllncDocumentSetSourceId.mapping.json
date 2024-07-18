@@ -2,10 +2,14 @@
   "title": "XxllncDocumentSetSourceId",
   "$id": "https://commongateway.nl/mapping/woo.xxllncDocumentSetSourceId.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "passTrough": false,
   "mapping": {
     "_sourceId": "uuid",
-    "titel": "Temporarily title so a object gets created for file fetching and url genering."
+    "titel": "filename",
+    "status": "{% if accepted|default and accepted == 1 %}{{ \"accepted\" }}{% endif %}"
+  },
+  "cast": {
+    "url": "unsetIfValue==url"
   }
 }
