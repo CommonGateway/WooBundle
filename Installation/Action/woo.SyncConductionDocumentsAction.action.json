@@ -2,7 +2,7 @@
     "title": "SyncConductionDocumentsAction",
     "$id": "https://commongateway.nl/woo.SyncConductionDocumentsAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
+    "version": "0.0.1",
     "listens": ["woo.xxllnc.document.populate"],
     "configuration": {
         "oin": "conduction",

@@ -216,7 +216,6 @@ class SyncXxllncService
         }
 
         if (isset($case['values']['attribute.woo_informatieverzoek']) === true && $case['values']['attribute.woo_informatieverzoek'] !== []) {
-            var_dump($case['values']['attribute.woo_informatieverzoek']);
             $this->sendMessage(
                 throw:'woo.xxllnc.document.populate',
                 data: [
