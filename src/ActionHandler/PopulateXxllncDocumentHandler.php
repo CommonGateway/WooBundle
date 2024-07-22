@@ -51,8 +51,7 @@ class PopulateXxllncDocumentHandler implements ActionHandlerInterface
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'SyncXxllncCasesHandler',
             'description' => 'Handles the sync for xxllnc cases.',
-            'required'    => [
-            ],
+            'required'    => [],
         ];
 
     }//end getConfiguration()

@@ -133,13 +133,13 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                     'required'    => false,
                     'default'     => false,
                 ],
-                'throw' => [
-                    'type' => 'string',
+                'throw'                     => [
+                    'type'        => 'string',
                     'description' => 'The throw fired by the discover-action to start the case detail actions.',
-                    'example' => 'woo.conduction.case',
-                    'required' => true,
-                    'default'   => false,
-                ]
+                    'example'     => 'woo.conduction.case',
+                    'required'    => true,
+                    'default'     => false,
+                ],
             ],
         ];
 
