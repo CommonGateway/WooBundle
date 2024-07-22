@@ -13,7 +13,8 @@
         "organisatie": "Conduction",
         "zaaksysteemSearchEndpoint": "/public_search/45/search",
         "fileEndpointReference": "https://commongateway.nl/woo.ViewFile.endpoint.json",
-        "throw": "woo.conduction.case"
+        "throw": "woo.conduction.case",
+        "allowPDFOnly": false
     },
     "conditions":
     {
