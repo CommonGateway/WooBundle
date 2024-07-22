@@ -154,8 +154,8 @@ class SyncXxllncService
 
     public function populateXxllncDocumentHandler(array $data, array $configuration): array
     {
-        $source   = $this->resourceService->getSource($configuration['source'], "common-gateway/woo-bundle");
-        $endpoint = $this->resourceService->getEndpoint($configuration['fileEndpoint'], "common-gateway/woo-bundle");
+        $source   = $this->resourceService->getSource($data['config']['source'], "common-gateway/woo-bundle");
+        $endpoint = $this->resourceService->getEndpoint($data['config']['fileEndpointReference'], "common-gateway/woo-bundle");
 
         $document = $this->entityManager->getRepository(ObjectEntity::class)->findByAnyId($data['sourceId']);
         $base64   = $this->fileService->getInhoudDocument(
@@ -211,6 +211,7 @@ class SyncXxllncService
                     'caseSourceId' => $case['id'],
                     'metadata'     => $document,
                     'publication'  => $publication->getId(),
+                    'config'       => $this->getConfiguration(),
                 ]
             );
         }
@@ -223,6 +224,7 @@ class SyncXxllncService
                     'caseSourceId' => $case['id'],
                     'metadata'     => $case['values']['attribute.woo_informatieverzoek'][0],
                     'publication'  => $publication->getId(),
+                    'config'       => $this->getConfiguration(),
                 ]
             );
         }
@@ -235,6 +237,7 @@ class SyncXxllncService
                     'caseSourceId' => $case['id'],
                     'metadata'     => $case['values']['attribute.woo_inventarisatielijst'][0],
                     'publication'  => $publication->getId(),
+                    'config'       => $this->getConfiguration(),
                 ]
             );
         }
@@ -247,6 +250,7 @@ class SyncXxllncService
                     'caseSourceId' => $case['id'],
                     'metadata'     => $case['values']['attribute.woo_besluit'][0],
                     'publication'  => $publication->getId(),
+                    'config'       => $this->getConfiguration(),
                 ]
             );
         }
@@ -335,6 +339,8 @@ class SyncXxllncService
 
     public function syncXxllncCaseHandler(array $data, array $configuration): array
     {
+        $this->setConfiguration($configuration);
+
         if (isset($data['case']) === true || isset($data['caseId']) === true) {
             return $this->syncXxllncCase(
                 data: $data,

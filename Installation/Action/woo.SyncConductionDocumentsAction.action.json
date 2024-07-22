@@ -1,24 +1,15 @@
 {
-    "title": "SyncConductionDocumentsAction",
-    "$id": "https://commongateway.nl/woo.SyncConductionDocumentsAction.action.json",
+    "title": "SyncXxllncDocumentsAction",
+    "$id": "https://commongateway.nl/woo.SyncXxllncDocumentsAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
     "version": "0.0.1",
     "listens": ["woo.xxllnc.document.populate"],
     "configuration": {
-        "oin": "conduction",
-        "portalUrl": "https://conductionnl.github.io/woo-website-conduction",
-        "source": "https://commongateway.woo.nl/source/conduction.zaaksysteem.source.json",
-        "schema": "https://commongateway.nl/woo.publicatie.schema.json",
-        "mapping": "https://commongateway.nl/mapping/woo.xxllncCaseToWoo.mapping.json",
-        "organisatie": "Conduction",
-        "zaaksysteemSearchEndpoint": "/public_search/45/search",
-        "fileEndpoint": "https://commongateway.nl/woo.ViewFile.endpoint.json",
-        "throw": "woo.conduction.item",
-        "allowPdfOnly": false
     },
     "conditions":
     {
         "==": [1, 1]
     },
-    "class": "CommonGateway\\WOOBundle\\ActionHandler\\PopulateXxllncDocumentHandler"
+    "class": "CommonGateway\\WOOBundle\\ActionHandler\\PopulateXxllncDocumentHandler",
+    "async": true
 }

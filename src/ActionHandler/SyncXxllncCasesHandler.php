@@ -2,7 +2,7 @@
 
 namespace CommonGateway\WOOBundle\ActionHandler;
 
-use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
+use CommonGateway\WOOBundle\Service\SyncXxllncService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -10,7 +10,7 @@ use Twig\Error\SyntaxError;
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 
 /**
- * ActionHandler executing SyncXxllncCasesService->syncXxllncCasesHandler.
+ * ActionHandler executing SyncXxllncService->syncXxllncCasesHandler.
  *
  * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
  * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
@@ -22,17 +22,17 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
 {
 
     /**
-     * @var SyncXxllncCasesService
+     * @var SyncXxllncService
      */
-    private SyncXxllncCasesService $service;
+    private SyncXxllncService $service;
 
 
     /**
      * SyncXxllncCasesHandler constructor.
      *
-     * @param SyncXxllncCasesService $service
+     * @param SyncXxllncService $service
      */
-    public function __construct(SyncXxllncCasesService $service)
+    public function __construct(SyncXxllncService $service)
     {
         $this->service = $service;
 
@@ -114,25 +114,32 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
                     'required'    => true,
                 ],
                 'allowPDFOnly'              => [
-                    'type'        => 'bool',
+                    'type'        => 'boolean',
                     'description' => 'If pdf documents should only be allowed.',
                     'example'     => false,
                     'required'    => true,
                 ],
                 'autoPublish'               => [
-                    'type'        => 'bool',
+                    'type'        => 'boolean',
                     'description' => 'If publications automatically should be visible and public.',
                     'example'     => true,
                     'required'    => true,
                     'default'     => true,
                 ],
                 'extractTextFromDocuments'  => [
-                    'type'        => 'bool',
+                    'type'        => 'boolean',
                     'description' => 'If text should be extracted from documents and set in to the Bijlage.documentText.',
                     'example'     => true,
                     'required'    => false,
                     'default'     => false,
                 ],
+                'throw' => [
+                    'type' => 'string',
+                    'description' => 'The throw fired by the discover-action to start the case detail actions.',
+                    'example' => 'woo.conduction.case',
+                    'required' => true,
+                    'default'   => false,
+                ]
             ],
         ];
 
@@ -151,7 +158,7 @@ class SyncXxllncCasesHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->service->syncXxllncCasesHandler($data, $configuration);
+        return $this->service->syncXxllncCaseHandler($data, $configuration);
 
     }//end run()
 
