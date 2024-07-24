@@ -257,6 +257,7 @@ class SyncXxllncService
 
     }//end createAttachmentMessages()
 
+
     private function searchAndDeleteObject(array $case): void
     {
         if (isset($case['id']) === true) {
@@ -268,7 +269,8 @@ class SyncXxllncService
                 $this->entityManager->flush();
             }
         }
-    }
+
+    }//end searchAndDeleteObject()
 
 
     public function syncXxllncCase(array $data, array $configuration): array
