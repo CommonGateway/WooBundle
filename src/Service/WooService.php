@@ -63,7 +63,7 @@ class WooService
      *
      * @return int Count of deleted objects.
      */
-    public function deleteNonExistingObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie=null): int
+    public function deleteUnsyncedObjects(array $idsSynced, Source $source, string $schemaRef, string $categorie=null): int
     {
         // Get all existing sourceIds.
         $source            = $this->entityManager->find('App:Gateway', $source->getId()->toString());
@@ -98,7 +98,7 @@ class WooService
 
         return $deletedObjectsCount;
 
-    }//end deleteNonExistingObjects()
+    }//end deleteUnsyncedObjects()
 
 
     /**
