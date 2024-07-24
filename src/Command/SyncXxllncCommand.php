@@ -57,18 +57,18 @@ class SyncXxllncCommand extends Command
     /**
      * Class constructor.
      *
-     * @param SyncXxllncService $syncXxllncService The case service
-     * @param EntityManagerInterface $entityManager          The entity manager.
-     * @param SessionInterface       $session                The session interface
+     * @param SyncXxllncService      $syncXxllncService The case service
+     * @param EntityManagerInterface $entityManager     The entity manager.
+     * @param SessionInterface       $session           The session interface
      */
     public function __construct(
         SyncXxllncService $syncXxllncService,
         EntityManagerInterface $entityManager,
         SessionInterface $session
     ) {
-        $this->syncXxllncService      = $syncXxllncService;
-        $this->entityManager          = $entityManager;
-        $this->session                = $session;
+        $this->syncXxllncService = $syncXxllncService;
+        $this->entityManager     = $entityManager;
+        $this->session           = $session;
         parent::__construct();
 
     }//end __construct()
@@ -105,7 +105,6 @@ class SyncXxllncCommand extends Command
     {
         $style = new SymfonyStyle($input, $output);
         // $this->syncXxllncService->setStyle($style);
-
         if (($actionRef = $input->getArgument('action')) === null
         ) {
             $style->error("No action reference given to the command");

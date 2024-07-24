@@ -335,6 +335,7 @@ class SyncXxllncService
             if (isset($object['id']) === true) {
                 $allSourceIds[] = $object['id'];
             }
+
             $this->sendMessage(throw: $configuration['throw'], data: ['case' => $object]);
         }
 
