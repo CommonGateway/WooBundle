@@ -177,6 +177,7 @@ class SyncWooCommand extends Command
                 return Command::FAILURE;
             }
         } else {
+            // This is the old SyncXxllncService! For new see SyncXxllncCommand and SyncXxllncService!
             if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $config) === null) {
                 $stopTimer = microtime(true);
                 $totalTime = ($stopTimer - $startTimer);
