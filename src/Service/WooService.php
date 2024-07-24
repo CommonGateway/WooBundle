@@ -49,9 +49,9 @@ class WooService
     ) {
         $this->entityManager = $entityManager;
         $this->logger        = $pluginLogger;
-        $input = new ArrayInput([]);
-        $output = new ConsoleOutput();
-        $this->style = new SymfonyStyle($input, $output);
+        $input               = new ArrayInput([]);
+        $output              = new ConsoleOutput();
+        $this->style         = new SymfonyStyle($input, $output);
 
     }//end __construct()
 
