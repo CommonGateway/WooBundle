@@ -4,9 +4,7 @@ namespace CommonGateway\WOOBundle\Command;
 
 use App\Entity\Action;
 use App\Entity\User;
-use CommonGateway\WOOBundle\Service\SyncNotubizService;
-use CommonGateway\WOOBundle\Service\SyncXxllncCasesService;
-use CommonGateway\WOOBundle\Service\SyncOpenWooService;
+use CommonGateway\WOOBundle\Service\SyncXxllncService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -28,7 +26,7 @@ use Ramsey\Uuid\Uuid;
  * @package  CommonGateway\WOOBundle
  * @category Command
  */
-class SyncWooCommand extends Command
+class SyncXxllncCommand extends Command
 {
 
     /**
@@ -36,28 +34,14 @@ class SyncWooCommand extends Command
      *
      * @var static
      */
-    protected static $defaultName = 'woo:objects:synchronize';
+    protected static $defaultName = 'woo:xxllnc:synchronize';
 
     /**
      * The case service.
      *
-     * @var SyncXxllncCasesService
+     * @var SyncXxllncService
      */
-    private SyncXxllncCasesService $syncXxllncCasesService;
-
-    /**
-     * The OpenWoo service.
-     *
-     * @var SyncOpenWooService
-     */
-    private SyncOpenWooService $syncOpenWooService;
-
-    /**
-     * The NotuBiz service.
-     *
-     * @var SyncNotubizService
-     */
-    private SyncNotubizService $syncNotubizService;
+    private SyncXxllncService $syncXxllncService;
 
     /**
      * @var EntityManagerInterface
@@ -73,24 +57,18 @@ class SyncWooCommand extends Command
     /**
      * Class constructor.
      *
-     * @param SyncXxllncCasesService $syncXxllncCasesService The case service
-     * @param SyncOpenWooService     $syncOpenWooService     The OpenWoo service
-     * @param SyncNotubizService     $syncNotubizService     The Notubiz service
-     * @param EntityManagerInterface $entityManager          The entity manager.
-     * @param SessionInterface       $session                The session interface
+     * @param SyncXxllncService      $syncXxllncService The case service
+     * @param EntityManagerInterface $entityManager     The entity manager.
+     * @param SessionInterface       $session           The session interface
      */
     public function __construct(
-        SyncXxllncCasesService $syncXxllncCasesService,
-        SyncOpenWooService $syncOpenWooService,
-        SyncNotubizService $syncNotubizService,
+        SyncXxllncService $syncXxllncService,
         EntityManagerInterface $entityManager,
         SessionInterface $session
     ) {
-        $this->syncXxllncCasesService = $syncXxllncCasesService;
-        $this->syncOpenWooService     = $syncOpenWooService;
-        $this->syncNotubizService     = $syncNotubizService;
-        $this->entityManager          = $entityManager;
-        $this->session                = $session;
+        $this->syncXxllncService = $syncXxllncService;
+        $this->entityManager     = $entityManager;
+        $this->session           = $session;
         parent::__construct();
 
     }//end __construct()
@@ -116,7 +94,7 @@ class SyncWooCommand extends Command
 
 
     /**
-     * Executes syncXxllncCasesService->syncXxllncCasesHandler or syncXxllncCasesService->getCase if a id is given.
+     * Executes SyncXxllncService->syncXxllncCasesHandler or SyncXxllncService->getCase if a id is given.
      *
      * @param InputInterface  Handles input from cli
      * @param OutputInterface Handles output from cli
@@ -126,8 +104,7 @@ class SyncWooCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new SymfonyStyle($input, $output);
-        $this->syncXxllncCasesService->setStyle($style);
-
+        // $this->syncXxllncService->setStyle($style);
         if (($actionRef = $input->getArgument('action')) === null
         ) {
             $style->error("No action reference given to the command");
@@ -152,51 +129,23 @@ class SyncWooCommand extends Command
 
         $config     = $action->getConfiguration();
         $startTimer = microtime(true);
-        if (isset($config['sourceType']) === true && $config['sourceType'] === 'notubiz') {
-            $this->syncNotubizService->setStyle($style);
-            if ($this->syncNotubizService->syncNotubizHandler([], $config) === null) {
-                $stopTimer = microtime(true);
-                $totalTime = ($stopTimer - $startTimer);
-                $action->setLastRunTime($totalTime);
-                $action->setStatus(false);
-                $this->entityManager->persist($action);
-                $this->entityManager->flush();
 
-                return Command::FAILURE;
-            }
-        } else if (isset($config['sourceType']) === true && $config['sourceType'] === 'openWoo') {
-            $this->syncOpenWooService->setStyle($style);
-            if ($this->syncOpenWooService->syncOpenWooHandler([], $config) === null) {
-                $stopTimer = microtime(true);
-                $totalTime = ($stopTimer - $startTimer);
-                $action->setLastRunTime($totalTime);
-                $action->setStatus(false);
-                $this->entityManager->persist($action);
-                $this->entityManager->flush();
+        $actionResult = $this->syncXxllncService->syncXxllncCaseHandler([], $config);
 
-                return Command::FAILURE;
-            }
-        } else {
-            // This is the old SyncXxllncService! For new see SyncXxllncCommand and SyncXxllncService!
-            if ($this->syncXxllncCasesService->syncXxllncCasesHandler([], $config) === null) {
-                $stopTimer = microtime(true);
-                $totalTime = ($stopTimer - $startTimer);
-                $action->setLastRunTime($totalTime);
-                $action->setStatus(false);
-                $this->entityManager->persist($action);
-                $this->entityManager->flush();
-
-                return Command::FAILURE;
-            }
-        }//end if
+        if ($actionResult !== null) {
+            $action->setLastRun(new DateTime());
+        }
 
         $stopTimer = microtime(true);
         $totalTime = ($stopTimer - $startTimer);
-        $action->setLastRun(new DateTime());
         $action->setLastRunTime($totalTime);
         $action->setStatus(true);
         $this->entityManager->persist($action);
         $this->entityManager->flush();
+
+        if ($actionResult === null) {
+            return Command::FAILURE;
+        }
 
         return Command::SUCCESS;
 

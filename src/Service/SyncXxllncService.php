@@ -330,9 +330,16 @@ class SyncXxllncService
 
         $objects = $this->fetchObjects(source: $source);
 
+        $allSourceIds = [];
         foreach ($objects as $object) {
+            if (isset($object['id']) === true) {
+                $allSourceIds[] = $object['id'];
+            }
+
             $this->sendMessage(throw: $configuration['throw'], data: ['case' => $object]);
         }
+
+        $this->sendMessage(throw: $configuration['throw'], data: ['deleteUnsyncedObjects' => true, 'allSourceIds' => $allSourceIds]);
 
         return $data;
 
@@ -348,6 +355,11 @@ class SyncXxllncService
                 data: $data,
                 configuration: $configuration
             );
+        }
+
+        if (isset($data['deleteUnsyncedObjects']) === true && $data['deleteUnsyncedObjects'] === true) {
+            $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+            return ['deletedObjects' => $this->wooService->deleteUnsyncedObjects($data['allSourceIds'], $source, $this->configuration['schema'])];
         }
 
         return $this->discoverXxllncCases(
