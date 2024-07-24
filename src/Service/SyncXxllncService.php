@@ -274,7 +274,6 @@ class SyncXxllncService
         $source  = $this->resourceService->getSource($configuration['source'], 'common-gateway/woo-bundle');
 
         // TODO: Check if we can put this into the mapping.
-        var_dump('hello!');
         $case = array_merge(
             $case,
             [
@@ -288,7 +287,6 @@ class SyncXxllncService
                 ],
             ]
         );
-        var_dump('my old friend');
 
         $mappedCase = $this->mappingService->mapping($mapping, $case);
 
