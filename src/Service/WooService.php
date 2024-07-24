@@ -2,17 +2,12 @@
 
 namespace CommonGateway\WOOBundle\Service;
 
-use App\Entity\Value;
-use App\Entity\Endpoint;
-use App\Entity\File;
-use CommonGateway\CoreBundle\Service\CallService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
 use App\Entity\Gateway as Source;
-use Smalot\PdfParser\Parser;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Service responsible for basic woo functionality and re-usable functions for the other WooBundle services.
@@ -36,9 +31,14 @@ class WooService
      */
     private LoggerInterface $logger;
 
+    /**
+     * @var SymfonyStyle $style.
+     */
+    private SymfonyStyle $style;
+
 
     /**
-     * FileService constructor.
+     * WooService constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param LoggerInterface        $pluginLogger
@@ -49,6 +49,9 @@ class WooService
     ) {
         $this->entityManager = $entityManager;
         $this->logger        = $pluginLogger;
+        $input = new ArrayInput([]);
+        $output = new ConsoleOutput();
+        $this->style = new SymfonyStyle($input, $output);
 
     }//end __construct()
 

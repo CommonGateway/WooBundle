@@ -358,7 +358,7 @@ class SyncXxllncService
 
         if (isset($data['deleteUnsyncedObjects']) === true && $data['deleteUnsyncedObjects'] === true) {
             $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-            return $this->wooService->deleteUnsyncedObjects($data['allSourceIds'], $source, $this->configuration['schema']);
+            return ['deletedObjects' => $this->wooService->deleteUnsyncedObjects($data['allSourceIds'], $source, $this->configuration['schema'])];
         }
 
         return $this->discoverXxllncCases(
