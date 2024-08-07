@@ -2,8 +2,8 @@
     "title": "SyncConductionCasesAction",
     "$id": "https://commongateway.nl/woo.SyncConductionAction.action.json",
     "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-    "version": "0.0.2",
-    "listens": ["woo.default.listens", "woo.conduction.case"],
+    "version": "0.0.3",
+    "listens": ["tilburg.default.listens", "woo.conduction.case"],
     "configuration": {
         "oin": "conduction",
         "portalUrl": "https://conductionnl.github.io/woo-website-conduction",
