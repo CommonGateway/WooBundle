@@ -426,7 +426,7 @@ class SyncXxllncCasesService
 
         $this->entityManager->flush();
 
-        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        $deletedObjectsCount = $this->wooService->deleteUnsyncedObjects($idsSynced, $source, $this->configuration['schema']);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 

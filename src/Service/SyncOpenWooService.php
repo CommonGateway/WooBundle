@@ -344,7 +344,7 @@ class SyncOpenWooService
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 
-        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
+        $deletedObjectsCount = $this->wooService->deleteUnsyncedObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 

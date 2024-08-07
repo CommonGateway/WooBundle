@@ -12,8 +12,8 @@ use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 /**
  * ActionHandler executing SyncTilburgCasesService->SyncTilburgCasesHandler.
  *
- * @package  CommonGateway\WOOBundle
- * @license  EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
+ * @package CommonGateway\WOOBundle
+ * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
  *
  * @author   Yoeri Dekker <yoeri@acato.nl>
  * @category ActionHandler
@@ -35,7 +35,9 @@ class SyncTilburgCasesHandler implements ActionHandlerInterface
     public function __construct(SyncTilburgCasesService $service)
     {
         $this->service = $service;
+
     }//end __construct()
+
 
     /**
      *  This function returns the required configuration as a [json-schema](https://json-schema.org/) array.
@@ -45,11 +47,11 @@ class SyncTilburgCasesHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id' => 'https://commongateway.nl/ActionHandler/woo.SyncTilburgCasesHandler.actionHandler.json',
-            '$schema' => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
-            'title' => 'SyncTilburgCasesHandler',
+            '$id'         => 'https://commongateway.nl/ActionHandler/woo.SyncTilburgCasesHandler.actionHandler.json',
+            '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
+            'title'       => 'SyncTilburgCasesHandler',
             'description' => 'Handles the sync for TIP cases.',
-            'required' => [
+            'required'    => [
                 'oin',
                 'portalUrl',
                 'source',
@@ -58,83 +60,84 @@ class SyncTilburgCasesHandler implements ActionHandlerInterface
                 'organisatie',
                 'caseIndex',
                 'caseDetail',
-                'fileEndpoint'
+                'fileEndpoint',
             ],
-            'properties' => [
-                'oin' => [
-                    'type' => 'string',
+            'properties'  => [
+                'oin'          => [
+                    'type'        => 'string',
                     'description' => 'The oin of the municipality.',
-                    'example' => '00000001001172773000',
-                    'required' => true,
+                    'example'     => '00000001001172773000',
+                    'required'    => true,
                 ],
-                'portalUrl' => [
-                    'type' => 'string',
+                'portalUrl'    => [
+                    'type'        => 'string',
                     'description' => 'The portal url of the publication.',
-                    'example' => 'https://conductionnl.github.io/woo-website-buren',
-                    'required' => true,
+                    'example'     => 'https://conductionnl.github.io/woo-website-buren',
+                    'required'    => true,
                 ],
-                'source' => [
-                    'type' => 'string',
+                'source'       => [
+                    'type'        => 'string',
                     'description' => 'The source where the publication belongs to.',
-                    'example' => 'https://commongateway.woo.nl/source/tilburg.zaaksysteem.source.json',
-                    'required' => true,
+                    'example'     => 'https://commongateway.woo.nl/source/tilburg.zaaksysteem.source.json',
+                    'required'    => true,
                 ],
-                'schema' => [
-                    'type' => 'string',
+                'schema'       => [
+                    'type'        => 'string',
                     'description' => 'The publication schema.',
-                    'example' => 'https://commongateway.nl/woo.publicatie.schema.json',
-                    'reference' => 'https://commongateway.nl/woo.publicatie.schema.json',
-                    'required' => true,
+                    'example'     => 'https://commongateway.nl/woo.publicatie.schema.json',
+                    'reference'   => 'https://commongateway.nl/woo.publicatie.schema.json',
+                    'required'    => true,
                 ],
-                'mapping' => [
-                    'type' => 'string',
+                'mapping'      => [
+                    'type'        => 'string',
                     'description' => 'The mapping for TIP case to publication.',
-                    'example' => 'https://commongateway.nl/mapping/woo.tilburgCaseToWoo.mapping.json',
-                    'reference' => 'https://commongateway.nl/mapping/woo.tilburgCaseToWoo.mapping.json',
-                    'required' => true,
+                    'example'     => 'https://commongateway.nl/mapping/woo.tilburgCaseToWoo.mapping.json',
+                    'reference'   => 'https://commongateway.nl/mapping/woo.tilburgCaseToWoo.mapping.json',
+                    'required'    => true,
                 ],
-                'organisatie' => [
-                    'type' => 'string',
+                'organisatie'  => [
+                    'type'        => 'string',
                     'description' => 'The organisation.',
-                    'example' => 'Gemeente Tilburg',
-                    'required' => true,
+                    'example'     => 'Gemeente Tilburg',
+                    'required'    => true,
                 ],
-                'caseIndex' => [
-                    'type' => 'string',
+                'caseIndex'    => [
+                    'type'        => 'string',
                     'description' => 'The endpoint for the case index.',
-                    'example' => '/v1/zaken',
-                    'required' => true,
+                    'example'     => '/v1/zaken',
+                    'required'    => true,
                 ],
-                'caseDetail' => [
-                    'type' => 'string',
+                'caseDetail'   => [
+                    'type'        => 'string',
                     'description' => 'The endpoint for the case details.',
-                    'example' => '/v1/zaken/:identificatie/informatieobjecten',
-                    'required' => true,
+                    'example'     => '/v1/zaken/:identificatie/informatieobjecten',
+                    'required'    => true,
                 ],
                 'fileEndpoint' => [
-                    'type' => 'string',
+                    'type'        => 'string',
                     'description' => 'The endpoint reference for documents.',
-                    'example' => 'tilburg',
-                    'required' => true,
+                    'example'     => 'tilburg',
+                    'required'    => true,
                 ],
             ],
         ];
 
     }//end getConfiguration()
 
+
     /**
      * This function runs the SyncTilburgCases service plugin.
      *
-     * @param array $data The data from the call
+     * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
      *
      * @return array
      * @throws TransportExceptionInterface|LoaderError|RuntimeError|SyntaxError
-     *
      */
     public function run(array $data, array $configuration): array
     {
         return $this->service->SyncTilburgCasesHandler($data, $configuration);
+
     }//end run()
 
 
