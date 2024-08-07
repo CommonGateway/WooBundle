@@ -209,9 +209,9 @@ class SyncTilburgCasesService
         }
 
         // @todo: Implement a way to fetch all objects from the TIP.
-	    // For now, this fixed date range is used to fetch 28 objects to avoid rate limiting.
-	    $results = $this->fetchObjects( $source, '2024-06-06', '2024-08-01' );
-	    $this->entityManager->flush();
+        // For now, this fixed date range is used to fetch 28 objects to avoid rate limiting.
+        $results = $this->fetchObjects($source, '2024-06-06', '2024-08-01');
+        $this->entityManager->flush();
 
         $responseItems          = [];
         $this->hydrationService = new HydrationService($this->syncService, $this->entityManager);
