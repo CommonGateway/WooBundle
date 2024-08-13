@@ -255,6 +255,19 @@ class SyncXxllncService
             );
         }
 
+        if (isset($case['values']['attribute.woo_convenant']) === true && $case['values']['attribute.woo_convenant'] !== []) {
+            $this->sendMessage(
+                throw: 'woo.xxllnc.document.populate',
+                data: [
+                    'sourceId'     => $case['values']['attribute.woo_besluit'][0]['uuid'],
+                    'caseSourceId' => $case['id'],
+                    'metadata'     => $case['values']['attribute.woo_besluit'][0],
+                    'publication'  => $publication->getId(),
+                    'config'       => $this->getConfiguration(),
+                ]
+            );
+        }
+
     }//end createAttachmentMessages()
 
 
@@ -288,7 +301,6 @@ class SyncXxllncService
         $mapping = $this->resourceService->getMapping($configuration['mapping'], 'common-gateway/woo-bundle');
         $source  = $this->resourceService->getSource($configuration['source'], 'common-gateway/woo-bundle');
 
-        // TODO: Check if we can put this into the mapping.
         $case = array_merge(
             $case,
             [

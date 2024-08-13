@@ -2,7 +2,7 @@
   "title": "Verzoek",
   "$id": "https://commongateway.nl/woo.verzoek.schema.json",
   "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "object",
   "description": "Verzoek object.",
   "required": [],
@@ -23,6 +23,12 @@
       "cascadeDelete": true
     },
     "inventarisatielijst": {
+      "type": "object",
+      "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
+      "format": "json",
+      "cascadeDelete": true
+    },
+    "convenant": {
       "type": "object",
       "$ref": "https://commongateway.nl/woo.bijlage.schema.json",
       "format": "json",
