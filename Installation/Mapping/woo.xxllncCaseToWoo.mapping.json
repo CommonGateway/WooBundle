@@ -42,6 +42,7 @@
     "metadata.verzoek.informatieverzoek": "jsonToArray",
     "metadata.verzoek.inventarisatielijst": "jsonToArray",
     "metadata.verzoek.besluit": "jsonToArray",
+    "metadata.verzoek.convenant": "jsonToArray",
     "metadata.verzoek": "unsetIfValue==",
     "categorie": "unsetIfValue==",
     "publicatiedatum": "unsetIfValue=="
