@@ -1,0 +1,29 @@
+{
+    "title" : "TilburgCaseToWoo",
+    "$id" : "https://commongateway.nl/mapping/woo.tilburgCaseToWoo.mapping.json",
+    "$schema" : "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version" : "0.0.1",
+    "passTrough" : false,
+    "mapping" : {
+        "_sourceId" : "identificatie",
+        "id" : "identificatie",
+        "organisatie.oin" : "{% if organisatie.oin|default %}{{ organisatie.oin }}{% else %}unknown{% endif %}",
+        "organisatie.naam" : "organisatie.naam",
+        "titel" : "omschrijving",
+        "samenvatting" : "zaaktypeomschrijving",
+        "beschrijving" : "zaaktypeomschrijving",
+        "afbeelding" : "",
+        "categorie" : "test",
+        "portal" : "",
+        "publicatiedatum" : "startdatum",
+        "featured" : "false",
+        "organisatie" : "",
+        "schema" : "",
+        "bijlagen" : "",
+        "onderwerp" : "",
+        "data" : ""
+    },
+    "cast" : {
+        "titel" : "unsetIfValue=="
+    }
+}

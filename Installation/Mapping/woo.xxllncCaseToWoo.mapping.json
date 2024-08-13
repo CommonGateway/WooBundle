@@ -43,7 +43,7 @@
     "metadata.verzoek.inventarisatielijst": "jsonToArray",
     "metadata.verzoek.besluit": "jsonToArray",
     "metadata.verzoek": "unsetIfValue==",
-    "categorie": "unsetIfValue==values.attribute&#46;woo_categorie",
+    "categorie": "unsetIfValue==",
     "publicatiedatum": "unsetIfValue=="
   }
 }

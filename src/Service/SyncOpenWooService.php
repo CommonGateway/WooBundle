@@ -344,7 +344,7 @@ class SyncOpenWooService
             $this->gatewayOEService->dispatchEvent('commongateway.action.event', $documentData, 'woo.openwoo.document.created');
         }
 
-        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
+        $deletedObjectsCount = $this->wooService->deleteUnsyncedObjects($idsSynced, $source, $this->configuration['schema'], $categorie);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 
@@ -397,15 +397,15 @@ class SyncOpenWooService
 
         $file->setName(($document['titel'] ?? $document['url']));
 
-        $explodedFilename = explode('.', ($document['titel'] ?? $document['url']));
-        $file->setExtension(end($explodedFilename));
         $file->setValue($value);
 
         $this->entityManager->persist($file);
 
+        $extension = null;
         switch ($file->getMimeType()) {
         case 'pdf':
         case 'application/pdf':
+            $extension = 'pdf';
             try {
                 $pdf  = $this->pdfParser->parseContent(\Safe\base64_decode($file->getBase64()));
                 $text = $pdf->getText();
@@ -420,8 +420,15 @@ class SyncOpenWooService
             $text = null;
         }
 
+        if (isset($extension) === false) {
+            $explodedFilename = explode('.', ($document['titel'] ?? $document['url']));
+            $extension        = end($explodedFilename);
+        }
+
+        $file->setExtension($extension);
+
         $body = [
-            'extension'    => end($explodedFilename),
+            'extension'    => $extension,
             'documentText' => $text,
         ];
         if (isset($data['keepUrl']) === false || $data['keepUrl'] !== true) {

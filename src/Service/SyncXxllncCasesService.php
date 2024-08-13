@@ -199,6 +199,13 @@ class SyncXxllncCasesService
             } while (isset($documentText) === false && (time() - $starttime) < 5);
         }
 
+        if (isset($documentMeta['extension']) === false) {
+            $documentMeta['extension'] = match ($mimeType) {
+                'pdf', 'application/pdf' => 'pdf',
+                default => '',
+            };
+        }
+
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
     }//end retrieveFile()
@@ -419,7 +426,7 @@ class SyncXxllncCasesService
 
         $this->entityManager->flush();
 
-        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $source, $this->configuration['schema']);
+        $deletedObjectsCount = $this->wooService->deleteUnsyncedObjects($idsSynced, $source, $this->configuration['schema']);
 
         $this->data['response'] = new Response(json_encode($responseItems), 200);
 

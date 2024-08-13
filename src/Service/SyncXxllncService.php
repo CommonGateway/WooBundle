@@ -271,6 +271,21 @@ class SyncXxllncService
     }//end createAttachmentMessages()
 
 
+    private function searchAndDeleteObject(array $case): void
+    {
+        if (isset($case['id']) === true) {
+            $this->logger->warning("Searching for a object with sourceId: {$case['id']} to delete it because it became invalid", ['plugin' => 'common-gateway/woo-bundle']);
+            $publicationObject = $this->entityManager->getRepository(ObjectEntity::class)->findByAnyId($case['id']);
+
+            if ($publicationObject instanceof ObjectEntity === true) {
+                $this->entityManager->remove($publicationObject);
+                $this->entityManager->flush();
+            }
+        }
+
+    }//end searchAndDeleteObject()
+
+
     public function syncXxllncCase(array $data, array $configuration): array
     {
         if (isset($data['case']) === false) {
@@ -306,6 +321,9 @@ class SyncXxllncService
         if ($validationErrors !== null) {
             $validationErrors = implode(', ', $validationErrors);
             $this->logger->warning("SyncXxllncCases validation errors: $validationErrors", ['plugin' => 'common-gateway/woo-bundle']);
+
+            $this->searchAndDeleteObject(case: $case);
+
             isset($this->style) === true && $this->style->warning("SyncXxllncCases validation errors: $validationErrors");
             return $data;
         }
@@ -323,6 +341,7 @@ class SyncXxllncService
         $object->hydrate(['portalUrl' => "{$configuration['portalUrl']}/{$object->getId()->toString()}"]);
 
         $this->entityManager->persist($object);
+        $this->entityManager->flush();
         $this->cacheService->cacheObject($object);
 
         $this->createAttachmentMessages(case: $case, publication: $object);
@@ -340,9 +359,16 @@ class SyncXxllncService
 
         $objects = $this->fetchObjects(source: $source);
 
+        $allSourceIds = [];
         foreach ($objects as $object) {
+            if (isset($object['id']) === true) {
+                $allSourceIds[] = $object['id'];
+            }
+
             $this->sendMessage(throw: $configuration['throw'], data: ['case' => $object]);
         }
+
+        $this->sendMessage(throw: $configuration['throw'], data: ['deleteUnsyncedObjects' => true, 'allSourceIds' => $allSourceIds]);
 
         return $data;
 
@@ -358,6 +384,11 @@ class SyncXxllncService
                 data: $data,
                 configuration: $configuration
             );
+        }
+
+        if (isset($data['deleteUnsyncedObjects']) === true && $data['deleteUnsyncedObjects'] === true) {
+            $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+            return ['deletedObjects' => $this->wooService->deleteUnsyncedObjects($data['allSourceIds'], $source, $this->configuration['schema'])];
         }
 
         return $this->discoverXxllncCases(

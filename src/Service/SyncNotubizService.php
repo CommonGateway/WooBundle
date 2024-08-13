@@ -534,7 +534,7 @@ class SyncNotubizService
             $this->cacheService->cacheObject($responseItem);
         }
 
-        $deletedObjectsCount = $this->wooService->deleteNonExistingObjects($idsSynced, $config['source'], $this->configuration['schema'], $categorie);
+        $deletedObjectsCount = $this->wooService->deleteUnsyncedObjects($idsSynced, $config['source'], $this->configuration['schema'], $categorie);
 
         return $this->returnResponse($responseItems, $config['source'], $deletedObjectsCount);
 
