@@ -259,9 +259,9 @@ class SyncXxllncService
             $this->sendMessage(
                 throw: 'woo.xxllnc.document.populate',
                 data: [
-                    'sourceId'     => $case['values']['attribute.woo_besluit'][0]['uuid'],
+                    'sourceId'     => $case['values']['attribute.woo_convenant'][0]['uuid'],
                     'caseSourceId' => $case['id'],
-                    'metadata'     => $case['values']['attribute.woo_besluit'][0],
+                    'metadata'     => $case['values']['attribute.woo_convenant'][0],
                     'publication'  => $publication->getId(),
                     'config'       => $this->getConfiguration(),
                 ]
