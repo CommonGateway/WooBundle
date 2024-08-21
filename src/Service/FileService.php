@@ -6,6 +6,7 @@ use App\Entity\Value;
 use App\Entity\Endpoint;
 use App\Entity\File;
 use CommonGateway\CoreBundle\Service\CallService;
+use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
