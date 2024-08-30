@@ -156,37 +156,42 @@ class SyncXxllncService
     {
         $source   = $this->resourceService->getSource($data['config']['source'], "common-gateway/woo-bundle");
         $endpoint = $this->resourceService->getEndpoint($data['config']['fileEndpointReference'], "common-gateway/woo-bundle");
+        try {
+            $document = $this->entityManager->getRepository(ObjectEntity::class)->findByAnyId($data['sourceId']);
+            $base64   = $this->fileService->getInhoudDocument(
+                caseId: $data['caseSourceId'],
+                documentId: $data['sourceId'],
+                mimeType: $data['metadata']['mimetype'],
+                zaaksysteem: $source
+            );
 
-        $document = $this->entityManager->getRepository(ObjectEntity::class)->findByAnyId($data['sourceId']);
-        $base64   = $this->fileService->getInhoudDocument(
-            caseId: $data['caseSourceId'],
-            documentId: $data['sourceId'],
-            mimeType: $data['metadata']['mimetype'],
-            zaaksysteem: $source
-        );
+            $value = $document->getValueObject('url');
+            $url   = $this->fileService->createOrUpdateFile(
+                value: $value,
+                title: $data['metadata']['filename'],
+                base64: $base64,
+                mimeType: $data['metadata']['mimetype'],
+                downloadEndpoint: $endpoint
+            );
 
-        $value = $document->getValueObject('url');
-        $url   = $this->fileService->createOrUpdateFile(
-            value: $value,
-            title: $data['metadata']['filename'],
-            base64: $base64,
-            mimeType: $data['metadata']['mimetype'],
-            downloadEndpoint: $endpoint
-        );
+            $documentText = $this->extractText(
+                value: $value,
+                configuration: $configuration
+            );
 
-        $documentText = $this->extractText(
-            value: $value,
-            configuration: $configuration
-        );
+            $document->hydrate(['url' => $url, 'documentText' => $documentText]);
 
-        $document->hydrate(['url' => $url, 'documentText' => $documentText]);
+            $this->entityManager->persist($document);
+            $this->entityManager->flush();
 
-        $this->entityManager->persist($document);
-        $this->entityManager->flush();
+            $publication = $this->entityManager->getRepository(ObjectEntity::class)->find($data['publication']);
+            $this->cacheService->cacheObject($publication);
+            return $data;
+        } catch (Exception $exception) {
+            $this->logger->error('Error populating document ' . $data['sourceId'] . ' with message: ' . $exception->getMessage(), 'common-gateway/woo-bundle');
 
-        $publication = $this->entityManager->getRepository(ObjectEntity::class)->find($data['publication']);
-        $this->cacheService->cacheObject($publication);
-        return $data;
+            return [];
+        }
 
     }//end populateXxllncDocumentHandler()
 
@@ -380,21 +385,39 @@ class SyncXxllncService
         $this->setConfiguration($configuration);
 
         if (isset($data['case']) === true || isset($data['caseId']) === true) {
-            return $this->syncXxllncCase(
-                data: $data,
-                configuration: $configuration
-            );
+            try {
+                return $this->syncXxllncCase(
+                    data: $data,
+                    configuration: $configuration
+                );
+            } catch (Exception $exception) {
+                $this->logger->error('Error syncing case ' . ($data['case']['id'] ?? 'no id.. with message: ' . $exception->getMessage()), 'common-gateway/woo-bundle');
+
+                return [];
+            }
         }
 
         if (isset($data['deleteUnsyncedObjects']) === true && $data['deleteUnsyncedObjects'] === true) {
-            $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
-            return ['deletedObjects' => $this->wooService->deleteUnsyncedObjects($data['allSourceIds'], $source, $this->configuration['schema'])];
+            try {
+                $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
+                return ['deletedObjects' => $this->wooService->deleteUnsyncedObjects($data['allSourceIds'], $source, $this->configuration['schema'])];
+            } catch (Exception $exception) {
+                $this->logger->error('Error deleting unsynced object: ' . $exception->getMessage(), 'common-gateway/woo-bundle');
+
+                return [];
+            }
         }
 
-        return $this->discoverXxllncCases(
-            data: $data,
-            configuration: $configuration
-        );
+        try {
+            return $this->discoverXxllncCases(
+                data: $data,
+                configuration: $configuration
+            );
+        } catch (Exception $exception) {
+            $this->logger->error('Error fetching all cases: ' . $exception->getMessage(), 'common-gateway/woo-bundle');
+
+            return [];
+        }
 
     }//end syncXxllncCaseHandler()
 
