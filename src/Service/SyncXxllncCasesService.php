@@ -371,7 +371,12 @@ class SyncXxllncCasesService
                 isset($this->style) === true && $this->style->info("Trying to synchronize publication with sourceId: {$result['id']}");
                 $this->logger->info("Trying to synchronize publication with sourceId: {$result['id']}", ['plugin' => 'common-gateway/woo-bundle']);
 
-                $result       = array_merge($result, ['autoPublish' => $this->configuration['autoPublish'] ?? true, 'organisatie' => ['oin' => $this->configuration['oin'], 'naam' => $this->configuration['organisatie']]]);
+                $result       = array_merge($result, [
+                    'settings'    => ['allowPDFOnly' => $configuration['allowPDFOnly'],],
+                    'autoPublish' => $this->configuration['autoPublish'] ?? true,
+                    'organisatie' => ['oin' => $this->configuration['oin'],
+                    'naam' => $this->configuration['organisatie']]
+                ]);
                 $mappedResult = $this->mappingService->mapping($mapping, $result);
                 // Map categories to prevent multiple variants of the same categorie.
                 $mappedResult = $this->mappingService->mapping($categorieMapping, $mappedResult);
