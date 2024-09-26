@@ -297,7 +297,7 @@ class SyncTilburgCasesService
         if ($document === false) {
             return false;
         }
-        
+
         // Fetch the existing temporary document.
         $documentObject = $this->entityManager->getRepository('App:ObjectEntity')
             ->findByAnyId($document['identificatie'], $source->getId()->toString());
