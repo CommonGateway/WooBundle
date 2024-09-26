@@ -2,7 +2,7 @@
     "title" : "TilburgCaseToWoo",
     "$id" : "https://commongateway.nl/mapping/woo.tilburgCaseToWoo.mapping.json",
     "$schema" : "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-    "version" : "0.0.1",
+    "version" : "0.0.2",
     "passTrough" : false,
     "mapping" : {
         "_sourceId" : "identificatie",
@@ -24,6 +24,7 @@
         "data" : ""
     },
     "cast" : {
-        "titel" : "unsetIfValue=="
+        "titel" : "unsetIfValue==",
+        "featured": "bool"
     }
 }
