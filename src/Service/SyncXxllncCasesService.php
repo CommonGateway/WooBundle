@@ -25,8 +25,8 @@ use Exception;
 /**
  * Service responsible for synchronizing xxllnc cases to woo objects.
  *
- * @author  
- * @license 
+ * @author
+ * @license
  *
  * @package  CommonGateway\WOOBundle
  * @category Service
@@ -137,7 +137,7 @@ class SyncXxllncCasesService
         $this->cacheService      = $cacheService;
         $this->wooService        = $wooService;
 
-    }
+    }//end __construct()
 
 
     /**
@@ -155,7 +155,7 @@ class SyncXxllncCasesService
 
         return $this;
 
-    }
+    }//end setStyle()
 
 
     /**
@@ -208,7 +208,7 @@ class SyncXxllncCasesService
 
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
-    }
+    }//end retrieveFile()
 
 
     /**
@@ -251,7 +251,7 @@ class SyncXxllncCasesService
 
         return $bijlagen;
 
-    }
+    }//end getBijlagen()
 
 
     /**
@@ -276,7 +276,7 @@ class SyncXxllncCasesService
 
         return $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id']]));
 
-    }
+    }//end handleCustomLogic()
 
 
     /**
@@ -310,7 +310,7 @@ class SyncXxllncCasesService
 
         return $results;
 
-    }
+    }//end fetchObjects()
 
 
     /**
@@ -335,7 +335,8 @@ class SyncXxllncCasesService
         }
 
         return $oin;
-    }
+
+    }//end validateOin()
 
 
     /**
@@ -392,8 +393,8 @@ class SyncXxllncCasesService
         try {
             $oin = $this->validateOin($this->configuration['oin']);
         } catch (\InvalidArgumentException $e) {
-            $this->logger->error('Validatie van OIN mislukt: ' . $e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
-            isset($this->style) === true && $this->style->error('Validatie van OIN mislukt: ' . $e->getMessage());
+            $this->logger->error('Validatie van OIN mislukt: '.$e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('Validatie van OIN mislukt: '.$e->getMessage());
             return [];
         }
 
@@ -465,8 +466,8 @@ class SyncXxllncCasesService
                 isset($this->style) === true && $this->style->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}");
                 $this->logger->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
-            }
-        }
+            }//end try
+        }//end foreach
 
         $this->entityManager->flush();
 
@@ -481,6 +482,7 @@ class SyncXxllncCasesService
 
         return $this->data;
 
-    }
+    }//end syncXxllncCasesHandler()
 
-}
+
+}//end class
