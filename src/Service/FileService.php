@@ -162,6 +162,7 @@ class FileService
         $file->setMimeType(($mimeType ?? 'application/pdf'));
         $extension = match ($file->getMimeType()) {
             'pdf', 'application/pdf' => 'pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
             default => '',
         };
 
