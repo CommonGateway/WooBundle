@@ -25,8 +25,8 @@ use Exception;
 /**
  * Service responsible for synchronizing xxllnc cases to woo objects.
  *
- * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>, Wilco Louwerse <wilco@conduction.nl>.
- * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
+ * @author  
+ * @license 
  *
  * @package  CommonGateway\WOOBundle
  * @category Service
@@ -137,7 +137,7 @@ class SyncXxllncCasesService
         $this->cacheService      = $cacheService;
         $this->wooService        = $wooService;
 
-    }//end __construct()
+    }
 
 
     /**
@@ -155,7 +155,7 @@ class SyncXxllncCasesService
 
         return $this;
 
-    }//end setStyle()
+    }
 
 
     /**
@@ -208,7 +208,7 @@ class SyncXxllncCasesService
 
         return $this->mappingService->mapping($config['mapping'], array_merge($documentMeta, ['url' => $url, 'documentText' => $documentText]));
 
-    }//end retrieveFile()
+    }
 
 
     /**
@@ -236,8 +236,8 @@ class SyncXxllncCasesService
                 $documentMeta     = $result['values']["attribute.woo_$field"][0];
                 $fileURLS[$field] = $this->retrieveFile($result, $documentMeta, $config);
                 $fileNames[]      = $result['values']["attribute.woo_$field"][0]['filename'];
-            }//end if
-        }//end foreach
+            }
+        }
 
         $bijlagen = [];
         if (isset($result['values']["attribute.woo_publicatie"]) === true) {
@@ -246,12 +246,12 @@ class SyncXxllncCasesService
                     $bijlagen[]  = $this->retrieveFile($result, $documentMeta, $config);
                     $fileNames[] = $documentMeta['filename'];
                 }
-            }//end foreach
-        }//end if
+            }
+        }
 
         return $bijlagen;
 
-    }//end getBijlagen()
+    }
 
 
     /**
@@ -276,7 +276,7 @@ class SyncXxllncCasesService
 
         return $this->mappingService->mapping($customFieldsMapping, array_merge($objectArray, $fileURLS, ["bijlagen" => $bijlagen, "portalUrl" => $portalURL, "id" => $result['id']]));
 
-    }//end handleCustomLogic()
+    }
 
 
     /**
@@ -310,7 +310,32 @@ class SyncXxllncCasesService
 
         return $results;
 
-    }//end fetchObjects()
+    }
+
+
+    /**
+     * Valideert de OIN-waarde om ervoor te zorgen dat deze alleen cijfers bevat.
+     *
+     * @param mixed $oin De OIN-waarde uit de configuratie.
+     *
+     * @return string De gevalideerde OIN-waarde.
+     *
+     * @throws \InvalidArgumentException als de OIN ongeldig is.
+     */
+    private function validateOin($oin): string
+    {
+        // Controleer of de OIN is ingesteld en een niet-lege string is
+        if (!isset($oin) || !is_string($oin) || trim($oin) === '') {
+            throw new \InvalidArgumentException('OIN-waarde ontbreekt of is ongeldig.');
+        }
+
+        // Controleer of de OIN alleen uit cijfers bestaat (voorloopnullen toegestaan)
+        if (!preg_match('/^\d+$/', $oin)) {
+            throw new \InvalidArgumentException('OIN-waarde moet alleen uit cijfers bestaan.');
+        }
+
+        return $oin;
+    }
 
 
     /**
@@ -355,13 +380,22 @@ class SyncXxllncCasesService
             isset($this->style) === true && $this->style->error("{$this->configuration['source']}, {$this->configuration['schema']} or {$this->configuration['mapping']} not found, ending syncXxllncCasesHandler");
 
             return [];
-        }//end if
+        }
 
         isset($this->style) === true && $this->style->info("Fetching cases from {$source->getLocation()}");
         $this->logger->info("Fetching cases from {$source->getLocation()}", ['plugin' => 'common-gateway/woo-bundle']);
 
         $results = $this->fetchObjects($source);
         $this->entityManager->flush();
+
+        // Valideer de OIN-waarde
+        try {
+            $oin = $this->validateOin($this->configuration['oin']);
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->error('Validatie van OIN mislukt: ' . $e->getMessage(), ['plugin' => 'common-gateway/woo-bundle']);
+            isset($this->style) === true && $this->style->error('Validatie van OIN mislukt: ' . $e->getMessage());
+            return [];
+        }
 
         $idsSynced        = [];
         $responseItems    = [];
@@ -377,7 +411,7 @@ class SyncXxllncCasesService
                         'settings'    => ['allowPDFOnly' => $configuration['allowPDFOnly']],
                         'autoPublish' => $this->configuration['autoPublish'] ?? true,
                         'organisatie' => [
-                            'oin'  => $this->configuration['oin'],
+                            'oin'  => $oin,
                             'naam' => $this->configuration['organisatie'],
                         ],
                     ]
@@ -431,8 +465,8 @@ class SyncXxllncCasesService
                 isset($this->style) === true && $this->style->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}");
                 $this->logger->error("Something went wrong synchronizing sourceId: {$result['id']} with error: {$exception->getMessage()}", ['plugin' => 'common-gateway/woo-bundle']);
                 continue;
-            }//end try
-        }//end foreach
+            }
+        }
 
         $this->entityManager->flush();
 
@@ -447,7 +481,6 @@ class SyncXxllncCasesService
 
         return $this->data;
 
-    }//end syncXxllncCasesHandler()
+    }
 
-
-}//end class
+}
