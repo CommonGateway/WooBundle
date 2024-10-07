@@ -188,7 +188,7 @@ class SyncXxllncService
             $this->cacheService->cacheObject($publication);
             return $data;
         } catch (Exception $exception) {
-            $this->logger->error('Error populating document '.$data['sourceId'].' with message: '.$exception->getMessage(), 'common-gateway/woo-bundle');
+            $this->logger->error(message: 'Error populating document '.$data['sourceId'].' with message: '.$exception->getMessage(), context: ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }//end try
@@ -391,7 +391,7 @@ class SyncXxllncService
                     configuration: $configuration
                 );
             } catch (Exception $exception) {
-                $this->logger->error('Error syncing case '.($data['case']['id'] ?? 'no id.. with message: '.$exception->getMessage()), 'common-gateway/woo-bundle');
+                $this->logger->error('Error syncing case '.($data['case']['id'] ?? 'no id.. with message: '.$exception->getMessage()), context: ['plugin' => 'common-gateway/woo-bundle']);
 
                 return [];
             }
@@ -402,7 +402,7 @@ class SyncXxllncService
                 $source = $this->resourceService->getSource($this->configuration['source'], 'common-gateway/woo-bundle');
                 return ['deletedObjects' => $this->wooService->deleteUnsyncedObjects($data['allSourceIds'], $source, $this->configuration['schema'])];
             } catch (Exception $exception) {
-                $this->logger->error('Error deleting unsynced object: '.$exception->getMessage(), 'common-gateway/woo-bundle');
+                $this->logger->error(message: 'Error deleting unsynced object: '.$exception->getMessage(), context: ['plugin' => 'common-gateway/woo-bundle']);
 
                 return [];
             }
@@ -414,7 +414,7 @@ class SyncXxllncService
                 configuration: $configuration
             );
         } catch (Exception $exception) {
-            $this->logger->error('Error fetching all cases: '.$exception->getMessage(), 'common-gateway/woo-bundle');
+            $this->logger->error(message: 'Error fetching all cases: '.$exception->getMessage(), context: ['plugin' => 'common-gateway/woo-bundle']);
 
             return [];
         }
